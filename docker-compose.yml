@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: galaxy-online-iii-db
+    environment:
+      POSTGRES_USER: galaxy_user
+      POSTGRES_PASSWORD: galaxy_local_dev_2026
+      POSTGRES_DB: galaxy_online_iii
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U galaxy_user -d galaxy_online_iii"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

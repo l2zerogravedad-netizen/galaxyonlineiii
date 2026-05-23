@@ -1,0 +1,23 @@
+{
+  "name": "@galaxy/api",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@galaxy/database": "*",
+    "@fastify/cors": "^9.0.0",
+    "@fastify/jwt": "^8.0.0",
+    "bcrypt": "^5.1.0",
+    "fastify": "^4.26.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.9.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "galaxy-online-iii",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MMO de estrategia espacial 4X inspirado en los clásicos del género",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev:api": "cd apps/api && npm run dev",
+    "dev:web": "cd apps/web && npm run dev",
+    "db:generate": "cd packages/database && npx prisma generate",
+    "db:migrate": "cd packages/database && npx prisma migrate dev",
+    "db:seed": "cd packages/database && npx prisma db seed",
+    "db:studio": "cd packages/database && npx prisma studio"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,285 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  username      String   @unique
+  createdAt     DateTime @default(now()) @map("created_at")
+  lastLoginAt   DateTime? @map("last_login_at")
+  isActive      Boolean  @default(true) @map("is_active")
+  
+  empire        Empire?
+  
+  @@map("users")
+}
+
+model Empire {
+  id            String   @id @default(uuid())
+  userId        String   @unique @map("user_id")
+  name          String
+  level         Int      @default(1)
+  experience    Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+  lastActiveAt  DateTime @default(now()) @map("last_active_at")
+  
+  user          User     @relation(fields: [userId], references: [id])
+  resources     Resource[]
+  planets       Planet[]
+  technologies  EmpireTechnology[]
+  ships         Ship[]
+  fleets        Fleet[]
+  shipConstructions ShipConstruction[]
+  
+  @@map("empires")
+}
+
+model Resource {
+  id                  String   @id @default(uuid())
+  empireId            String   @map("empire_id")
+  type                String
+  amount              Int      @default(0)
+  capacity            Int      @default(1000)
+  productionPerHour   Int      @default(0) @map("production_per_hour")
+  updatedAt           DateTime @default(now()) @map("updated_at")
+  
+  empire              Empire   @relation(fields: [empireId], references: [id])
+  
+  @@unique([empireId, type])
+  @@map("resources")
+}
+
+model Planet {
+  id                String   @id @default(uuid())
+  empireId          String   @map("empire_id")
+  name              String   @default("Planeta Principal")
+  galaxyX           Int      @default(0) @map("galaxy_x")
+  galaxyY           Int      @default(0) @map("galaxy_y")
+  type              String @default("HABITABLE")
+  maxBuildingSlots  Int      @default(9) @map("max_building_slots")
+  createdAt         DateTime @default(now()) @map("created_at")
+  
+  empire            Empire   @relation(fields: [empireId], references: [id])
+  buildings         Building[]
+  
+  @@map("planets")
+}
+
+model Building {
+  id                    String   @id @default(uuid())
+  planetId              String   @map("planet_id")
+  type                  String
+  level                 Int      @default(1)
+  slotIndex             Int      @map("slot_index")
+  status                String @default("IDLE")
+  constructionEndsAt    DateTime? @map("construction_ends_at")
+  
+  planet                Planet   @relation(fields: [planetId], references: [id])
+  
+  @@unique([planetId, slotIndex])
+  @@map("buildings")
+}
+
+model Technology {
+  id            String   @id @default(uuid())
+  key           String   @unique
+  name          String
+  description   String
+  category      String   @default("GENERAL")
+  requiredTechId String? @map("required_tech_id")
+  baseCostMetal     Int      @default(100) @map("base_cost_metal")
+  baseCostPlasma    Int      @default(50) @map("base_cost_plasma")
+  baseResearchTime  Int      @default(300) @map("base_research_time")
+  maxLevel      Int      @default(5) @map("max_level")
+  
+  // Efecto de la tecnología
+  effectType    String?  @map("effect_type")
+  effectValue   Float    @default(0) @map("effect_value")
+  effectDescription String? @map("effect_description")
+  
+  // Relaciones
+  requiredTech  Technology? @relation("TechRequirements", fields: [requiredTechId], references: [id])
+  unlockedTechs Technology[] @relation("TechRequirements")
+  empireTechs   EmpireTechnology[]
+  
+  @@map("technologies")
+}
+
+model EmpireTechnology {
+  id              String   @id @default(uuid())
+  empireId        String   @map("empire_id")
+  technologyId    String   @map("technology_id")
+  level           Int      @default(0)
+  status          String @default("LOCKED")
+  researchStartedAt DateTime? @map("research_started_at")
+  researchEndsAt  DateTime? @map("research_ends_at")
+  
+  empire          Empire   @relation(fields: [empireId], references: [id])
+  technology      Technology @relation(fields: [technologyId], references: [id])
+  
+  @@unique([empireId, technologyId])
+  @@map("empire_technologies")
+}
+
+model Blueprint {
+  id              String   @id @default(uuid())
+  name            String
+  key             String   @unique
+  type            String
+  description     String
+  category        String   @default("COMBAT") // COMBAT, CIVIL, TRANSPORT
+  requiredTechId  String?  @map("required_technology_id")
+  requiredBuildingType String? @map("required_building_type") // SHIPYARD
+  costMetal       Int      @default(0) @map("cost_metal")
+  costPlasma      Int      @default(0) @map("cost_plasma")
+  costCredits     Int      @default(0) @map("cost_credits")
+  buildTime       Int      @default(0) @map("build_time") // segundos por unidad
+  attack          Int      @default(0)
+  hp              Int      @default(0)
+  defense         Int      @default(0)
+  speed           Int      @default(0)
+  cargoCapacity   Int      @default(0) @map("cargo_capacity")
+  
+  ships           Ship[]
+  constructions   ShipConstruction[]
+  
+  @@map("blueprints")
+}
+
+model Ship {
+  id            String   @id @default(uuid())
+  empireId      String   @map("empire_id")
+  blueprintId   String   @map("blueprint_id")
+  quantity      Int      @default(0)
+  status        String @default("AVAILABLE")
+  fleetId       String?  @map("fleet_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  
+  empire        Empire   @relation(fields: [empireId], references: [id])
+  blueprint     Blueprint @relation(fields: [blueprintId], references: [id])
+  
+  @@map("ships")
+}
+
+model ShipConstruction {
+  id            String   @id @default(uuid())
+  empireId      String   @map("empire_id")
+  blueprintId   String   @map("blueprint_id")
+  quantity      Int      @default(1)
+  status        String   @default("BUILDING") // BUILDING, COMPLETED
+  startedAt     DateTime @default(now()) @map("started_at")
+  endsAt        DateTime @map("ends_at")
+  completedAt   DateTime? @map("completed_at")
+  
+  empire        Empire   @relation(fields: [empireId], references: [id])
+  blueprint     Blueprint @relation(fields: [blueprintId], references: [id])
+  
+  @@map("ship_constructions")
+}
+
+model Fleet {
+  id            String   @id @default(uuid())
+  empireId      String   @map("empire_id")
+  name          String
+  status        String @default("IDLE")
+  totalPower    Int      @default(0) @map("total_power")
+  createdAt     DateTime @default(now()) @map("created_at")
+  
+  empire        Empire   @relation(fields: [empireId], references: [id])
+  formations    FleetFormation[]
+  
+  @@map("fleets")
+}
+
+model FleetFormation {
+  id            String   @id @default(uuid())
+  fleetId       String   @map("fleet_id")
+  slotIndex     Int      @map("slot_index")
+  shipId        String   @map("ship_id")
+  quantity      Int      @default(0)
+  
+  fleet         Fleet    @relation(fields: [fleetId], references: [id])
+  
+  @@unique([fleetId, slotIndex])
+  @@map("fleet_formations")
+}
+
+model Mission {
+  id                  String   @id @default(uuid())
+  name                String
+  description         String
+  difficulty          Int
+  recommendedPower    Int      @map("recommended_power")
+  enemyFleetConfig    String     @map("enemy_fleet_config")
+  rewardXp            Int      @default(0) @map("reward_xp")
+  rewardCredits       Int      @default(0) @map("reward_credits")
+  
+  missionRuns         MissionRun[]
+  
+  @@map("missions")
+}
+
+model MissionRun {
+  id            String   @id @default(uuid())
+  empireId      String   @map("empire_id")
+  missionId     String   @map("mission_id")
+  fleetId       String   @map("fleet_id")
+  status        String @default("RUNNING")
+  startedAt     DateTime @default(now()) @map("started_at")
+  completedAt   DateTime? @map("completed_at")
+  
+  mission       Mission  @relation(fields: [missionId], references: [id])
+  
+  @@map("mission_runs")
+}
+
+model Battle {
+  id                String   @id @default(uuid())
+  empireId          String   @map("empire_id")
+  missionRunId      String?  @map("mission_run_id")
+  fleetId           String   @map("fleet_id")
+  result            String?
+  rounds            String?
+  seed              String?
+  xpGained          Int      @default(0) @map("xp_gained")
+  creditsGained     Int      @default(0) @map("credits_gained")
+  createdAt         DateTime @default(now()) @map("created_at")
+  
+  losses            BattleLoss[]
+  
+  @@map("battles")
+}
+
+model BattleLoss {
+  id            String   @id @default(uuid())
+  battleId      String   @map("battle_id")
+  blueprintId   String   @map("blueprint_id")
+  quantity      Int
+  
+  battle        Battle   @relation(fields: [battleId], references: [id])
+  
+  @@map("battle_losses")
+}
+
+model ConstructionQueue {
+  id              String   @id @default(uuid())
+  empireId        String   @map("empire_id")
+  type            String
+  targetId        String   @map("target_id")
+  targetPlanetId  String?  @map("target_planet_id")
+  quantity        Int      @default(1)
+  startedAt       DateTime @default(now()) @map("started_at")
+  endsAt          DateTime @map("ends_at")
+  completed       Boolean  @default(false)
+  
+  @@map("construction_queue")
+}
+
+// Enums converted to String for SQLite compatibility
