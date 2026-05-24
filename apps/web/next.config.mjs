@@ -5,10 +5,11 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3001/api/:path*',
+        destination: 'https://galaxyonlineiii-production.up.railway.app/api/:path*',
       },
     ];
   },
+  output: 'standalone',
 };
 
 export default nextConfig;
