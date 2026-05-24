@@ -1,5 +1,4 @@
-export { PlanetDashboardPremium } from './PlanetDashboardPremium';
-export type { PlanetDashboardPremiumProps } from './PlanetDashboardPremium';
-export { AssetImage } from './AssetImage';
-export * from './types';
-export * from './mockData';
+export { default as PlanetDashboardPremium } from './PlanetDashboardPremium';
+export { default as AssetImg } from './AssetImg';
+export * from './game-data';
+export * from './icons';
