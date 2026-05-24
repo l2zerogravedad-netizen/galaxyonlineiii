@@ -46,18 +46,27 @@ export function GlbViewerClient() {
     [revokeObjectUrl]
   );
 
-  const loadPlaceholder = useCallback(() => {
+  const loadPlaceholder = useCallback(async () => {
     revokeObjectUrl();
     setError(null);
     setMetadata(null);
-    setModelUrl(PLACEHOLDER_URL);
-    setFileName('placeholder-shipyard-preview.glb');
-    fetch(PLACEHOLDER_URL, { method: 'HEAD' })
-      .then((r) => {
-        const len = r.headers.get('content-length');
-        setFileSizeBytes(len ? Number(len) : 0);
-      })
-      .catch(() => setFileSizeBytes(0));
+    try {
+      const head = await fetch(PLACEHOLDER_URL, { method: 'HEAD' });
+      if (!head.ok) {
+        setError(
+          'Placeholder no generado. Ejecutá: cd apps/web && node ../../tools/glb-viewer/scripts/generate-placeholder.mjs'
+        );
+        setModelUrl(null);
+        return;
+      }
+      const len = head.headers.get('content-length');
+      setFileSizeBytes(len ? Number(len) : 0);
+      setModelUrl(PLACEHOLDER_URL);
+      setFileName('placeholder-shipyard-preview.glb');
+    } catch {
+      setError('No se pudo cargar el placeholder.');
+      setModelUrl(null);
+    }
   }, [revokeObjectUrl]);
 
   useEffect(() => () => revokeObjectUrl(), [revokeObjectUrl]);
