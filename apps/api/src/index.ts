@@ -7,6 +7,8 @@ import { empireRoutes } from './routes/empire';
 import { planetRoutes } from './routes/planet';
 import { researchRoutes } from './routes/research';
 import { shipyardRoutes } from './routes/shipyard';
+import { fleetRoutes } from './routes/fleets';
+import { missionRoutes } from './routes/missions';
 
 const app = fastify({ logger: true });
 
@@ -20,6 +22,8 @@ app.register(empireRoutes, { prefix: '/api/empire' });
 app.register(planetRoutes, { prefix: '/api/planets' });
 app.register(researchRoutes, { prefix: '/api/research' });
 app.register(shipyardRoutes, { prefix: '/api/shipyard' });
+app.register(fleetRoutes, { prefix: '/api/fleets' });
+app.register(missionRoutes, { prefix: '/api/missions' });
 
 // Health check
 app.get('/health', async () => ({ status: 'ok', time: new Date().toISOString() }));

@@ -170,6 +170,7 @@ model Ship {
   
   empire        Empire   @relation(fields: [empireId], references: [id])
   blueprint     Blueprint @relation(fields: [blueprintId], references: [id])
+  fleetFormations FleetFormation[]
   
   @@map("ships")
 }
@@ -214,7 +215,8 @@ model FleetFormation {
   shipId        String   @map("ship_id")
   quantity      Int      @default(0)
   
-  fleet         Fleet    @relation(fields: [fleetId], references: [id])
+  fleet         Fleet    @relation(fields: [fleetId], references: [id], onDelete: Cascade)
+  ship          Ship     @relation(fields: [shipId], references: [id])
   
   @@unique([fleetId, slotIndex])
   @@map("fleet_formations")
