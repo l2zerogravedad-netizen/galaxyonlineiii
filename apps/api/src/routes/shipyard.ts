@@ -16,11 +16,7 @@ export async function shipyardRoutes(app: FastifyInstance) {
     const { empireId } = request.user as { empireId: string };
 
     // Get all blueprints
-    const blueprints = await prisma.blueprint.findMany({
-      include: {
-        requiredTech: true,
-      },
-    });
+    const blueprints = await prisma.blueprint.findMany();
 
     // Get empire data for checks
     const empire = await prisma.empire.findUnique({
@@ -70,7 +66,7 @@ export async function shipyardRoutes(app: FastifyInstance) {
       let requiredTechName = null;
       if (bp.requiredTechId) {
         techUnlocked = completedTechs.has(bp.requiredTechId);
-        requiredTechName = bp.requiredTech?.name;
+        requiredTechName = null; // TODO: Fetch tech name if needed
       }
 
       // Check building requirement
