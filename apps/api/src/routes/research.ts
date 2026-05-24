@@ -84,6 +84,7 @@ export async function researchRoutes(app: FastifyInstance) {
         isMaxLevel: currentLevel >= tech.maxLevel,
         prerequisiteMet,
         prerequisiteName,
+        requiredTechId: tech.requiredTechId,
         costs: {
           metal: costMetal,
           plasma: costPlasma,
