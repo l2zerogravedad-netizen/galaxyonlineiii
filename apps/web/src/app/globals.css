@@ -17,3 +17,55 @@ body {
   );
   min-height: 100vh;
 }
+
+/* Premium planet dashboard */
+.planet-dashboard {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(34, 211, 238, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 50%, rgba(139, 92, 246, 0.08), transparent 45%),
+    linear-gradient(180deg, #020617 0%, #0f172a 40%, #020617 100%);
+}
+
+.game-panel {
+  @apply rounded-xl border border-cyan-500/20 bg-slate-900/60 backdrop-blur-sm;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.05),
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.building-slot {
+  @apply relative flex flex-col items-center justify-center rounded-lg border border-cyan-600/25 bg-slate-900/50 transition-all duration-200;
+  width: 5.5rem;
+  height: 5.5rem;
+}
+
+@media (min-width: 768px) {
+  .building-slot {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
+}
+
+.building-slot-empty {
+  @apply border-dashed border-cyan-500/30 bg-cyan-950/20 hover:bg-cyan-950/40 hover:border-cyan-400/50;
+}
+
+.game-btn-primary {
+  @apply px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-950 transition;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 50%, #8b5cf6 100%);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.35);
+}
+
+.game-btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.3);
+  border-radius: 4px;
+}

@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run build:api && npm run build:web",
     "build:api": "cd packages/database && npx prisma generate && npm run build && cd ../../apps/api && npm run build",
-    "build:web": "cd packages/database && npx prisma generate && cd ../../apps/web && npm run build",
+    "build:web": "cd packages/shared && npm run build && cd ../database && npx prisma generate && cd ../../apps/web && npm run build",
     "start": "npm run start:api",
     "start:api": "cd apps/api && npm start",
     "start:web": "cd apps/web && node .next/standalone/server.js",

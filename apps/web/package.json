@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@galaxy/shared": "*",
     "@tanstack/react-query": "^5.32.0",
     "axios": "1.16.1",
     "next": "16.2.6",

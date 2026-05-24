@@ -362,6 +362,15 @@ Antes de que cualquier asset entre al proyecto:
 | Mission to Minerva | KitBash3D | KitBash3D Commercial | ⏳ **PENDIENTE** | Gratis pero requiere cuenta/login en KitBash3D para descargar. NO descargado aún. Riesgo: BAJO |
 | Metal032 | ambientCG | CC0 1.0 | ❌ **RECHAZADO (temporal)** | Descarga directa falló (retornó HTML). Requiere método alternativo. Riesgo: NINGUNO |
 
+### Dashboard premium UI (`public/game/assets/`)
+
+| Asset | Fuente | Licencia | Estado | Motivo |
+|-------|--------|----------|--------|--------|
+| 9× buildings WebP | Generación original | Pendiente | ⏳ **PENDIENTE** | Rutas definidas; `AssetImage` usa fallback CSS |
+| main-planet.webp | Generación original | Pendiente | ⏳ **PENDIENTE** | — |
+| 8× UI icons WebP | Generación original | Pendiente | ⏳ **PENDIENTE** | — |
+| Integración GO2 / screenshots | — | — | ❌ **RECHAZADO** | No usar assets protegidos de Galaxy Online II |
+
 ---
 
 ## Last Updated

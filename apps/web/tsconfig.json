@@ -24,6 +24,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@galaxy/shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@galaxy/shared/*": [
+        "../../packages/shared/src/*"
       ]
     },
     "target": "ES2017"

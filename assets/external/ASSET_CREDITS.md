@@ -136,6 +136,35 @@ assets/
 
 ---
 
+## Generated Original UI Assets (Dashboard Premium)
+
+Assets 2D WebP para `apps/web/public/game/assets/`. **Pendientes de generación** — UI usa fallbacks CSS vía `AssetImage`.
+
+| Asset | Autor | Fuente | Link | Licencia | Fecha | Uso | Riesgo legal |
+|-------|-------|--------|------|----------|-------|-----|--------------|
+| metal-extractor.webp | Pendiente | IA/Blender original | — | Pendiente CC0/original | — | Edificio grilla | Bajo si original |
+| plasma-refinery.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| warehouse.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| energy-generator.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| control-center.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| shipyard.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| research-lab.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| defense-turret.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| hangar.webp | Pendiente | IA/Blender original | — | Pendiente | — | Edificio grilla | Bajo si original |
+| main-planet.webp | Pendiente | IA/Blender original | — | Pendiente | — | Panel planeta | Bajo si original |
+| UI icons (8) | Pendiente | IA original | — | Pendiente | — | Recursos/nav | Bajo si original |
+
+**Reglas:**
+
+- Los assets finales deben ser **originales** o **CC0 verificados**
+- No usar assets con copyright dudoso
+- No usar franquicias famosas (Star Wars, Star Trek, GO2, etc.)
+- No usar logos reales
+- Ver prompts: `assets/source/prompts/building-assets-prompts.md`
+- Pipeline: `docs/ASSET_RENDER_PIPELINE.md`
+
+---
+
 ## Last Updated
 
 2026-05-24
