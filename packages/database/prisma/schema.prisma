@@ -195,11 +195,14 @@ model Fleet {
   empireId      String   @map("empire_id")
   name          String
   status        String @default("IDLE")
+  planetId      String?  @map("planet_id")
   totalPower    Int      @default(0) @map("total_power")
   createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
   
   empire        Empire   @relation(fields: [empireId], references: [id])
   formations    FleetFormation[]
+  missionRuns   MissionRun[]
   
   @@map("fleets")
 }
@@ -222,8 +225,12 @@ model Mission {
   name                String
   description         String
   difficulty          Int
+  durationSeconds     Int      @default(300) @map("duration_seconds")
+  minShipsRequired    Int      @default(1) @map("min_ships_required")
   recommendedPower    Int      @map("recommended_power")
   enemyFleetConfig    String     @map("enemy_fleet_config")
+  rewardMetal         Int      @default(0) @map("reward_metal")
+  rewardPlasma        Int      @default(0) @map("reward_plasma")
   rewardXp            Int      @default(0) @map("reward_xp")
   rewardCredits       Int      @default(0) @map("reward_credits")
   
@@ -238,10 +245,13 @@ model MissionRun {
   missionId     String   @map("mission_id")
   fleetId       String   @map("fleet_id")
   status        String @default("RUNNING")
+  result        String?  // WIN, LOSS, CANCELLED
+  rewardsGiven  Boolean  @default(false) @map("rewards_given")
   startedAt     DateTime @default(now()) @map("started_at")
   completedAt   DateTime? @map("completed_at")
   
   mission       Mission  @relation(fields: [missionId], references: [id])
+  fleet         Fleet    @relation(fields: [fleetId], references: [id])
   
   @@map("mission_runs")
 }
