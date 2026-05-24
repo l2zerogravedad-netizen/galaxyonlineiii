@@ -168,7 +168,9 @@ export async function researchRoutes(app: FastifyInstance) {
       const costMultiplier = nextLevel;
       const costMetal = technology.baseCostMetal * costMultiplier;
       const costPlasma = technology.baseCostPlasma * costMultiplier;
-      const researchTime = technology.baseResearchTime * costMultiplier;
+      // DEV: Fast timers for development testing (never enabled by default)
+      const timeMultiplier = process.env.DEV_FAST_TIMERS === 'true' ? 0.1 : 1;
+      const researchTime = technology.baseResearchTime * costMultiplier * timeMultiplier;
 
       // Check resources
       const resources = await prisma.resource.findMany({

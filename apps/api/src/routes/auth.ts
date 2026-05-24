@@ -80,11 +80,15 @@ export async function authRoutes(app: FastifyInstance) {
         }
 
         // Create resources
+        // DEV_MODE: High resources for development testing
+        const isDevHighResources = process.env.DEV_HIGH_STARTING_RESOURCES === 'true';
+        const devAmount = 1000000; // 1 millón iniciales
+        const devCapacity = 100000000; // 100 millones capacidad
         await tx.resource.createMany({
           data: [
-            { empireId: empire.id, type: 'METAL', amount: 500, capacity: 1000, productionPerHour: 100 },
-            { empireId: empire.id, type: 'PLASMA', amount: 200, capacity: 1000, productionPerHour: 50 },
-            { empireId: empire.id, type: 'CREDITS', amount: 1000, capacity: 999999999, productionPerHour: 0 },
+            { empireId: empire.id, type: 'METAL', amount: isDevHighResources ? devAmount : 500, capacity: isDevHighResources ? devCapacity : 1000, productionPerHour: 100 },
+            { empireId: empire.id, type: 'PLASMA', amount: isDevHighResources ? devAmount : 200, capacity: isDevHighResources ? devCapacity : 1000, productionPerHour: 50 },
+            { empireId: empire.id, type: 'CREDITS', amount: isDevHighResources ? devAmount : 1000, capacity: 999999999, productionPerHour: 0 },
           ],
         });
 

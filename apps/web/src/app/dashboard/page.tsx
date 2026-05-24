@@ -147,7 +147,7 @@ export default function DashboardPage() {
 
         {/* Actions */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <ActionButton href="#" label="Astillero" disabled />
+          <ActionButton href="/shipyard" label="Astillero" />
           <ActionButton href="/research" label="Investigación" />
           <ActionButton href="#" label="Flotas" disabled />
           <ActionButton href="#" label="Misiones" disabled />

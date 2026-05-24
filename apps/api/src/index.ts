@@ -19,6 +19,7 @@ app.register(authRoutes, { prefix: '/api/auth' });
 app.register(empireRoutes, { prefix: '/api/empire' });
 app.register(planetRoutes, { prefix: '/api/planets' });
 app.register(researchRoutes, { prefix: '/api/research' });
+app.register(shipyardRoutes, { prefix: '/api/shipyard' });
 
 // Health check
 app.get('/health', async () => ({ status: 'ok', time: new Date().toISOString() }));

@@ -214,10 +214,14 @@ export async function shipyardRoutes(app: FastifyInstance) {
         });
       }
 
+      // DEV_MODE: Cheap costs for development testing
+      const isDevCheapCosts = process.env.DEV_CHEAP_COSTS === 'true';
+      const costMultiplier = isDevCheapCosts ? 0.01 : 1; // 1% of real cost in dev mode
+      
       // Calculate total costs
-      const totalCostMetal = blueprint.costMetal * quantity;
-      const totalCostPlasma = blueprint.costPlasma * quantity;
-      const totalCostCredits = blueprint.costCredits * quantity;
+      const totalCostMetal = Math.max(1, Math.floor(blueprint.costMetal * quantity * costMultiplier));
+      const totalCostPlasma = Math.max(1, Math.floor(blueprint.costPlasma * quantity * costMultiplier));
+      const totalCostCredits = Math.max(1, Math.floor(blueprint.costCredits * quantity * costMultiplier));
 
       // Apply build time reduction from technology
       let effectiveBuildTime = blueprint.buildTime;
@@ -228,7 +232,9 @@ export async function shipyardRoutes(app: FastifyInstance) {
         const reduction = automationTech.level * 0.1; // 10% per level
         effectiveBuildTime = Math.floor(effectiveBuildTime * (1 - reduction));
       }
-      const totalBuildTime = effectiveBuildTime * quantity;
+      // DEV: Fast timers for development testing (never enabled by default)
+      const timeMultiplier = process.env.DEV_FAST_TIMERS === 'true' ? 0.1 : 1;
+      const totalBuildTime = Math.floor(effectiveBuildTime * quantity * timeMultiplier);
 
       // Check resources
       const metal = empire.resources.find((r) => r.type === 'METAL');

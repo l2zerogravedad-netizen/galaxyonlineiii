@@ -35,14 +35,16 @@ const BUILDING_TYPES = [
   { type: 'ACADEMY', name: 'Academia', description: 'Entrena comandantes' },
 ];
 
+// NOTE: Frontend uses dev cost estimates for UI display
+// Backend validates actual costs based on DEV_CHEAP_COSTS environment variable
 const BASE_COSTS: Record<string, { metal: number; plasma: number; time: number }> = {
-  COMMAND_CENTER: { metal: 1000, plasma: 500, time: 600 },
-  METAL_MINE: { metal: 100, plasma: 50, time: 60 },
-  PLASMA_EXTRACTOR: { metal: 100, plasma: 50, time: 60 },
-  SHIPYARD: { metal: 500, plasma: 200, time: 300 },
-  RESEARCH_LAB: { metal: 400, plasma: 200, time: 240 },
-  WAREHOUSE: { metal: 200, plasma: 100, time: 120 },
-  ACADEMY: { metal: 300, plasma: 150, time: 180 },
+  COMMAND_CENTER: { metal: 1, plasma: 1, time: 10 },
+  METAL_MINE: { metal: 1, plasma: 1, time: 5 },
+  PLASMA_EXTRACTOR: { metal: 1, plasma: 1, time: 5 },
+  SHIPYARD: { metal: 1, plasma: 1, time: 10 },
+  RESEARCH_LAB: { metal: 1, plasma: 1, time: 10 },
+  WAREHOUSE: { metal: 1, plasma: 1, time: 10 },
+  ACADEMY: { metal: 1, plasma: 1, time: 10 },
 };
 
 export default function BuildPage() {
@@ -106,15 +108,25 @@ export default function BuildPage() {
     }
   };
 
+  // Variable costs with realistic endings, max level 30
   const getBuildingInfo = (type: string, level: number = 1) => {
     const base = BASE_COSTS[type];
-    if (!base) return null;
+    if (!base || level > 30) return null;
     
-    return {
-      metal: base.metal * level,
-      plasma: base.plasma * level,
-      time: base.time * level,
-    };
+    // Exponential growth with pseudo-random endings
+    const growthRate = 1.6; // 60% increase per level
+    const typeOffset = type.charCodeAt(0) + type.length; // Unique offset per building type
+    
+    // Generate "realistic" numbers with varied endings like 15455873
+    const noiseMetal = ((level * 137 + typeOffset * 53) % 847) + 123;
+    const noisePlasma = ((level * 239 + typeOffset * 71) % 623) + 89;
+    const noiseTime = ((level * 89 + typeOffset * 41) % 47) + 13;
+    
+    const metal = Math.floor(base.metal * Math.pow(growthRate, level - 1) * 100 + noiseMetal);
+    const plasma = Math.floor(base.plasma * Math.pow(growthRate, level - 1) * 80 + noisePlasma);
+    const time = Math.floor(base.time * Math.pow(1.3, level - 1) + noiseTime);
+    
+    return { metal, plasma, time };
   };
 
   const hasEnoughResources = (type: string, level: number = 1) => {

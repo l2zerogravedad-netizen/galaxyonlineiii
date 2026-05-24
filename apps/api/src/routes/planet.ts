@@ -2,7 +2,19 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '@galaxy/database';
 
-const buildingCost: Record<string, { metal: number; plasma: number; time: number }> = {
+// DEV_MODE: Cheap costs for development testing
+const devBuildingCost: Record<string, { metal: number; plasma: number; time: number }> = {
+  COMMAND_CENTER: { metal: 1, plasma: 1, time: 10 },
+  METAL_MINE: { metal: 1, plasma: 1, time: 5 },
+  PLASMA_EXTRACTOR: { metal: 1, plasma: 1, time: 5 },
+  SHIPYARD: { metal: 1, plasma: 1, time: 10 },
+  RESEARCH_LAB: { metal: 1, plasma: 1, time: 10 },
+  ACADEMY: { metal: 1, plasma: 1, time: 10 },
+  WAREHOUSE: { metal: 1, plasma: 1, time: 10 },
+};
+
+// PRODUCTION: Real game balance costs
+const prodBuildingCost: Record<string, { metal: number; plasma: number; time: number }> = {
   COMMAND_CENTER: { metal: 1000, plasma: 500, time: 600 },
   METAL_MINE: { metal: 100, plasma: 50, time: 60 },
   PLASMA_EXTRACTOR: { metal: 100, plasma: 50, time: 60 },
@@ -11,6 +23,10 @@ const buildingCost: Record<string, { metal: number; plasma: number; time: number
   ACADEMY: { metal: 300, plasma: 150, time: 180 },
   WAREHOUSE: { metal: 200, plasma: 100, time: 120 },
 };
+
+// Select cost config based on environment
+const isDevCheapCosts = process.env.DEV_CHEAP_COSTS === 'true';
+const buildingCost = isDevCheapCosts ? devBuildingCost : prodBuildingCost;
 
 const createBuildingSchema = z.object({
   type: z.enum([
@@ -101,11 +117,37 @@ export async function planetRoutes(app: FastifyInstance) {
       // Check if upgrading or building new
       const isUpgrade = existingBuilding !== undefined;
       const level = isUpgrade ? existingBuilding.level + 1 : 1;
-      const totalCost = {
-        metal: cost.metal * level,
-        plasma: cost.plasma * level,
-        time: cost.time * level,
-      };
+      
+      // Validate max level 30
+      if (level > 30) {
+        return reply.status(400).send({ error: 'Maximum level reached (30)' });
+      }
+      
+      let totalCost;
+      
+      if (isDevCheapCosts) {
+        // DEV_MODE: Simple linear growth for fast testing
+        totalCost = {
+          metal: cost.metal * level,
+          plasma: cost.plasma * level,
+          time: cost.time * level,
+        };
+      } else {
+        // PRODUCTION: Exponential growth with realistic endings
+        const growthRate = 1.5; // 50% increase per level
+        const typeOffset = data.type.charCodeAt(0) + data.type.length;
+        
+        // Generate "realistic" numbers with varied endings
+        const noiseMetal = ((level * 137 + typeOffset * 53) % 847) + 123;
+        const noisePlasma = ((level * 239 + typeOffset * 71) % 623) + 89;
+        const noiseTime = ((level * 89 + typeOffset * 41) % 47) + 13;
+        
+        totalCost = {
+          metal: Math.floor(cost.metal * Math.pow(growthRate, level - 1) + noiseMetal),
+          plasma: Math.floor(cost.plasma * Math.pow(growthRate, level - 1) + noisePlasma),
+          time: Math.floor(cost.time * Math.pow(1.2, level - 1) + noiseTime),
+        };
+      }
 
       // Check resources
       if (metal.amount < totalCost.metal || plasma.amount < totalCost.plasma) {
@@ -126,7 +168,9 @@ export async function planetRoutes(app: FastifyInstance) {
         });
 
         // Create or update building
-        const endsAt = new Date(Date.now() + totalCost.time * 1000);
+        // DEV: Fast timers for development testing (never enabled by default)
+        const timeMultiplier = process.env.DEV_FAST_TIMERS === 'true' ? 0.1 : 1;
+        const endsAt = new Date(Date.now() + totalCost.time * timeMultiplier * 1000);
 
         if (isUpgrade) {
           return await tx.building.update({
