@@ -15,7 +15,7 @@ export default function StructureLibrary({
   const libraryItems = buildings.filter((b) => b.type !== "empty" && b.level === 0);
 
   return (
-    <section className="relative flex shrink-0 flex-col overflow-hidden rounded-xl border border-cyan-500/20 bg-[#0a1628]/90">
+    <section className="relative flex h-20 shrink-0 flex-col overflow-hidden rounded-xl border border-cyan-500/20 bg-[#0a1628]/90 lg:h-24">
       <CornerMarks />
       <div className="flex items-center gap-2 border-b border-cyan-500/10 px-3 py-2">
         <h2 className="text-[10px] font-black uppercase tracking-wider text-cyan-400">ESTRUCTURAS DISPONIBLES</h2>

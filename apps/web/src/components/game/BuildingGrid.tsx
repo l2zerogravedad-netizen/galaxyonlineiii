@@ -14,7 +14,7 @@ export default function BuildingGrid({
   onSel: (id: string) => void;
 }) {
   return (
-    <section className="relative flex flex-1 flex-col overflow-hidden rounded-xl border border-cyan-500/20 bg-[#0a1628]/90">
+    <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-cyan-500/20 bg-[#0a1628]/90">
       <CornerMarks />
       <div className="flex-1 overflow-y-auto p-2 lg:p-3">
         <div className="grid grid-cols-3 gap-2">

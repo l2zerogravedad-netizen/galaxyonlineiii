@@ -35,7 +35,7 @@ export default function PlanetDashboardPremium() {
           ))}
         </div>
 
-        <div className="flex flex-1 gap-2 overflow-hidden lg:gap-3">
+        <div className="flex min-h-0 flex-1 gap-2 overflow-hidden lg:gap-3">
           <PlanetPanel />
           <BuildingGrid buildings={initialBuildings} selId={selId} onSel={onSel} />
           <BuildingDetailPanel building={sel} />
