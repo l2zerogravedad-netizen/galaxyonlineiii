@@ -8,16 +8,18 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "cd packages/database && npx prisma generate",
-    "build:api": "cd packages/database && npx prisma generate && cd ../../apps/api && npm run build",
+    "build": "npm run build:api && npm run build:web",
+    "build:api": "cd packages/database && npx prisma generate && npm run build && cd ../../apps/api && npm run build",
     "build:web": "cd packages/database && npx prisma generate && cd ../../apps/web && npm run build",
-    "start": "cd packages/database && npx prisma db push --accept-data-loss && cd ../../apps/api && npm start",
+    "start": "npm run start:api",
+    "start:api": "cd apps/api && npm start",
     "start:web": "cd apps/web && npm start",
     "dev:api": "cd apps/api && npm run dev",
     "dev:web": "cd apps/web && npm run dev",
     "db:generate": "cd packages/database && npx prisma generate",
     "db:migrate": "cd packages/database && npx prisma migrate dev",
     "db:migrate:deploy": "cd packages/database && npx prisma migrate deploy",
+    "db:push:prod": "cd packages/database && npx prisma db push",
     "db:seed": "cd packages/database && npx prisma db seed",
     "db:studio": "cd packages/database && npx prisma studio"
   },

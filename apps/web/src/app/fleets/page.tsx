@@ -16,6 +16,7 @@ interface FleetFormation {
   id: string;
   quantity: number;
   ship: {
+    id: string;
     blueprint: {
       name: string;
       type: string;
