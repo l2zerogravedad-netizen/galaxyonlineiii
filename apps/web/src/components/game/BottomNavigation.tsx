@@ -1,41 +1,38 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { AssetImage } from './AssetImage';
+import { CornerMarks, NavIcon, LockIcon } from "./icons";
 
-const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Planeta', icon: '/game/assets/ui/info.webp', emoji: '🪐' },
-  { href: '/shipyard', label: 'Astillero', icon: '/game/assets/ui/build.webp', emoji: '🚀' },
-  { href: '/research', label: 'Investigación', icon: '/game/assets/ui/research.webp', emoji: '🔬' },
-  { href: '/fleets', label: 'Flotas', icon: '/game/assets/ui/defense.webp', emoji: '⚔' },
-  { href: '/missions', label: 'Misiones', icon: '/game/assets/ui/info.webp', emoji: '📡' },
-] as const;
-
-export function BottomNavigation() {
-  const pathname = usePathname();
+export default function BottomNavigation() {
+  const items = [
+    { label: "ASTILLERO", icon: "ship" as const, active: true, disabled: false },
+    { label: "INVESTIGACIÓN", icon: "research" as const, active: false, disabled: false },
+    { label: "FLOTAS", icon: "fleet" as const, active: false, disabled: true },
+    { label: "MISIONES", icon: "mission" as const, active: false, disabled: true },
+  ];
 
   return (
-    <nav className="game-panel flex items-stretch justify-around gap-1 p-1 md:p-2">
-      {NAV_ITEMS.map((item) => {
-        const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-        return (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 rounded-lg transition ${
-            active
-              ? 'bg-cyan-950/60 border border-cyan-500/40 text-cyan-200'
-              : 'hover:bg-slate-800/60 text-slate-400 hover:text-cyan-200'
-          }`}
+    <nav className="grid grid-cols-4 gap-2 lg:gap-3">
+      {items.map((item) => (
+        <button
+          key={item.label}
+          disabled={item.disabled}
+          className={[
+            "relative flex h-14 items-center justify-center gap-2 overflow-hidden rounded-lg border px-2 text-xs font-black uppercase tracking-wider transition lg:h-16 lg:gap-3 lg:text-sm",
+            item.disabled
+              ? "cursor-not-allowed border-slate-700/40 bg-[#0a1628]/80 text-slate-600"
+              : item.active
+                ? "border-cyan-400/40 bg-cyan-500/10 text-cyan-300 shadow-[0_0_20px_rgba(0,200,255,0.15)]"
+                : "border-cyan-500/15 bg-[#0a1628]/80 text-slate-400 hover:border-cyan-400/30 hover:bg-cyan-500/5 hover:text-cyan-300",
+          ].join(" ")}
         >
-          <AssetImage src={item.icon} alt={item.label} className="w-6 h-6" glow="cyan" icon={item.emoji} />
-          <span className="text-[9px] md:text-[10px] mt-1 uppercase tracking-wide truncate w-full text-center">
-            {item.label}
-          </span>
-        </Link>
-        );
-      })}
+          <CornerMarks />
+          {item.disabled ? <LockIcon /> : <NavIcon type={item.icon} />}
+          <div className="text-left">
+            <p>{item.label}</p>
+            {item.disabled && <p className="text-[9px] font-normal text-slate-600">PRÓXIMAMENTE</p>}
+          </div>
+        </button>
+      ))}
     </nav>
   );
 }

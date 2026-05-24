@@ -1,56 +1,35 @@
-'use client';
+"use client";
 
-import { AssetImage } from './AssetImage';
+import type { Resource } from "./game-data";
+import { fmt, pct } from "./game-data";
+import AssetImg from "./AssetImg";
+import { CornerMarks, ResourceIcon } from "./icons";
 
-interface ResourceCardProps {
-  label: string;
-  amount: number;
-  capacity?: number;
-  production?: number;
-  iconSrc: string;
-  iconFallback: string;
-  accent: 'cyan' | 'purple' | 'gold';
-}
+export default function ResourceCard({ resource }: { resource: Resource }) {
+  const colors = {
+    cyan: { border: "border-cyan-500/20", glow: "shadow-[0_0_20px_rgba(0,200,255,0.12)]", bar: "from-cyan-400 to-blue-500", text: "text-cyan-400", iconBg: "bg-cyan-500/10", iconBorder: "border-cyan-400/20" },
+    purple: { border: "border-purple-500/20", glow: "shadow-[0_0_20px_rgba(140,70,255,0.12)]", bar: "from-purple-500 to-fuchsia-400", text: "text-purple-400", iconBg: "bg-purple-500/10", iconBorder: "border-purple-400/20" },
+    gold: { border: "border-yellow-500/20", glow: "shadow-[0_0_20px_rgba(255,180,40,0.12)]", bar: "from-yellow-400 to-orange-500", text: "text-yellow-400", iconBg: "bg-yellow-500/10", iconBorder: "border-yellow-400/20" },
+  }[resource.tone];
 
-const accentBorder = {
-  cyan: 'border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.12)]',
-  purple: 'border-purple-500/40 shadow-[0_0_20px_rgba(168,85,247,0.12)]',
-  gold: 'border-amber-500/40 shadow-[0_0_20px_rgba(251,191,36,0.12)]',
-};
-
-const accentText = {
-  cyan: 'text-cyan-300',
-  purple: 'text-purple-300',
-  gold: 'text-amber-300',
-};
-
-export function ResourceCard({
-  label,
-  amount,
-  capacity,
-  production,
-  iconSrc,
-  iconFallback,
-  accent,
-}: ResourceCardProps) {
   return (
-    <div className={`game-panel flex items-center gap-3 px-3 py-2 border ${accentBorder[accent]}`}>
-      <AssetImage
-        src={iconSrc}
-        alt={label}
-        className="w-10 h-10 shrink-0"
-        glow={accent}
-        icon={iconFallback}
-      />
-      <div className="min-w-0 flex-1">
-        <p className={`text-[10px] uppercase tracking-wider ${accentText[accent]}`}>{label}</p>
-        <p className="text-lg font-bold tabular-nums truncate">{Math.floor(amount).toLocaleString()}</p>
-        {capacity != null && capacity > 0 && (
-          <p className="text-[10px] text-slate-500">/ {capacity.toLocaleString()}</p>
-        )}
-        {production != null && production > 0 && (
-          <p className="text-[10px] text-emerald-400">+{production.toLocaleString()}/h</p>
-        )}
+    <div className={`relative overflow-hidden rounded-xl border ${colors.border} bg-[#0a1628]/90 ${colors.glow} p-3`}>
+      <CornerMarks />
+      <div className="flex items-center gap-3">
+        <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-lg border ${colors.iconBorder} ${colors.iconBg} lg:h-12 lg:w-12`}>
+          <AssetImg name={resource.webpName} folder="ui" alt={resource.label} className="h-7 w-7 object-contain lg:h-8 lg:w-8" fallback={<ResourceIcon type={resource.key} />} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className={`text-[10px] font-bold uppercase tracking-wider ${colors.text} lg:text-xs`}>{resource.label}</p>
+          <p className="text-xl font-black tracking-tight text-white lg:text-2xl">{fmt(resource.value)}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] text-slate-500">/ {fmt(resource.max)}</p>
+            {resource.rate ? <p className="text-[10px] font-bold text-emerald-400">{resource.rate}</p> : null}
+          </div>
+        </div>
+      </div>
+      <div className="mt-2 h-1 overflow-hidden rounded-full bg-slate-900">
+        <div className={`h-full rounded-full bg-gradient-to-r ${colors.bar} shadow-[0_0_6px_currentColor]`} style={{ width: `${pct(resource.value, resource.max)}%` }} />
       </div>
     </div>
   );

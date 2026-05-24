@@ -1,39 +1,44 @@
-'use client';
+"use client";
 
-import { AssetImage } from './AssetImage';
+import AssetImg from "./AssetImg";
+import { CornerMarks, PlanetIconSmall, ChevronRight, InfoIcon } from "./icons";
 
-interface PlanetPanelProps {
-  planetName: string;
-  planetType?: string;
+export default function PlanetPanel() {
+  return (
+    <section className="relative flex w-[280px] shrink-0 flex-col overflow-hidden rounded-xl border border-cyan-500/20 bg-[#0a1628]/90 lg:w-[320px]">
+      <CornerMarks />
+      <div className="flex items-center gap-2 border-b border-cyan-500/10 px-3 py-2">
+        <PlanetIconSmall />
+        <h2 className="text-xs font-black uppercase tracking-wider text-cyan-400">Planeta Principal</h2>
+      </div>
+      <div className="relative flex flex-1 flex-col items-center justify-center p-2">
+        <div className="relative h-[200px] w-[200px] lg:h-[240px] lg:w-[240px]">
+          <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_35%_30%,#c8e6ff_0%,#5fb8ff_8%,#16599a_22%,#0a2752_48%,#031326_75%,transparent_76%)] shadow-[0_0_60px_rgba(0,150,255,0.4)]" />
+          <AssetImg name="main-planet" folder="planets" alt="Planeta" className="absolute inset-0 h-full w-full object-contain" fallback={null} />
+        </div>
+      </div>
+      <div className="border-t border-cyan-500/10">
+        <InfoRow icon="map" label="Coordenadas" value="X: 125  Y: 307" />
+        <InfoRow icon="people" label="Población" value="1.250" />
+        <InfoRow icon="shield" label="Defensa Planetaria" value="850" />
+        <InfoRow icon="bolt" label="Producción Total" value="+150/h" highlight />
+      </div>
+      <button className="flex items-center justify-between border-t border-cyan-500/10 px-3 py-2 text-xs font-bold text-cyan-400 transition hover:bg-cyan-500/5">
+        <span>VER DETALLES</span>
+        <ChevronRight />
+      </button>
+    </section>
+  );
 }
 
-export function PlanetPanel({ planetName, planetType = 'Habitable' }: PlanetPanelProps) {
+function InfoRow({ icon, label, value, highlight }: { icon: string; label: string; value: string; highlight?: boolean }) {
   return (
-    <aside className="game-panel flex flex-col items-center p-3 lg:p-4 min-h-[200px] lg:min-h-0">
-      <p className="text-[10px] uppercase tracking-widest text-cyan-400/70 mb-2">Planeta principal</p>
-      <div className="relative w-full max-w-[220px] aspect-square flex items-center justify-center">
-        <div className="absolute inset-4 rounded-full bg-cyan-500/10 blur-2xl animate-pulse" />
-        <div className="absolute inset-8 rounded-full bg-purple-500/10 blur-xl" />
-        <AssetImage
-          src="/game/assets/planets/main-planet.webp"
-          alt={planetName}
-          className="relative w-full h-full z-10"
-          glow="cyan"
-          icon="🪐"
-        />
+    <div className="flex items-center justify-between border-b border-cyan-500/5 px-3 py-1.5 last:border-b-0">
+      <div className="flex items-center gap-2">
+        <InfoIcon type={icon} />
+        <span className="text-[10px] text-slate-500 lg:text-xs">{label}</span>
       </div>
-      <h2 className="mt-3 text-sm font-semibold text-center">{planetName}</h2>
-      <p className="text-[10px] text-slate-400 uppercase">{planetType}</p>
-      <div className="mt-3 w-full grid grid-cols-2 gap-2 text-[10px]">
-        <div className="rounded border border-cyan-900/50 bg-slate-900/50 px-2 py-1 text-center">
-          <span className="text-slate-500 block">Defensa</span>
-          <span className="text-cyan-300 font-mono">84%</span>
-        </div>
-        <div className="rounded border border-cyan-900/50 bg-slate-900/50 px-2 py-1 text-center">
-          <span className="text-slate-500 block">Población</span>
-          <span className="text-cyan-300 font-mono">12.4k</span>
-        </div>
-      </div>
-    </aside>
+      <span className={`text-[10px] font-bold lg:text-xs ${highlight ? "text-emerald-400" : "text-slate-300"}`}>{value}</span>
+    </div>
   );
 }
