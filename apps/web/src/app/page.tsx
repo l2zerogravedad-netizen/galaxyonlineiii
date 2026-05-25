@@ -112,6 +112,15 @@ export default function LoginPage() {
           </button>
         </form>
 
+        <p className="text-center text-sm">
+          <a
+            href="/demo/construction"
+            className="text-emerald-400 hover:text-emerald-300 underline"
+          >
+            Demo construcción (arrastrar edificios, sin login)
+          </a>
+        </p>
+
         <div className="text-center">
           <button
             onClick={() => setIsRegistering(!isRegistering)}
