@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import '@/lib/apiBase';
 
 export default function LoginPage() {
   const router = useRouter();

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import '@/lib/apiBase';
 import type { ApiEmpire, GameDashboardDto } from '@galaxy/shared';
 import {
   dashboardToBuildings,
@@ -46,12 +47,13 @@ function empireToDashboard(empire: ApiEmpire): GameDashboardDto {
       id: planet?.id ?? '',
       name: planet?.name ?? 'Planeta Principal',
       type: planet?.type ?? 'HABITABLE',
+      maxBuildingSlots: planet?.maxBuildingSlots ?? 80,
       buildings: planet?.buildings ?? [],
     },
+    constructionQueue: [],
   };
 }
 
-/** Tries /api/game/dashboard, then /api/empire. */
 export async function loadDashboardData(): Promise<GameDashboardDto> {
   try {
     return await fetchGameDashboard();
@@ -70,8 +72,21 @@ export function mapDashboardToUi(dto: GameDashboardDto) {
     planetType: dto.planet.type,
     grid: dashboardToGrid(dto.planet),
     buildings: dashboardToBuildings(dto),
+    constructionQueue: dto.constructionQueue ?? [],
     usingMock: false,
   };
+}
+
+export async function collectGameResources(): Promise<{
+  resources: GameDashboardDto['resources'];
+  collected: { metal: number; plasma: number; credits: number };
+}> {
+  const { data } = await axios.post(
+    '/api/game/resources/collect',
+    {},
+    { headers: authHeaders() }
+  );
+  return data;
 }
 
 export async function buildOrUpgradeBuilding(
@@ -81,18 +96,6 @@ export async function buildOrUpgradeBuilding(
 ): Promise<void> {
   await axios.post(
     `/api/planets/${planetId}/build`,
-    { slotIndex, type },
-    { headers: authHeaders() }
-  );
-}
-
-export async function upgradeBuildingById(
-  buildingId: string,
-  slotIndex: number,
-  type: string
-): Promise<void> {
-  await axios.post(
-    `/api/game/buildings/${buildingId}/upgrade`,
     { slotIndex, type },
     { headers: authHeaders() }
   );

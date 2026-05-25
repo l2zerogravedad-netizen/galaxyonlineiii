@@ -34,8 +34,8 @@ export function UpArrow() {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15L12 9L6 15"/></svg>;
 }
 
-export function LockIcon() {
-  return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M7 11V7A5 5 0 0117 7v4"/></svg>;
+export function LockIcon({ className = "" }: { className?: string }) {
+  return <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M7 11V7A5 5 0 0117 7v4"/></svg>;
 }
 
 export function PlanetIconSmall() {

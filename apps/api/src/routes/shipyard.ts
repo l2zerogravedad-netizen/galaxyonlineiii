@@ -42,7 +42,7 @@ export async function shipyardRoutes(app: FastifyInstance) {
 
     // Check for shipyard building
     const hasShipyard = empire.planets.some((planet) =>
-      planet.buildings.some((b) => b.type === 'SHIPYARD')
+      planet.buildings.some((b) => b.type === 'shipyard' || b.type === 'SHIPYARD')
     );
 
     // Get completed techs for unlocking
@@ -185,7 +185,7 @@ export async function shipyardRoutes(app: FastifyInstance) {
 
       // Check shipyard building
       const hasShipyard = empire.planets.some((planet) =>
-        planet.buildings.some((b) => b.type === 'SHIPYARD')
+        planet.buildings.some((b) => b.type === 'shipyard' || b.type === 'SHIPYARD')
       );
 
       if (blueprint.requiredBuildingType && !hasShipyard) {

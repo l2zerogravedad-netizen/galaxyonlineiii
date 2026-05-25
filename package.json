@@ -16,6 +16,7 @@
     "start:web": "cd apps/web && node .next/standalone/server.js",
     "dev:api": "cd apps/api && npm run dev",
     "dev:web": "cd apps/web && npm run dev",
+    "play:hint": "powershell -File scripts/dev-play.ps1",
     "db:generate": "cd packages/database && npx prisma generate",
     "db:migrate": "cd packages/database && npx prisma migrate dev",
     "db:migrate:deploy": "cd packages/database && npx prisma migrate deploy",

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@galaxy/database": "*",
+    "@galaxy/shared": "*",
     "@fastify/cors": "^9.0.0",
     "@fastify/jwt": "^8.0.0",
     "bcrypt": "^5.1.0",

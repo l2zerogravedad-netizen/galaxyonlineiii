@@ -1,7 +1,7 @@
 'use client';
 
-import PlanetDashboardPremium from '@/components/game/PlanetDashboardPremium';
+import { Go2PlanetScreen } from '@/components/game/go2/Go2PlanetScreen';
 
 export default function DashboardPage() {
-  return <PlanetDashboardPremium />;
+  return <Go2PlanetScreen />;
 }

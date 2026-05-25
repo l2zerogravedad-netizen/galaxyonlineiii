@@ -1,25 +1,31 @@
-import type { ApiBuilding, GameDashboardDto } from '@galaxy/shared';
+import type { ApiBuilding, GameDashboardDto, Go2ConstructionQueueItemDto } from '@galaxy/shared';
+import {
+  getBuildingLevelCost,
+  normalizeBuildingType,
+  PLANET_BUILDING_SLOTS,
+  TYPE_TO_CATALOG_ID,
+} from '@galaxy/shared';
 import type { BuildingDefinition, BuildingStatus, GridSlot, PlayerData, ResourcesData } from '@/components/game/types';
 import {
   BUILDING_CATALOG,
   DEFAULT_PLAYER,
   DEFAULT_RESOURCES,
-  INITIAL_GRID,
 } from '@/components/game/mockData';
-import { API_BUILDABLE_TYPES, TYPE_TO_CATALOG_ID } from './buildingMap';
+import { API_BUILDABLE_TYPES } from './buildingMap';
+import { BUILD_TAB_BY_TYPE, MAX_PER_PLANET_BY_TYPE } from '@galaxy/shared';
 
 function mapBuildingStatus(apiStatus: string): BuildingStatus {
   if (apiStatus === 'CONSTRUCTING' || apiStatus === 'UPGRADING') return 'upgrading';
-  if (apiStatus === 'IDLE' || apiStatus === 'ACTIVE') return 'active';
   return 'active';
 }
 
-function productionLabel(type: string, productionPerHour: number): string {
-  if (type === 'METAL_MINE' && productionPerHour > 0) {
-    return `+${productionPerHour.toLocaleString()}/h metal`;
+function productionLabel(type: string, dto: GameDashboardDto['resources']): string {
+  const t = normalizeBuildingType(type);
+  if (t === 'metal_extractor' && dto.metalProduction > 0) {
+    return `+${dto.metalProduction.toLocaleString()}/h metal`;
   }
-  if (type === 'PLASMA_EXTRACTOR' && productionPerHour > 0) {
-    return `+${productionPerHour.toLocaleString()}/h plasma`;
+  if (t === 'plasma_refinery' && dto.plasmaProduction > 0) {
+    return `+${dto.plasmaProduction.toLocaleString()}/h plasma`;
   }
   return '—';
 }
@@ -27,35 +33,33 @@ function productionLabel(type: string, productionPerHour: number): string {
 function mergeApiBuilding(
   template: BuildingDefinition,
   api: ApiBuilding,
-  resources: GameDashboardDto['resources']
+  dto: GameDashboardDto['resources']
 ): BuildingDefinition {
-  const production =
-    api.type === 'METAL_MINE'
-      ? productionLabel(api.type, resources.metalProduction)
-      : api.type === 'PLASMA_EXTRACTOR'
-        ? productionLabel(api.type, resources.plasmaProduction)
-        : template.production;
-
+  const canonical = normalizeBuildingType(api.type);
   return {
     ...template,
-    type: api.type,
+    type: canonical,
     level: api.level,
     status: mapBuildingStatus(api.status),
     slotIndex: api.slotIndex,
-    production,
+    production: productionLabel(canonical, dto),
     apiBuildingId: api.id,
+    constructionEndsAt: api.constructionEndsAt ?? null,
+    uiTab: BUILD_TAB_BY_TYPE[canonical],
+    maxPerPlanet: MAX_PER_PLANET_BY_TYPE[canonical],
   };
 }
 
 export function dashboardToGrid(planet: GameDashboardDto['planet']): GridSlot[] {
-  const grid: GridSlot[] = Array.from({ length: 9 }, (_, slotIndex) => ({
+  const grid: GridSlot[] = Array.from({ length: PLANET_BUILDING_SLOTS }, (_, slotIndex) => ({
     slotIndex,
     buildingId: null,
   }));
 
   for (const b of planet.buildings) {
-    if (b.slotIndex < 0 || b.slotIndex > 8) continue;
-    const catalogId = TYPE_TO_CATALOG_ID[b.type];
+    if (b.slotIndex < 0 || b.slotIndex >= PLANET_BUILDING_SLOTS) continue;
+    const canonical = normalizeBuildingType(b.type);
+    const catalogId = TYPE_TO_CATALOG_ID[canonical];
     if (catalogId) {
       grid[b.slotIndex] = { slotIndex: b.slotIndex, buildingId: catalogId };
     }
@@ -68,23 +72,37 @@ export function dashboardToBuildings(dto: GameDashboardDto): BuildingDefinition[
   const onPlanetByCatalogId = new Map<string, ApiBuilding>();
 
   for (const api of dto.planet.buildings) {
-    const catalogId = TYPE_TO_CATALOG_ID[api.type];
-    if (catalogId) onPlanetByCatalogId.set(catalogId, api);
+    const canonical = normalizeBuildingType(api.type);
+    const catalogId = TYPE_TO_CATALOG_ID[canonical];
+    if (catalogId) onPlanetByCatalogId.set(catalogId, { ...api, type: canonical });
   }
 
   return BUILDING_CATALOG.map((template) => {
     const api = onPlanetByCatalogId.get(template.id);
     if (api) {
-      return mergeApiBuilding(template, api, dto.resources);
+      const merged = mergeApiBuilding(template, api, dto.resources);
+      const targetLevel =
+        api.status === 'CONSTRUCTING'
+          ? 1
+          : api.status === 'UPGRADING'
+            ? api.level + 1
+            : api.level + 1;
+      const cost = getBuildingLevelCost(merged.type, Math.max(1, targetLevel));
+      return {
+        ...merged,
+        upgradeCost: { metal: cost.metal, plasma: cost.plasma, credits: cost.credits },
+      };
     }
 
     const buildable = API_BUILDABLE_TYPES.has(template.type);
+    const cost = getBuildingLevelCost(template.type, 1);
     return {
       ...template,
       status: buildable ? ('empty' as const) : ('locked' as const),
       level: 0,
       slotIndex: undefined,
       apiBuildingId: undefined,
+      upgradeCost: { metal: cost.metal, plasma: cost.plasma, credits: cost.credits },
     };
   });
 }
@@ -111,14 +129,25 @@ export function dashboardToResources(dto: GameDashboardDto): ResourcesData {
 }
 
 export function getMockDashboardState() {
+  const grid: GridSlot[] = Array.from({ length: PLANET_BUILDING_SLOTS }, (_, slotIndex) => ({
+    slotIndex,
+    buildingId: null,
+  }));
+  for (const b of BUILDING_CATALOG) {
+    if (b.slotIndex != null && b.level > 0) {
+      grid[b.slotIndex] = { slotIndex: b.slotIndex, buildingId: b.id };
+    }
+  }
+
   return {
     player: DEFAULT_PLAYER,
     resources: DEFAULT_RESOURCES,
     planetId: null as string | null,
     planetName: 'Planeta Principal',
     planetType: 'HABITABLE',
-    grid: INITIAL_GRID,
+    grid,
     buildings: BUILDING_CATALOG,
+    constructionQueue: [] as Go2ConstructionQueueItemDto[],
     usingMock: true,
   };
 }

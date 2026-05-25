@@ -4,6 +4,21 @@
 
 ---
 
+## Trabajo multi-agente (canónico)
+
+**Directorio de trabajo:** `c:\temp-galaxy\` (Windsurf documentó aquí; Cursor = web; Claude = móvil después).
+
+| Documento | Contenido |
+|-----------|-----------|
+| [docs/COORDINACION_TRES_CLIENTES.md](docs/COORDINACION_TRES_CLIENTES.md) | Roles, reglas, qué no usar |
+| [docs/PLAN_ARRANQUE_WEB_CURSOR.md](docs/PLAN_ARRANQUE_WEB_CURSOR.md) | Plan Fase 1 web |
+| [docs/implementation-phases/](docs/implementation-phases/) | Diseño completo GO II |
+| [docs/GO2_GAMEPLAY_FROM_VIDEO.md](docs/GO2_GAMEPLAY_FROM_VIDEO.md) | Flujo UI del video |
+
+**Infra:** Railway + Supabase (ver `.env.example`). Repo deploy: `galaxyonlineiii` en GitHub.
+
+---
+
 ## ⚠️ Aviso Legal
 
 Este proyecto es una **obra original** inspirada en el género de estrategia espacial 4X, con referencia a la experiencia de juegos como Galaxy Online II, Stellaris, OGame, y otros títulos del género.

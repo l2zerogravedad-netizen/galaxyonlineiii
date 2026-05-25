@@ -1,0 +1,452 @@
+/* Vista planeta estilo Galaxy Online II */
+
+.go2-planet-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #87b86a 0%, #5d9a48 35%, #4a7f3c 70%, #3a6b32 100%);
+}
+
+.go2-planet-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(0, 0, 0, 0.08) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.go2-terrain-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem 5rem;
+}
+
+.go2-iso-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+.go2-iso-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  margin-top: -9px;
+}
+
+.go2-iso-row:nth-child(even) {
+  margin-left: 38px;
+}
+
+.go2-iso-tile {
+  position: relative;
+  width: 76px;
+  height: 40px;
+  margin: 0 1px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  transition: filter 0.15s ease;
+}
+
+.go2-iso-tile::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: linear-gradient(145deg, #6db85a 0%, #4d9340 45%, #3d7a34 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.go2-iso-tile--grid::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 255, 255, 0.04) 4px,
+    rgba(255, 255, 255, 0.04) 5px
+  );
+  pointer-events: none;
+}
+
+.go2-iso-tile--selected::before {
+  background: linear-gradient(145deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.6);
+}
+
+.go2-iso-tile--target::before {
+  background: linear-gradient(145deg, #fde68a 0%, #f59e0b 55%, #ea580c 100%);
+  animation: go2-pulse 1s ease-in-out infinite;
+}
+
+.go2-iso-tile--occupied::before {
+  background: linear-gradient(145deg, #5a8f4e 0%, #457a3c 100%);
+}
+
+.go2-iso-tile--building::before {
+  background: linear-gradient(145deg, #94a3b8 0%, #64748b 100%);
+}
+
+@keyframes go2-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.15);
+  }
+}
+
+.go2-tile-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.go2-tile-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  transform: translateY(-8px);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+.go2-tile-lv {
+  position: absolute;
+  bottom: 6px;
+  right: 14px;
+  z-index: 3;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fef3c7;
+  text-shadow: 0 1px 2px #000;
+}
+
+.go2-build-bar {
+  position: absolute;
+  top: 4px;
+  left: 20%;
+  right: 20%;
+  z-index: 4;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.go2-build-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+}
+
+.go2-pending-q {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  font-size: 14px;
+  font-weight: 900;
+  color: #facc15;
+  text-shadow: 0 0 6px #000, 0 0 12px #f59e0b;
+}
+
+.go2-planet-header {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 35;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(180, 120, 40, 0.4);
+  background: linear-gradient(180deg, rgba(20, 14, 6, 0.92) 0%, rgba(10, 8, 4, 0.95) 100%);
+}
+
+.go2-header-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #b45309;
+  background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+  color: #fffbeb;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.go2-header-btn:disabled {
+  opacity: 0.5;
+}
+
+.go2-header-btn--danger {
+  border-color: #991b1b;
+  background: linear-gradient(180deg, #dc2626 0%, #7f1d1d 100%);
+}
+
+.go2-hud-resources {
+  position: absolute;
+  top: 72px;
+  right: 8px;
+  z-index: 30;
+  display: flex;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 2px solid rgba(180, 120, 40, 0.6);
+  background: linear-gradient(180deg, rgba(30, 20, 10, 0.92) 0%, rgba(15, 10, 5, 0.95) 100%);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.go2-res-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  gap: 2px;
+}
+
+.go2-res-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 900;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.go2-res-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fef3c7;
+  font-variant-numeric: tabular-nums;
+}
+
+.go2-queue-panel {
+  position: absolute;
+  top: 56px;
+  right: 8px;
+  z-index: 28;
+  width: min(220px, 32vw);
+  border-radius: 6px;
+  border: 2px solid rgba(180, 120, 40, 0.55);
+  background: linear-gradient(180deg, rgba(25, 18, 8, 0.94) 0%, rgba(12, 8, 4, 0.96) 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.go2-queue-title {
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fcd34d;
+  border-bottom: 1px solid rgba(180, 120, 40, 0.35);
+}
+
+.go2-queue-slot {
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  color: #e7e5e4;
+}
+
+.go2-queue-slot--empty {
+  color: #78716c;
+  font-style: italic;
+}
+
+.go2-queue-time {
+  font-family: ui-monospace, monospace;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.go2-bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 35;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px 12px;
+  background: linear-gradient(0deg, rgba(10, 8, 5, 0.95) 0%, transparent 100%);
+}
+
+.go2-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px;
+  border-radius: 8px 8px 4px 4px;
+  border: 2px solid rgba(120, 80, 30, 0.5);
+  background: linear-gradient(180deg, #4a3728 0%, #2a1f14 100%);
+  color: #d6d3d1;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+
+.go2-nav-btn--active {
+  border-color: #fbbf24;
+  background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
+  color: #fef3c7;
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.35);
+}
+
+.go2-hammer-btn {
+  position: absolute;
+  bottom: 72px;
+  right: 16px;
+  z-index: 34;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  border: 3px solid #fbbf24;
+  background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+}
+
+.go2-hammer-btn:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
+.go2-build-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.go2-build-dialog {
+  width: min(640px, 94vw);
+  max-height: min(520px, 88vh);
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 3px solid #b45309;
+  background: linear-gradient(180deg, #1c1917 0%, #0c0a09 100%);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+
+.go2-build-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 2px solid #78350f;
+}
+
+.go2-build-tab {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #a8a29e;
+  background: #292524;
+}
+
+.go2-build-tab--on {
+  color: #451a03;
+  background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+}
+
+.go2-build-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.go2-build-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  border: 1px solid #44403c;
+  background: #1c1917;
+  color: #e7e5e4;
+  font-size: 10px;
+}
+
+.go2-build-item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.go2-build-item:not(:disabled):hover {
+  border-color: #fbbf24;
+  background: #292524;
+}
+
+.go2-toast {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: rgba(20, 12, 4, 0.92);
+  border: 1px solid #d97706;
+  color: #fef3c7;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.go2-slot-panel {
+  position: absolute;
+  bottom: 88px;
+  left: 8px;
+  z-index: 32;
+  width: min(260px, 42vw);
+  border-radius: 8px;
+  border: 2px solid rgba(180, 120, 40, 0.55);
+  background: linear-gradient(180deg, rgba(25, 18, 8, 0.96) 0%, rgba(12, 8, 4, 0.98) 100%);
+  padding: 10px;
+  color: #fef3c7;
+  font-size: 11px;
+}

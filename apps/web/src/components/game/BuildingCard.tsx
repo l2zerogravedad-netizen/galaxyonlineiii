@@ -1,8 +1,7 @@
 "use client";
 
 import type { Building } from "./game-data";
-import AssetImg from "./AssetImg";
-import { BuildingIcon } from "./icons";
+import PlaceholderBuilding from "./PlaceholderBuilding";
 
 export default function BuildingCard({
   building,
@@ -36,16 +35,15 @@ export default function BuildingCard({
       <div className="relative flex h-[60px] w-full items-center justify-center lg:h-[80px]">
         {empty ? (
           <div className="flex flex-col items-center gap-1">
-            <div className="grid h-10 w-10 place-items-center rounded-full border border-cyan-400/20 text-xl text-cyan-400/50 lg:h-12 lg:w-12">+</div>
+            <PlaceholderBuilding type="empty" size="md" glow="cyan" className="opacity-60" />
             <p className="text-[9px] font-bold uppercase tracking-wider text-cyan-400/50">CONSTRUIR</p>
           </div>
         ) : (
-          <AssetImg
-            name={building.webpName}
-            folder="buildings"
-            alt={building.name}
-            className="h-full w-full object-contain drop-shadow-[0_0_24px_rgba(0,220,255,0.75)] transition group-hover:drop-shadow-[0_0_30px_rgba(0,220,255,0.9)]"
-            fallback={<BuildingIcon type={building.type} />}
+          <PlaceholderBuilding
+            type={building.type}
+            size="md"
+            glow={building.glow}
+            className="drop-shadow-[0_0_16px_rgba(0,220,255,0.5)] transition-all duration-300 group-hover:drop-shadow-[0_0_24px_rgba(0,220,255,0.8)] group-hover:scale-105"
           />
         )}
       </div>

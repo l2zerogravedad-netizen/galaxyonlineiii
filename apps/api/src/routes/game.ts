@@ -1,10 +1,21 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '@galaxy/database';
+import {
+  buildGo2ConstructionQueue,
+  getBuildingLevelCost,
+  normalizeBuildingType,
+  PLANET_BUILDING_SLOTS,
+} from '@galaxy/shared';
+import { syncEmpireGameState } from '../lib/gameState';
+import { finalizeCompletedBuildings } from '../lib/buildingLogic';
 
 function xpMaxForLevel(level: number): number {
   return Math.max(level * 1000, 1000);
 }
+
+const isDevCheap =
+  process.env.DEV_CHEAP_COSTS === 'true' || process.env.DEV_CHEAP_COSTS === '1';
 
 export async function gameRoutes(app: FastifyInstance) {
   app.addHook('onRequest', async (request, reply) => {
@@ -15,14 +26,14 @@ export async function gameRoutes(app: FastifyInstance) {
     }
   });
 
-  /** GET /api/game/dashboard — player, resources, main planet + buildings */
   app.get('/dashboard', async (request, reply) => {
     const { empireId } = request.user as { empireId: string };
+
+    const synced = await syncEmpireGameState(empireId);
 
     const empire = await prisma.empire.findUnique({
       where: { id: empireId },
       include: {
-        resources: true,
         planets: {
           include: { buildings: true },
           orderBy: { createdAt: 'asc' },
@@ -34,10 +45,26 @@ export async function gameRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: 'Empire not found' });
     }
 
-    const metal = empire.resources.find((r) => r.type === 'METAL');
-    const plasma = empire.resources.find((r) => r.type === 'PLASMA');
-    const credits = empire.resources.find((r) => r.type === 'CREDITS');
     const planet = empire.planets[0];
+    let buildings = planet?.buildings ?? [];
+    if (planet) {
+      buildings = (await finalizeCompletedBuildings(planet.id)) as typeof buildings;
+    }
+
+    const normalized = buildings.map((b) => ({
+      id: b.id,
+      planetId: b.planetId,
+      type: normalizeBuildingType(b.type),
+      level: b.level,
+      slotIndex: b.slotIndex,
+      status: b.status,
+      constructionEndsAt:
+        b.constructionEndsAt instanceof Date
+          ? b.constructionEndsAt.toISOString()
+          : (b.constructionEndsAt as string | null) ?? null,
+    }));
+
+    const constructionQueue = buildGo2ConstructionQueue(normalized, isDevCheap);
 
     return {
       player: {
@@ -47,21 +74,41 @@ export async function gameRoutes(app: FastifyInstance) {
         xp: empire.experience,
         xpMax: xpMaxForLevel(empire.level),
       },
-      resources: {
-        metal: metal?.amount ?? 0,
-        plasma: plasma?.amount ?? 0,
-        credits: credits?.amount ?? 0,
-        metalCapacity: metal?.capacity ?? 0,
-        plasmaCapacity: plasma?.capacity ?? 0,
-        metalProduction: metal?.productionPerHour ?? 0,
-        plasmaProduction: plasma?.productionPerHour ?? 0,
-      },
+      resources: synced.resources,
+      collected: synced.collected,
       planet: {
         id: planet?.id ?? '',
         name: planet?.name ?? 'Planeta Principal',
         type: planet?.type ?? 'HABITABLE',
-        buildings: planet?.buildings ?? [],
+        maxBuildingSlots: planet?.maxBuildingSlots ?? PLANET_BUILDING_SLOTS,
+        buildings: normalized,
       },
+      constructionQueue,
+    };
+  });
+
+  app.post('/resources/collect', async (request, reply) => {
+    const { empireId } = request.user as { empireId: string };
+    const empire = await prisma.empire.findUnique({ where: { id: empireId } });
+    if (!empire) {
+      return reply.status(404).send({ error: 'Empire not found' });
+    }
+    return syncEmpireGameState(empireId);
+  });
+
+  app.get('/buildings/:type/cost', async (request, reply) => {
+    const { type } = request.params as { type: string };
+    const level = Math.min(
+      30,
+      Math.max(1, Number((request.query as { level?: string })?.level) || 1)
+    );
+    const canonical = normalizeBuildingType(type);
+    const cost = getBuildingLevelCost(canonical, level, isDevCheap);
+    return {
+      type: canonical,
+      level,
+      cost: { metal: cost.metal, plasma: cost.plasma, credits: cost.credits },
+      timeSeconds: cost.time,
     };
   });
 
@@ -114,11 +161,10 @@ export async function gameRoutes(app: FastifyInstance) {
   });
 
   const upgradeBodySchema = z.object({
-    slotIndex: z.number().min(0).max(8).optional(),
+    slotIndex: z.number().min(0).max(PLANET_BUILDING_SLOTS - 1).optional(),
     type: z.string().optional(),
   });
 
-  /** POST /api/game/buildings/:id/upgrade — :id = building UUID */
   app.post('/buildings/:id/upgrade', async (request, reply) => {
     const { id: buildingId } = request.params as { id: string };
     const { empireId } = request.user as { empireId: string };
@@ -133,14 +179,14 @@ export async function gameRoutes(app: FastifyInstance) {
       return reply.status(404).send({ error: 'Building not found' });
     }
 
-    const slotIndex = body.slotIndex ?? building.slotIndex;
-    const type = body.type ?? building.type;
-
     const res = await app.inject({
       method: 'POST',
       url: `/api/planets/${building.planetId}/build`,
       headers: { authorization: request.headers.authorization ?? '' },
-      payload: { slotIndex, type },
+      payload: {
+        slotIndex: body.slotIndex ?? building.slotIndex,
+        type: body.type ?? building.type,
+      },
     });
 
     return reply.status(res.statusCode).send(JSON.parse(res.body));

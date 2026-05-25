@@ -1,166 +1,71 @@
+import {
+  BUILD_TAB_BY_TYPE,
+  INITIAL_PLAYER_RESOURCES,
+  MAX_PER_PLANET_BY_TYPE,
+  WINDSURF_TERRESTRIAL_BUILDINGS,
+} from '@galaxy/shared';
 import type { BuildingDefinition, GridSlot, PlayerData, ResourcesData } from './types';
 
 export const DEFAULT_PLAYER: PlayerData = {
-  name: 'Imperio Nova',
-  level: 12,
-  xp: 8420,
-  xpMax: 12000,
+  name: 'Imperio Demo',
+  level: 1,
+  xp: 0,
+  xpMax: 1000,
 };
 
 export const DEFAULT_RESOURCES: ResourcesData = {
-  metal: 128_450,
-  plasma: 64_200,
-  credits: 9_800,
-  metalCapacity: 200_000,
-  plasmaCapacity: 150_000,
-  metalProduction: 1200,
-  plasmaProduction: 640,
+  metal: INITIAL_PLAYER_RESOURCES.metal,
+  plasma: INITIAL_PLAYER_RESOURCES.plasma,
+  credits: INITIAL_PLAYER_RESOURCES.credits,
+  metalCapacity: 50_000,
+  plasmaCapacity: 50_000,
+  metalProduction: 100,
+  plasmaProduction: 50,
 };
 
 const B = '/game/assets/buildings';
 
-export const BUILDING_CATALOG: BuildingDefinition[] = [
-  {
-    id: 'metal-extractor',
-    name: 'Extractor de Metal',
-    type: 'METAL_MINE',
-    level: 3,
-    image: `${B}/metal-extractor.webp`,
-    description: 'Extrae mineral de la corteza planetaria para la industria orbital.',
-    production: '+1,200/h metal',
+function catalogEntry(
+  spec: (typeof WINDSURF_TERRESTRIAL_BUILDINGS)[number],
+  opts: Partial<BuildingDefinition>
+): BuildingDefinition {
+  return {
+    id: spec.catalogId,
+    name: spec.name,
+    type: spec.apiType,
+    level: opts.level ?? 0,
+    image: `${B}/${spec.catalogId}.webp`,
+    description: spec.name,
+    production: '—',
     capacity: '—',
     health: 100,
-    category: 'production',
-    upgradeCost: { metal: 5000, plasma: 1200, credits: 400 },
-    status: 'active',
-    slotIndex: 0,
-  },
-  {
-    id: 'plasma-refinery',
-    name: 'Refinería de Plasma',
-    type: 'PLASMA_EXTRACTOR',
-    level: 2,
-    image: `${B}/plasma-refinery.webp`,
-    description: 'Procesa plasma ionizado para reactores y armamento.',
-    production: '+640/h plasma',
-    capacity: '—',
-    health: 95,
-    category: 'production',
-    upgradeCost: { metal: 4200, plasma: 800, credits: 350 },
-    status: 'active',
-    slotIndex: 1,
-  },
-  {
-    id: 'warehouse',
-    name: 'Almacén',
-    type: 'WAREHOUSE',
-    level: 2,
-    image: `${B}/warehouse.webp`,
-    description: 'Aumenta la capacidad de almacenamiento de recursos.',
-    production: '—',
-    capacity: '+50,000',
-    health: 120,
-    category: 'storage',
-    upgradeCost: { metal: 3000, plasma: 900, credits: 200 },
-    status: 'active',
-    slotIndex: 2,
-  },
-  {
-    id: 'energy-generator',
-    name: 'Generador de Energía',
-    type: 'ENERGY',
-    level: 1,
-    image: `${B}/energy-generator.webp`,
-    description: 'Suministra energía a edificios y defensas del sector.',
-    production: '+80/h energía',
-    capacity: '—',
-    health: 90,
-    category: 'core',
-    upgradeCost: { metal: 2500, plasma: 1500, credits: 300 },
-    status: 'upgrading',
-    slotIndex: 3,
-  },
-  {
-    id: 'control-center',
-    name: 'Centro de Control',
-    type: 'COMMAND_CENTER',
-    level: 4,
-    image: `${B}/control-center.webp`,
-    description: 'Núcleo de mando del planeta. Desbloquea nuevas construcciones.',
-    production: '—',
-    capacity: '—',
-    health: 200,
-    category: 'core',
-    upgradeCost: { metal: 8000, plasma: 4000, credits: 1200 },
-    status: 'active',
-    slotIndex: 4,
-  },
-  {
-    id: 'shipyard',
-    name: 'Astillero',
-    type: 'SHIPYARD',
-    level: 2,
-    image: `${B}/shipyard.webp`,
-    description: 'Construye y repara naves de la flota imperial.',
-    production: '—',
-    capacity: '2 colas',
-    health: 110,
-    category: 'military',
-    upgradeCost: { metal: 6000, plasma: 3000, credits: 800 },
-    status: 'active',
-    slotIndex: 5,
-  },
-  {
-    id: 'research-lab',
-    name: 'Laboratorio',
-    type: 'RESEARCH_LAB',
-    level: 1,
-    image: `${B}/research-lab.webp`,
-    description: 'Investiga tecnologías avanzadas para el imperio.',
-    production: '—',
-    capacity: '—',
-    health: 85,
-    category: 'research',
-    upgradeCost: { metal: 4500, plasma: 5500, credits: 600 },
-    status: 'locked',
-    slotIndex: 6,
-  },
-  {
-    id: 'defense-turret',
-    name: 'Torre de Defensa',
-    type: 'DEFENSE',
-    level: 0,
-    image: `${B}/defense-turret.webp`,
-    description: 'Defensa orbital contra incursiones enemigas.',
-    production: '—',
-    capacity: '—',
-    health: 150,
-    category: 'military',
-    upgradeCost: { metal: 3500, plasma: 2000, credits: 500 },
-    status: 'locked',
-    slotIndex: 7,
-  },
-  {
-    id: 'hangar',
-    name: 'Hangar',
-    type: 'HANGAR',
-    level: 0,
-    image: `${B}/hangar.webp`,
-    description: 'Estaciona flotas en órbita baja del planeta.',
-    production: '—',
-    capacity: '12 naves',
-    health: 100,
-    category: 'military',
-    upgradeCost: { metal: 5000, plasma: 2500, credits: 700 },
-    status: 'empty',
-    slotIndex: 8,
-  },
-];
+    category: spec.category === 'defense' ? 'defense' : spec.category === 'military' ? 'military' : spec.category === 'research' ? 'research' : spec.category === 'storage' ? 'storage' : spec.category === 'production' ? 'production' : 'core',
+    upgradeCost: { metal: 100, plasma: 50, credits: 50 },
+    status: opts.status ?? 'empty',
+    slotIndex: opts.slotIndex,
+    uiTab: BUILD_TAB_BY_TYPE[spec.apiType],
+    maxPerPlanet: MAX_PER_PLANET_BY_TYPE[spec.apiType],
+    glow: 'cyan',
+    ...opts,
+  };
+}
 
-export const INITIAL_GRID: GridSlot[] = Array.from({ length: 9 }, (_, slotIndex) => {
-  const b = BUILDING_CATALOG.find((x) => x.slotIndex === slotIndex);
-  if (!b || b.status === 'empty') return { slotIndex, buildingId: null };
-  return { slotIndex, buildingId: b.id };
+export const BUILDING_CATALOG: BuildingDefinition[] = WINDSURF_TERRESTRIAL_BUILDINGS.map((spec) => {
+  const preset: Partial<BuildingDefinition> = {};
+  if (spec.apiType === 'metal_extractor') {
+    Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 0, production: '+100/h metal' });
+  } else if (spec.apiType === 'plasma_refinery') {
+    Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 1, production: '+50/h plasma' });
+  } else if (spec.apiType === 'control_center') {
+    Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 40 });
+  } else if (spec.apiType === 'research_lab') {
+    Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 2 });
+  } else if (spec.apiType === 'shipyard') {
+    Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 3 });
+  } else {
+    Object.assign(preset, { level: 0, status: 'empty' as const });
+  }
+  return catalogEntry(spec, preset);
 });
 
 export function getBuildingById(id: string): BuildingDefinition | undefined {

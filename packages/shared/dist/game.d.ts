@@ -1,6 +1,7 @@
-/** Shared game API contracts (web + api). */
+/** Shared game API contracts (web + api + desktop + mobile). */
+import type { CanonicalBuildingTypeId } from './planetLayout';
 export type ApiResourceType = 'METAL' | 'PLASMA' | 'CREDITS';
-export type ApiBuildingType = 'COMMAND_CENTER' | 'METAL_MINE' | 'PLASMA_EXTRACTOR' | 'SHIPYARD' | 'RESEARCH_LAB' | 'ACADEMY' | 'WAREHOUSE';
+export type ApiBuildingType = CanonicalBuildingTypeId | string;
 export type ApiBuildingStatus = 'IDLE' | 'CONSTRUCTING' | 'UPGRADING' | string;
 export interface ApiResource {
     id: string;
@@ -54,12 +55,25 @@ export interface GamePlanetDto {
     id: string;
     name: string;
     type: string;
+    maxBuildingSlots: number;
     buildings: ApiBuilding[];
+}
+export interface Go2ConstructionQueueItemDto {
+    id: string;
+    buildingType: string;
+    buildingName: string;
+    level: number;
+    targetLevel: number;
+    slotIndex: number;
+    status: 'CONSTRUCTING' | 'UPGRADING';
+    endsAt: string | null;
+    progressPct: number;
 }
 export interface GameDashboardDto {
     player: GamePlayerDto;
     resources: GameResourcesDto;
     planet: GamePlanetDto;
+    constructionQueue: Go2ConstructionQueueItemDto[];
 }
 export interface UpgradeBuildingBody {
     slotIndex: number;

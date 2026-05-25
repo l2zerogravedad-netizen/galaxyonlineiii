@@ -69,7 +69,7 @@ model Planet {
   galaxyX           Int      @default(0) @map("galaxy_x")
   galaxyY           Int      @default(0) @map("galaxy_y")
   type              String @default("HABITABLE")
-  maxBuildingSlots  Int      @default(9) @map("max_building_slots")
+  maxBuildingSlots  Int      @default(80) @map("max_building_slots")
   createdAt         DateTime @default(now()) @map("created_at")
   
   empire            Empire   @relation(fields: [empireId], references: [id])

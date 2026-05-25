@@ -2,6 +2,11 @@ import { FastifyInstance } from 'fastify';
 import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import { prisma } from '@galaxy/database';
+import {
+  INITIAL_PLAYER_RESOURCES,
+  INITIAL_RESOURCE_CAPACITY,
+  PLANET_BUILDING_SLOTS,
+} from '@galaxy/shared';
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -58,16 +63,17 @@ export async function authRoutes(app: FastifyInstance) {
             empireId: empire.id,
             name: 'Planeta Principal',
             type: 'HABITABLE',
+            maxBuildingSlots: PLANET_BUILDING_SLOTS,
           },
         });
 
-        // Create initial buildings
+        const centerSlot = Math.floor(PLANET_BUILDING_SLOTS / 2);
         const initialBuildings = [
-          { type: 'COMMAND_CENTER', slotIndex: 4 },
-          { type: 'METAL_MINE', slotIndex: 0 },
-          { type: 'PLASMA_EXTRACTOR', slotIndex: 1 },
-          { type: 'SHIPYARD', slotIndex: 2 },
-          { type: 'RESEARCH_LAB', slotIndex: 3 },
+          { type: 'control_center', slotIndex: centerSlot },
+          { type: 'metal_extractor', slotIndex: 0 },
+          { type: 'plasma_refinery', slotIndex: 1 },
+          { type: 'research_lab', slotIndex: 2 },
+          { type: 'shipyard', slotIndex: 3 },
         ];
 
         for (const building of initialBuildings) {
@@ -82,13 +88,31 @@ export async function authRoutes(app: FastifyInstance) {
         // Create resources
         // DEV_MODE: High resources for development testing
         const isDevHighResources = process.env.DEV_HIGH_STARTING_RESOURCES === 'true';
-        const devAmount = 1000000; // 1 millón iniciales
-        const devCapacity = 100000000; // 100 millones capacidad
+        const devAmount = 1_000_000;
+        const devCapacity = 100_000_000;
         await tx.resource.createMany({
           data: [
-            { empireId: empire.id, type: 'METAL', amount: isDevHighResources ? devAmount : 500, capacity: isDevHighResources ? devCapacity : 1000, productionPerHour: 100 },
-            { empireId: empire.id, type: 'PLASMA', amount: isDevHighResources ? devAmount : 200, capacity: isDevHighResources ? devCapacity : 1000, productionPerHour: 50 },
-            { empireId: empire.id, type: 'CREDITS', amount: isDevHighResources ? devAmount : 1000, capacity: 999999999, productionPerHour: 0 },
+            {
+              empireId: empire.id,
+              type: 'METAL',
+              amount: isDevHighResources ? devAmount : INITIAL_PLAYER_RESOURCES.metal,
+              capacity: isDevHighResources ? devCapacity : INITIAL_RESOURCE_CAPACITY.metal,
+              productionPerHour: 100,
+            },
+            {
+              empireId: empire.id,
+              type: 'PLASMA',
+              amount: isDevHighResources ? devAmount : INITIAL_PLAYER_RESOURCES.plasma,
+              capacity: isDevHighResources ? devCapacity : INITIAL_RESOURCE_CAPACITY.plasma,
+              productionPerHour: 50,
+            },
+            {
+              empireId: empire.id,
+              type: 'CREDITS',
+              amount: isDevHighResources ? devAmount : INITIAL_PLAYER_RESOURCES.credits,
+              capacity: INITIAL_RESOURCE_CAPACITY.credits,
+              productionPerHour: 0,
+            },
           ],
         });
 
@@ -96,16 +120,18 @@ export async function authRoutes(app: FastifyInstance) {
         // Tier 1 (no requiredTechId) are AVAILABLE for research
         // Others are LOCKED until prerequisites are met
         const allTechs = await tx.technology.findMany();
-        for (const tech of allTechs) {
-          const status = tech.requiredTechId ? 'LOCKED' : 'AVAILABLE';
-          await tx.empireTechnology.create({
-            data: {
-              empireId: empire.id,
-              technologyId: tech.id,
-              level: 0,
-              status,
-            },
-          });
+        if (allTechs.length > 0) {
+          for (const tech of allTechs) {
+            const status = tech.requiredTechId ? 'LOCKED' : 'AVAILABLE';
+            await tx.empireTechnology.create({
+              data: {
+                empireId: empire.id,
+                technologyId: tech.id,
+                level: 0,
+                status,
+              },
+            });
+          }
         }
 
         return { user, empire };

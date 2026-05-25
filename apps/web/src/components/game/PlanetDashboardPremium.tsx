@@ -2,7 +2,10 @@
 
 import { useState, useCallback, useMemo } from "react";
 
-import { allBuildings, initialBuildings, player, resources, pct } from "./game-data";
+import { allBuildings, emptySlots, player, resources, pct } from "./game-data";
+
+const builtIds = new Set(["b1", "b2", "b3", "b4", "b5"]);
+const initialBuildings = [...allBuildings.filter((b) => builtIds.has(b.id)), ...emptySlots];
 
 import ResourceCard from "./ResourceCard";
 import PlanetPanel from "./PlanetPanel";

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import '@/lib/apiBase';
 
 export const metadata: Metadata = {
   title: 'Galaxy Online III',

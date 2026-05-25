@@ -2,8 +2,8 @@
 
 import type { Building, ResourceKey } from "./game-data";
 import { fmt } from "./game-data";
-import AssetImg from "./AssetImg";
-import { CornerMarks, BuildingIcon, ResourceIconSmall, UpArrow, StatIcon } from "./icons";
+import PlaceholderBuilding from "./PlaceholderBuilding";
+import { CornerMarks, ResourceIconSmall, UpArrow, StatIcon } from "./icons";
 
 export default function BuildingDetailPanel({ building }: { building: Building }) {
   const empty = building.type === "empty";
@@ -23,16 +23,15 @@ export default function BuildingDetailPanel({ building }: { building: Building }
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,194,255,0.1),transparent_60%)]" />
           {empty ? (
             <div className="flex flex-col items-center gap-2">
-              <div className="grid h-14 w-14 place-items-center rounded-full border border-cyan-400/20 text-3xl text-cyan-400/30">+</div>
+              <PlaceholderBuilding type="empty" size="lg" glow="cyan" className="opacity-50" />
               <p className="text-xs text-cyan-400/40">Espacio disponible</p>
             </div>
           ) : (
-            <AssetImg
-              name={building.webpName}
-              folder="buildings"
-              alt={building.name}
-              className="h-28 w-28 object-contain drop-shadow-[0_0_24px_rgba(0,220,255,0.75)] lg:h-32 lg:w-32"
-              fallback={<BuildingIcon type={building.type} large />}
+            <PlaceholderBuilding
+              type={building.type}
+              size="lg"
+              glow={building.glow}
+              className="drop-shadow-[0_0_24px_rgba(0,220,255,0.6)]"
             />
           )}
         </div>
@@ -41,25 +40,68 @@ export default function BuildingDetailPanel({ building }: { building: Building }
 
         {!empty && (
           <>
+            {/* Estado del edificio */}
             <div className="mt-3">
-              <h3 className="mb-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400">ESTADÍSTICAS</h3>
+              <h3 className="mb-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400">ESTADO</h3>
               <div className="overflow-hidden rounded-lg border border-cyan-500/10 bg-black/20">
-                <StatRow icon="production" label="Producción" value={building.production || "—"} positive />
-                <StatRow icon="capacity" label="Capacidad" value={fmt(building.capacity || 0)} />
-                <StatRow icon="health" label="Salud" value={`${fmt(building.health || 0)} / ${fmt(building.health || 0)}`} />
+                <StatRow icon="health" label="Salud" value={`${fmt(building.health)} / ${fmt(building.maxHealth)}`} />
+                <StatRow icon="level" label="Nivel" value={`${building.level} / ${building.maxLevel}`} />
+                {building.consumption?.energy && (
+                  <StatRow icon="energy" label="Consumo" value={`-${building.consumption.energy}/h`} />
+                )}
               </div>
             </div>
-            <div className="mt-3 rounded-lg border border-cyan-500/15 bg-cyan-500/5 p-3">
-              <h3 className="mb-2 text-[10px] font-black uppercase tracking-wider text-cyan-400">MEJORAR AL NIVEL {building.level + 1}</h3>
-              <div className="grid grid-cols-3 gap-1.5">
-                <CostBox icon="metal" value={building.upgradeCost?.metal || 0} />
-                <CostBox icon="plasma" value={building.upgradeCost?.plasma || 0} />
-                <CostBox icon="credits" value={building.upgradeCost?.credits || 0} />
+
+            {/* Producción / Capacidad */}
+            {(building.production || building.capacity) && (
+              <div className="mt-3">
+                <h3 className="mb-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400">
+                  {building.production ? 'PRODUCCIÓN' : 'CAPACIDAD'}
+                </h3>
+                <div className="overflow-hidden rounded-lg border border-cyan-500/10 bg-black/20">
+                  {building.production?.metal && (
+                    <StatRow icon="production" label="Metal" value={`+${building.production.metal}/h`} positive />
+                  )}
+                  {building.production?.plasma && (
+                    <StatRow icon="production" label="Plasma" value={`+${building.production.plasma}/h`} positive />
+                  )}
+                  {building.production?.energy && (
+                    <StatRow icon="production" label="Energía" value={`+${building.production.energy}/h`} positive />
+                  )}
+                  {building.production?.credits && (
+                    <StatRow icon="production" label="Créditos" value={`+${building.production.credits}/h`} positive />
+                  )}
+                  {building.capacity?.metal && (
+                    <StatRow icon="capacity" label="Cap. Metal" value={`+${fmt(building.capacity.metal)}`} />
+                  )}
+                  {building.capacity?.plasma && (
+                    <StatRow icon="capacity" label="Cap. Plasma" value={`+${fmt(building.capacity.plasma)}`} />
+                  )}
+                </div>
               </div>
-              <button className="mt-2 flex h-10 w-full items-center justify-center gap-1 rounded-lg border border-cyan-400/30 bg-cyan-500/15 text-sm font-black uppercase tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(0,200,255,0.2)] transition hover:bg-cyan-500/25">
-                <UpArrow /> MEJORAR
-              </button>
-            </div>
+            )}
+
+            {/* Costo de mejora */}
+            {building.level < building.maxLevel && (
+              <div className="mt-3 rounded-lg border border-cyan-500/15 bg-cyan-500/5 p-3">
+                <h3 className="mb-2 text-[10px] font-black uppercase tracking-wider text-cyan-400">MEJORAR AL NIVEL {building.level + 1}</h3>
+                <div className="grid grid-cols-3 gap-1.5">
+                  <CostBox icon="metal" value={building.upgradeCost?.metal || 0} />
+                  <CostBox icon="plasma" value={building.upgradeCost?.plasma || 0} />
+                  <CostBox icon="credits" value={building.upgradeCost?.credits || 0} />
+                </div>
+                <button className="mt-2 flex h-10 w-full items-center justify-center gap-1 rounded-lg border border-cyan-400/30 bg-cyan-500/15 text-sm font-black uppercase tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(0,200,255,0.2)] transition hover:bg-cyan-500/25">
+                  <UpArrow /> MEJORAR
+                </button>
+              </div>
+            )}
+
+            {/* Máximo nivel alcanzado */}
+            {building.level >= building.maxLevel && (
+              <div className="mt-3 rounded-lg border border-yellow-500/20 bg-yellow-500/10 p-3 text-center">
+                <span className="text-xs font-bold text-yellow-400">✦ NIVEL MÁXIMO ALCANZADO ✦</span>
+              </div>
+            )}
           </>
         )}
       </div>
