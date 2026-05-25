@@ -37,7 +37,7 @@ function countBuildingsOfType(buildings, apiType) {
     const canonical = (0, legacyBuildingTypes_1.normalizeBuildingType)(apiType);
     return buildings.filter((b) => (0, legacyBuildingTypes_1.normalizeBuildingType)(b.type) === canonical &&
         b.level > 0 &&
-        b.status !== 'CONSTRUCTING').length;
+        (b.status === 'IDLE' || b.status === 'UPGRADING')).length;
 }
 function canPlaceBuildingType(buildings, apiType, slotIndex) {
     const canonical = (0, legacyBuildingTypes_1.normalizeBuildingType)(apiType);

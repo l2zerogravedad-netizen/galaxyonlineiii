@@ -117,10 +117,15 @@ export function dashboardToPlayer(dto: GameDashboardDto): PlayerData {
 }
 
 export function dashboardToResources(dto: GameDashboardDto): ResourcesData {
+  const r = dto.resources as GameDashboardDto['resources'] & {
+    crystal?: number;
+    crystalCapacity?: number;
+    crystalProduction?: number;
+  };
   return {
     metal: dto.resources.metal,
     plasma: dto.resources.plasma,
-    credits: dto.resources.credits,
+    credits: dto.resources.credits ?? r.crystal ?? 0,
     metalCapacity: dto.resources.metalCapacity,
     plasmaCapacity: dto.resources.plasmaCapacity,
     metalProduction: dto.resources.metalProduction,

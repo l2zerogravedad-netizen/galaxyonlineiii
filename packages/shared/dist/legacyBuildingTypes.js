@@ -6,13 +6,19 @@ exports.isCanonicalBuildingType = isCanonicalBuildingType;
 /** Tipos legacy API (mayoría en mayúsculas) → snake_case canónico */
 exports.LEGACY_TO_CANONICAL = {
     COMMAND_CENTER: 'control_center',
+    NEXUS_COMMAND: 'control_center',
     METAL_MINE: 'metal_extractor',
+    METAL_QUARRY: 'metal_extractor',
     PLASMA_EXTRACTOR: 'plasma_refinery',
+    HE3_SYNTHESIZER: 'plasma_refinery',
     SHIPYARD: 'shipyard',
+    STELLAR_FOUNDRY: 'shipyard',
     RESEARCH_LAB: 'research_lab',
+    INSIGHT_SPIRE: 'research_lab',
     ACADEMY: 'research_lab',
     WAREHOUSE: 'warehouse',
     ENERGY: 'energy_generator',
+    SOLAR_HELIX: 'energy_generator',
     DEFENSE: 'defense_turret',
     HANGAR: 'hangar',
 };

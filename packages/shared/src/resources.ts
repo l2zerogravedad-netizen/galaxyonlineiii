@@ -39,13 +39,17 @@ export function toGameResourcesDto(resources: ResourceRow[]): GameResourcesDto {
   const metal = getResourceRow(resources, 'METAL');
   const plasma = getResourceRow(resources, 'PLASMA');
   const credits = getResourceRow(resources, 'CREDITS');
+  const creditAmount = Math.floor(credits?.amount ?? 0);
   return {
     metal: Math.floor(metal?.amount ?? 0),
     plasma: Math.floor(plasma?.amount ?? 0),
-    credits: Math.floor(credits?.amount ?? 0),
+    credits: creditAmount,
+    crystal: creditAmount,
     metalCapacity: metal?.capacity ?? 0,
     plasmaCapacity: plasma?.capacity ?? 0,
+    crystalCapacity: credits?.capacity ?? 0,
     metalProduction: metal?.productionPerHour ?? 0,
     plasmaProduction: plasma?.productionPerHour ?? 0,
+    crystalProduction: credits?.productionPerHour ?? 0,
   };
 }

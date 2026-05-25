@@ -46,10 +46,14 @@ export interface GameResourcesDto {
     metal: number;
     plasma: number;
     credits: number;
+    /** Legacy Nova API field — same as credits */
+    crystal?: number;
     metalCapacity: number;
     plasmaCapacity: number;
+    crystalCapacity?: number;
     metalProduction: number;
     plasmaProduction: number;
+    crystalProduction?: number;
 }
 export interface GamePlanetDto {
     id: string;
