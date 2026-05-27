@@ -102,6 +102,194 @@ function getWorldPos(planet: GalaxyPlanet): { wx: number; wy: number } {
 }
 
 // ============================================================================
+// Sprite Generation (Procedural Planet Sprites)
+// ============================================================================
+
+const SPRITE_CACHE = new Map<string, HTMLCanvasElement>();
+
+function getSpriteKey(type: GalaxyPlanet['type'], size: number): string {
+  return `${type}_${size}`;
+}
+
+function generatePlanetSprite(type: GalaxyPlanet['type'], size: number): HTMLCanvasElement {
+  const key = getSpriteKey(type, size);
+  if (SPRITE_CACHE.has(key)) return SPRITE_CACHE.get(key)!;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = size * 2 + 8;
+  canvas.height = size * 2 + 8;
+  const ctx = canvas.getContext('2d')!;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const r = size;
+  const rng = seededRandom(type.length * 42 + size);
+
+  // Base colors per planet type
+  const palettes: Record<GalaxyPlanet['type'], { base: string; dark: string; accent: string; spots: string[] }> = {
+    ice:     { base: '#a8d0e6', dark: '#5b9bd5', accent: '#e8f4f8', spots: ['#d6e9f2', '#8bb8d8', '#c5dff0'] },
+    earth:   { base: '#4a90d9', dark: '#2d5a27', accent: '#5cb85c', spots: ['#3d7a33', '#6abf69', '#2a5a1e'] },
+    fire:    { base: '#d4574a', dark: '#8b2500', accent: '#ff6b35', spots: ['#ff4500', '#cc3300', '#ff8844'] },
+    gas:     { base: '#9b59b6', dark: '#5a1a6b', accent: '#d4a5e0', spots: ['#7d3c98', '#c084d4', '#6c3483'] },
+    lava:    { base: '#e67e22', dark: '#7a1f00', accent: '#ffcc00', spots: ['#ff6600', '#cc4400', '#ffaa22'] },
+    resource:{ base: '#f1c40f', dark: '#b7950b', accent: '#ffee58', spots: ['#d4ac0d', '#f9e547', '#c9a00c'] },
+  };
+  const pal = palettes[type];
+
+  // 1. Outer glow (alliance-like soft glow)
+  const glowGrad = ctx.createRadialGradient(cx, cy, r * 0.8, cx, cy, r * 1.4);
+  glowGrad.addColorStop(0, hexToRgba(pal.accent, 0.15));
+  glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = glowGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // 2. Shadow
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetX = 3;
+  ctx.shadowOffsetY = 3;
+
+  // 3. Main planet circle with base gradient
+  const baseGrad = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.25, r * 0.1, cx, cy, r);
+  baseGrad.addColorStop(0, pal.accent);
+  baseGrad.addColorStop(0.4, pal.base);
+  baseGrad.addColorStop(0.9, pal.dark);
+  baseGrad.addColorStop(1, '#000000');
+  ctx.fillStyle = baseGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // 4. Procedural spots/continents
+  const spotCount = Math.floor(rng() * 5) + 3;
+  for (let i = 0; i < spotCount; i++) {
+    const angle = rng() * Math.PI * 2;
+    const dist = rng() * r * 0.6;
+    const sx = cx + Math.cos(angle) * dist;
+    const sy = cy + Math.sin(angle) * dist;
+    const sr = rng() * r * 0.3 + r * 0.1;
+    const color = pal.spots[Math.floor(rng() * pal.spots.length)];
+
+    const spotGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr);
+    spotGrad.addColorStop(0, hexToRgba(color, 0.7));
+    spotGrad.addColorStop(0.7, hexToRgba(color, 0.3));
+    spotGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = spotGrad;
+    ctx.beginPath();
+    ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 5. 3D highlight (upper-left bright spot)
+  const hlGrad = ctx.createRadialGradient(
+    cx - r * 0.3, cy - r * 0.3, 0,
+    cx - r * 0.3, cy - r * 0.3, r * 0.6
+  );
+  hlGrad.addColorStop(0, 'rgba(255,255,255,0.3)');
+  hlGrad.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = hlGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 6. Edge rim light
+  ctx.save();
+  ctx.strokeStyle = hexToRgba(pal.accent, 0.3);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+
+  // 7. Gas planet rings
+  if (type === 'gas') {
+    ctx.save();
+    ctx.strokeStyle = hexToRgba(pal.accent, 0.4);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, r * 1.5, r * 0.4, Math.PI * 0.2, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = hexToRgba(pal.accent, 0.2);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, r * 1.8, r * 0.5, Math.PI * 0.2, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  SPRITE_CACHE.set(key, canvas);
+  return canvas;
+}
+
+function generateBuildingSprite(size: number): HTMLCanvasElement {
+  const key = `bld_${size}`;
+  if (SPRITE_CACHE.has(key)) return SPRITE_CACHE.get(key)!;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = size + 6;
+  canvas.height = size + 6;
+  const ctx = canvas.getContext('2d')!;
+  const rng = seededRandom(size * 7);
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
+  // Colors for the building
+  const roofColors = ['#e8a838', '#d4932a', '#f0b848', '#c88320'];
+  const wallColors = ['#a8c060', '#8faf50', '#b8d070', '#7d9f40'];
+  const roofColor = roofColors[Math.floor(rng() * roofColors.length)];
+  const wallColor = wallColors[Math.floor(rng() * wallColors.length)];
+  const w = size * 0.7;
+  const h = size * 0.55;
+  const roofH = size * 0.3;
+
+  // Shadow
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fillRect(cx - w/2 + 1, cy - h/2 + roofH + 2, w, h - roofH + 1);
+  ctx.restore();
+
+  // Wall (rectangle body)
+  ctx.fillStyle = wallColor;
+  ctx.fillRect(cx - w/2, cy - h/2 + roofH, w, h - roofH);
+
+  // Wall border
+  ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+  ctx.lineWidth = 0.5;
+  ctx.strokeRect(cx - w/2, cy - h/2 + roofH, w, h - roofH);
+
+  // Roof (triangle)
+  ctx.fillStyle = roofColor;
+  ctx.beginPath();
+  ctx.moveTo(cx - w/2 - size*0.1, cy - h/2 + roofH);
+  ctx.lineTo(cx, cy - h/2);
+  ctx.lineTo(cx + w/2 + size*0.1, cy - h/2 + roofH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Roof border
+  ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+  ctx.lineWidth = 0.5;
+  ctx.stroke();
+
+  // Roof highlight
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.beginPath();
+  ctx.moveTo(cx - w/2 - size*0.05, cy - h/2 + roofH);
+  ctx.lineTo(cx, cy - h/2 + size*0.05);
+  ctx.lineTo(cx + w*0.2, cy - h/2 + roofH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Door/window
+  ctx.fillStyle = 'rgba(60,40,20,0.6)';
+  ctx.fillRect(cx - w*0.15, cy + h*0.05, w*0.3, h*0.25);
+
+  SPRITE_CACHE.set(key, canvas);
+  return canvas;
+}
+
+// ============================================================================
 // Component
 // ============================================================================
 
@@ -361,40 +549,18 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
       if (buildings <= 0) return;
 
       const count = Math.min(buildings, 8);
-      const orbitRadius = (PLANET_RADIUS + 10) * camZoom;
-      const bRadius = (3.5 + Math.min(count, 5) * 0.3) * camZoom;
+      const orbitRadius = (PLANET_RADIUS + 14) * camZoom;
+      const bSize = Math.round((5 + Math.min(count, 4)) * camZoom);
+      const sprite = generateBuildingSprite(Math.max(bSize, 6));
       const angleStep = (Math.PI * 2) / count;
 
       ctx.save();
 
       for (let i = 0; i < count; i++) {
-        const angle = angleStep * i - Math.PI / 2;
-        const bx = sx + Math.cos(angle) * orbitRadius;
-        const by = sy + Math.sin(angle) * orbitRadius;
-
-        // Outer glow (subtle blue border)
-        ctx.beginPath();
-        ctx.arc(bx, by, bRadius + 1.5 * camZoom, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(100, 180, 255, 0.3)';
-        ctx.fill();
-
-        // Inner circle (bright white/blue core)
-        ctx.beginPath();
-        ctx.arc(bx, by, bRadius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(220, 240, 255, 0.85)';
-        ctx.fill();
-
-        // Tiny highlight dot
-        ctx.beginPath();
-        ctx.arc(
-          bx - bRadius * 0.25,
-          by - bRadius * 0.25,
-          bRadius * 0.35,
-          0,
-          Math.PI * 2
-        );
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.fill();
+        const angle = angleStep * i - Math.PI / 2 + (i % 2) * 0.15; // slight offset for natural look
+        const bx = sx + Math.cos(angle) * orbitRadius - sprite.width / 2;
+        const by = sy + Math.sin(angle) * orbitRadius - sprite.height / 2;
+        ctx.drawImage(sprite, bx, by);
       }
 
       ctx.restore();
@@ -433,48 +599,20 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
       ctx.arc(sx, sy, glowRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. Sombra (más pronunciada para efecto 3D)
+      // 2. Render planet sprite (detailed procedural texture)
+      const spriteSize = Math.round(scaledR);
+      const sprite = generatePlanetSprite(planet.type, spriteSize);
       ctx.save();
       ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
       ctx.shadowBlur = 10 * cam.zoom;
       ctx.shadowOffsetX = 4 * cam.zoom;
       ctx.shadowOffsetY = 4 * cam.zoom;
-
-      // 3. Circulo base con gradiente segun tipo
-      const planetGrad = ctx.createRadialGradient(
-        sx - scaledR * 0.3,
-        sy - scaledR * 0.3,
-        scaledR * 0.1,
-        sx,
-        sy,
-        scaledR
+      ctx.drawImage(
+        sprite,
+        sx - sprite.width / 2,
+        sy - sprite.height / 2
       );
-      planetGrad.addColorStop(0, colors.light);
-      planetGrad.addColorStop(0.6, colors.base);
-      planetGrad.addColorStop(1, colors.dark);
-
-      ctx.fillStyle = planetGrad;
-      ctx.beginPath();
-      ctx.arc(sx, sy, scaledR, 0, Math.PI * 2);
-      ctx.fill();
-
       ctx.restore();
-
-      // 4. Iluminacion 3D (brillo sutil superior-izquierdo)
-      const highlightGrad = ctx.createRadialGradient(
-        sx - scaledR * 0.35,
-        sy - scaledR * 0.35,
-        0,
-        sx - scaledR * 0.35,
-        sy - scaledR * 0.35,
-        scaledR * 0.7
-      );
-      highlightGrad.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-      highlightGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = highlightGrad;
-      ctx.beginPath();
-      ctx.arc(sx, sy, scaledR, 0, Math.PI * 2);
-      ctx.fill();
 
       // 5. Edificios (antes de anillos y escudo)
       if (planet.buildings > 0) {
