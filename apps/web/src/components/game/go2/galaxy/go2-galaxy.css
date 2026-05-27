@@ -1,0 +1,402 @@
+/* ============================================================
+   Galaxy Online III - Galaxy Map Styles
+   Theme: Dark Space (Amber / Cyan / Purple accents)
+   ============================================================ */
+
+/* === GALAXY SCREEN LAYOUT === */
+.go2-galaxy-root {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #020408;
+  font-family: 'Courier New', monospace;
+}
+
+/* === MINIMAP === */
+.galaxy-minimap {
+  position: absolute;
+  bottom: 80px;
+  right: 16px;
+  width: 160px;
+  height: 160px;
+  border: 2px solid rgba(251, 191, 36, 0.4);
+  border-radius: 8px;
+  background: rgba(2, 4, 8, 0.85);
+  overflow: hidden;
+  z-index: 30;
+  cursor: crosshair;
+  transition: border-color 0.2s ease;
+}
+
+.galaxy-minimap:hover {
+  border-color: rgba(251, 191, 36, 0.7);
+}
+
+.galaxy-minimap canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* === CHAT PANEL === */
+.galaxy-chat {
+  position: absolute;
+  bottom: 80px;
+  left: 16px;
+  width: 320px;
+  height: 220px;
+  border: 2px solid rgba(251, 191, 36, 0.4);
+  border-radius: 8px;
+  background: rgba(2, 4, 8, 0.92);
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+  backdrop-filter: blur(4px);
+}
+
+.galaxy-chat-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+  flex-shrink: 0;
+}
+
+.galaxy-chat-tab {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #78716c;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  font-family: 'Courier New', monospace;
+}
+
+.galaxy-chat-tab:hover {
+  color: #a8a29e;
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.galaxy-chat-tab--active {
+  color: #fbbf24;
+  border-bottom-color: #fbbf24;
+}
+
+.galaxy-chat-tab--active:hover {
+  color: #fbbf24;
+  background: transparent;
+}
+
+.galaxy-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.galaxy-chat-msg {
+  font-size: 11px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.galaxy-chat-msg--system {
+  color: #22d3ee;
+}
+
+.galaxy-chat-msg--alliance {
+  color: #69db7c;
+}
+
+.galaxy-chat-msg--player {
+  color: #e7e5e4;
+}
+
+.galaxy-chat-sender {
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.galaxy-chat-input-area {
+  display: flex;
+  padding: 8px;
+  border-top: 1px solid rgba(251, 191, 36, 0.2);
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.galaxy-chat-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  background: rgba(10, 8, 5, 0.8);
+  color: #fef3c7;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.galaxy-chat-input::placeholder {
+  color: #57534e;
+}
+
+.galaxy-chat-input:focus {
+  border-color: #fbbf24;
+}
+
+.galaxy-chat-send {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+  color: #fffbeb;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.galaxy-chat-send:hover {
+  filter: brightness(1.2);
+}
+
+.galaxy-chat-send:active {
+  filter: brightness(0.9);
+}
+
+/* === TOOLTIP === */
+.galaxy-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 40;
+  min-width: 200px;
+  padding: 12px;
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20, 14, 6, 0.96) 0%, rgba(10, 8, 4, 0.98) 100%);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(251, 191, 36, 0.15);
+  font-family: 'Courier New', monospace;
+  transition: opacity 0.1s ease;
+}
+
+.galaxy-tooltip-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fbbf24;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.galaxy-tooltip-player {
+  font-size: 12px;
+  color: #fef3c7;
+  margin-bottom: 2px;
+}
+
+.galaxy-tooltip-alliance {
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.galaxy-tooltip-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  font-size: 10px;
+  color: #a8a29e;
+}
+
+.galaxy-tooltip-stat-label {
+  color: #78716c;
+}
+
+.galaxy-tooltip-stat-value {
+  color: #fef3c7;
+  font-weight: 700;
+  text-align: right;
+}
+
+.galaxy-tooltip-resources {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(251, 191, 36, 0.2);
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+}
+
+.galaxy-tooltip-res {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.galaxy-tooltip-res-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* === COORDINATES HUD === */
+.galaxy-coords {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 30;
+  padding: 8px 12px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 6px;
+  background: rgba(2, 4, 8, 0.8);
+  color: #fbbf24;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  backdrop-filter: blur(4px);
+}
+
+/* === SERVER INFO === */
+.galaxy-server-info {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 30;
+  padding: 8px 12px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 6px;
+  background: rgba(2, 4, 8, 0.8);
+  color: #a8a29e;
+  font-size: 10px;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  backdrop-filter: blur(4px);
+  line-height: 1.5;
+}
+
+.galaxy-server-info span {
+  color: #69db7c;
+  font-weight: 700;
+}
+
+/* === SCROLLBAR (Chat Messages) === */
+.galaxy-chat-messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.galaxy-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.galaxy-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(251, 191, 36, 0.3);
+  border-radius: 2px;
+}
+
+.galaxy-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 191, 36, 0.5);
+}
+
+/* === PLANET TYPE INDICATORS === */
+.galaxy-planet-type-ice {
+  --planet-color: #4dabf7;
+}
+.galaxy-planet-type-fire {
+  --planet-color: #ff6b6b;
+}
+.galaxy-planet-type-earth {
+  --planet-color: #69db7c;
+}
+.galaxy-planet-type-gas {
+  --planet-color: #da77f2;
+}
+.galaxy-planet-type-lava {
+  --planet-color: #ffa94d;
+}
+.galaxy-planet-type-resource {
+  --planet-color: #ffd43b;
+}
+
+/* === TOOLTIP ALLIANCE COLORS === */
+.alliance-destiny {
+  background: rgba(77, 171, 247, 0.2);
+  color: #4dabf7;
+  border: 1px solid rgba(77, 171, 247, 0.4);
+}
+.alliance-salvation {
+  background: rgba(105, 219, 124, 0.2);
+  color: #69db7c;
+  border: 1px solid rgba(105, 219, 124, 0.4);
+}
+.alliance-inferno {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.4);
+}
+.alliance-confederacy {
+  background: rgba(255, 212, 59, 0.2);
+  color: #ffd43b;
+  border: 1px solid rgba(255, 212, 59, 0.4);
+}
+.alliance-independent {
+  background: rgba(173, 181, 189, 0.2);
+  color: #adb5bd;
+  border: 1px solid rgba(173, 181, 189, 0.4);
+}
+
+/* === MINIMAP VIEWPORT RECT === */
+.galaxy-minimap-viewport {
+  stroke: rgba(251, 191, 36, 0.8);
+  stroke-width: 1;
+  fill: rgba(251, 191, 36, 0.08);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 640px) {
+  .galaxy-chat {
+    width: 260px;
+    height: 180px;
+    bottom: 72px;
+    left: 8px;
+  }
+
+  .galaxy-minimap {
+    width: 120px;
+    height: 120px;
+    bottom: 72px;
+    right: 8px;
+  }
+
+  .galaxy-coords {
+    top: 8px;
+    left: 8px;
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+
+  .galaxy-server-info {
+    top: 8px;
+    right: 8px;
+    font-size: 9px;
+    padding: 6px 8px;
+  }
+}
