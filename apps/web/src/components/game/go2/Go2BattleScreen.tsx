@@ -21,7 +21,7 @@
  * └────────────────────────────────────────────────────────────┘
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { type Commander } from './go2-commander-data';
 import type { FatalityResult } from './Go2FatalitySystem';
 import { checkFatality } from './Go2FatalitySystem';
@@ -43,10 +43,10 @@ import {
   type HighestDamageInfo,
 } from './Go2PostBattle';
 import {
-  Go2BattleArena3D,
-  type BattleFleet3D,
-  type BattleAction3D,
-} from './Go2BattleArena3D';
+  Go2Battle3D,
+  generateDemoBattleFrames,
+  type BattleFrame,
+} from './Go2Battle3D';
 
 /* ─── re-export types used by consumers ─── */
 
@@ -227,37 +227,6 @@ function runBattleEngine(input: BattleEngineInput): BattleResult {
   };
 }
 
-/* ─── convert BattleFleet → BattleFleet3D for the arena ─── */
-
-function convertToBattleFleet3D(
-  fleet: BattleFleet,
-  side: 'attacker' | 'defender'
-): BattleFleet3D {
-  return {
-    side,
-    commander: {
-      id: fleet.commander?.id ?? 'none',
-      name: fleet.commander?.name ?? fleet.playerName,
-      level: fleet.commander?.level ?? 1,
-      stars: fleet.commander?.stars ?? 1,
-      portrait: fleet.commander?.id
-        ? `/assets/cmd_${fleet.commander.id}.webp`
-        : '',
-    },
-    stacks: (fleet.stacks ?? []).map((stack, idx) => ({
-      id: `stack_${side}_${idx}`,
-      shipType: (stack.type ?? 'cruiser') as 'frigate' | 'cruiser' | 'battleship',
-      count: stack.count ?? 0,
-      maxCount: stack.maxCount ?? stack.count ?? 0,
-      structure: 100,
-      shield: 100,
-      row: Math.floor(idx / 3),
-      col: idx % 3,
-      modelVariant: idx % 4,
-    })),
-  };
-}
-
 /* ─── main component ─── */
 
 export function Go2BattleScreen({
@@ -274,11 +243,12 @@ export function Go2BattleScreen({
 }: Go2BattleScreenProps) {
   const [phase, setPhase] = useState<BattlePhase>('preparing');
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
-  const [currentRound, setCurrentRound] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1);
-  const [actions, setActions] = useState<BattleAction3D[]>([]);
   const storedSettings = useRef<BattleSettings | null>(null);
+
+  // Generate battle frames for 3D visualization
+  const battleFrames = useMemo(() => generateDemoBattleFrames(), []);
 
   // Phase 1: Pre-battle — user configures formation
   const handleAttack = useCallback(
@@ -350,12 +320,8 @@ export function Go2BattleScreen({
       )}
 
       {phase === 'fighting' && (
-        <Go2BattleArena3D
-          attacker={convertToBattleFleet3D(attackerFleet, 'attacker')}
-          defender={convertToBattleFleet3D(defenderFleet, 'defender')}
-          currentRound={currentRound}
-          maxRounds={20}
-          actions={actions}
+        <Go2Battle3D
+          battleFrames={battleFrames}
           isPaused={isPaused}
           speed={speed}
           onPauseToggle={() => setIsPaused((p) => !p)}
