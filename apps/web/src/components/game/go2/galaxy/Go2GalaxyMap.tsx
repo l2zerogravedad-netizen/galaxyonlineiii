@@ -46,7 +46,7 @@ interface Star {
 // ============================================================================
 
 const CELL_SIZE = GALAXY_SIZE.cellSize;
-const PLANET_RADIUS = 24;
+const PLANET_RADIUS = 28;
 const STAR_COUNT = 300;
 
 const NEBULAE = [
@@ -322,24 +322,28 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
       sy: number,
       camZoom: number
     ) => {
-      const size = 14 * camZoom;
-      const half = size / 2;
-      const offset = PLANET_RADIUS * camZoom + 8 * camZoom;
+      const size = 18 * camZoom;
+      const barThickness = size * 0.32;
+      const offset = PLANET_RADIUS * camZoom + 12 * camZoom;
       const cx = sx + offset;
       const cy = sy;
 
       ctx.save();
-      ctx.fillStyle = '#d32f2f';
 
-      // Rectangulo vertical
-      const vW = size * 0.35;
-      const vH = size;
-      ctx.fillRect(cx - vW / 2, cy - vH / 2, vW, vH);
+      // Shadow
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 4 * camZoom;
 
-      // Rectangulo horizontal
-      const hW = size;
-      const hH = size * 0.35;
-      ctx.fillRect(cx - hW / 2, cy - hH / 2, hW, hH);
+      // Vertical bar
+      ctx.fillStyle = '#e53935';
+      ctx.fillRect(cx - barThickness / 2, cy - size / 2, barThickness, size);
+
+      // Horizontal bar
+      ctx.fillRect(cx - size / 2, cy - barThickness / 2, size, barThickness);
+
+      // Center highlight (brighter)
+      ctx.fillStyle = '#ff5252';
+      ctx.fillRect(cx - barThickness / 2, cy - barThickness / 2, barThickness, barThickness);
 
       ctx.restore();
     },
@@ -356,18 +360,41 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
     ) => {
       if (buildings <= 0) return;
 
-      const baseRadius = PLANET_RADIUS * camZoom + 6 * camZoom;
-      const bSize = 3.5 * camZoom;
-      const angleStep = (Math.PI * 2) / Math.min(buildings, 8);
+      const count = Math.min(buildings, 8);
+      const orbitRadius = (PLANET_RADIUS + 10) * camZoom;
+      const bRadius = (3.5 + Math.min(count, 5) * 0.3) * camZoom;
+      const angleStep = (Math.PI * 2) / count;
 
       ctx.save();
-      ctx.fillStyle = '#8d6e63';
 
-      for (let i = 0; i < Math.min(buildings, 8); i++) {
+      for (let i = 0; i < count; i++) {
         const angle = angleStep * i - Math.PI / 2;
-        const bx = sx + Math.cos(angle) * baseRadius;
-        const by = sy + Math.sin(angle) * baseRadius;
-        ctx.fillRect(bx - bSize / 2, by - bSize / 2, bSize, bSize);
+        const bx = sx + Math.cos(angle) * orbitRadius;
+        const by = sy + Math.sin(angle) * orbitRadius;
+
+        // Outer glow (subtle blue border)
+        ctx.beginPath();
+        ctx.arc(bx, by, bRadius + 1.5 * camZoom, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(100, 180, 255, 0.3)';
+        ctx.fill();
+
+        // Inner circle (bright white/blue core)
+        ctx.beginPath();
+        ctx.arc(bx, by, bRadius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(220, 240, 255, 0.85)';
+        ctx.fill();
+
+        // Tiny highlight dot
+        ctx.beginPath();
+        ctx.arc(
+          bx - bRadius * 0.25,
+          by - bRadius * 0.25,
+          bRadius * 0.35,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fill();
       }
 
       ctx.restore();
@@ -395,22 +422,23 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
       const colors = PLANET_TYPE_COLORS[planet.type];
       const allianceColor = ALLIANCE_COLORS[planet.alliance] ?? '#adb5bd';
 
-      // 1. Glow de alianza
-      const glowRadius = 40 * cam.zoom;
+      // 1. Glow de alianza (más grande y visible)
+      const glowRadius = 65 * cam.zoom;
       const glowGrad = ctx.createRadialGradient(sx, sy, scaledR, sx, sy, glowRadius);
-      glowGrad.addColorStop(0, hexToRgba(allianceColor, 0.15));
+      glowGrad.addColorStop(0, hexToRgba(allianceColor, 0.2));
+      glowGrad.addColorStop(0.5, hexToRgba(allianceColor, 0.08));
       glowGrad.addColorStop(1, hexToRgba(allianceColor, 0));
       ctx.fillStyle = glowGrad;
       ctx.beginPath();
       ctx.arc(sx, sy, glowRadius, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. Sombra
+      // 2. Sombra (más pronunciada para efecto 3D)
       ctx.save();
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = 6 * cam.zoom;
-      ctx.shadowOffsetX = 2 * cam.zoom;
-      ctx.shadowOffsetY = 2 * cam.zoom;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 10 * cam.zoom;
+      ctx.shadowOffsetX = 4 * cam.zoom;
+      ctx.shadowOffsetY = 4 * cam.zoom;
 
       // 3. Circulo base con gradiente segun tipo
       const planetGrad = ctx.createRadialGradient(
@@ -441,7 +469,7 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
         sy - scaledR * 0.35,
         scaledR * 0.7
       );
-      highlightGrad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+      highlightGrad.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
       highlightGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
       ctx.fillStyle = highlightGrad;
       ctx.beginPath();
