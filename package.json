@@ -22,7 +22,16 @@
     "db:migrate:deploy": "cd packages/database && npx prisma migrate deploy",
     "db:push:prod": "cd packages/database && npx prisma db push",
     "db:seed": "cd packages/database && npx prisma db seed",
-    "db:studio": "cd packages/database && npx prisma studio"
+    "db:studio": "cd packages/database && npx prisma studio",
+    "railway:status": "railway status",
+    "railway:logs": "railway logs",
+    "railway:deploy": "railway deploy",
+    "railway:login": "railway login",
+    "railway:whoami": "railway whoami",
+    "railway:variables": "railway variables",
+    "railway:services": "railway service",
+    "railway:up": "railway up",
+    "railway:down": "railway down"
   },
   "engines": {
     "node": ">=20.0.0"

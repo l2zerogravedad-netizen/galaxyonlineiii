@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "railway": {
+      "command": "/root/.railway/bin/railway",
+      "args": ["mcp"],
+      "env": {}
+    }
+  }
+}
