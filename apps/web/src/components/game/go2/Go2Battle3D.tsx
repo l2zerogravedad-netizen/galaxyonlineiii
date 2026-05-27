@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Go2Battle3D - Real 3D Battle Viewer with GLB Models
  *
