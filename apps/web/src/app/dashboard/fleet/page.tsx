@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Go2CommanderPanel } from '@/components/game/go2/Go2CommanderPanel';
 import { Go2FleetSystem } from '@/components/game/go2/Go2FleetSystem';
-import { Go2CommanderMerge } from '@/components/game/go2/Go2CommanderMerge';
+import Go2CommanderMerge from '@/components/game/go2/Go2CommanderMerge';
 import { Go2GemInterface } from '@/components/game/go2/Go2GemInterface';
 import { Go2Hospital } from '@/components/game/go2/Go2Hospital';
 import { Go2DrawingSystem } from '@/components/game/go2/Go2DrawingSystem';
