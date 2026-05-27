@@ -42,6 +42,11 @@ import {
   type CommanderExpInfo,
   type HighestDamageInfo,
 } from './Go2PostBattle';
+import {
+  Go2BattleArena3D,
+  type BattleFleet3D,
+  type BattleAction3D,
+} from './Go2BattleArena3D';
 
 /* ─── re-export types used by consumers ─── */
 
@@ -222,92 +227,35 @@ function runBattleEngine(input: BattleEngineInput): BattleResult {
   };
 }
 
-/* ─── battle canvas placeholder ─── */
+/* ─── convert BattleFleet → BattleFleet3D for the arena ─── */
 
-function Go2BattleCanvas({
-  attackerName,
-  defenderName,
-  onComplete,
-}: {
-  attackerName: string;
-  defenderName: string;
-  onComplete: () => void;
-}) {
-  const [tick, setTick] = useState(0);
-  const messages = [
-    'Initializing battle engine...',
-    `Deploying ${attackerName}'s fleet...`,
-    `Enemy fleet ${defenderName} detected!`,
-    'Calculating targeting solutions...',
-    '⚔️ First salvo fired!',
-    '💥 Combat in progress...',
-    'Assessing battle damage...',
-    'Finalizing results...',
-  ];
-
-  // Auto-advance and complete
-  const hasScheduled = useRef(false);
-  if (!hasScheduled.current) {
-    hasScheduled.current = true;
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      setTick(step);
-      if (step >= messages.length - 1) {
-        clearInterval(interval);
-        setTimeout(() => onComplete(), 600);
-      }
-    }, 350);
-  }
-
-  const currentMessage = messages[Math.min(tick, messages.length - 1)];
-
-  return (
-    <div className="flex min-h-[500px] items-center justify-center">
-      <div
-        className="w-full max-w-[600px] rounded-lg border-2 p-6 text-center shadow-2xl"
-        style={{
-          backgroundColor: '#000033',
-          borderColor: '#0066CC',
-          fontFamily: 'monospace',
-        }}
-      >
-        <div className="mb-4 text-sm font-bold uppercase tracking-widest text-[#64b5f6]">
-          ⚔️ Battle In Progress
-        </div>
-        <div className="mb-4 flex items-center justify-center gap-6 text-xs text-white/60">
-          <span className="font-bold text-[#4caf50]">{attackerName}</span>
-          <span className="text-lg">⚔️</span>
-          <span className="font-bold text-[#f44336]">{defenderName}</span>
-        </div>
-        <div className="mx-auto mb-4 h-2 w-64 overflow-hidden rounded-full bg-black/40">
-          <div
-            className="h-full bg-[#0066CC] transition-all"
-            style={{ width: `${((tick + 1) / messages.length) * 100}%` }}
-          />
-        </div>
-        <div className="mb-6 text-lg font-bold text-white/80">{currentMessage}</div>
-        <div className="flex justify-center gap-1">
-          {Array.from({ length: 3 }, (_, i) => (
-            <span
-              key={i}
-              className="inline-block h-2 w-2 rounded-full bg-[#0066CC]"
-              style={{
-                animation: `pulse 1s ease-in-out ${i * 0.2}s infinite`,
-                opacity: 0.4 + (i * 0.3),
-              }}
-            />
-          ))}
-        </div>
-        <style>{`
-          @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.4; }
-            50% { transform: scale(1.4); opacity: 1; }
-          }
-        `}</style>
-      </div>
-    </div>
-  );
+function convertToBattleFleet3D(
+  fleet: BattleFleet,
+  side: 'attacker' | 'defender'
+): BattleFleet3D {
+  return {
+    side,
+    commander: {
+      id: fleet.commander?.id ?? 'none',
+      name: fleet.commander?.name ?? fleet.playerName,
+      level: fleet.commander?.level ?? 1,
+      stars: fleet.commander?.stars ?? 1,
+      portrait: fleet.commander?.id
+        ? `/assets/cmd_${fleet.commander.id}.webp`
+        : '',
+    },
+    stacks: (fleet.stacks ?? []).map((stack, idx) => ({
+      id: `stack_${side}_${idx}`,
+      shipType: (stack.type ?? 'cruiser') as 'frigate' | 'cruiser' | 'battleship',
+      count: stack.count ?? 0,
+      maxCount: stack.maxCount ?? stack.count ?? 0,
+      structure: 100,
+      shield: 100,
+      row: Math.floor(idx / 3),
+      col: idx % 3,
+      modelVariant: idx % 4,
+    })),
+  };
 }
 
 /* ─── main component ─── */
@@ -326,6 +274,10 @@ export function Go2BattleScreen({
 }: Go2BattleScreenProps) {
   const [phase, setPhase] = useState<BattlePhase>('preparing');
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const [actions, setActions] = useState<BattleAction3D[]>([]);
   const storedSettings = useRef<BattleSettings | null>(null);
 
   // Phase 1: Pre-battle — user configures formation
@@ -398,10 +350,21 @@ export function Go2BattleScreen({
       )}
 
       {phase === 'fighting' && (
-        <Go2BattleCanvas
-          attackerName={attackerFleet.playerName}
-          defenderName={defenderFleet.playerName}
-          onComplete={handleBattleComplete}
+        <Go2BattleArena3D
+          attacker={convertToBattleFleet3D(attackerFleet, 'attacker')}
+          defender={convertToBattleFleet3D(defenderFleet, 'defender')}
+          currentRound={currentRound}
+          maxRounds={20}
+          actions={actions}
+          isPaused={isPaused}
+          speed={speed}
+          onPauseToggle={() => setIsPaused((p) => !p)}
+          onSpeedChange={setSpeed}
+          onSkip={handleBattleComplete}
+          onExit={() => {
+            setPhase('preparing');
+            onExit();
+          }}
         />
       )}
 
