@@ -1,0 +1,6 @@
+[build]
+builder = "RAILPACK"
+buildCommand = "cd apps/web && npm run build"
+
+[deploy]
+startCommand = "cd apps/web && node .next/standalone/server.js"
