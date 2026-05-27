@@ -154,9 +154,20 @@ function CommanderCard({ commander }: { commander: Commander }) {
       <div className="flex gap-4">
         <CommanderPortrait id={commander.id} name={commander.name} rarityColor={rarityColor} />
         <div className="flex flex-1 flex-col justify-center gap-2">
-          <div className="flex items-center gap-2.5 text-[13px]">
-            <span className="min-w-[55px] font-semibold text-[#64b5f6]">Skill:</span>
-            <span className="font-bold text-white">{commander.skill}</span>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2.5 text-[13px]">
+              <span className="min-w-[55px] font-semibold text-[#ffd54f]">Skill:</span>
+              <span className="font-bold text-white">{commander.skill}</span>
+              <span
+                className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                style={{ background: `${rarityColor}33`, color: rarityColor, border: `1px solid ${rarityColor}55` }}
+              >
+                {commander.skillAffectedBy}
+              </span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-[#90caf9]/80">
+              {commander.skillDescription}
+            </p>
           </div>
           <div className="flex items-center gap-2.5 text-[13px]">
             <span className="min-w-[55px] font-semibold text-[#64b5f6]">Status:</span>
@@ -190,21 +201,25 @@ function CommanderCard({ commander }: { commander: Commander }) {
       {/* stars */}
       <StarRow count={commander.stars} />
 
-      {/* 4 stats */}
+      {/* 4 stats with tooltips */}
       <div className="grid grid-cols-4 gap-2">
         {[
-          { icon: '🎯', label: 'Acc', value: commander.stats.accuracy },
-          { icon: '🚀', label: 'Spd', value: commander.stats.speed },
-          { icon: '✈️', label: 'Ddg', value: commander.stats.dodge },
-          { icon: '🔲', label: 'Elec', value: commander.stats.electron },
+          { icon: '🎯', label: 'Acc', value: commander.stats.accuracy, tooltip: 'Affects hit chance of weapons. Higher = more damage dealt.' },
+          { icon: '🚀', label: 'Spd', value: commander.stats.speed, tooltip: 'Affects combat order and chance of successive strikes.' },
+          { icon: '✈️', label: 'Ddg', value: commander.stats.dodge, tooltip: "Reduces enemy hit rate. Chance to dodge enemy attacks." },
+          { icon: '⚡', label: 'Elec', value: commander.stats.electron, tooltip: 'Increases Critical Hit Rate and Critical Hit Damage.' },
         ].map((s) => (
           <div
             key={s.label}
-            className="flex flex-col items-center gap-1 rounded-lg border border-[#1976d2]/15 bg-black/25 px-2 py-2.5"
+            className="group relative flex flex-col items-center gap-1 rounded-lg border border-[#1976d2]/15 bg-black/25 px-2 py-2.5"
           >
             <span className="text-2xl">{s.icon}</span>
             <span className="text-[22px] font-extrabold text-white">{s.value}</span>
             <span className="text-[9px] uppercase text-white/40">{s.label}</span>
+            {/* Tooltip */}
+            <div className="pointer-events-none absolute -top-12 left-1/2 z-20 hidden w-44 -translate-x-1/2 rounded-lg border border-[#42a5f5]/40 bg-[#0a0e1a] p-2 text-center text-[10px] leading-tight text-[#90caf9] shadow-lg group-hover:block">
+              {s.tooltip}
+            </div>
           </div>
         ))}
       </div>
