@@ -90,6 +90,13 @@ function CommanderList({
                   : 'border-l-[3px] border-l-transparent text-white/80 hover:bg-[#1976d2]/15'
               }`}
             >
+              <img
+                src={`/assets/cmd_${cmd.id}.png`}
+                alt={cmd.name}
+                className="h-7 w-7 shrink-0 rounded-md border border-white/20 object-cover"
+                loading="lazy"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
               <span
                 className={`h-2 w-2 shrink-0 rounded-full ${RARITY_DOT_CLASS[cmd.rarity]}`}
               />
@@ -105,10 +112,33 @@ function CommanderList({
   );
 }
 
+function CommanderPortrait({ id, name, rarityColor }: { id: string; name: string; rarityColor: string }) {
+  return (
+    <div
+      className="flex h-[90px] w-[90px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] border-2 bg-gradient-to-br from-[#1a2744] to-[#0a1428]"
+      style={{ borderColor: `${rarityColor}88` }}
+    >
+      <img
+        src={`/assets/cmd_${id}.png`}
+        alt={name}
+        className="h-full w-full object-cover"
+        onError={(e) => {
+          // Fallback to initial if image fails to load
+          const target = e.currentTarget;
+          target.style.display = 'none';
+          const parent = target.parentElement;
+          if (parent) {
+            parent.innerHTML = `<span style="color:${rarityColor};font-size:40px;font-weight:900;">${name.charAt(0).toUpperCase()}</span>`;
+          }
+        }}
+      />
+    </div>
+  );
+}
+
 function CommanderCard({ commander }: { commander: Commander }) {
   const xpPct = Math.round((commander.exp / commander.expMax) * 100);
   const rarityColor = RARITY_COLORS[commander.rarity];
-  const initial = commander.name.charAt(0).toUpperCase();
 
   return (
     <div className="relative flex min-w-0 flex-1 flex-col gap-2.5 rounded-xl border border-[#1976d2]/25 bg-gradient-to-b from-[#0c2d5c]/60 to-[#060f23]/90 p-4">
@@ -122,12 +152,7 @@ function CommanderCard({ commander }: { commander: Commander }) {
 
       {/* portrait + info */}
       <div className="flex gap-4">
-        <div
-          className="flex h-[90px] w-[90px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] border-2 border-[#42a5f5]/50 bg-gradient-to-br from-[#1a2744] to-[#0a1428] text-[40px] font-black"
-          style={{ color: rarityColor }}
-        >
-          {initial}
-        </div>
+        <CommanderPortrait id={commander.id} name={commander.name} rarityColor={rarityColor} />
         <div className="flex flex-1 flex-col justify-center gap-2">
           <div className="flex items-center gap-2.5 text-[13px]">
             <span className="min-w-[55px] font-semibold text-[#64b5f6]">Skill:</span>
