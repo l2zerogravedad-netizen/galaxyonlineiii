@@ -5,10 +5,7 @@ nixPkgs = ["nodejs_20"]
 cmds = ["npm ci"]
 
 [phases.build]
-cmds = [
-  "cd packages/shared && npx tsc",
-  "cd apps/web && npm run build"
-]
+cmds = ["cd apps/web && npm run build"]
 
 [start]
 cmd = "cd apps/web && node .next/standalone/server.js"

@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "cd packages/shared && npm run build && cd ../../apps/web && npm run build",
+    "build": "cd apps/web && npm run build",
     "build:api": "cd packages/database && npx prisma generate && npm run build && cd ../../apps/api && npm run build",
     "build:web": "cd packages/shared && npm run build && cd ../../apps/web && npm run build",
     "start": "cd apps/web && node .next/standalone/server.js",
