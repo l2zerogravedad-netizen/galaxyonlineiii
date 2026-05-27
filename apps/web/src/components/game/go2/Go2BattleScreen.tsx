@@ -22,6 +22,7 @@
  */
 
 import { useState, useCallback, useRef, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { type Commander } from './go2-commander-data';
 import type { FatalityResult } from './Go2FatalitySystem';
 import { checkFatality } from './Go2FatalitySystem';
@@ -43,10 +44,16 @@ import {
   type HighestDamageInfo,
 } from './Go2PostBattle';
 import {
-  Go2Battle3D,
   generateDemoBattleFrames,
   type BattleFrame,
-} from './Go2Battle3D';
+} from './Go2BattleFrameData';
+import Go2BattleSimple from './Go2BattleSimple';
+
+/* ─── Dynamic import for 3D battle (heavy Three.js dependency) ─── */
+const Go2Battle3D = dynamic(
+  () => import('./Go2Battle3D').then((mod) => ({ default: mod.Go2Battle3D })),
+  { ssr: false, loading: () => <Go2BattleSimple /> }
+);
 
 /* ─── re-export types used by consumers ─── */
 
