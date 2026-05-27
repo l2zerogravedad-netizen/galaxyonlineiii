@@ -1,162 +1,129 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Go2GalaxyMap } from './Go2GalaxyMap';
 import { Go2GalaxyMinimap } from './Go2GalaxyMinimap';
 import { Go2GalaxyChat } from './Go2GalaxyChat';
-import { Go2GalaxyTooltip } from './Go2GalaxyTooltip';
 import { Go2BottomNav } from '../Go2BottomNav';
 import { GALAXY_PLANETS } from './galaxy-data';
 import { useGalaxyMap } from './useGalaxyMap';
 
-/* ------------------------------------------------------------------ */
-/*  Sector data                                                        */
-/* ------------------------------------------------------------------ */
+// Icons as simple SVG components for retro GO2 look
+const SectorLeftIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M10 3L5 8L10 13" stroke="#64b5f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
-interface SectorInfo {
-  id: string;
-  name: string;
-  count: number;
-}
+const SectorRightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M6 3L11 8L6 13" stroke="#64b5f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
-const SECTORS: SectorInfo[] = [
+const HomeIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <circle cx="7" cy="7" r="6" stroke="#64b5f6" strokeWidth="1.5"/>
+    <circle cx="7" cy="7" r="2" fill="#64b5f6"/>
+  </svg>
+);
+
+const RefreshIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M7 1a6 6 0 0 1 6 6M7 1v3M7 1l-2 2" stroke="#64b5f6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M7 13a6 6 0 0 1-6-6M7 13v-3M7 13l2-2" stroke="#64b5f6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ActionButton = ({ icon, label, active, onClick }: { icon: string; label: string; active?: boolean; onClick?: () => void }) => (
+  <button
+    onClick={onClick}
+    className={`
+      flex flex-col items-center justify-center gap-0.5
+      w-11 h-11 rounded-full
+      transition-all duration-150
+      ${active 
+        ? 'bg-gradient-to-b from-blue-500/40 to-blue-700/40 border border-blue-400/60 shadow-lg shadow-blue-500/20' 
+        : 'bg-gradient-to-b from-slate-800/80 to-slate-900/80 border border-blue-500/20 hover:border-blue-400/40 hover:from-slate-700/80 hover:to-slate-800/80'
+      }
+    `}
+  >
+    <span className="text-base">{icon}</span>
+  </button>
+);
+
+const SideButton = ({ icon, onClick, title }: { icon: string; onClick?: () => void; title?: string }) => (
+  <button
+    onClick={onClick}
+    title={title}
+    className="
+      w-9 h-9 rounded-lg
+      flex items-center justify-center
+      bg-gradient-to-b from-slate-800/70 to-slate-900/70
+      border border-blue-500/20
+      hover:border-blue-400/40 hover:from-slate-700/70 hover:to-slate-800/70
+      transition-all duration-150
+      shadow-md
+    "
+  >
+    <span className="text-sm">{icon}</span>
+  </button>
+);
+
+// Sector data
+const SECTORS = [
   { id: 'S01', name: 'Ursa Major', count: 5 },
   { id: 'S02', name: 'Orion', count: 8 },
-  { id: 'S03', name: 'Cassiopeia', count: 6 },
-  { id: 'S04', name: 'Andromeda', count: 7 },
-  { id: 'S05', name: 'Cygnus', count: 4 },
-  { id: 'S06', name: 'Draco', count: 9 },
-  { id: 'S07', name: 'Phoenix', count: 3 },
-  { id: 'S08', name: 'Leo', count: 6 },
+  { id: 'S03', name: 'Cygnus', count: 12 },
+  { id: 'S04', name: 'Andromeda', count: 15 },
+  { id: 'S05', name: 'Draco', count: 10 },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Timer hook                                                         */
-/* ------------------------------------------------------------------ */
-
-function useTimer(initialSeconds: number): string {
-  const [seconds, setSeconds] = useState(initialSeconds);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const h = Math.floor(seconds / 3600)
-    .toString()
-    .padStart(2, '0');
-  const m = Math.floor((seconds % 3600) / 60)
-    .toString()
-    .padStart(2, '0');
-  const s = (seconds % 60).toString().padStart(2, '0');
-
-  return `${h}:${m}:${s}`;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Action-bar button data                                             */
-/* ------------------------------------------------------------------ */
-
-interface ActionButton {
-  icon: string;
-  label: string;
-}
-
-const ACTION_BUTTONS: ActionButton[] = [
-  { icon: '\uD83C\uDF0D', label: 'Planet' },
-  { icon: '\uD83D\uDDFA\uFE0F', label: 'Galaxy' },
-  { icon: '\u2694\uFE0F', label: 'Fleets' },
-  { icon: '\u2709\uFE0F', label: 'Messages' },
-  { icon: '\uD83D\uDEE1\uFE0F', label: 'Shield' },
-  { icon: '\u2699\uFE0F', label: 'Settings' },
-  { icon: '\uD83D\uDC64', label: 'Profile' },
-  { icon: '\uD83D\uDCCB', label: 'Ranking' },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Side-button data                                                   */
-/* ------------------------------------------------------------------ */
-
-interface SideButton {
-  icon: string;
-  label: string;
-}
-
-const SIDE_BUTTONS: SideButton[] = [
-  { icon: '\uD83D\uDD04', label: 'Refresh' },
-  { icon: '\uD83D\uDDFA\uFE0F', label: 'Map' },
-  { icon: '\uD83C\uDFE0', label: 'Base' },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Component                                                          */
-/* ------------------------------------------------------------------ */
-
-export const Go2GalaxyScreen: React.FC = () => {
+export function Go2GalaxyScreen() {
   const {
     camera,
     hoveredPlanet,
     selectedPlanet,
-    tooltip,
-    containerRef,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
     handleClick,
     handleWheel,
-    updateCanvasSize,
-    viewportCoords,
-    canvasSizeRef,
+    handleResize,
   } = useGalaxyMap();
 
-  /* -- Sector navigation -- */
-  const [sectorIndex, setSectorIndex] = useState(0);
-  const currentSector = SECTORS[sectorIndex];
+  // Sector navigation
+  const [currentSectorIdx, setCurrentSectorIdx] = useState(0);
+  const currentSector = SECTORS[currentSectorIdx];
 
-  const goPrevSector = useCallback(() => {
-    setSectorIndex((prev) => (prev > 0 ? prev - 1 : SECTORS.length - 1));
+  // Timer
+  const [timer, setTimer] = useState('00:35:37');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer(prev => {
+        const [h, m, s] = prev.split(':').map(Number);
+        let newS = s + 1;
+        let newM = m;
+        let newH = h;
+        if (newS >= 60) { newS = 0; newM++; }
+        if (newM >= 60) { newM = 0; newH++; }
+        return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}:${String(newS).padStart(2, '0')}`;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
-  const goNextSector = useCallback(() => {
-    setSectorIndex((prev) => (prev < SECTORS.length - 1 ? prev + 1 : 0));
+  const prevSector = useCallback(() => {
+    setCurrentSectorIdx(i => (i > 0 ? i - 1 : SECTORS.length - 1));
   }, []);
 
-  const goHomeSector = useCallback(() => {
-    setSectorIndex(0);
+  const nextSector = useCallback(() => {
+    setCurrentSectorIdx(i => (i < SECTORS.length - 1 ? i + 1 : 0));
   }, []);
-
-  /* -- Timer -- */
-  const timerDisplay = useTimer(2137); // starts at ~00:35:37
-
-  /* -- Canvas resize -- */
-  const handleResize = useCallback(
-    (width: number, height: number) => {
-      updateCanvasSize(width, height);
-    },
-    [updateCanvasSize]
-  );
-
-  /* -- Hover refs for side buttons -- */
-  const [hoveredSideBtn, setHoveredSideBtn] = useState<number | null>(null);
-  const [hoveredActionBtn, setHoveredActionBtn] = useState<number | null>(null);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: '100dvh',
-        overflow: 'hidden',
-        backgroundColor: '#0a1628',
-        fontFamily: 'monospace',
-      }}
-    >
-      {/* ============================================================ */}
-      {/* 1. Canvas Map — full viewport                                 */}
-      {/* ============================================================ */}
+    <div className="relative w-full h-[100dvh] overflow-hidden bg-[#060d1a] select-none">
+      {/* Galaxy Map Canvas */}
       <Go2GalaxyMap
         camera={camera}
         hoveredPlanet={hoveredPlanet}
@@ -169,308 +136,91 @@ export const Go2GalaxyScreen: React.FC = () => {
         onResize={handleResize}
       />
 
-      {/* ============================================================ */}
-      {/* 2. Sector Navigator (top-left)                                */}
-      {/* ============================================================ */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 10,
-          left: 10,
-          zIndex: 50,
-          backgroundColor: 'rgba(10, 30, 60, 0.85)',
-          border: '1px solid rgba(100, 150, 255, 0.2)',
-          borderRadius: 6,
-          padding: '8px 12px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 6,
-          minWidth: 180,
-        }}
-      >
-        {/* Sector name row */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            fontSize: 13,
-            fontWeight: 'bold',
-            color: '#64b5f6',
-            fontFamily: 'monospace',
-          }}
-        >
-          <button
-            onClick={goPrevSector}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#64b5f6',
-              fontSize: 14,
-              cursor: 'pointer',
-              padding: '0 4px',
-              lineHeight: 1,
-            }}
-          >
-            &#9664;
+      {/* ==================== SECTOR NAVIGATOR (Top Left) ==================== */}
+      <div className="absolute top-3 left-3 z-30">
+        <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#0a1628]/90 border border-blue-500/20 backdrop-blur-sm">
+          <button onClick={prevSector} className="hover:opacity-70 transition-opacity">
+            <SectorLeftIcon />
           </button>
-          <span>
+          <button className="hover:opacity-70 transition-opacity mx-1">
+            <HomeIcon />
+          </button>
+          <span className="text-cyan-400 font-bold text-xs font-mono tracking-wide mx-1">
             {currentSector.id}. {currentSector.name} ({currentSector.count})
           </span>
-          <button
-            onClick={goNextSector}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#64b5f6',
-              fontSize: 14,
-              cursor: 'pointer',
-              padding: '0 4px',
-              lineHeight: 1,
-            }}
-          >
-            &#9654;
+          <button className="hover:opacity-70 transition-opacity mx-1">
+            <RefreshIcon />
           </button>
-        </div>
-
-        {/* Sub-controls: prev / home / next */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button
-            onClick={goPrevSector}
-            title="Previous sector"
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              backgroundColor: 'rgba(20, 50, 100, 0.6)',
-              border: '1px solid rgba(100, 150, 255, 0.25)',
-              color: '#64b5f6',
-              fontSize: 11,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            &#9664;
-          </button>
-          <button
-            onClick={goHomeSector}
-            title="Home sector"
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              backgroundColor: 'rgba(20, 50, 100, 0.6)',
-              border: '1px solid rgba(100, 150, 255, 0.25)',
-              color: '#64b5f6',
-              fontSize: 13,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            &#8962;
-          </button>
-          <button
-            onClick={goNextSector}
-            title="Next sector"
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              backgroundColor: 'rgba(20, 50, 100, 0.6)',
-              border: '1px solid rgba(100, 150, 255, 0.25)',
-              color: '#64b5f6',
-              fontSize: 11,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            &#9654;
+          <button onClick={nextSector} className="hover:opacity-70 transition-opacity">
+            <SectorRightIcon />
           </button>
         </div>
       </div>
 
-      {/* ============================================================ */}
-      {/* 3. Left sidebar — Action Buttons                              */}
-      {/* ============================================================ */}
-      <div
-        style={{
-          position: 'absolute',
-          left: 10,
-          top: 110,
-          zIndex: 50,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
-        }}
-      >
-        {SIDE_BUTTONS.map((btn, i) => (
-          <button
-            key={btn.label}
-            title={btn.label}
-            onMouseEnter={() => setHoveredSideBtn(i)}
-            onMouseLeave={() => setHoveredSideBtn(null)}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              backgroundColor:
-                hoveredSideBtn === i
-                  ? 'rgba(30, 70, 140, 0.8)'
-                  : 'rgba(20, 50, 100, 0.6)',
-              border: '1px solid rgba(100, 150, 255, 0.3)',
-              color: '#64b5f6',
-              fontSize: 15,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'background-color 0.15s',
-              textShadow:
-                hoveredSideBtn === i
-                  ? '0 0 8px rgba(100, 181, 246, 0.6)'
-                  : 'none',
-            }}
-          >
-            {btn.icon}
-          </button>
-        ))}
-
-        {/* ========================================================== */}
-        {/* 4. Timer (below side buttons)                               */}
-        {/* ========================================================== */}
-        <div
-          style={{
-            marginTop: 4,
-            textAlign: 'center',
-            fontSize: 11,
-            fontFamily: 'monospace',
-            color: '#4caf50',
-            letterSpacing: 1,
-            userSelect: 'none',
-          }}
-        >
-          {timerDisplay}
-        </div>
-      </div>
-
-      {/* ============================================================ */}
-      {/* 6. Coordinates HUD (top-left, below sector nav)               */}
-      {/* ============================================================ */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 110,
-          left: 56,
-          zIndex: 50,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 4,
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: 'rgba(10, 30, 60, 0.7)',
-            border: '1px solid rgba(100, 150, 255, 0.12)',
-            borderRadius: 4,
-            padding: '5px 10px',
-            fontFamily: 'monospace',
-            fontSize: 10,
-            color: '#5a7a9c',
-            lineHeight: 1.6,
-          }}
-        >
-          <div>
-            Viewport: [
-            {Math.round(viewportCoords.topLeft.wx)}:
-            {Math.round(viewportCoords.topLeft.wy)}]
+      {/* ==================== RESOURCE INFO (Top Right) ==================== */}
+      <div className="absolute top-3 right-3 z-30">
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-[#0a1628]/90 border border-blue-500/20 backdrop-blur-sm">
+          <div className="flex items-center gap-1">
+            <span className="text-amber-400 text-xs">&#9679;</span>
+            <span className="text-amber-200 text-xs font-mono">1.2M</span>
           </div>
-          <div>Planets: {GALAXY_PLANETS.length}</div>
+          <div className="flex items-center gap-1">
+            <span className="text-cyan-400 text-xs">&#9679;</span>
+            <span className="text-cyan-200 text-xs font-mono">850K</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-purple-400 text-xs">&#9679;</span>
+            <span className="text-purple-200 text-xs font-mono">420K</span>
+          </div>
         </div>
       </div>
 
-      {/* ============================================================ */}
-      {/* 9. Action Bar — bottom-right, 8 circular buttons              */}
-      {/* ============================================================ */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 70,
-          right: 180,
-          zIndex: 50,
-          display: 'flex',
-          gap: 6,
-        }}
-      >
-        {ACTION_BUTTONS.map((btn, i) => (
-          <button
-            key={btn.label}
-            title={btn.label}
-            onMouseEnter={() => setHoveredActionBtn(i)}
-            onMouseLeave={() => setHoveredActionBtn(null)}
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: '50%',
-              background:
-                hoveredActionBtn === i
-                  ? 'linear-gradient(180deg, rgba(30, 60, 120, 0.9), rgba(20, 40, 90, 0.95))'
-                  : 'linear-gradient(180deg, rgba(20, 40, 80, 0.8), rgba(10, 20, 50, 0.9))',
-              border: '1px solid rgba(100, 150, 255, 0.25)',
-              color: '#64b5f6',
-              fontSize: 18,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'all 0.15s',
-              boxShadow:
-                hoveredActionBtn === i
-                  ? '0 0 12px rgba(100, 181, 246, 0.3), inset 0 1px 0 rgba(255,255,255,0.08)'
-                  : 'inset 0 1px 0 rgba(255,255,255,0.05)',
-            }}
-          >
-            {btn.icon}
-          </button>
-        ))}
+      {/* ==================== SIDE BUTTONS (Left) ==================== */}
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-2">
+        <SideButton icon="&#128260;" title="Refresh" />
+        <SideButton icon="&#127758;" title="Map" />
+        <SideButton icon="&#127968;" title="Home" />
+        <div className="mt-2 px-2 py-1 rounded bg-[#0a1628]/80 border border-green-500/20">
+          <span className="text-green-400 text-[10px] font-mono">{timer}</span>
+        </div>
       </div>
 
-      {/* ============================================================ */}
-      {/* 7. Minimap — bottom-right, above bottom nav                   */}
-      {/* ============================================================ */}
-      <Go2GalaxyMinimap
-        camera={camera}
-        canvasWidth={canvasSizeRef.current?.width || 1920}
-        canvasHeight={canvasSizeRef.current?.height || 1080}
-      />
+      {/* ==================== CHAT PANEL (Bottom Left) ==================== */}
+      <div className="absolute bottom-[72px] left-3 z-30">
+        <Go2GalaxyChat />
+      </div>
 
-      {/* ============================================================ */}
-      {/* 8. Chat Panel — bottom-left, above bottom nav                 */}
-      {/* ============================================================ */}
-      <Go2GalaxyChat />
+      {/* ==================== MINIMAP (Bottom Right, above nav) ==================== */}
+      <div className="absolute bottom-[72px] right-3 z-30">
+        <Go2GalaxyMinimap
+          planets={GALAXY_PLANETS}
+          camera={camera}
+          mapWidth={GALAXY_PLANETS.reduce((max, p) => Math.max(max, p.x), 0) + 2}
+          mapHeight={GALAXY_PLANETS.reduce((max, p) => Math.max(max, p.y), 0) + 2}
+          viewportWidth={typeof window !== 'undefined' ? window.innerWidth : 1200}
+          viewportHeight={typeof window !== 'undefined' ? window.innerHeight : 800}
+          onViewportClick={(worldX, worldY) => {
+            console.log('Minimap click:', worldX, worldY);
+          }}
+        />
+      </div>
 
-      {/* ============================================================ */}
-      {/* 11. Tooltip — near cursor                                     */}
-      {/* ============================================================ */}
-      <Go2GalaxyTooltip
-        planet={tooltip.planet}
-        x={tooltip.x}
-        y={tooltip.y}
-        visible={tooltip.visible}
-      />
+      {/* ==================== ACTION BAR (Bottom Right, above nav) ==================== */}
+      <div className="absolute bottom-[72px] right-[180px] z-30">
+        <div className="flex items-center gap-1.5 px-2 py-2 rounded-xl bg-gradient-to-t from-[#0a1628]/95 to-[#0a1628]/70 border border-blue-500/10 backdrop-blur-sm">
+          <ActionButton icon="&#127759;" label="Planet" />
+          <ActionButton icon="&#127756;" label="Galaxy" active />
+          <ActionButton icon="&#128640;" label="Fleets" />
+          <ActionButton icon="&#128737;" label="Shield" />
+          <ActionButton icon="&#9993;" label="Mail" />
+          <ActionButton icon="&#9881;" label="Settings" />
+          <ActionButton icon="&#128100;" label="Profile" />
+          <ActionButton icon="&#127942;" label="Rank" />
+        </div>
+      </div>
 
-      {/* ============================================================ */}
-      {/* 10. Bottom Navigation                                         */}
-      {/* ============================================================ */}
+      {/* ==================== BOTTOM NAVIGATION ==================== */}
       <Go2BottomNav />
     </div>
   );
-};
-
-Go2GalaxyScreen.displayName = 'Go2GalaxyScreen';
+}
