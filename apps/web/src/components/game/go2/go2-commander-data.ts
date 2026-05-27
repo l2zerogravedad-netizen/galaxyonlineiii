@@ -1,3 +1,5 @@
+import type { Gem } from './go2-gem-system';
+
 export type Rarity = 'common' | 'super' | 'legendary' | 'divine';
 
 export interface EquipmentItem {
@@ -27,10 +29,17 @@ export interface Commander {
   skillAffectedBy: string;
   status: string;
   stats: CommanderStats;
+  growthRates: CommanderStats;
   equipment: {
     weapons: (EquipmentItem | null)[];
     defense: (EquipmentItem | null)[];
   };
+  // ─── Gem System: 3 gem slots for stat boosts ───
+  gems: (Gem | null)[];
+  // ─── Hospital System: seconds remaining in hospital recovery ───
+  injuryTime?: number;
+  // ─── Fatality System: permanently dead commanders are removed ───
+  isDead?: boolean;
 }
 
 // ============================================================
@@ -124,6 +133,11 @@ const EMPTY_EQUIPMENT = {
 };
 
 // ============================================================
+// EMPTY GEM SLOTS (3 slots — see go2-gem-system.ts)
+// ============================================================
+const EMPTY_GEMS = [null, null, null] as (Gem | null)[];
+
+// ============================================================
 // COMPLETE COMMANDER DATABASE (101 commanders)
 // ============================================================
 export const COMMANDERS: Commander[] = [
@@ -143,7 +157,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 9, speed: 3, dodge: 7, electron: 5 },
+    growthRates: { accuracy: 3.1, speed: 1.1, dodge: 2.2, electron: 1.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'angla',
@@ -158,7 +174,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 4, speed: 4, dodge: 5, electron: 7 },
+    growthRates: { accuracy: 0.9, speed: 1.2, dodge: 1.5, electron: 1.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'donna',
@@ -173,7 +191,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 7, speed: 4, dodge: 4, electron: 8 },
+    growthRates: { accuracy: 2.4, speed: 1.1, dodge: 0.9, electron: 2.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'essido',
@@ -188,7 +208,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 8, speed: 5, dodge: 6, electron: 8 },
+    growthRates: { accuracy: 1.8, speed: 1.6, dodge: 2.0, electron: 1.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'heloyc',
@@ -203,7 +225,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 7, speed: 2, dodge: 8, electron: 4 },
+    growthRates: { accuracy: 1.6, speed: 0.5, dodge: 2.6, electron: 1.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'jason',
@@ -218,7 +242,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 4, speed: 2, dodge: 5, electron: 5 },
+    growthRates: { accuracy: 0.9, speed: 0.7, dodge: 1.6, electron: 1.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'jerome',
@@ -233,7 +259,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 5, speed: 8, dodge: 2, electron: 5 },
+    growthRates: { accuracy: 1.2, speed: 2.5, dodge: 0.5, electron: 1.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'kelly',
@@ -248,7 +276,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 3, speed: 9, dodge: 6, electron: 5 },
+    growthRates: { accuracy: 1.0, speed: 2.9, dodge: 1.8, electron: 1.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'lawrence',
@@ -263,7 +293,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 9, speed: 4, dodge: 6, electron: 8 },
+    growthRates: { accuracy: 2.5, speed: 0.9, dodge: 1.4, electron: 2.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'mantie',
@@ -278,7 +310,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 14, speed: 14, dodge: 14, electron: 14 },
+    growthRates: { accuracy: 5.0, speed: 4.2, dodge: 4.8, electron: 3.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'maxius',
@@ -293,7 +327,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 10, speed: 0, dodge: 5, electron: 5 },
+    growthRates: { accuracy: 2.9, speed: 0.0, dodge: 1.7, electron: 1.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'motima',
@@ -308,7 +344,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 8, speed: 2, dodge: 6, electron: 6 },
+    growthRates: { accuracy: 2.6, speed: 0.6, dodge: 2.0, electron: 1.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'natiya',
@@ -323,7 +361,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 8, speed: 8, dodge: 6, electron: 8 },
+    growthRates: { accuracy: 2.1, speed: 2.4, dodge: 1.8, electron: 2.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'panis',
@@ -338,7 +378,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 5, speed: 5, dodge: 6, electron: 12 },
+    growthRates: { accuracy: 1.8, speed: 1.7, dodge: 2.2, electron: 3.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'rayllf',
@@ -353,7 +395,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 6, speed: 8, dodge: 7, electron: 7 },
+    growthRates: { accuracy: 2.1, speed: 2.7, dodge: 2.6, electron: 2.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'reggie',
@@ -368,7 +412,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 5, speed: 3, dodge: 8, electron: 4 },
+    growthRates: { accuracy: 1.8, speed: 1.0, dodge: 2.3, electron: 1.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'shaba',
@@ -383,7 +429,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 8, speed: 10, dodge: 5, electron: 5 },
+    growthRates: { accuracy: 2.6, speed: 2.5, dodge: 1.4, electron: 1.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'sofia',
@@ -398,7 +446,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 7, speed: 5, dodge: 11, electron: 6 },
+    growthRates: { accuracy: 1.5, speed: 1.3, dodge: 4.0, electron: 1.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'taude',
@@ -413,7 +463,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 7, speed: 7, dodge: 4, electron: 4 },
+    growthRates: { accuracy: 2.4, speed: 2.4, dodge: 1.5, electron: 1.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'tyren',
@@ -428,7 +480,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 10, speed: 5, dodge: 7, electron: 5 },
+    growthRates: { accuracy: 3.3, speed: 1.3, dodge: 2.2, electron: 1.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'vinna',
@@ -443,7 +497,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 6, speed: 6, dodge: 6, electron: 6 },
+    growthRates: { accuracy: 1.8, speed: 1.4, dodge: 1.6, electron: 1.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'wayne',
@@ -458,7 +514,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 8, speed: 4, dodge: 9, electron: 2 },
+    growthRates: { accuracy: 2.9, speed: 0.9, dodge: 2.1, electron: 0.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
 
   // ----------------------------------------------------------
@@ -477,7 +535,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 5, speed: 10, dodge: 6, electron: 1 },
+    growthRates: { accuracy: 2.2, speed: 5.0, dodge: 2.9, electron: 0.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'anna',
@@ -492,7 +552,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 9, speed: 8, dodge: 10, electron: 5 },
+    growthRates: { accuracy: 4.3, speed: 4.2, dodge: 5.5, electron: 2.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'annata',
@@ -507,7 +569,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 10, speed: 8, dodge: 5, electron: 8 },
+    growthRates: { accuracy: 4.3, speed: 3.9, dodge: 2.5, electron: 4.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'bruce',
@@ -522,7 +586,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 6, speed: 8, dodge: 8, electron: 12 },
+    growthRates: { accuracy: 3.4, speed: 4.3, dodge: 3.4, electron: 6.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'eveline',
@@ -537,7 +603,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 7, speed: 6, dodge: 9, electron: 5 },
+    growthRates: { accuracy: 3.8, speed: 3.0, dodge: 4.0, electron: 2.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'evi',
@@ -552,7 +620,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 8, speed: 5, dodge: 9, electron: 5 },
+    growthRates: { accuracy: 4.5, speed: 2.4, dodge: 4.0, electron: 2.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'gastaf',
@@ -567,7 +637,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 12, speed: 0, dodge: 10, electron: 7 },
+    growthRates: { accuracy: 6.3, speed: 0.0, dodge: 5.7, electron: 3.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'jakar',
@@ -582,7 +654,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 9, speed: 3, dodge: 5, electron: 4 },
+    growthRates: { accuracy: 4.5, speed: 1.6, dodge: 2.5, electron: 2.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'joseph',
@@ -597,7 +671,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 4, speed: 10, dodge: 7, electron: 17 },
+    growthRates: { accuracy: 2.2, speed: 4.4, dodge: 3.3, electron: 7.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'leo',
@@ -612,7 +688,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 5, speed: 9, dodge: 6, electron: 8 },
+    growthRates: { accuracy: 2.8, speed: 3.9, dodge: 3.5, electron: 4.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'linda',
@@ -627,7 +705,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 10, speed: 9, dodge: 7, electron: 7 },
+    growthRates: { accuracy: 4.6, speed: 4.0, dodge: 3.8, electron: 3.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'lynn',
@@ -642,7 +722,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Spaces Moved',
     status: 'Normal',
     stats: { accuracy: 8, speed: 5, dodge: 6, electron: 3 },
+    growthRates: { accuracy: 4.6, speed: 2.5, dodge: 3.4, electron: 1.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'nick',
@@ -657,7 +739,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 5, speed: 4, dodge: 5, electron: 2 },
+    growthRates: { accuracy: 2.1, speed: 2.0, dodge: 2.3, electron: 0.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'penni',
@@ -672,7 +756,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 10, speed: 10, dodge: 10, electron: 10 },
+    growthRates: { accuracy: 5.0, speed: 4.9, dodge: 5.3, electron: 4.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'raslin',
@@ -687,7 +773,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 8, speed: 7, dodge: 9, electron: 10 },
+    growthRates: { accuracy: 4.6, speed: 3.6, dodge: 4.8, electron: 4.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'ringel',
@@ -702,7 +790,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 9, speed: 5, dodge: 9, electron: 3 },
+    growthRates: { accuracy: 4.4, speed: 2.6, dodge: 3.9, electron: 1.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'rocky',
@@ -717,7 +807,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Independent',
     status: 'Normal',
     stats: { accuracy: 12, speed: 4, dodge: 8, electron: 5 },
+    growthRates: { accuracy: 5.5, speed: 2.3, dodge: 3.9, electron: 2.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'sylva',
@@ -732,7 +824,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Independent',
     status: 'Normal',
     stats: { accuracy: 7, speed: 5, dodge: 5, electron: 2 },
+    growthRates: { accuracy: 3.3, speed: 2.8, dodge: 2.6, electron: 0.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'sylla',
@@ -747,7 +841,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 5, speed: 9, dodge: 5, electron: 5 },
+    growthRates: { accuracy: 2.1, speed: 4.6, dodge: 2.5, electron: 2.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'todd',
@@ -762,7 +858,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 30, speed: 8, dodge: 5, electron: 6 },
+    growthRates: { accuracy: 15.1, speed: 4.2, dodge: 2.3, electron: 2.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
 
   // ----------------------------------------------------------
@@ -781,7 +879,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron & Speed',
     status: 'Normal',
     stats: { accuracy: 8, speed: 8, dodge: 8, electron: 8 },
+    growthRates: { accuracy: 5.6, speed: 5.4, dodge: 5.3, electron: 5.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'bain',
@@ -796,7 +896,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Dodge',
     status: 'Normal',
     stats: { accuracy: 14, speed: 12, dodge: 18, electron: 16 },
+    growthRates: { accuracy: 9.1, speed: 9.1, dodge: 13.1, electron: 11.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'bart',
@@ -811,7 +913,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron & Speed',
     status: 'Normal',
     stats: { accuracy: 5, speed: 3, dodge: 5, electron: 3 },
+    growthRates: { accuracy: 3.6, speed: 2.0, dodge: 3.7, electron: 2.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'callisto',
@@ -826,7 +930,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 14, speed: 20, dodge: 15, electron: 20 },
+    growthRates: { accuracy: 9.3, speed: 13.2, dodge: 9.8, electron: 15.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'carlos',
@@ -841,7 +947,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Speed',
     status: 'Normal',
     stats: { accuracy: 15, speed: 5, dodge: 10, electron: 10 },
+    growthRates: { accuracy: 10.1, speed: 3.4, dodge: 7.0, electron: 6.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'cassius',
@@ -856,7 +964,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Dodge',
     status: 'Normal',
     stats: { accuracy: 15, speed: 15, dodge: 15, electron: 15 },
+    growthRates: { accuracy: 9.4, speed: 11.0, dodge: 11.0, electron: 9.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'circe',
@@ -871,7 +981,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Dodge',
     status: 'Normal',
     stats: { accuracy: 15, speed: 10, dodge: 12, electron: 22 },
+    growthRates: { accuracy: 9.7, speed: 7.6, dodge: 9.2, electron: 16.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'dilira',
@@ -886,7 +998,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 10, speed: 15, dodge: 10, electron: 12 },
+    growthRates: { accuracy: 7.3, speed: 11.4, dodge: 6.6, electron: 8.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'hellen',
@@ -901,7 +1015,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Electron',
     status: 'Normal',
     stats: { accuracy: 11, speed: 5, dodge: 7, electron: 16 },
+    growthRates: { accuracy: 8.0, speed: 3.2, dodge: 4.6, electron: 10.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'krina-klaus',
@@ -916,7 +1032,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 20, speed: 20, dodge: 20, electron: 20 },
+    growthRates: { accuracy: 15.3, speed: 14.0, dodge: 13.4, electron: 13.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'maletiz',
@@ -931,7 +1049,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge & Electron',
     status: 'Normal',
     stats: { accuracy: 2, speed: 2, dodge: 2, electron: 2 },
+    growthRates: { accuracy: 1.5, speed: 1.4, dodge: 1.4, electron: 1.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'marcus',
@@ -946,7 +1066,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Speed',
     status: 'Normal',
     stats: { accuracy: 8, speed: 6, dodge: 8, electron: 3 },
+    growthRates: { accuracy: 5.4, speed: 4.6, dodge: 6.0, electron: 2.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'medusa',
@@ -961,7 +1083,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge & Electron',
     status: 'Normal',
     stats: { accuracy: 20, speed: 14, dodge: 18, electron: 12 },
+    growthRates: { accuracy: 14.3, speed: 10.9, dodge: 12.3, electron: 8.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'miller',
@@ -976,7 +1100,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Independent',
     status: 'Normal',
     stats: { accuracy: 0, speed: 0, dodge: 0, electron: 0 },
+    growthRates: { accuracy: 0.0, speed: 0.0, dodge: 0.0, electron: 0.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'nora',
@@ -991,7 +1117,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Dodge',
     status: 'Normal',
     stats: { accuracy: 9, speed: 4, dodge: 8, electron: 3 },
+    growthRates: { accuracy: 6.7, speed: 2.6, dodge: 5.1, electron: 2.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'rafia',
@@ -1006,7 +1134,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Total Stats',
     status: 'Normal',
     stats: { accuracy: 3, speed: 3, dodge: 5, electron: 2 },
+    growthRates: { accuracy: 1.9, speed: 2.1, dodge: 3.7, electron: 1.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'rayo',
@@ -1021,7 +1151,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Total Stats',
     status: 'Normal',
     stats: { accuracy: 13, speed: 13, dodge: 13, electron: 13 },
+    growthRates: { accuracy: 8.3, speed: 9.4, dodge: 9.3, electron: 9.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'robert',
@@ -1036,7 +1168,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Total Stats',
     status: 'Normal',
     stats: { accuracy: 20, speed: 4, dodge: 10, electron: 5 },
+    growthRates: { accuracy: 14.3, speed: 3.0, dodge: 7.6, electron: 3.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'sandora',
@@ -1051,7 +1185,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Speed',
     status: 'Normal',
     stats: { accuracy: 9, speed: 7, dodge: 8, electron: 7 },
+    growthRates: { accuracy: 6.5, speed: 4.9, dodge: 5.2, electron: 5.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'singhri',
@@ -1066,7 +1202,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Independent',
     status: 'Normal',
     stats: { accuracy: 12, speed: 12, dodge: 12, electron: 12 },
+    growthRates: { accuracy: 8.3, speed: 7.7, dodge: 9.2, electron: 8.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'stani',
@@ -1081,7 +1219,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Electron',
     status: 'Normal',
     stats: { accuracy: 5, speed: 8, dodge: 5, electron: 10 },
+    growthRates: { accuracy: 3.3, speed: 6.0, dodge: 3.6, electron: 7.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'titan',
@@ -1096,7 +1236,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'None',
     status: 'Normal',
     stats: { accuracy: 35, speed: 35, dodge: 35, electron: 35 },
+    growthRates: { accuracy: 22.2, speed: 23.3, dodge: 24.2, electron: 23.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'venus',
@@ -1111,7 +1253,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge & Speed',
     status: 'Normal',
     stats: { accuracy: 15, speed: 23, dodge: 24, electron: 12 },
+    growthRates: { accuracy: 9.7, speed: 15.0, dodge: 18.4, electron: 7.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
 
   // ----------------------------------------------------------
@@ -1130,7 +1274,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 9, speed: 22, dodge: 11, electron: 15 },
+    growthRates: { accuracy: 8.8, speed: 21.1, dodge: 12.1, electron: 14.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'deadly-duo',
@@ -1145,7 +1291,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 19, speed: 17, dodge: 17, electron: 12 },
+    growthRates: { accuracy: 17.7, speed: 16.6, dodge: 17.6, electron: 11.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'death-from-above',
@@ -1160,7 +1308,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'All',
     status: 'Normal',
     stats: { accuracy: 24, speed: 24, dodge: 24, electron: 24 },
+    growthRates: { accuracy: 20.4, speed: 27.2, dodge: 22.0, electron: 25.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'desolate-prayers',
@@ -1175,7 +1325,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed and Accuracy',
     status: 'Normal',
     stats: { accuracy: 20, speed: 20, dodge: 13, electron: 18 },
+    growthRates: { accuracy: 22.5, speed: 22.4, dodge: 13.9, electron: 15.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'dopplegangers',
@@ -1190,7 +1342,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'All',
     status: 'Normal',
     stats: { accuracy: 34, speed: 45, dodge: 44, electron: 45 },
+    growthRates: { accuracy: 32.6, speed: 40.3, dodge: 43.1, electron: 44.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'enduring-chorus',
@@ -1205,7 +1359,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 8, speed: 19, dodge: 21, electron: 6 },
+    growthRates: { accuracy: 7.3, speed: 21.8, dodge: 18.3, electron: 5.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'ererbus-errants',
@@ -1220,7 +1376,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 31, speed: 22, dodge: 11, electron: 34 },
+    growthRates: { accuracy: 35.1, speed: 19.3, dodge: 11.3, electron: 37.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'eschaton-adventists',
@@ -1235,7 +1393,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Dodge',
     status: 'Normal',
     stats: { accuracy: 38, speed: 30, dodge: 31, electron: 25 },
+    growthRates: { accuracy: 41.4, speed: 30.2, dodge: 27.0, electron: 24.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'eternal-terrors',
@@ -1250,7 +1410,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Electron',
     status: 'Normal',
     stats: { accuracy: 29, speed: 10, dodge: 11, electron: 23 },
+    growthRates: { accuracy: 31.3, speed: 8.6, dodge: 12.3, electron: 20.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'fairy-fiend',
@@ -1265,7 +1427,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Speed',
     status: 'Normal',
     stats: { accuracy: 22, speed: 10, dodge: 20, electron: 10 },
+    growthRates: { accuracy: 21.9, speed: 10.7, dodge: 21.9, electron: 11.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'fatal-furies',
@@ -1280,7 +1444,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Speed',
     status: 'Normal',
     stats: { accuracy: 30, speed: 15, dodge: 14, electron: 12 },
+    growthRates: { accuracy: 28.3, speed: 14.3, dodge: 16.0, electron: 13.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'fearmongers',
@@ -1295,7 +1461,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Electron',
     status: 'Normal',
     stats: { accuracy: 19, speed: 15, dodge: 12, electron: 21 },
+    growthRates: { accuracy: 17.8, speed: 17.1, dodge: 10.7, electron: 21.6 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'feral-raptors',
@@ -1310,7 +1478,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Speed',
     status: 'Normal',
     stats: { accuracy: 18, speed: 14, dodge: 20, electron: 10 },
+    growthRates: { accuracy: 18.0, speed: 15.5, dodge: 22.7, electron: 9.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'frontline-surge',
@@ -1325,7 +1495,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 15, speed: 10, dodge: 17, electron: 3 },
+    growthRates: { accuracy: 13.6, speed: 9.8, dodge: 17.5, electron: 2.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'hand-of-lelantos',
@@ -1340,7 +1512,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 36, speed: 34, dodge: 32, electron: 34 },
+    growthRates: { accuracy: 39.3, speed: 30.5, dodge: 30.6, electron: 36.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'hekatian-witnesses',
@@ -1355,7 +1529,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Dodge',
     status: 'Normal',
     stats: { accuracy: 36, speed: 37, dodge: 35, electron: 34 },
+    growthRates: { accuracy: 31.7, speed: 34.3, dodge: 39.5, electron: 30.1 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'homeric-hellions',
@@ -1370,7 +1546,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'All',
     status: 'Normal',
     stats: { accuracy: 38, speed: 45, dodge: 25, electron: 12 },
+    growthRates: { accuracy: 37.8, speed: 45.9, dodge: 25.9, electron: 10.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'impending-doom',
@@ -1385,7 +1563,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge & Electron',
     status: 'Normal',
     stats: { accuracy: 10, speed: 12, dodge: 7, electron: 17 },
+    growthRates: { accuracy: 11.0, speed: 13.0, dodge: 7.9, electron: 15.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'indomitable-duo',
@@ -1400,7 +1580,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge',
     status: 'Normal',
     stats: { accuracy: 12, speed: 25, dodge: 17, electron: 14 },
+    growthRates: { accuracy: 13.4, speed: 22.5, dodge: 17.4, electron: 15.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'iron-maidens',
@@ -1415,7 +1597,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed and Dodge',
     status: 'Normal',
     stats: { accuracy: 10, speed: 21, dodge: 19, electron: 5 },
+    growthRates: { accuracy: 9.4, speed: 22.7, dodge: 21.0, electron: 5.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'kismet-beams',
@@ -1430,7 +1614,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Speed',
     status: 'Normal',
     stats: { accuracy: 25, speed: 20, dodge: 10, electron: 5 },
+    growthRates: { accuracy: 27.9, speed: 21.0, dodge: 10.3, electron: 4.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'leech-lurkers',
@@ -1445,7 +1631,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Speed',
     status: 'Normal',
     stats: { accuracy: 17, speed: 12, dodge: 32, electron: 13 },
+    growthRates: { accuracy: 18.3, speed: 13.7, dodge: 35.0, electron: 12.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'light-darkness',
@@ -1460,7 +1648,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Speed',
     status: 'Normal',
     stats: { accuracy: 12, speed: 15, dodge: 21, electron: 3 },
+    growthRates: { accuracy: 10.5, speed: 14.7, dodge: 22.1, electron: 2.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'lurking-light',
@@ -1475,7 +1665,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge & Speed',
     status: 'Normal',
     stats: { accuracy: 11, speed: 7, dodge: 24, electron: 12 },
+    growthRates: { accuracy: 11.5, speed: 7.0, dodge: 24.3, electron: 11.9 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'pernicious-princes',
@@ -1490,7 +1682,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'All',
     status: 'Normal',
     stats: { accuracy: 20, speed: 20, dodge: 20, electron: 20 },
+    growthRates: { accuracy: 19.7, speed: 21.3, dodge: 22.0, electron: 22.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'rays-of-destiny',
@@ -1505,7 +1699,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Total Stats',
     status: 'Normal',
     stats: { accuracy: 21, speed: 12, dodge: 15, electron: 9 },
+    growthRates: { accuracy: 21.9, speed: 11.1, dodge: 14.9, electron: 8.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'rex-scuta',
@@ -1520,7 +1716,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'All',
     status: 'Normal',
     stats: { accuracy: 18, speed: 21, dodge: 15, electron: 18 },
+    growthRates: { accuracy: 18.9, speed: 18.0, dodge: 15.7, electron: 17.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'the-ravagers',
@@ -1535,7 +1733,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Electron',
     status: 'Normal',
     stats: { accuracy: 14, speed: 10, dodge: 13, electron: 11 },
+    growthRates: { accuracy: 13.6, speed: 8.9, dodge: 14.9, electron: 9.8 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'suicidal-sirens',
@@ -1550,7 +1750,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Electron',
     status: 'Normal',
     stats: { accuracy: 31, speed: 3, dodge: 12, electron: 20 },
+    growthRates: { accuracy: 34.8, speed: 2.6, dodge: 12.2, electron: 19.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'summa-cum-laude',
@@ -1565,7 +1767,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy & Speed',
     status: 'Normal',
     stats: { accuracy: 24, speed: 9, dodge: 23, electron: 12 },
+    growthRates: { accuracy: 24.6, speed: 7.8, dodge: 19.8, electron: 10.5 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'tactical-wizards',
@@ -1580,7 +1784,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Dodge & Electron',
     status: 'Normal',
     stats: { accuracy: 9, speed: 16, dodge: 12, electron: 22 },
+    growthRates: { accuracy: 9.3, speed: 16.7, dodge: 10.9, electron: 25.2 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'the-twin-torpedoes',
@@ -1595,7 +1801,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 30, speed: 0, dodge: 10, electron: 7 },
+    growthRates: { accuracy: 25.5, speed: 0.0, dodge: 10.5, electron: 8.0 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'victory-roar',
@@ -1610,7 +1818,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy',
     status: 'Normal',
     stats: { accuracy: 17, speed: 16, dodge: 19, electron: 15 },
+    growthRates: { accuracy: 18.7, speed: 17.4, dodge: 19.2, electron: 15.7 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'wildfire',
@@ -1625,7 +1835,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'Accuracy and Electron',
     status: 'Normal',
     stats: { accuracy: 35, speed: 5, dodge: 9, electron: 18 },
+    growthRates: { accuracy: 30.7, speed: 5.2, dodge: 9.3, electron: 16.4 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
   {
     id: 'winter-knights',
@@ -1640,7 +1852,9 @@ export const COMMANDERS: Commander[] = [
     skillAffectedBy: 'All',
     status: 'Normal',
     stats: { accuracy: 15, speed: 34, dodge: 30, electron: 20 },
+    growthRates: { accuracy: 16.7, speed: 38.4, dodge: 30.1, electron: 19.3 },
     equipment: { weapons: [null, null, null, null], defense: [null, null, null, null] },
+    gems: EMPTY_GEMS,
   },
 ];
 
@@ -1677,4 +1891,136 @@ export function getCommandersBySkill(skillName: string): Commander[] {
   return COMMANDERS.filter(
     (c) => c.skill.toLowerCase() === skillName.toLowerCase()
   );
+}
+
+
+// ============================================================
+// EQUIPMENT QUALITY BONUSES (percentage added to stats)
+// ============================================================
+export const WEAPON_QUALITY_BONUS: Record<string, { accuracy: number; electron: number }> = {
+  S: { accuracy: 15, electron: 10 },
+  A: { accuracy: 10, electron: 7 },
+  B: { accuracy: 7, electron: 5 },
+  C: { accuracy: 5, electron: 3 },
+  D: { accuracy: 3, electron: 1 },
+};
+
+export const DEFENSE_QUALITY_BONUS: Record<string, { dodge: number; speed: number }> = {
+  S: { dodge: 15, speed: 10 },
+  A: { dodge: 10, speed: 7 },
+  B: { dodge: 7, speed: 5 },
+  C: { dodge: 5, speed: 3 },
+  D: { dodge: 3, speed: 1 },
+};
+
+// ============================================================
+// STAT CALCULATION FUNCTIONS
+// ============================================================
+
+/**
+ * Calculate a commander's stats at a given level.
+ * Formula: stat_at_level = base_stat + (growth_rate × (level - 1))
+ */
+export function calculateStatsAtLevel(cmd: Commander, level: number): CommanderStats {
+  const lvl = Math.max(1, Math.min(50, level));
+  return {
+    accuracy: Math.round(cmd.stats.accuracy + cmd.growthRates.accuracy * (lvl - 1)),
+    speed: Math.round(cmd.stats.speed + cmd.growthRates.speed * (lvl - 1)),
+    dodge: Math.round(cmd.stats.dodge + cmd.growthRates.dodge * (lvl - 1)),
+    electron: Math.round(cmd.stats.electron + cmd.growthRates.electron * (lvl - 1)),
+  };
+}
+
+/**
+ * Get the EXP required for a specific level based on rarity.
+ * Formula: expForLevel = base × (1.15 ^ level)
+ */
+export function getExpForLevel(rarity: Rarity, level: number): number {
+  const base: Record<Rarity, number> = {
+    common: 180,
+    super: 200,
+    legendary: 250,
+    divine: 300,
+  };
+  const lvl = Math.max(1, Math.min(50, level));
+  return Math.floor(base[rarity] * Math.pow(1.15, lvl));
+}
+
+/**
+ * Get the cumulative EXP required to reach a specific level from level 1.
+ */
+export function getCumulativeExpToLevel(rarity: Rarity, level: number): number {
+  let total = 0;
+  for (let i = 1; i < level; i++) {
+    total += getExpForLevel(rarity, i);
+  }
+  return total;
+}
+
+/**
+ * Calculate equipment bonuses for a commander.
+ * Returns the total percentage bonuses from all equipped items.
+ */
+export function calculateEquipmentBonuses(cmd: Commander): {
+  accuracyBonus: number;
+  speedBonus: number;
+  dodgeBonus: number;
+  electronBonus: number;
+} {
+  let accuracyBonus = 0;
+  let electronBonus = 0;
+  let dodgeBonus = 0;
+  let speedBonus = 0;
+
+  // Sum weapon bonuses
+  for (const weapon of cmd.equipment.weapons) {
+    if (weapon) {
+      const bonus = WEAPON_QUALITY_BONUS[weapon.quality];
+      if (bonus) {
+        accuracyBonus += bonus.accuracy;
+        electronBonus += bonus.electron;
+      }
+    }
+  }
+
+  // Sum defense bonuses
+  for (const defense of cmd.equipment.defense) {
+    if (defense) {
+      const bonus = DEFENSE_QUALITY_BONUS[defense.quality];
+      if (bonus) {
+        dodgeBonus += bonus.dodge;
+        speedBonus += bonus.speed;
+      }
+    }
+  }
+
+  return { accuracyBonus, speedBonus, dodgeBonus, electronBonus };
+}
+
+/**
+ * Calculate a commander's final stats at a given level with equipment bonuses applied.
+ * Equipment bonuses are applied as percentage increases to the level-adjusted stats.
+ */
+export function calculateFinalStats(cmd: Commander, level: number): CommanderStats {
+  const baseStats = calculateStatsAtLevel(cmd, level);
+  const equipment = calculateEquipmentBonuses(cmd);
+
+  return {
+    accuracy: Math.round(baseStats.accuracy * (1 + equipment.accuracyBonus / 100)),
+    speed: Math.round(baseStats.speed * (1 + equipment.speedBonus / 100)),
+    dodge: Math.round(baseStats.dodge * (1 + equipment.dodgeBonus / 100)),
+    electron: Math.round(baseStats.electron * (1 + equipment.electronBonus / 100)),
+  };
+}
+
+/**
+ * Get the stat increases that will happen on the next level up.
+ */
+export function getNextLevelBonus(cmd: Commander): CommanderStats {
+  return {
+    accuracy: Math.round(cmd.growthRates.accuracy),
+    speed: Math.round(cmd.growthRates.speed),
+    dodge: Math.round(cmd.growthRates.dodge),
+    electron: Math.round(cmd.growthRates.electron),
+  };
 }

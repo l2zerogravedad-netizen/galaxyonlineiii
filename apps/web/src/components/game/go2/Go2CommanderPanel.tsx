@@ -3,43 +3,16 @@
 import { useState } from 'react';
 import {
   type Commander,
-  type EquipmentItem,
   COMMANDERS,
   RARITY_COLORS,
   RARITY_DOT_CLASS,
-  QUALITY_COLORS,
+  getExpForLevel,
+  calculateFinalStats,
 } from './go2-commander-data';
+import { Go2CommanderLevel } from './Go2CommanderLevel';
+import { Go2CommanderEquipment } from './Go2CommanderEquipment';
 
 /* ────────────────────────── helpers ────────────────────────── */
-
-function EquipmentSlot({ item, index }: { item: EquipmentItem | null; index: number }) {
-  if (!item) {
-    return (
-      <div
-        className="relative flex aspect-square flex-col items-center justify-center rounded-[10px] border-2 border-dashed border-white/10 bg-gradient-to-br from-[#1a2744] to-[#0f1f38]"
-        key={index}
-      >
-        <span className="text-xl text-white/10">+</span>
-      </div>
-    );
-  }
-
-  const q = QUALITY_COLORS[item.quality] ?? QUALITY_COLORS.C;
-
-  return (
-    <div
-      className={`relative flex aspect-square cursor-pointer flex-col items-center justify-center rounded-[10px] border-2 ${q.border} bg-gradient-to-br from-[#1a2744] to-[#0f1f38]`}
-      key={item.id}
-    >
-      <span className="mb-0.5 text-[28px]">{item.icon}</span>
-      <span
-        className={`absolute bottom-1 right-1 flex h-[22px] w-[22px] items-center justify-center rounded-[6px] border border-white/30 text-[11px] font-extrabold text-white ${q.bg}`}
-      >
-        {item.quality}
-      </span>
-    </div>
-  );
-}
 
 function StarRow({ count }: { count: number }) {
   return (
@@ -64,10 +37,12 @@ function CommanderList({
   commanders,
   selectedId,
   onSelect,
+  commanderState,
 }: {
   commanders: Commander[];
   selectedId: string;
   onSelect: (id: string) => void;
+  commanderState: Record<string, { exp: number; level: number; equipment: Commander['equipment'] }>;
 }) {
   return (
     <div className="flex w-[170px] shrink-0 flex-col overflow-hidden rounded-xl border border-[#1976d2]/30 bg-gradient-to-b from-[#0d47a1]/30 to-[#081428]/80">
@@ -102,7 +77,7 @@ function CommanderList({
               />
               <span className="truncate">{cmd.name}</span>
               <span className="ml-auto shrink-0 text-[10px] text-white/40">
-                Lv.{cmd.level}
+                Lv.{(commanderState[cmd.id]?.level ?? cmd.level)}
               </span>
             </button>
           );
@@ -136,9 +111,18 @@ function CommanderPortrait({ id, name, rarityColor }: { id: string; name: string
   );
 }
 
-function CommanderCard({ commander }: { commander: Commander }) {
+function CommanderCard({
+  commander,
+  onAddExp,
+  onEquipChange,
+}: {
+  commander: Commander;
+  onAddExp?: (amount: number) => void;
+  onEquipChange?: (equipment: Commander['equipment']) => void;
+}) {
   const xpPct = Math.round((commander.exp / commander.expMax) * 100);
   const rarityColor = RARITY_COLORS[commander.rarity];
+  const finalStats = calculateFinalStats(commander, commander.level);
 
   return (
     <div className="relative flex min-w-0 flex-1 flex-col gap-2.5 rounded-xl border border-[#1976d2]/25 bg-gradient-to-b from-[#0c2d5c]/60 to-[#060f23]/90 p-4">
@@ -201,13 +185,13 @@ function CommanderCard({ commander }: { commander: Commander }) {
       {/* stars */}
       <StarRow count={commander.stars} />
 
-      {/* 4 stats with tooltips */}
+      {/* 4 stats with tooltips (show level-adjusted stats) */}
       <div className="grid grid-cols-4 gap-2">
         {[
-          { icon: '🎯', label: 'Acc', value: commander.stats.accuracy, tooltip: 'Affects hit chance of weapons. Higher = more damage dealt.' },
-          { icon: '🚀', label: 'Spd', value: commander.stats.speed, tooltip: 'Affects combat order and chance of successive strikes.' },
-          { icon: '✈️', label: 'Ddg', value: commander.stats.dodge, tooltip: "Reduces enemy hit rate. Chance to dodge enemy attacks." },
-          { icon: '⚡', label: 'Elec', value: commander.stats.electron, tooltip: 'Increases Critical Hit Rate and Critical Hit Damage.' },
+          { icon: '🎯', label: 'Acc', value: finalStats.accuracy, tooltip: 'Affects hit chance of weapons. Higher = more damage dealt.' },
+          { icon: '🚀', label: 'Spd', value: finalStats.speed, tooltip: 'Affects combat order and chance of successive strikes.' },
+          { icon: '✈️', label: 'Ddg', value: finalStats.dodge, tooltip: "Reduces enemy hit rate. Chance to dodge enemy attacks." },
+          { icon: '⚡', label: 'Elec', value: finalStats.electron, tooltip: 'Increases Critical Hit Rate and Critical Hit Damage.' },
         ].map((s) => (
           <div
             key={s.label}
@@ -224,35 +208,11 @@ function CommanderCard({ commander }: { commander: Commander }) {
         ))}
       </div>
 
-      {/* weapons */}
-      <div className="mt-1 text-[10px] uppercase tracking-widest text-white/40">
-        Weapons
-      </div>
-      <div className="grid grid-cols-4 gap-2">
-        {commander.equipment.weapons.map((item, i) => (
-          <EquipmentSlot key={`w-${i}`} item={item} index={i} />
-        ))}
-      </div>
+      {/* level-up component */}
+      <Go2CommanderLevel commander={commander} onAddExp={onAddExp} />
 
-      {/* defense */}
-      <div className="mt-1 text-[10px] uppercase tracking-widest text-white/40">
-        Defense
-      </div>
-      <div className="grid grid-cols-4 gap-2">
-        {commander.equipment.defense.map((item, i) => (
-          <EquipmentSlot key={`d-${i}`} item={item} index={i} />
-        ))}
-      </div>
-
-      {/* actions */}
-      <div className="mt-1.5 grid grid-cols-2 gap-3 border-t border-[#1976d2]/15 pt-3">
-        <button className="rounded-xl border-2 border-[#1976d2]/50 bg-gradient-to-b from-[#1565c0]/80 to-[#0d47a1]/90 py-3 text-xs font-bold text-white">
-          Convertir
-        </button>
-        <button className="rounded-xl border-2 border-[#1976d2]/50 bg-gradient-to-b from-[#1565c0]/80 to-[#0d47a1]/90 py-3 text-xs font-bold text-white">
-          Eliminar
-        </button>
-      </div>
+      {/* equipment component */}
+      <Go2CommanderEquipment commander={commander} onEquipChange={onEquipChange} />
     </div>
   );
 }
@@ -336,8 +296,70 @@ function FleetPanel() {
 
 export function Go2CommanderPanel() {
   const [selectedId, setSelectedId] = useState<string>('reggie');
+  const [commanderState, setCommanderState] = useState<Record<string, { exp: number; level: number; equipment: Commander['equipment'] }>>({});
 
-  const selected = COMMANDERS.find((c) => c.id === selectedId) ?? COMMANDERS[0];
+  const baseSelected = COMMANDERS.find((c) => c.id === selectedId) ?? COMMANDERS[0];
+
+  // Merge runtime state with base commander data
+  const saved = commanderState[baseSelected.id];
+  const selected: Commander = saved
+    ? {
+        ...baseSelected,
+        exp: saved.exp,
+        level: saved.level,
+        equipment: saved.equipment,
+        expMax: getExpForLevel(baseSelected.rarity, saved.level),
+      }
+    : baseSelected;
+
+  const handleAddExp = (amount: number) => {
+    setCommanderState((prev) => {
+      const current = prev[baseSelected.id] ?? {
+        exp: baseSelected.exp,
+        level: baseSelected.level,
+        equipment: baseSelected.equipment,
+      };
+      let newExp = current.exp + amount;
+      let newLevel = current.level;
+      let newEquipment = current.equipment;
+
+      // Check for level ups
+      while (newLevel < 50) {
+        const needed = getExpForLevel(baseSelected.rarity, newLevel);
+        if (newExp >= needed) {
+          newExp -= needed;
+          newLevel++;
+        } else {
+          break;
+        }
+      }
+
+      // Cap at level 50
+      if (newLevel >= 50) {
+        newLevel = 50;
+        newExp = 0;
+      }
+
+      return {
+        ...prev,
+        [baseSelected.id]: { exp: newExp, level: newLevel, equipment: newEquipment },
+      };
+    });
+  };
+
+  const handleEquipChange = (equipment: Commander['equipment']) => {
+    setCommanderState((prev) => {
+      const current = prev[baseSelected.id] ?? {
+        exp: baseSelected.exp,
+        level: baseSelected.level,
+        equipment: baseSelected.equipment,
+      };
+      return {
+        ...prev,
+        [baseSelected.id]: { ...current, equipment },
+      };
+    });
+  };
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
@@ -360,8 +382,13 @@ export function Go2CommanderPanel() {
           commanders={COMMANDERS}
           selectedId={selectedId}
           onSelect={setSelectedId}
+          commanderState={commanderState}
         />
-        <CommanderCard commander={selected} />
+        <CommanderCard
+          commander={selected}
+          onAddExp={handleAddExp}
+          onEquipChange={handleEquipChange}
+        />
         <FleetPanel />
       </div>
     </div>
