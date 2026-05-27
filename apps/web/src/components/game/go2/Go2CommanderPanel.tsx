@@ -91,7 +91,7 @@ function CommanderList({
               }`}
             >
               <img
-                src={`/assets/cmd_${cmd.id}.png`}
+                src={`/assets/cmd_${cmd.id}.webp`}
                 alt={cmd.name}
                 className="h-7 w-7 shrink-0 rounded-md border border-white/20 object-cover"
                 loading="lazy"
@@ -119,7 +119,7 @@ function CommanderPortrait({ id, name, rarityColor }: { id: string; name: string
       style={{ borderColor: `${rarityColor}88` }}
     >
       <img
-        src={`/assets/cmd_${id}.png`}
+        src={`/assets/cmd_${id}.webp`}
         alt={name}
         className="h-full w-full object-cover"
         onError={(e) => {
