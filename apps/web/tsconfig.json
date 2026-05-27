@@ -43,6 +43,8 @@
   ],
   "exclude": [
     "node_modules",
-    "src/data/game/**/*.ts"
+    "src/data/game/**/*.ts",
+    "src/components/game/go2/Go2Battle3D.tsx",
+    "src/components/game/go2/Go2BattleFrameData.ts"
   ]
 }

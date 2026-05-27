@@ -22,7 +22,6 @@
  */
 
 import { useState, useCallback, useRef, useMemo } from 'react';
-import dynamic from 'next/dynamic';
 import { type Commander } from './go2-commander-data';
 import type { FatalityResult } from './Go2FatalitySystem';
 import { checkFatality } from './Go2FatalitySystem';
@@ -43,17 +42,7 @@ import {
   type CommanderExpInfo,
   type HighestDamageInfo,
 } from './Go2PostBattle';
-import {
-  generateDemoBattleFrames,
-  type BattleFrame,
-} from './Go2BattleFrameData';
 import Go2BattleSimple from './Go2BattleSimple';
-
-/* ─── Dynamic import for 3D battle (heavy Three.js dependency) ─── */
-const Go2Battle3D = dynamic(
-  () => import('./Go2Battle3D').then((mod) => ({ default: mod.Go2Battle3D })),
-  { ssr: false, loading: () => <Go2BattleSimple /> }
-);
 
 /* ─── re-export types used by consumers ─── */
 
@@ -250,12 +239,7 @@ export function Go2BattleScreen({
 }: Go2BattleScreenProps) {
   const [phase, setPhase] = useState<BattlePhase>('preparing');
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const [speed, setSpeed] = useState(1);
   const storedSettings = useRef<BattleSettings | null>(null);
-
-  // Generate battle frames for 3D visualization
-  const battleFrames = useMemo(() => generateDemoBattleFrames(), []);
 
   // Phase 1: Pre-battle — user configures formation
   const handleAttack = useCallback(
@@ -327,18 +311,26 @@ export function Go2BattleScreen({
       )}
 
       {phase === 'fighting' && (
-        <Go2Battle3D
-          battleFrames={battleFrames}
-          isPaused={isPaused}
-          speed={speed}
-          onPauseToggle={() => setIsPaused((p) => !p)}
-          onSpeedChange={setSpeed}
-          onSkip={handleBattleComplete}
-          onExit={() => {
-            setPhase('preparing');
-            onExit();
-          }}
-        />
+        <>
+          <Go2BattleSimple />
+          <div className="flex justify-center gap-4 p-4">
+            <button
+              onClick={handleBattleComplete}
+              className="px-8 py-3 bg-[#4caf50] hover:bg-[#45a049] text-white font-bold rounded-lg border-2 border-[#66bb6a] transition-colors"
+            >
+              Ver Resultados
+            </button>
+            <button
+              onClick={() => {
+                setPhase('preparing');
+                onExit();
+              }}
+              className="px-8 py-3 bg-[#ff4444] hover:bg-[#cc0000] text-white font-bold rounded-lg border-2 border-[#ff6666] transition-colors"
+            >
+              Retirarse
+            </button>
+          </div>
+        </>
       )}
 
       {phase === 'ended' && battleResult && (
