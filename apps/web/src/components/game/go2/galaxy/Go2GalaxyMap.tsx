@@ -46,7 +46,7 @@ interface Star {
 // ============================================================================
 
 const CELL_SIZE = GALAXY_SIZE.cellSize;
-const PLANET_RADIUS = 18;
+const PLANET_RADIUS = 24;
 const STAR_COUNT = 300;
 
 const NEBULAE = [
@@ -557,7 +557,7 @@ export const Go2GalaxyMap: React.FC<Go2GalaxyMapProps> = ({
       w: number,
       h: number
     ) => {
-      if (cam.zoom < 0.5) return;
+      // Labels always visible
 
       for (const planet of GALAXY_PLANETS) {
         const { wx, wy } = getWorldPos(planet);
