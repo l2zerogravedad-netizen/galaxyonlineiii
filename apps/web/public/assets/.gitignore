@@ -1,0 +1,6 @@
+# Commander portraits - too large for git
+# Download from: go2-portraits-100.zip (provided separately)
+# Or run: bash download-portraits.sh
+cmd_*.webp
+*.png
+portraits.json
