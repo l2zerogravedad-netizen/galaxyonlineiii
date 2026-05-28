@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Online 3 - Sistema de Batalla</title>
+    <link rel="stylesheet" href="css/hud.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050810;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #game-wrapper {
+            position: relative;
+            width: 960px;
+            height: 640px;
+        }
+        #game-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 960px;
+            height: 640px;
+            z-index: 1;
+        }
+        #game-container canvas { display: block; }
+
+        /* HUD Overlay */
+        #hud-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 960px;
+            height: 640px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        #hud-overlay > * { pointer-events: auto; }
+
+        /* Loading */
+        #loading-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #080c1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+        #loading-screen.hidden { opacity: 0; pointer-events: none; }
+        #loading-bar-container {
+            width: 300px; height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px; overflow: hidden;
+            border: 1px solid rgba(100,150,255,0.15);
+        }
+        #loading-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, #1a3a7a, #4a8acc, #1a3a7a);
+            transition: width 0.2s;
+        }
+
+        @media (max-height: 720px) {
+            #game-wrapper { transform: scale(0.9); }
+        }
+        @media (max-height: 640px) {
+            #game-wrapper { transform: scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-wrapper">
+        <div id="game-container">
+            <div id="loading-screen">
+                <div style="font-size:20px;color:#aaccff;text-transform:uppercase;letter-spacing:4px;margin-bottom:16px;">
+                    Galaxy Online 3
+                </div>
+                <div style="font-size:12px;color:#6688aa;margin-bottom:20px;">Cargando sistema de batalla...</div>
+                <div id="loading-bar-container">
+                    <div id="loading-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+        <div id="hud-overlay"></div>
+    </div>
+
+    <!-- Phaser 3.60 -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+
+    <!-- Game Scripts -->
+    <script src="js/TextureGenerator.js"></script>
+    <script src="js/ShipSprites.js"></script>
+    <script src="js/Formations.js"></script>
+    <script src="js/FleetManager.js"></script>
+    <script src="js/Squadron.js"></script>
+    <script src="js/Projectile.js"></script>
+    <script src="js/FloatingText.js"></script>
+    <script src="js/RoundBanner.js"></script>
+    <script src="js/CombatSystem.js"></script>
+    <script src="js/BattleScene.js"></script>
+    <script src="js/HUD.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

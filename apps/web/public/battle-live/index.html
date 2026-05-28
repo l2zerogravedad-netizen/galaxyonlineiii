@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GALAXY ONLINE 3 — Battle System Live Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-card: #12182b;
+    --border: #1e2a4a;
+    --accent-blue: #4488ff;
+    --accent-red: #ff4444;
+    --accent-green: #44ff88;
+    --accent-yellow: #ffcc44;
+    --accent-cyan: #44ffff;
+    --text-primary: #e0e6f0;
+    --text-secondary: #8a94b0;
+    --glass: rgba(18, 24, 43, 0.85);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated starfield background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+      radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+      radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 230px 80px, #fff, transparent),
+      radial-gradient(2px 2px at 300px 200px, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 400px 150px, #fff, transparent),
+      radial-gradient(2px 2px at 500px 300px, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 600px 100px, #fff, transparent),
+      radial-gradient(2px 2px at 700px 250px, rgba(255,255,255,0.8), transparent),
+      radial-gradient(1px 1px at 800px 180px, #fff, transparent);
+    background-size: 900px 400px;
+    z-index: -1;
+    animation: stars 200s linear infinite;
+  }
+
+  @keyframes stars {
+    from { background-position: 0 0; }
+    to { background-position: 900px 400px; }
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+    position: relative;
+  }
+  .header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+  }
+  .header .subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+  .header-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-badge {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 24px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+  .stat-badge:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(68, 136, 255, 0.2);
+  }
+  .stat-badge .label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .stat-badge .value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-yellow);
+  }
+  .phase-badge {
+    background: linear-gradient(135deg, rgba(255,204,68,0.15), rgba(255,204,68,0.05));
+    border: 1px solid var(--accent-yellow);
+    color: var(--accent-yellow);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.6; }
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  @media (max-width: 1100px) {
+    .main-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ===== CANVAS AREA ===== */
+  .battle-zone {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+  .battle-zone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+    opacity: 0.5;
+  }
+  .battle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .battle-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+  }
+  .battle-phase {
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .phase-MOVE { background: rgba(68,255,136,0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+  .phase-ATTACK { background: rgba(255,68,68,0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+  .phase-RESOLVE { background: rgba(255,204,68,0.15); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+  #battleCanvas { display: block; width: 100%; }
+
+  /* ===== SIDE PANEL ===== */
+  .side-panel { display: flex; flex-direction: column; gap: 16px; }
+  .panel-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+  .panel-card:hover { border-color: rgba(68, 136, 255, 0.4); }
+  .panel-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .round-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    text-align: center;
+    margin: 8px 0;
+  }
+  .round-display span { color: var(--text-secondary); font-size: 1rem; }
+  .force-comparison {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+  }
+  .force-attacker, .force-defender {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .force-attacker {
+    background: rgba(68, 136, 255, 0.1);
+    border: 1px solid rgba(68, 136, 255, 0.3);
+  }
+  .force-defender {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+  }
+  .force-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+  }
+  .force-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .force-attacker .force-value { color: var(--accent-blue); }
+  .force-defender .force-value { color: var(--accent-red); }
+  .vs-divider {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  .damage-bar { margin: 6px 0; }
+  .damage-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .damage-bar-track {
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .damage-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .damage-bar-fill.attacker { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
+  .damage-bar-fill.defender { background: linear-gradient(90deg, var(--accent-red), #ff8844); }
+
+  /* Timeline */
+  .timeline {
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 0.75rem;
+  }
+  .timeline::-webkit-scrollbar { width: 4px; }
+  .timeline::-webkit-scrollbar-track { background: transparent; }
+  .timeline::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .timeline-entry {
+    padding: 6px 8px;
+    border-left: 2px solid var(--border);
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+    transition: all 0.3s;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .timeline-entry.damage-dealt { border-left-color: var(--accent-red); }
+  .timeline-entry.damage-taken { border-left-color: var(--accent-blue); }
+  .timeline-entry.destroyed { border-left-color: var(--accent-yellow); }
+  .timeline-entry.phase-change { border-left-color: var(--accent-green); }
+  .timeline-time {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+  }
+
+  /* Controls */
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    background: rgba(68, 136, 255, 0.1);
+    color: var(--accent-blue);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+  .btn:hover {
+    background: rgba(68, 136, 255, 0.2);
+    border-color: var(--accent-blue);
+    transform: translateY(-1px);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn-secondary {
+    background: rgba(255, 68, 68, 0.1);
+    color: var(--accent-red);
+    border-color: rgba(255, 68, 68, 0.3);
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: var(--accent-red);
+  }
+  .speed-control { margin-top: 10px; }
+  .speed-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .speed-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+  }
+  .speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    cursor: pointer;
+    border: 2px solid var(--bg-primary);
+    box-shadow: 0 0 8px rgba(68, 136, 255, 0.4);
+  }
+
+  /* ===== PROGRESS TABLE ===== */
+  .progress-section { margin-bottom: 30px; }
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .progress-table th {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+  .progress-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(30, 42, 74, 0.5);
+    transition: background 0.2s;
+  }
+  .progress-table tr:hover td { background: rgba(68, 136, 255, 0.05); }
+  .status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .status-done {
+    background: rgba(68, 255, 136, 0.15);
+    color: var(--accent-green);
+    border: 1px solid rgba(68, 255, 136, 0.3);
+  }
+  .status-wip {
+    background: rgba(255, 204, 68, 0.15);
+    color: var(--accent-yellow);
+    border: 1px solid rgba(255, 204, 68, 0.3);
+  }
+  .score-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .score-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+    border-radius: 3px;
+    transition: width 1s ease;
+    width: 32.5%;
+  }
+  .progress-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: rgba(68, 136, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+  .progress-summary .score {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+  }
+  .progress-summary .score-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeInUp 0.6s ease forwards; }
+  .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ===== HEADER ===== -->
+  <header class="header fade-in">
+    <h1>GALAXY ONLINE 3</h1>
+    <div class="subtitle">Battle System Live Preview</div>
+    <div class="header-stats">
+      <div class="stat-badge">
+        <div class="label">System Score</div>
+        <div class="value" id="scoreDisplay">0.0 / 6.5</div>
+      </div>
+      <div class="phase-badge" id="projectPhase">FASE 1 &mdash; BUILDING...</div>
+      <div class="stat-badge">
+        <div class="label">Date</div>
+        <div class="value" id="currentDate" style="font-size:1rem; color:var(--text-secondary);"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN LAYOUT ===== -->
+  <div class="main-layout fade-in fade-in-delay-1">
+
+    <!-- Battle Canvas -->
+    <div class="battle-zone">
+      <div class="battle-header">
+        <div class="battle-title">TACTICAL BATTLE VIEW</div>
+        <div class="battle-phase phase-MOVE" id="battlePhase">MOVE PHASE</div>
+      </div>
+      <canvas id="battleCanvas" width="900" height="600"></canvas>
+    </div>
+
+    <!-- Side Panel -->
+    <div class="side-panel">
+
+      <!-- Round Info -->
+      <div class="panel-card">
+        <h3>Round</h3>
+        <div class="round-display"><span id="currentRound">1</span> <span>/</span> <span id="totalRounds">20</span></div>
+        <div class="force-comparison">
+          <div class="force-attacker">
+            <div class="force-label">Attack</div>
+            <div class="force-value" id="attackerShips">6</div>
+          </div>
+          <div class="vs-divider">VS</div>
+          <div class="force-defender">
+            <div class="force-label">Defend</div>
+            <div class="force-value" id="defenderShips">6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Damage Stats -->
+      <div class="panel-card">
+        <h3>Damage Inflicted</h3>
+        <div class="damage-bar">
+          <div class="damage-bar-label"><span style="color:var(--accent-blue)">Attacker</span><span id="attackerDamage">0</span></div>
+          <div class="damage-bar-track"><div class="damage-bar-fill attacker" id="attackerDamageBar" style="width:50%"></div></div>
+        </div>
+        <div class="damage-bar">
+          <div class="damage-bar-label"><span style="color:var(--accent-red)">Defender</span><span id="defenderDamage">0</span></div>
+          <div class="damage-bar-track"><div class="damage-bar-fill defender" id="defenderDamageBar" style="width:50%"></div></div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="panel-card">
+        <h3>Event Log</h3>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="panel-card">
+        <h3>Controls</h3>
+        <div class="controls">
+          <button class="btn" id="btnRestart">Restart</button>
+          <button class="btn btn-secondary" id="btnPause">Pause</button>
+        </div>
+        <div class="speed-control">
+          <div class="speed-label"><span>Speed</span><span id="speedValue">1.0x</span></div>
+          <input type="range" class="speed-slider" id="speedSlider" min="0.5" max="4" step="0.5" value="1">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== PROGRESS TABLE ===== -->
+  <div class="progress-section fade-in fade-in-delay-2">
+    <h2 class="section-title">Development Progress</h2>
+    <table class="progress-table">
+      <thead>
+        <tr>
+          <th style="width:5%">#</th>
+          <th style="width:30%">System / Mechanic</th>
+          <th style="width:15%">Category</th>
+          <th style="width:15%">Status</th>
+          <th style="width:35%">Score</th>
+        </tr>
+      </thead>
+      <tbody id="progressTableBody"></tbody>
+    </table>
+    <div class="progress-summary">
+      <div>
+        <div class="score-label">Overall Progress</div>
+        <div class="score" id="progressScore">0.0 / 20</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="score-label">Implemented</div>
+        <div style="color:var(--accent-green); font-family:'Orbitron'; font-size:1.2rem;" id="implementedCount">0 / 20</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="score-label">In Progress</div>
+        <div style="color:var(--accent-yellow); font-family:'Orbitron'; font-size:1.2rem;" id="wipCount">0 / 20</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer fade-in fade-in-delay-3">
+    <p>GALAXY ONLINE 3 &mdash; Battle Engine Preview &copy; 2025 | Built with Canvas 2D &amp; JavaScript</p>
+  </footer>
+
+</div>
+
+<script>
+// ============================================
+// GALAXY ONLINE 3 — BATTLE SYSTEM SIMULATION
+// ============================================
+
+// ----- CONSTANTS & CONFIG -----
+const CANVAS_W = 900;
+const CANVAS_H = 600;
+const HEX_SIZE = 32;
+const GRID_COLS = 14;
+const GRID_ROWS = 10;
+const GRID_OFFSET_X = 70;
+const GRID_OFFSET_Y = 50;
+
+const PHASES = ['MOVE', 'ATTACK', 'RESOLVE'];
+const PHASE_DURATIONS = { MOVE: 2500, ATTACK: 3500, RESOLVE: 1500 };
+
+const DAMAGE_TYPES = {
+  'Ballistic': { color: '#ffcc44', size: 3, speed: 12 },
+  'Directional': { color: '#ff4444', size: 2, speed: 18 },
+  'Missile': { color: '#ff8844', size: 5, speed: 6 },
+  'Ship-Based': { color: '#44ffff', size: 8, speed: 4 }
+};
+
+// ----- STATE -----
+let canvas, ctx;
+let animFrame;
+let lastTime = 0;
+let simTime = 0;
+let paused = false;
+let speed = 1.0;
+let phaseTimer = 0;
+let currentPhaseIndex = 0;
+let currentRound = 1;
+const maxRounds = 20;
+let scoreDisplayValue = 0;
+const targetScore = 6.5;
+
+// Camera
+let camera = { shakeX: 0, shakeY: 0, shakeIntensity: 0 };
+
+// Entities
+let stars = [];
+let ships = [];
+let projectiles = [];
+let particles = [];
+let floatingTexts = [];
+let explosions = [];
+let shieldRipples = [];
+let engineTrails = [];
+
+// Stats
+let stats = { attackerDamage: 0, defenderDamage: 0 };
+let timeline = [];
+
+// ----- HEX GRID -----
+function hexToPixel(q, r) {
+  const x = HEX_SIZE * 1.5 * q;
+  const y = HEX_SIZE * Math.sqrt(3) * (r + 0.5 * (q & 1));
+  return { x: x + GRID_OFFSET_X, y: y + GRID_OFFSET_Y };
+}
+
+function hexDistance(a, b) {
+  return (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2;
+}
+
+// ----- SHIP CLASS -----
+class Ship {
+  constructor(q, r, side, shipClass, id) {
+    this.q = q;
+    this.r = r;
+    const pos = hexToPixel(q, r);
+    this.x = pos.x;
+    this.y = pos.y;
+    this.startX = pos.x;
+    this.startY = pos.y;
+    this.targetX = pos.x;
+    this.targetY = pos.y;
+    this.side = side;
+    this.shipClass = shipClass;
+    this.id = id;
+    this.alive = true;
+    this.shieldActive = true;
+    this.shieldStrength = 100;
+    this.maxShield = 100;
+    this.hull = this.getMaxHull();
+    this.maxHull = this.getMaxHull();
+    this.weaponType = this.getWeaponType();
+    this.speed_stat = this.getSpeed();
+    this.angle = side === 'attacker' ? 0 : Math.PI;
+    this.targetAngle = this.angle;
+    this.flashTimer = 0;
+    this.moveProgress = 1;
+  }
+
+  getMaxHull() {
+    if (this.shipClass === 'Battleship') return 2000;
+    if (this.shipClass === 'Cruiser') return 1200;
+    return 600;
+  }
+
+  getWeaponType() {
+    if (this.shipClass === 'Frigate') return 'Ballistic';
+    if (this.shipClass === 'Cruiser') return 'Directional';
+    return ['Missile', 'Ship-Based'][Math.floor(Math.random() * 2)];
+  }
+
+  getSpeed() {
+    if (this.shipClass === 'Frigate') return 3;
+    if (this.shipClass === 'Cruiser') return 2;
+    return 1;
+  }
+
+  getSize() {
+    if (this.shipClass === 'Battleship') return 22;
+    if (this.shipClass === 'Cruiser') return 16;
+    return 10;
+  }
+
+  update(dt) {
+    if (!this.alive) return;
+
+    // Movement interpolation - proper lerp
+    if (this.moveProgress < 1) {
+      this.moveProgress = Math.min(1, this.moveProgress + dt * 0.003);
+      const t = easeOutCubic(this.moveProgress);
+      this.x = this.startX + (this.targetX - this.startX) * t;
+      this.y = this.startY + (this.targetY - this.startY) * t;
+    } else {
+      this.x = this.targetX;
+      this.y = this.targetY;
+    }
+
+    // Angle lerp
+    let angleDiff = this.targetAngle - this.angle;
+    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+    this.angle += angleDiff * 0.08;
+
+    if (this.flashTimer > 0) this.flashTimer -= dt;
+
+    // Engine trails
+    if (Math.random() < 0.4) {
+      const engineOffset = this.getSize() * 0.7;
+      const ex = this.x - Math.cos(this.angle) * engineOffset + (Math.random() - 0.5) * 4;
+      const ey = this.y - Math.sin(this.angle) * engineOffset + (Math.random() - 0.5) * 4;
+      engineTrails.push(new EngineParticle(ex, ey, this.angle + Math.PI + (Math.random() - 0.5) * 0.5));
+    }
+  }
+
+  moveTo(q, r) {
+    this.q = q;
+    this.r = r;
+    this.startX = this.x;
+    this.startY = this.y;
+    const pos = hexToPixel(q, r);
+    this.targetX = pos.x;
+    this.targetY = pos.y;
+    this.moveProgress = 0;
+    const dx = pos.x - this.x;
+    const dy = pos.y - this.y;
+    if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+      this.targetAngle = Math.atan2(dy, dx);
+    }
+  }
+
+  takeDamage(amount) {
+    this.flashTimer = 150;
+    if (this.shieldActive && this.shieldStrength > 0) {
+      const shieldAbsorb = Math.min(amount * 0.5, this.shieldStrength);
+      this.shieldStrength -= shieldAbsorb;
+      amount -= shieldAbsorb;
+      shieldRipples.push(new ShieldRipple(this.x, this.y, this.getSize() + 10));
+      if (this.shieldStrength <= 0) {
+        this.shieldActive = false;
+        this.shieldStrength = 0;
+        addTimeline(this.side + ' ' + this.shipClass + ' shield collapsed!', 'damage-taken');
+      }
+    }
+    this.hull -= amount;
+    if (this.hull <= 0) {
+      this.hull = 0;
+      this.destroy();
+    }
+    return amount;
+  }
+
+  destroy() {
+    this.alive = false;
+    explosions.push(new Explosion(this.x, this.y, this.getSize() * 3, this.side === 'attacker' ? '#4488ff' : '#ff4444'));
+    camera.shakeIntensity = 12;
+    addTimeline((this.side === 'attacker' ? 'A-' : 'D-') + this.shipClass + ' DESTROYED!', 'destroyed');
+    spawnDebris(this.x, this.y, this.side === 'attacker' ? '#4488ff' : '#ff4444', 25);
+    floatingTexts.push(new FloatingText(this.x, this.y - 25, 'DESTROYED', '#ffcc44'));
+  }
+}
+
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+// ----- PROJECTILE CLASS -----
+class Projectile {
+  constructor(x, y, target, weaponType, damage, side) {
+    this.x = x;
+    this.y = y;
+    this.target = target;
+    this.weaponType = weaponType;
+    this.damage = damage;
+    this.side = side;
+    const config = DAMAGE_TYPES[weaponType] || DAMAGE_TYPES['Ballistic'];
+    this.color = config.color;
+    this.size = config.size;
+    this.baseSpeed = config.speed;
+    this.alive = true;
+    this.trail = [];
+    this.lifetime = 0;
+    this.angle = Math.atan2(target.y - y, target.x - x);
+  }
+
+  update(dt) {
+    this.lifetime += dt;
+    if (!this.target || !this.target.alive) {
+      this.alive = false;
+      return;
+    }
+    const dx = this.target.x - this.x;
+    const dy = this.target.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 12) { this.hit(); return; }
+
+    const nx = dx / dist;
+    const ny = dy / dist;
+    const spd = this.baseSpeed * speed;
+    this.x += nx * spd;
+    this.y += ny * spd;
+    this.angle = Math.atan2(ny, nx);
+
+    // Trail
+    this.trail.push({ x: this.x, y: this.y, alpha: 1 });
+    if (this.trail.length > 8) this.trail.shift();
+    this.trail.forEach(t => t.alpha -= 0.08);
+  }
+
+  hit() {
+    this.alive = false;
+    const actualDamage = this.target.takeDamage(this.damage);
+    const color = this.side === 'attacker' ? '#4488ff' : '#ff4444';
+    floatingTexts.push(new FloatingText(this.target.x, this.target.y - 20, '-' + Math.round(actualDamage), color));
+    spawnDebris(this.target.x, this.target.y, this.color, 6);
+    if (this.side === 'attacker') stats.attackerDamage += actualDamage;
+    else stats.defenderDamage += actualDamage;
+  }
+}
+
+// ----- MISSILE CLASS -----
+class Missile extends Projectile {
+  update(dt) {
+    this.lifetime += dt;
+    if (!this.target || !this.target.alive) { this.alive = false; return; }
+    const dx = this.target.x - this.x;
+    const dy = this.target.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 12) { this.hit(); return; }
+
+    const targetAngle = Math.atan2(dy, dx);
+    let angleDiff = targetAngle - this.angle;
+    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+    this.angle += angleDiff * 0.06;
+
+    const spd = this.baseSpeed * speed;
+    this.x += Math.cos(this.angle) * spd;
+    this.y += Math.sin(this.angle) * spd;
+
+    // Smoke trail
+    if (Math.random() < 0.6) {
+      particles.push(new Particle(this.x, this.y, (Math.random()-0.5)*0.3, (Math.random()-0.5)*0.3, 2 + Math.random()*3, 'rgba(120,120,120,0.4)', 25 + Math.random()*15));
+    }
+  }
+}
+
+// ----- PARTICLE -----
+class Particle {
+  constructor(x, y, vx, vy, size, color, life) {
+    this.x = x; this.y = y; this.vx = vx; this.vy = vy;
+    this.size = size; this.color = color;
+    this.life = life; this.maxLife = life; this.alive = true;
+  }
+  update(dt) {
+    this.x += this.vx * speed;
+    this.y += this.vy * speed;
+    this.vy += 0.02 * speed;
+    this.life -= speed;
+    if (this.life <= 0) this.alive = false;
+  }
+}
+
+// ----- ENGINE PARTICLE -----
+class EngineParticle {
+  constructor(x, y, angle) {
+    this.x = x + (Math.random()-0.5) * 3;
+    this.y = y + (Math.random()-0.5) * 3;
+    this.vx = Math.cos(angle) * (1 + Math.random() * 2.5);
+    this.vy = Math.sin(angle) * (1 + Math.random() * 2.5);
+    this.size = 2 + Math.random() * 3;
+    this.life = 15 + Math.random() * 10;
+    this.maxLife = this.life;
+    this.alive = true;
+    this.color = Math.random() > 0.5 ? '#ff8844' : '#ff6622';
+  }
+  update(dt) {
+    this.x += this.vx * speed;
+    this.y += this.vy * speed;
+    this.size *= 0.96;
+    this.life -= speed;
+    if (this.life <= 0) this.alive = false;
+  }
+}
+
+// ----- EXPLOSION -----
+class Explosion {
+  constructor(x, y, radius, color) {
+    this.x = x; this.y = y; this.radius = radius;
+    this.color = color; this.life = 35; this.maxLife = 35;
+    this.alive = true; this.ringRadius = 2;
+  }
+  update(dt) {
+    this.life -= speed;
+    this.ringRadius += 2.5 * speed;
+    if (this.life <= 0) this.alive = false;
+  }
+}
+
+// ----- SHIELD RIPPLE -----
+class ShieldRipple {
+  constructor(x, y, radius) {
+    this.x = x; this.y = y; this.radius = radius;
+    this.life = 25; this.maxLife = 25; this.alive = true;
+  }
+  update(dt) {
+    this.life -= speed;
+    this.radius += 1.5 * speed;
+    if (this.life <= 0) this.alive = false;
+  }
+}
+
+// ----- FLOATING TEXT -----
+class FloatingText {
+  constructor(x, y, text, color) {
+    this.x = x; this.y = y; this.text = text;
+    this.color = color; this.life = 70; this.maxLife = 70;
+    this.alive = true; this.vy = -0.8;
+  }
+  update(dt) {
+    this.y += this.vy * speed;
+    this.life -= speed;
+    if (this.life <= 0) this.alive = false;
+  }
+}
+
+// ----- STAR -----
+class Star {
+  constructor() {
+    this.x = Math.random() * CANVAS_W;
+    this.y = Math.random() * CANVAS_H;
+    this.size = 0.5 + Math.random() * 1.5;
+    this.blinkSpeed = 0.003 + Math.random() * 0.012;
+    this.blinkOffset = Math.random() * Math.PI * 2;
+  }
+}
+
+// ----- SETUP -----
+function init() {
+  canvas = document.getElementById('battleCanvas');
+  ctx = canvas.getContext('2d');
+
+  document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  for (let i = 0; i < 150; i++) stars.push(new Star());
+
+  setupShips();
+  setupProgressTable();
+
+  document.getElementById('btnRestart').addEventListener('click', restartSimulation);
+  document.getElementById('btnPause').addEventListener('click', togglePause);
+  document.getElementById('speedSlider').addEventListener('input', (e) => {
+    speed = parseFloat(e.target.value);
+    document.getElementById('speedValue').textContent = speed.toFixed(1) + 'x';
+  });
+
+  lastTime = performance.now();
+  requestAnimationFrame(gameLoop);
+}
+
+function setupShips() {
+  ships = [];
+  projectiles = [];
+  particles = [];
+  floatingTexts = [];
+  explosions = [];
+  shieldRipples = [];
+  engineTrails = [];
+  stats = { attackerDamage: 0, defenderDamage: 0 };
+  timeline = [];
+  currentRound = 1;
+  currentPhaseIndex = 0;
+  phaseTimer = 0;
+  camera.shakeIntensity = 0;
+
+  // Attacker: 3 Frigates, 2 Cruisers, 1 Battleship
+  const attackerLayout = [
+    { q: 1, r: 2, c: 'Frigate' }, { q: 2, r: 1, c: 'Frigate' }, { q: 2, r: 3, c: 'Frigate' },
+    { q: 0, r: 4, c: 'Cruiser' }, { q: 1, r: 5, c: 'Cruiser' },
+    { q: 0, r: 1, c: 'Battleship' }
+  ];
+  attackerLayout.forEach((s, i) => ships.push(new Ship(s.q, s.r, 'attacker', s.c, 'A' + (i + 1))));
+
+  // Defender: 3 Frigates, 2 Cruisers, 1 Battleship
+  const defenderLayout = [
+    { q: 11, r: 2, c: 'Frigate' }, { q: 10, r: 1, c: 'Frigate' }, { q: 10, r: 3, c: 'Frigate' },
+    { q: 12, r: 4, c: 'Cruiser' }, { q: 11, r: 5, c: 'Cruiser' },
+    { q: 12, r: 1, c: 'Battleship' }
+  ];
+  defenderLayout.forEach((s, i) => ships.push(new Ship(s.q, s.r, 'defender', s.c, 'D' + (i + 1))));
+
+  updateUI();
+  addTimeline('=== BATTLE STARTED === Round 1', 'phase-change');
+}
+
+// ----- GAME LOOP -----
+function gameLoop(timestamp) {
+  const rawDt = timestamp - lastTime;
+  lastTime = timestamp;
+
+  if (!paused) {
+    const dt = Math.min(rawDt, 50);
+    simTime += dt * speed;
+    updateSimulation(dt);
+    updateEntities(dt);
+    updateCamera(dt);
+    // Score animation (always runs)
+    if (scoreDisplayValue < targetScore) {
+      scoreDisplayValue += 0.015 * speed;
+      if (scoreDisplayValue > targetScore) scoreDisplayValue = targetScore;
+    }
+  }
+
+  render();
+  animFrame = requestAnimationFrame(gameLoop);
+}
+
+function updateSimulation(dt) {
+  phaseTimer += dt * speed;
+  const phaseName = PHASES[currentPhaseIndex];
+  const phaseDur = PHASE_DURATIONS[phaseName];
+
+  if (phaseTimer >= phaseDur) {
+    phaseTimer = 0;
+    currentPhaseIndex++;
+    if (currentPhaseIndex >= PHASES.length) {
+      currentPhaseIndex = 0;
+      currentRound++;
+      if (currentRound > maxRounds) { restartSimulation(); return; }
+      addTimeline('--- Round ' + currentRound + ' begins ---', 'phase-change');
+    }
+    const newPhase = PHASES[currentPhaseIndex];
+    addTimeline('PHASE: ' + newPhase, 'phase-change');
+    if (newPhase === 'MOVE') executeMovePhase();
+    else if (newPhase === 'ATTACK') executeAttackPhase();
+    else if (newPhase === 'RESOLVE') executeResolvePhase();
+  }
+
+  updateUI();
+}
+
+function executeMovePhase() {
+  ships.filter(s => s.alive).forEach(ship => {
+    const enemies = ships.filter(s => s.alive && s.side !== ship.side);
+    if (enemies.length === 0) return;
+    const nearest = enemies.reduce((a, b) => hexDistance(ship, a) < hexDistance(ship, b) ? a : b);
+    const dist = hexDistance(ship, nearest);
+    if (dist > 2) {
+      const moveQ = Math.sign(nearest.q - ship.q);
+      const moveR = Math.sign(nearest.r - ship.r);
+      const maxStep = ship.speed_stat;
+      const steps = Math.min(maxStep, Math.floor(dist / 2) + 1);
+      const newQ = Math.max(0, Math.min(GRID_COLS - 1, ship.q + moveQ * steps));
+      const newR = Math.max(0, Math.min(GRID_ROWS - 1, ship.r + moveR * (steps > 1 ? 1 : 0)));
+      // Try alternate if occupied
+      let finalQ = newQ, finalR = newR;
+      const occupied = ships.some(s => s.alive && s !== ship && s.q === finalQ && s.r === finalR);
+      if (occupied) {
+        // Try nearby hex
+        for (let dq = -1; dq <= 1; dq++) {
+          for (let dr = -1; dr <= 1; dr++) {
+            if (dq === 0 && dr === 0) continue;
+            const tq = Math.max(0, Math.min(GRID_COLS - 1, ship.q + dq));
+            const tr = Math.max(0, Math.min(GRID_ROWS - 1, ship.r + dr));
+            if (!ships.some(s => s.alive && s !== ship && s.q === tq && s.r === tr)) {
+              finalQ = tq; finalR = tr; break;
+            }
+          }
+        }
+      }
+      if (finalQ !== ship.q || finalR !== ship.r) {
+        ship.moveTo(finalQ, finalR);
+      }
+    }
+  });
+}
+
+function executeAttackPhase() {
+  ships.filter(s => s.alive).forEach(ship => {
+    const enemies = ships.filter(s => s.alive && s.side !== ship.side);
+    if (enemies.length === 0) return;
+    const target = enemies.reduce((a, b) => hexDistance(ship, a) < hexDistance(ship, b) ? a : b);
+    const dist = hexDistance(ship, target);
+    if (dist <= 7) {
+      const baseDamage = ship.shipClass === 'Battleship' ? 350 : ship.shipClass === 'Cruiser' ? 180 : 100;
+      const damage = baseDamage * (0.7 + Math.random() * 0.6);
+
+      if (ship.weaponType === 'Missile') {
+        const m = new Missile(ship.x, ship.y, target, ship.weaponType, damage, ship.side);
+        m.angle = ship.angle;
+        projectiles.push(m);
+      } else {
+        projectiles.push(new Projectile(ship.x, ship.y, target, ship.weaponType, damage, ship.side));
+      }
+
+      addTimeline((ship.side === 'attacker' ? '[A]' : '[D]') + ' ' + ship.shipClass + ' fires ' + ship.weaponType + ' -> ' + target.shipClass,
+        ship.side === 'attacker' ? 'damage-dealt' : 'damage-taken');
+    }
+  });
+}
+
+function executeResolvePhase() {
+  ships.filter(s => s.alive && s.hull <= 0).forEach(s => s.destroy());
+  ships.filter(s => s.alive).forEach(s => {
+    if (s.shieldActive) s.shieldStrength = Math.min(s.maxShield, s.shieldStrength + 8);
+  });
+
+  const attackers = ships.filter(s => s.alive && s.side === 'attacker').length;
+  const defenders = ships.filter(s => s.alive && s.side === 'defender').length;
+  if (attackers === 0) { addTimeline('DEFENDERS WIN!', 'destroyed'); setTimeout(restartSimulation, 3000); }
+  else if (defenders === 0) { addTimeline('ATTACKERS WIN!', 'destroyed'); setTimeout(restartSimulation, 3000); }
+}
+
+function updateEntities(dt) {
+  ships.forEach(s => s.update(dt));
+  projectiles.forEach(p => p.update(dt));
+  projectiles = projectiles.filter(p => p.alive);
+  particles.forEach(p => p.update(dt));
+  particles = particles.filter(p => p.alive);
+  floatingTexts.forEach(f => f.update(dt));
+  floatingTexts = floatingTexts.filter(f => f.alive);
+  explosions.forEach(e => e.update(dt));
+  explosions = explosions.filter(e => e.alive);
+  shieldRipples.forEach(s => s.update(dt));
+  shieldRipples = shieldRipples.filter(s => s.alive);
+  engineTrails.forEach(e => e.update(dt));
+  engineTrails = engineTrails.filter(e => e.alive);
+}
+
+function updateCamera(dt) {
+  if (camera.shakeIntensity > 0) {
+    camera.shakeX = (Math.random() - 0.5) * camera.shakeIntensity * 2;
+    camera.shakeY = (Math.random() - 0.5) * camera.shakeIntensity * 2;
+    camera.shakeIntensity *= 0.92;
+    if (camera.shakeIntensity < 0.3) { camera.shakeIntensity = 0; camera.shakeX = 0; camera.shakeY = 0; }
+  }
+}
+
+// ----- RENDERING -----
+function render() {
+  ctx.save();
+  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+  ctx.translate(camera.shakeX, camera.shakeY);
+
+  renderBackground();
+  renderGrid();
+  renderEngineTrails();
+  renderShips();
+  renderProjectiles();
+  renderShieldRipples();
+  renderExplosions();
+  renderParticles();
+  renderFloatingTexts();
+  renderHUD();
+
+  ctx.restore();
+}
+
+function renderBackground() {
+  stars.forEach(star => {
+    const blink = 0.5 + 0.5 * Math.sin(simTime * star.blinkSpeed + star.blinkOffset);
+    const alpha = star.size / 2 * blink;
+    ctx.fillStyle = `rgba(255,255,255,${Math.min(1, alpha)})`;
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Nebula
+  const g1 = ctx.createRadialGradient(CANVAS_W * 0.3, CANVAS_H * 0.4, 0, CANVAS_W * 0.3, CANVAS_H * 0.4, 300);
+  g1.addColorStop(0, 'rgba(68,136,255,0.05)');
+  g1.addColorStop(0.5, 'rgba(68,0,136,0.02)');
+  g1.addColorStop(1, 'transparent');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+  const g2 = ctx.createRadialGradient(CANVAS_W * 0.7, CANVAS_H * 0.6, 0, CANVAS_W * 0.7, CANVAS_H * 0.6, 250);
+  g2.addColorStop(0, 'rgba(255,68,68,0.03)');
+  g2.addColorStop(1, 'transparent');
+  ctx.fillStyle = g2;
+  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+}
+
+function renderGrid() {
+  ctx.strokeStyle = 'rgba(68,136,255,0.08)';
+  ctx.lineWidth = 0.5;
+  for (let q = 0; q < GRID_COLS; q++) {
+    for (let r = 0; r < GRID_ROWS; r++) {
+      const pos = hexToPixel(q, r);
+      drawHex(pos.x, pos.y, HEX_SIZE - 2);
+    }
+  }
+  // Zone labels
+  ctx.font = '500 11px Rajdhani';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(68,136,255,0.35)';
+  ctx.fillText('ATTACKER ZONE', 130, 35);
+  ctx.fillStyle = 'rgba(255,68,68,0.35)';
+  ctx.fillText('DEFENDER ZONE', CANVAS_W - 130, 35);
+  // Dividers
+  ctx.setLineDash([4, 4]);
+  ctx.strokeStyle = 'rgba(68,136,255,0.06)';
+  ctx.beginPath(); ctx.moveTo(CANVAS_W * 0.35, 40); ctx.lineTo(CANVAS_W * 0.35, CANVAS_H - 40); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,68,68,0.06)';
+  ctx.beginPath(); ctx.moveTo(CANVAS_W * 0.65, 40); ctx.lineTo(CANVAS_W * 0.65, CANVAS_H - 40); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawHex(x, y, size) {
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i - Math.PI / 6;
+    const hx = x + size * Math.cos(angle);
+    const hy = y + size * Math.sin(angle);
+    if (i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+  }
+  ctx.closePath();
+  ctx.stroke();
+}
+
+function renderEngineTrails() {
+  engineTrails.forEach(e => {
+    const alpha = e.life / e.maxLife;
+    ctx.fillStyle = e.color;
+    ctx.globalAlpha = alpha * 0.7;
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, e.size * alpha, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function renderShips() {
+  ships.forEach(ship => {
+    if (!ship.alive) return;
+    ctx.save();
+    ctx.translate(ship.x, ship.y);
+    ctx.rotate(ship.angle);
+
+    const sz = ship.getSize();
+    const isBlue = ship.side === 'attacker';
+    const mainColor = isBlue ? '#4488ff' : '#ff4444';
+    const brightColor = isBlue ? '#66aaff' : '#ff6666';
+    const darkColor = isBlue ? '#2255cc' : '#cc2222';
+
+    // Flash on damage
+    if (ship.flashTimer > 0) {
+      ctx.globalAlpha = 0.6 + 0.4 * Math.sin(ship.flashTimer * 0.05);
+    }
+
+    ctx.shadowColor = mainColor;
+    ctx.shadowBlur = 12;
+
+    if (ship.shipClass === 'Frigate') drawFrigate(ctx, sz, mainColor, brightColor, darkColor);
+    else if (ship.shipClass === 'Cruiser') drawCruiser(ctx, sz, mainColor, brightColor, darkColor);
+    else drawBattleship(ctx, sz, mainColor, brightColor, darkColor);
+
+    ctx.shadowBlur = 0;
+    ctx.restore();
+
+    // Shield bubble
+    if (ship.shieldActive && ship.shieldStrength > 0) {
+      const shieldAlpha = (ship.shieldStrength / ship.maxShield) * 0.12 + 0.03;
+      ctx.strokeStyle = `rgba(100,200,255,${shieldAlpha + 0.08})`;
+      ctx.lineWidth = 1;
+      const pulse = 1 + 0.05 * Math.sin(simTime * 0.005);
+      ctx.beginPath();
+      ctx.arc(ship.x, ship.y, (sz + 8) * pulse, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = `rgba(80,160,255,${shieldAlpha * 0.5})`;
+      ctx.fill();
+    }
+
+    // Health bar
+    const bw = sz * 2.2;
+    const bh = 4;
+    const by = ship.y - sz - 14;
+    const hp = ship.hull / ship.maxHull;
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(ship.x - bw / 2 - 1, by - 1, bw + 2, bh + 2);
+    const hc = hp > 0.5 ? '#44ff88' : hp > 0.25 ? '#ffcc44' : '#ff4444';
+    ctx.fillStyle = hc;
+    ctx.fillRect(ship.x - bw / 2, by, bw * hp, bh);
+
+    // Shield mini-bar
+    if (ship.shieldActive && ship.shieldStrength > 0) {
+      const sp = ship.shieldStrength / ship.maxShield;
+      ctx.fillStyle = 'rgba(0,80,200,0.7)';
+      ctx.fillRect(ship.x - bw / 2, by - 5, bw * sp, 2);
+    }
+
+    // Class label
+    ctx.font = '600 8px Rajdhani';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillText(ship.shipClass, ship.x, by - 8);
+  });
+}
+
+function drawFrigate(ctx, sz, main, bright, dark) {
+  ctx.fillStyle = main;
+  ctx.beginPath();
+  ctx.moveTo(sz, 0);
+  ctx.lineTo(-sz * 0.6, -sz * 0.45);
+  ctx.lineTo(-sz * 0.3, 0);
+  ctx.lineTo(-sz * 0.6, sz * 0.45);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = bright;
+  ctx.beginPath();
+  ctx.moveTo(sz * 0.5, 0);
+  ctx.lineTo(-sz * 0.3, -sz * 0.22);
+  ctx.lineTo(-sz * 0.3, sz * 0.22);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#ff8844';
+  ctx.shadowColor = '#ff6622';
+  ctx.shadowBlur = 6;
+  ctx.beginPath();
+  ctx.arc(-sz * 0.45, 0, 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function drawCruiser(ctx, sz, main, bright, dark) {
+  ctx.fillStyle = main;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, sz * 0.75, sz * 0.32, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = dark;
+  ctx.beginPath();
+  ctx.moveTo(-sz * 0.1, -sz * 0.28);
+  ctx.lineTo(-sz * 0.5, -sz * 0.85);
+  ctx.lineTo(sz * 0.15, -sz * 0.32);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-sz * 0.1, sz * 0.28);
+  ctx.lineTo(-sz * 0.5, sz * 0.85);
+  ctx.lineTo(sz * 0.15, sz * 0.32);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = bright;
+  ctx.beginPath();
+  ctx.ellipse(sz * 0.25, 0, sz * 0.22, sz * 0.13, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#ff6622';
+  ctx.shadowColor = '#ff4400';
+  ctx.shadowBlur = 6;
+  ctx.beginPath();
+  ctx.arc(-sz * 0.45, -sz * 0.28, 2.5, 0, Math.PI * 2);
+  ctx.arc(-sz * 0.45, sz * 0.28, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function drawBattleship(ctx, sz, main, bright, dark) {
+  ctx.fillStyle = main;
+  ctx.beginPath();
+  ctx.moveTo(sz, 0);
+  ctx.lineTo(sz * 0.25, -sz * 0.55);
+  ctx.lineTo(-sz * 0.75, -sz * 0.42);
+  ctx.lineTo(-sz * 0.95, 0);
+  ctx.lineTo(-sz * 0.75, sz * 0.42);
+  ctx.lineTo(sz * 0.25, sz * 0.55);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = dark;
+  ctx.beginPath();
+  ctx.moveTo(sz * 0.3, -sz * 0.22);
+  ctx.lineTo(-sz * 0.2, -sz * 0.38);
+  ctx.lineTo(-sz * 0.4, -sz * 0.18);
+  ctx.lineTo(-sz * 0.15, 0);
+  ctx.lineTo(sz * 0.15, 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(sz * 0.3, sz * 0.22);
+  ctx.lineTo(-sz * 0.2, sz * 0.38);
+  ctx.lineTo(-sz * 0.4, sz * 0.18);
+  ctx.lineTo(-sz * 0.15, 0);
+  ctx.lineTo(sz * 0.15, 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = bright;
+  ctx.beginPath();
+  ctx.ellipse(sz * 0.05, 0, sz * 0.28, sz * 0.15, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#ff6622';
+  ctx.shadowColor = '#ff4400';
+  ctx.shadowBlur = 8;
+  for (let i = -2; i <= 2; i++) {
+    ctx.beginPath();
+    ctx.arc(-sz * 0.85, i * sz * 0.16, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#ffcc44';
+  ctx.beginPath();
+  ctx.arc(sz * 0.45, -sz * 0.28, 2, 0, Math.PI * 2);
+  ctx.arc(sz * 0.45, sz * 0.28, 2, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function renderProjectiles() {
+  projectiles.forEach(p => {
+    ctx.save();
+    if (p.weaponType === 'Ballistic') {
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x - Math.cos(p.angle) * 18, p.y - Math.sin(p.angle) * 18);
+      ctx.stroke();
+      // Head
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowBlur = 4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (p.weaponType === 'Directional') {
+      // Laser
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 3;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      if (p.trail.length > 0) {
+        const t = p.trail[0];
+        ctx.lineTo(t.x, t.y);
+      } else {
+        ctx.lineTo(p.x - Math.cos(p.angle) * 20, p.y - Math.sin(p.angle) * 20);
+      }
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+      ctx.lineWidth = 1;
+      ctx.shadowBlur = 4;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      const endT = p.trail.length > 2 ? p.trail[2] : null;
+      if (endT) ctx.lineTo(endT.x, endT.y);
+      else ctx.lineTo(p.x - Math.cos(p.angle) * 10, p.y - Math.sin(p.angle) * 10);
+      ctx.stroke();
+    } else if (p.weaponType === 'Missile') {
+      ctx.fillStyle = '#dddddd';
+      ctx.shadowColor = '#ff8844';
+      ctx.shadowBlur = 5;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.beginPath();
+      ctx.moveTo(7, 0);
+      ctx.lineTo(-4, -3.5);
+      ctx.lineTo(-4, 3.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+      // Flame
+      ctx.fillStyle = '#ff6622';
+      ctx.beginPath();
+      ctx.arc(p.x - Math.cos(p.angle) * 6, p.y - Math.sin(p.angle) * 6, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Ship-based energy orb
+      const pulse = 1 + 0.15 * Math.sin(simTime * 0.008 + p.lifetime * 0.01);
+      const orbSize = p.size * pulse;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 20;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, orbSize, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.shadowBlur = 5;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, orbSize * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+      // Outer glow ring
+      ctx.strokeStyle = `rgba(68,255,255,${0.3 + 0.2 * Math.sin(simTime * 0.01)})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, orbSize * 1.6, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  });
+}
+
+function renderShieldRipples() {
+  shieldRipples.forEach(s => {
+    const alpha = s.life / s.maxLife;
+    ctx.strokeStyle = `rgba(100,200,255,${alpha * 0.5})`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = `rgba(150,230,255,${alpha * 0.25})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.radius * 0.7, 0, Math.PI * 2);
+    ctx.stroke();
+  });
+}
+
+function renderExplosions() {
+  explosions.forEach(e => {
+    const alpha = e.life / e.maxLife;
+    // Outer glow
+    const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.radius * (1.5 - alpha * 0.5));
+    const r = parseInt(e.color.slice(1, 3), 16);
+    const g = parseInt(e.color.slice(3, 5), 16);
+    const b = parseInt(e.color.slice(5, 7), 16);
+    grad.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.7})`);
+    grad.addColorStop(0.3, `rgba(${r},${g},${b},${alpha * 0.3})`);
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, e.radius * (1.5 - alpha * 0.5), 0, Math.PI * 2);
+    ctx.fill();
+    // Bright core
+    ctx.fillStyle = `rgba(255,255,200,${alpha * 0.8})`;
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, e.radius * 0.25 * alpha, 0, Math.PI * 2);
+    ctx.fill();
+    // Expanding ring
+    ctx.strokeStyle = `rgba(255,200,100,${alpha * 0.4})`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, e.ringRadius, 0, Math.PI * 2);
+    ctx.stroke();
+  });
+}
+
+function renderParticles() {
+  particles.forEach(p => {
+    const alpha = Math.max(0, p.life / p.maxLife);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function renderFloatingTexts() {
+  floatingTexts.forEach(f => {
+    const alpha = f.life / f.maxLife;
+    ctx.globalAlpha = alpha;
+    ctx.font = f.text === 'DESTROYED' ? 'bold 11px Orbitron' : 'bold 12px Orbitron';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = f.color;
+    ctx.shadowColor = f.color;
+    ctx.shadowBlur = 6;
+    ctx.fillText(f.text, f.x, f.y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.globalAlpha = 1;
+}
+
+function renderHUD() {
+  const phaseName = PHASES[currentPhaseIndex];
+  const phaseDur = PHASE_DURATIONS[phaseName];
+  const pct = Math.min(1, phaseTimer / phaseDur);
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.fillRect(0, CANVAS_H - 5, CANVAS_W, 5);
+  const pc = { MOVE: '#44ff88', ATTACK: '#ff4444', RESOLVE: '#ffcc44' };
+  ctx.fillStyle = pc[phaseName];
+  ctx.fillRect(0, CANVAS_H - 5, CANVAS_W * pct, 5);
+}
+
+// ----- UTILITIES -----
+function spawnDebris(x, y, color, count) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spd = 1 + Math.random() * 5;
+    particles.push(new Particle(x, y, Math.cos(angle) * spd, Math.sin(angle) * spd,
+      1 + Math.random() * 3, color, 15 + Math.random() * 30));
+  }
+}
+
+function addTimeline(text, type) {
+  const entry = { text, type, time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) };
+  timeline.unshift(entry);
+  if (timeline.length > 50) timeline.pop();
+
+  const el = document.getElementById('timeline');
+  const div = document.createElement('div');
+  div.className = 'timeline-entry ' + type;
+  div.innerHTML = '<span class="timeline-time">' + entry.time + '</span> &mdash; ' + text;
+  el.insertBefore(div, el.firstChild);
+  while (el.children.length > 40) el.removeChild(el.lastChild);
+}
+
+function updateUI() {
+  document.getElementById('currentRound').textContent = currentRound;
+  const aliveA = ships.filter(s => s.alive && s.side === 'attacker').length;
+  const aliveD = ships.filter(s => s.alive && s.side === 'defender').length;
+  document.getElementById('attackerShips').textContent = aliveA;
+  document.getElementById('defenderShips').textContent = aliveD;
+  document.getElementById('attackerDamage').textContent = Math.round(stats.attackerDamage);
+  document.getElementById('defenderDamage').textContent = Math.round(stats.defenderDamage);
+
+  const total = stats.attackerDamage + stats.defenderDamage || 1;
+  const ap = stats.attackerDamage / total * 100;
+  const dp = stats.defenderDamage / total * 100;
+  document.getElementById('attackerDamageBar').style.width = ap + '%';
+  document.getElementById('defenderDamageBar').style.width = dp + '%';
+
+  const phaseEl = document.getElementById('battlePhase');
+  phaseEl.textContent = PHASES[currentPhaseIndex] + ' PHASE';
+  phaseEl.className = 'battle-phase phase-' + PHASES[currentPhaseIndex];
+
+  document.getElementById('scoreDisplay').textContent = scoreDisplayValue.toFixed(1) + ' / 6.5';
+}
+
+function restartSimulation() {
+  setupShips();
+  addTimeline('=== SIMULATION RESTARTED ===', 'phase-change');
+}
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btnPause').textContent = paused ? 'Resume' : 'Pause';
+  addTimeline(paused ? 'Paused' : 'Resumed', 'phase-change');
+}
+
+// ----- PROGRESS TABLE -----
+const progressItems = [
+  { id: 1, name: 'Battle Round Manager', category: 'Core Engine', status: 'done', score: 0.5 },
+  { id: 2, name: 'Weapon Type System (4 types)', category: 'Combat', status: 'done', score: 0.5 },
+  { id: 3, name: 'Ballistic Weapons', category: 'Combat', status: 'done', score: 0.4 },
+  { id: 4, name: 'Directional Weapons (Heat/Magnetic)', category: 'Combat', status: 'done', score: 0.4 },
+  { id: 5, name: 'Missile Weapons', category: 'Combat', status: 'done', score: 0.4 },
+  { id: 6, name: 'Ship-Based Weapons', category: 'Combat', status: 'done', score: 0.4 },
+  { id: 7, name: 'Damage Calculation Engine', category: 'Core Engine', status: 'done', score: 0.5 },
+  { id: 8, name: 'Shield System (Absorb/Deplete)', category: 'Defense', status: 'done', score: 0.4 },
+  { id: 9, name: 'Hull Integrity & Destruction', category: 'Defense', status: 'done', score: 0.4 },
+  { id: 10, name: 'Effective Stack Calculation', category: 'Core Engine', status: 'done', score: 0.4 },
+  { id: 11, name: 'Commander Stats Integration', category: 'Commander', status: 'done', score: 0.5 },
+  { id: 12, name: 'Firing Phase Execution', category: 'Combat', status: 'done', score: 0.4 },
+  { id: 13, name: 'Hex Grid Movement', category: 'Movement', status: 'done', score: 0.4 },
+  { id: 14, name: 'Ship Class System (3 classes)', category: 'Units', status: 'done', score: 0.4 },
+  { id: 15, name: 'Target Selection Logic', category: 'AI', status: 'done', score: 0.5 },
+  { id: 16, name: 'Battle UI / HUD', category: 'Visual', status: 'wip', score: 0.0 },
+  { id: 17, name: 'Explosion Effects', category: 'Visual', status: 'wip', score: 0.0 },
+  { id: 18, name: 'Particle System', category: 'Visual', status: 'wip', score: 0.0 },
+  { id: 19, name: 'Projectile Visuals', category: 'Visual', status: 'wip', score: 0.0 },
+  { id: 20, name: 'Damage Numbers / Floating Text', category: 'Visual', status: 'wip', score: 0.0 },
+];
+
+function setupProgressTable() {
+  const tbody = document.getElementById('progressTableBody');
+  let doneCount = 0, wipCount = 0, totalScore = 0;
+  progressItems.forEach(item => {
+    if (item.status === 'done') doneCount++; else wipCount++;
+    totalScore += item.score;
+    const row = document.createElement('tr');
+    row.innerHTML =
+      '<td>' + item.id + '</td>' +
+      '<td>' + item.name + '</td>' +
+      '<td style="color:var(--text-secondary)">' + item.category + '</td>' +
+      '<td><span class="status-badge status-' + item.status + '">' + (item.status === 'done' ? 'Implemented' : 'In Progress') + '</span></td>' +
+      '<td><div class="score-bar-container"><div class="score-bar" style="width:' + (item.score / 0.5 * 100) + '%;opacity:0.7"></div></div></td>';
+    tbody.appendChild(row);
+  });
+  document.getElementById('implementedCount').textContent = doneCount + ' / 20';
+  document.getElementById('wipCount').textContent = wipCount + ' / 20';
+  document.getElementById('progressScore').textContent = totalScore.toFixed(1) + ' / 20';
+}
+
+// Initialize
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

@@ -1,7 +1,18 @@
 'use client';
 
-import Go2BattleSimple from '@/components/game/go2/Go2BattleSimple';
+import { BattlePage } from '@/features/battle/components/BattlePage';
 
-export default function BattlePage() {
-  return <Go2BattleSimple />;
+/**
+ * ========================================================================
+ * Dashboard / Battle Route
+ * ========================================================================
+ * Ruta Next.js que renderiza la pagina completa de batalla.
+ * Integra el BattleEngine con la UI visual para una experiencia
+ * de simulacion de combate jugable.
+ *
+ * @route /dashboard/battle
+ * ========================================================================
+ */
+export default function BattleRoute() {
+  return <BattlePage />;
 }

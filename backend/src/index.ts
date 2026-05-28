@@ -19,10 +19,8 @@ import { validationMiddleware } from '@/middleware/validation';
 import authRoutes from '@/routes/auth';
 import userRoutes from '@/routes/users';
 import economyRoutes from '@/routes/economy';
-import inventoryRoutes from '@/routes/inventory';
-import shipsRoutes from '@/routes/ships';
-import marketplaceRoutes from '@/routes/marketplace';
-import combatRoutes from '@/routes/combat';
+import battlesRoutes from '@/routes/battles';
+import referenceRoutes from '@/routes/reference';
 
 // Import WebSocket handlers
 import { initializeWebSocket } from '@/websocket/index';
@@ -129,10 +127,13 @@ class DestockSpaceBackend {
     this.app.use('/api/v1/auth', authRoutes);
     this.app.use('/api/v1/users', authMiddleware, userRoutes);
     this.app.use('/api/v1/economy', authMiddleware, economyRoutes);
-    this.app.use('/api/v1/inventory', authMiddleware, inventoryRoutes);
-    this.app.use('/api/v1/ships', authMiddleware, shipsRoutes);
-    this.app.use('/api/v1/marketplace', authMiddleware, marketplaceRoutes);
-    this.app.use('/api/v1/combat', authMiddleware, combatRoutes);
+
+    // Battle system routes (Galaxy Online 2)
+    // Note: auth is applied per-route in battles.ts. dev-simulate is intentionally public.
+    this.app.use('/api/v1/battles', battlesRoutes);
+
+    // Reference data routes (commanders, ships, formations - public)
+    this.app.use('/api/v1', referenceRoutes);
 
     // API documentation
     this.app.get('/api/docs', (req, res) => {
@@ -143,10 +144,10 @@ class DestockSpaceBackend {
           auth: '/api/v1/auth',
           users: '/api/v1/users',
           economy: '/api/v1/economy',
-          inventory: '/api/v1/inventory',
-          ships: '/api/v1/ships',
-          marketplace: '/api/v1/marketplace',
-          combat: '/api/v1/combat'
+          battles: '/api/v1/battles',
+          commanders: '/api/v1/commanders',
+          ships: '/api/v1/ships/designs',
+          formations: '/api/v1/formations'
         },
         documentation: 'https://docs.destockspace.com/api'
       });

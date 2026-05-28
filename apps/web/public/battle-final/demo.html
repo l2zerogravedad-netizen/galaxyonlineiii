@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galaxy Online 2 - Battle HUD Demo</title>
+  <link rel="stylesheet" href="css/hud.css">
+  <style>
+    /* Demo page styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #050810;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    /* Game container simulates Phaser canvas parent */
+    #game-container {
+      position: relative;
+      width: 960px;
+      height: 640px;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(20, 40, 80, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 30%, rgba(40, 20, 60, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(10, 30, 50, 0.3) 0%, transparent 50%),
+        linear-gradient(180deg, #060d1a 0%, #0a1220 50%, #060d1a 100%);
+      border: 1px solid #1a2a4a;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(68, 136, 255, 0.1), 0 0 80px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Simulated game canvas */
+    #game-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Starfield animation for demo background */
+    .starfield {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: twinkle var(--duration) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.8; transform: scale(1.2); }
+    }
+
+    /* Simulated ships for demo */
+    .demo-ship {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.6;
+      filter: drop-shadow(0 0 4px rgba(68, 136, 255, 0.5));
+      animation: shipFloat 3s ease-in-out infinite;
+    }
+
+    .demo-ship.ship-attacker {
+      filter: drop-shadow(0 0 4px rgba(68, 136, 255, 0.6));
+    }
+
+    .demo-ship.ship-defender {
+      filter: drop-shadow(0 0 4px rgba(255, 68, 68, 0.6));
+    }
+
+    @keyframes shipFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Responsive scaling */
+    @media (max-width: 1000px) {
+      #game-container {
+        width: 100vw;
+        height: 66.67vw;
+        max-height: 100vh;
+        border-radius: 0;
+        border: none;
+      }
+    }
+
+    /* Demo controls below game */
+    #demo-controls {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10000;
+      background: rgba(10, 14, 26, 0.9);
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #1a2a4a;
+    }
+
+    .demo-btn {
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: 1px solid #2a3a5a;
+      background: #1a2040;
+      color: #8b9bb4;
+      font-size: 12px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-btn:hover {
+      background: #2a4080;
+      color: white;
+      border-color: #4488ff;
+    }
+
+    .demo-info {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(10, 14, 26, 0.9);
+      border: 1px solid #1a2a4a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #8b9bb4;
+      font-size: 12px;
+      z-index: 10000;
+      max-width: 250px;
+      line-height: 1.6;
+    }
+
+    .demo-info h3 {
+      color: #ffd54f;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .demo-info kbd {
+      background: #1a2040;
+      border: 1px solid #2a3a5a;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 11px;
+      color: #88bbff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Game Container -->
+  <div id="game-container">
+    <!-- Simulated Canvas Background -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Starfield -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Simulated Ships -->
+    <div class="demo-ship ship-attacker" style="left:15%;top:35%;">&#128760;</div>
+    <div class="demo-ship ship-attacker" style="left:22%;top:30%;">&#128760;</div>
+    <div class="demo-ship ship-attacker" style="left:18%;top:45%;">&#128760;</div>
+    <div class="demo-ship ship-attacker" style="left:28%;top:38%;">&#128760;</div>
+    <div class="demo-ship ship-attacker" style="left:12%;top:55%;">&#128760;</div>
+    <div class="demo-ship ship-defender" style="right:15%;top:35%;">&#128640;</div>
+    <div class="demo-ship ship-defender" style="right:22%;top:30%;">&#128640;</div>
+    <div class="demo-ship ship-defender" style="right:18%;top:45%;">&#128640;</div>
+    <div class="demo-ship ship-defender" style="right:28%;top:38%;">&#128640;</div>
+    <div class="demo-ship ship-defender" style="right:12%;top:55%;">&#128640;</div>
+  </div>
+
+  <!-- HUD Scripts -->
+  <script src="js/HUD.js"></script>
+
+  <script>
+    // ============================================================
+    // DEMO SCRIPT - Simulates a real battle scenario
+    // ============================================================
+
+    (function() {
+      // 1. Generate starfield
+      const starfield = document.getElementById('starfield');
+      for (let i = 0; i < 80; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+        star.style.setProperty('--delay', Math.random() * 3 + 's');
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        starfield.appendChild(star);
+      }
+
+      // 2. Initialize HUD
+      const gameContainer = document.getElementById('game-container');
+      const hud = new BattleHUD({ container: gameContainer });
+
+      // 3. Set up initial player data (matching GO2 reference)
+      hud.setAttacker('SandoraD', 80, 9, 835556, 835600);
+      hud.setDefender('RaccoN', 80, 9, 701045, 707000);
+      hud.setRound(4);
+
+      // 4. Add buffs/skills
+      hud.addBuff('left', '&#9889;', 'skill', 'Lightning Strike');
+      hud.addBuff('left', '&#128293;', 'skill', 'Fire Blast');
+      hud.addBuff('left', '&#127744;', 'skill', 'Tornado');
+
+      hud.addBuff('right', '&#128737;', 'buff', 'Shield Boost');
+      hud.addBuff('right', '&#9884;', 'buff', 'Power Surge');
+
+      // 5. Add initial log entries
+      hud.addLog('Battle started! SandoraD vs RaccoN', 'system');
+      hud.addLog('Round 1 begins', 'round');
+      hud.addLog('SandoraD attacks with Rapid Cannon', 'system');
+      hud.addLog('12500 damage to enemy squadron', 'damage');
+      hud.addLog('Devastating hit!', 'critical');
+      hud.addLog('Round 2 begins', 'round');
+      hud.addLog('RaccoN counterattacks with Plasma Beam', 'system');
+      hud.addLog('8200 damage', 'damage');
+      hud.addLog('SandoraD uses Lightning Strike!', 'system');
+      hud.addLog('15000 damage', 'critical');
+      hud.addLog('Round 3 begins', 'round');
+      hud.addLog('RaccoN deploys Shield Boost', 'system');
+      hud.addLog('Shield restored by 5000', 'heal');
+
+      // 6. Show round banner
+      setTimeout(() => {
+        hud.showRoundBanner(4, 2500);
+      }, 1000);
+
+      // 7. Simulate battle timer
+      let elapsedSeconds = 87;
+      setInterval(() => {
+        elapsedSeconds++;
+        hud.setTimer(elapsedSeconds);
+      }, 1000);
+      hud.setTimer(elapsedSeconds);
+
+      // 8. Register callbacks
+      hud.onAutoClick((enabled) => {
+        hud.addLog(`Auto battle ${enabled ? 'enabled' : 'disabled'}`, 'system');
+      });
+
+      hud.onPauseClick((paused) => {
+        hud.addLog(paused ? 'Battle paused' : 'Battle resumed', 'system');
+      });
+
+      hud.onSpeedClick((speed) => {
+        hud.addLog(`Speed set to x${speed}`, 'system');
+      });
+
+      hud.onExitClick(() => {
+        hud.addLog('Exiting battle...', 'system');
+      });
+
+      // 9. Demo control buttons (outside game)
+      const demoControls = document.createElement('div');
+      demoControls.id = 'demo-controls';
+
+      const createDemoBtn = (label, onClick) => {
+        const btn = document.createElement('button');
+        btn.className = 'demo-btn';
+        btn.textContent = label;
+        btn.addEventListener('click', onClick);
+        return btn;
+      };
+
+      demoControls.appendChild(createDemoBtn('Damage Attacker', () => {
+        const dmg = Math.floor(Math.random() * 20000) + 5000;
+        const current = hud._attacker.hp;
+        const newHp = Math.max(0, current - dmg);
+        hud.updateHP('attacker', newHp, hud._attacker.maxHp);
+        hud.flashDamage('attacker', dmg);
+        hud.addLog(`Attacker takes ${dmg.toLocaleString()} damage`, 'damage');
+      }));
+
+      demoControls.appendChild(createDemoBtn('Damage Defender', () => {
+        const dmg = Math.floor(Math.random() * 20000) + 5000;
+        const current = hud._defender.hp;
+        const newHp = Math.max(0, current - dmg);
+        hud.updateHP('defender', newHp, hud._defender.maxHp);
+        hud.flashDamage('defender', dmg);
+        hud.addLog(`Defender takes ${dmg.toLocaleString()} damage`, 'damage');
+      }));
+
+      demoControls.appendChild(createDemoBtn('Critical', () => {
+        const dmg = Math.floor(Math.random() * 30000) + 15000;
+        const side = Math.random() > 0.5 ? 'attacker' : 'defender';
+        const current = side === 'attacker' ? hud._attacker.hp : hud._defender.hp;
+        const newHp = Math.max(0, current - dmg);
+        hud.updateHP(side, newHp, side === 'attacker' ? hud._attacker.maxHp : hud._defender.maxHp);
+        hud.showCritical(side, dmg);
+        hud.addLog(`CRITICAL HIT for ${dmg.toLocaleString()} damage!`, 'critical');
+      }));
+
+      demoControls.appendChild(createDemoBtn('Heal', () => {
+        const heal = Math.floor(Math.random() * 10000) + 3000;
+        const side = Math.random() > 0.5 ? 'attacker' : 'defender';
+        const current = side === 'attacker' ? hud._attacker.hp : hud._defender.hp;
+        const max = side === 'attacker' ? hud._attacker.maxHp : hud._defender.maxHp;
+        const newHp = Math.min(max, current + heal);
+        hud.updateHP(side, newHp, max);
+        hud.showHeal(side, heal);
+        hud.addLog(`Healed for ${heal.toLocaleString()} HP`, 'heal');
+      }));
+
+      demoControls.appendChild(createDemoBtn('New Round', () => {
+        const nextRound = hud._round + 1;
+        hud.setRound(nextRound);
+        hud.showRoundBanner(nextRound, 2500);
+      }));
+
+      demoControls.appendChild(createDemoBtn('Add Buff', () => {
+        const buffs = ['&#9889;', '&#128293;', '&#127744;', '&#128737;', '&#9884;'];
+        const names = ['Lightning', 'Fire', 'Tornado', 'Shield', 'Surge'];
+        const idx = Math.floor(Math.random() * buffs.length);
+        const side = Math.random() > 0.5 ? 'left' : 'right';
+        hud.addBuff(side, buffs[idx], 'buff', names[idx]);
+        hud.addLog(`${names[idx]} buff applied`, 'system');
+      }));
+
+      demoControls.appendChild(createDemoBtn('Clear Buffs', () => {
+        hud.clearBuffs('left');
+        hud.clearBuffs('right');
+        hud.addLog('All buffs cleared', 'system');
+      }));
+
+      demoControls.appendChild(createDemoBtn('Reset HP', () => {
+        hud.setAttacker('SandoraD', 80, 9, 835600, 835600);
+        hud.setDefender('RaccoN', 80, 9, 707000, 707000);
+        hud.addLog('HP restored to full', 'heal');
+      }));
+
+      document.body.appendChild(demoControls);
+
+      // 10. Info panel
+      const demoInfo = document.createElement('div');
+      demoInfo.className = 'demo-info';
+      demoInfo.innerHTML = `
+        <h3>GO2 Battle HUD Demo</h3>
+        <div><strong>Keyboard Shortcuts:</strong></div>
+        <div><kbd>Space</kbd> Pause/Resume</div>
+        <div><kbd>1</kbd> <kbd>2</kbd> <kbd>4</kbd> Set Speed</div>
+        <div><kbd>A</kbd> Toggle Auto</div>
+        <div><kbd>Esc</kbd> Exit / Close Panel</div>
+        <div style="margin-top:8px;color:#ffd54f;">Check the demo buttons below the game to simulate battle events!</div>
+      `;
+      document.body.appendChild(demoInfo);
+
+      // Expose HUD to console for debugging
+      window.battleHUD = hud;
+      console.log('Battle HUD Demo loaded! Use window.battleHUD to access the HUD instance.');
+    })();
+  </script>
+</body>
+</html>
