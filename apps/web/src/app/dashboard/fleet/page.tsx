@@ -67,7 +67,7 @@ export default function FleetPage() {
       <div className="flex-1 overflow-auto">
         {tab === 'commanders' && <Go2CommanderPanel />}
         {tab === 'fleets' && <Go2FleetSystem commanders={COMMANDERS} />}
-        {tab === 'merge' && <Go2CommanderMerge commanders={COMMANDERS} scrolls={sampleScrolls} />}
+        {tab === 'merge' && <Go2CommanderMerge commanders={COMMANDERS} mergeScrolls={sampleScrolls.reduce((sum, s) => sum + s.quantity, 0)} />}
         {tab === 'gems' && <Go2GemInterface gems={sampleGems} />}
         {tab === 'hospital' && <Go2Hospital beds={3} injured={[]} />}
         {tab === 'draw' && <Go2DrawingSystem corsairsGold={1250} />}
