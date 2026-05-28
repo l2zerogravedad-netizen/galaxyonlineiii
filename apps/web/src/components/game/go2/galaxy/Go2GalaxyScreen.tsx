@@ -89,7 +89,7 @@ export function Go2GalaxyScreen() {
     handleMouseUp,
     handleClick,
     handleWheel,
-    handleResize,
+    updateCanvasSize,
   } = useGalaxyMap();
 
   // Sector navigation
@@ -133,7 +133,7 @@ export function Go2GalaxyScreen() {
         onMouseUp={handleMouseUp}
         onClick={handleClick}
         onWheel={handleWheel}
-        onResize={handleResize}
+        onResize={updateCanvasSize}
       />
 
       {/* ==================== SECTOR NAVIGATOR (Top Left) ==================== */}
