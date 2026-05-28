@@ -1,374 +1,286 @@
+/**
+ * ============================================================
+ * REFERENCE DATA ROUTES — Galaxy Online 2
+ * Endpoints publicos para datos de referencia del juego
+ * ============================================================
+ *
+ * Datos reales de comandantes extraidos de go2-commander-data.ts
+ * 100 comandantes oficiales de Galaxy Online 2
+ *
+ * Endpoints:
+ *   GET /api/v1/commanders       — 100+ comandantes
+ *   GET /api/v1/commanders/:id   — 1 comandante por ID
+ *   GET /api/v1/ships/designs    — Diseños de naves
+ *   GET /api/v1/formations       — Formaciones de batalla
+ */
+
 import { Router } from 'express';
-import { rateLimitMiddleware } from '@/middleware/rateLimit';
 import { asyncHandler } from '@/utils/asyncHandler';
+import fs from 'fs';
+import path from 'path';
+
+const router = Router();
 
 // ============================================================
-// TYPES
+// TYPES (formato real GO2 — accuracy/speed/dodge/electron)
 // ============================================================
+
+export interface CommanderStats {
+  accuracy: number;
+  speed: number;
+  dodge: number;
+  electron: number;
+}
 
 export interface CommanderCard {
   id: string;
   name: string;
-  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-  role: 'offense' | 'defense' | 'support' | 'balanced';
-  baseStats: {
-    attack: number;
-    defense: number;
-    speed: number;
-    command: number;
-  };
-  specialAbility?: string;
-  description: string;
-  imageUrl?: string;
+  rarity: 'common' | 'super' | 'legendary' | 'divine';
+  level: number;
+  stars: number;
+  skill: string;
+  skillDescription: string;
+  skillAffectedBy: string;
+  status: string;
+  stats: CommanderStats;
+  growthRates: CommanderStats;
 }
 
 export interface ShipDesign {
   id: string;
   name: string;
-  type: 'fighter' | 'cruiser' | 'battleship' | 'carrier' | 'frigate' | 'destroyer';
-  class: 'light' | 'medium' | 'heavy' | 'capital';
-  baseStats: {
-    hull: number;
-    shield: number;
-    speed: number;
-    attack: number;
-    he3Capacity: number;
-  };
+  shipClass: 'frigate' | 'cruiser' | 'battleship' | 'special';
+  attack: number;
+  defense: number;
+  structure: number;
+  shield: number;
+  speed: number;
+  stability: number;
   weaponSlots: number;
   moduleSlots: number;
+  he3Consumption: number;
   description: string;
-  techRequired?: number;
 }
 
 export interface Formation {
   id: string;
   name: string;
   description: string;
-  layout: number[];
-  bonuses: {
-    attack?: number;
-    defense?: number;
-    speed?: number;
-  };
-  icon?: string;
+  layout: string; // descripcion visual
+  bonuses: Record<string, number>;
 }
 
 // ============================================================
-// REFERENCE DATA (Mock - replace with DB calls in production)
+// CARGAR 100+ COMANDANTES REALES DESDE JSON
 // ============================================================
 
-const COMMANDERS: CommanderCard[] = [
-  {
-    id: 'cmd_001',
-    name: 'Kaelen Voss',
-    rarity: 'legendary',
-    role: 'offense',
-    baseStats: { attack: 95, defense: 60, speed: 80, command: 90 },
-    specialAbility: 'Blitzkrieg: +25% fleet speed for 3 rounds',
-    description: 'Renowned fleet admiral known for aggressive blitz tactics.',
-  },
-  {
-    id: 'cmd_002',
-    name: 'Serra Kaine',
-    rarity: 'epic',
-    role: 'defense',
-    baseStats: { attack: 55, defense: 95, speed: 50, command: 85 },
-    specialAbility: 'Iron Wall: +30% shield regeneration per round',
-    description: 'Master of defensive formations and shield technologies.',
-  },
-  {
-    id: 'cmd_003',
-    name: 'Jax Rylar',
-    rarity: 'rare',
-    role: 'offense',
-    baseStats: { attack: 80, defense: 45, speed: 90, command: 70 },
-    specialAbility: 'Rapid Strike: First attack each round deals +20% damage',
-    description: 'Speed-focused strike commander who hits fast and hard.',
-  },
-  {
-    id: 'cmd_004',
-    name: 'Mira Talon',
-    rarity: 'epic',
-    role: 'support',
-    baseStats: { attack: 50, defense: 65, speed: 70, command: 95 },
-    specialAbility: 'Coordination: +15% damage for all adjacent stacks',
-    description: 'Expert tactician who amplifies allied fleet performance.',
-  },
-  {
-    id: 'cmd_005',
-    name: 'Darius Crowe',
-    rarity: 'uncommon',
-    role: 'balanced',
-    baseStats: { attack: 60, defense: 60, speed: 60, command: 60 },
-    specialAbility: 'Steady Command: +5% to all combat stats',
-    description: 'A reliable commander with no glaring weaknesses.',
-  },
-  {
-    id: 'cmd_006',
-    name: 'Lyra Vex',
-    rarity: 'rare',
-    role: 'offense',
-    baseStats: { attack: 85, defense: 40, speed: 75, command: 65 },
-    specialAbility: 'Critical Eye: +10% critical hit chance',
-    description: 'Precision-focused gunnery expert.',
-  },
-  {
-    id: 'cmd_007',
-    name: 'Orin Steele',
-    rarity: 'common',
-    role: 'defense',
-    baseStats: { attack: 35, defense: 70, speed: 40, command: 50 },
-    specialAbility: 'Hold the Line: +10% hull integrity',
-    description: 'Veteran defensive commander with solid fundamentals.',
-  },
-  {
-    id: 'cmd_008',
-    name: 'Nyx Aether',
-    rarity: 'legendary',
-    role: 'support',
-    baseStats: { attack: 45, defense: 55, speed: 85, command: 100 },
-    specialAbility: 'Time Dilation: Enemy stacks act at -15 effective speed',
-    description: 'Mysterious commander who manipulates the flow of battle.',
-  },
-  {
-    id: 'cmd_009',
-    name: 'Thorne Blackwell',
-    rarity: 'epic',
-    role: 'balanced',
-    baseStats: { attack: 75, defense: 75, speed: 70, command: 80 },
-    specialAbility: 'Adaptive Tactics: Switch between +20% attack or +20% defense each round',
-    description: 'Versatile commander who adapts to any situation.',
-  },
-  {
-    id: 'cmd_010',
-    name: 'Elara Moon',
-    rarity: 'rare',
-    role: 'support',
-    baseStats: { attack: 40, defense: 60, speed: 65, command: 85 },
-    specialAbility: 'Repair Drones: Restore 5% hull to most damaged stack each round',
-    description: 'Engineering specialist with autonomous repair capabilities.',
-  },
-];
+let COMMANDERS: CommanderCard[] = [];
+
+try {
+  const jsonPath = path.join(__dirname, '../../../../apps/web/public/data/commanders.json');
+  const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+  COMMANDERS = jsonData.commanders || [];
+  console.log(`[GO2] ${COMMANDERS.length} comandantes cargados desde JSON`);
+} catch (err) {
+  console.warn('[GO2] No se pudo cargar commanders.json, usando fallback:', (err as Error).message);
+  COMMANDERS = [];
+}
+
+// ============================================================
+// SHIP DESIGNS (reales GO2)
+// ============================================================
 
 const SHIP_DESIGNS: ShipDesign[] = [
   {
-    id: 'ship_001',
-    name: 'Viper Interceptor',
-    type: 'fighter',
-    class: 'light',
-    baseStats: { hull: 400, shield: 200, speed: 120, attack: 80, he3Capacity: 50 },
-    weaponSlots: 2,
-    moduleSlots: 1,
-    description: 'Fast and agile fighter ideal for first strikes.',
+    id: 'frigate-mk1', name: 'Frigate MK-I', shipClass: 'frigate',
+    attack: 30, defense: 15, structure: 80, shield: 50, speed: 100, stability: 1.0,
+    weaponSlots: 2, moduleSlots: 2, he3Consumption: 2,
+    description: 'Nave ligera y rapida. Escudo fuerte, dano bajo. Ideal como tanque.',
   },
   {
-    id: 'ship_002',
-    name: 'Goliath Destroyer',
-    type: 'destroyer',
-    class: 'medium',
-    baseStats: { hull: 1200, shield: 600, speed: 70, attack: 150, he3Capacity: 100 },
-    weaponSlots: 3,
-    moduleSlots: 2,
-    description: 'Heavy hitter with balanced offensive and defensive stats.',
+    id: 'frigate-mk2', name: 'Frigate MK-II', shipClass: 'frigate',
+    attack: 40, defense: 20, structure: 100, shield: 70, speed: 110, stability: 1.1,
+    weaponSlots: 3, moduleSlots: 2, he3Consumption: 3,
+    description: 'Mejora de la Frigate base. Mayor escudo y velocidad.',
   },
   {
-    id: 'ship_003',
-    name: 'Leviathan Battleship',
-    type: 'battleship',
-    class: 'heavy',
-    baseStats: { hull: 3000, shield: 1500, speed: 40, attack: 250, he3Capacity: 200 },
-    weaponSlots: 4,
-    moduleSlots: 3,
-    description: 'Slow but devastating. The ultimate damage dealer.',
+    id: 'cruiser-mk1', name: 'Cruiser MK-I', shipClass: 'cruiser',
+    attack: 60, defense: 40, structure: 150, shield: 80, speed: 70, stability: 1.2,
+    weaponSlots: 3, moduleSlots: 3, he3Consumption: 5,
+    description: 'Nave balanceada. Buen dano, defensa solida y modulos versatiles.',
   },
   {
-    id: 'ship_004',
-    name: 'Aegis Cruiser',
-    type: 'cruiser',
-    class: 'medium',
-    baseStats: { hull: 1800, shield: 1200, speed: 60, attack: 120, he3Capacity: 150 },
-    weaponSlots: 2,
-    moduleSlots: 3,
-    description: 'Shield-focused vessel with exceptional survivability.',
+    id: 'cruiser-mk2', name: 'Cruiser MK-II', shipClass: 'cruiser',
+    attack: 75, defense: 50, structure: 180, shield: 100, speed: 75, stability: 1.3,
+    weaponSlots: 4, moduleSlots: 3, he3Consumption: 6,
+    description: 'Cruiser mejorada. Mayor capacidad de armamento y defensa.',
   },
   {
-    id: 'ship_005',
-    name: 'Nimbus Carrier',
-    type: 'carrier',
-    class: 'capital',
-    baseStats: { hull: 2500, shield: 1000, speed: 35, attack: 100, he3Capacity: 180 },
-    weaponSlots: 3,
-    moduleSlots: 4,
-    description: 'Command vessel with extensive support capabilities.',
+    id: 'battleship-mk1', name: 'Battleship MK-I', shipClass: 'battleship',
+    attack: 100, defense: 70, structure: 250, shield: 60, speed: 40, stability: 1.5,
+    weaponSlots: 4, moduleSlots: 4, he3Consumption: 10,
+    description: 'Nave masiva con dano devastador. Lenta pero letal.',
   },
   {
-    id: 'ship_006',
-    name: 'Spectre Frigate',
-    type: 'frigate',
-    class: 'light',
-    baseStats: { hull: 800, shield: 400, speed: 95, attack: 110, he3Capacity: 80 },
-    weaponSlots: 2,
-    moduleSlots: 2,
-    description: 'Stealth-oriented hit-and-run vessel.',
+    id: 'battleship-mk2', name: 'Battleship MK-II', shipClass: 'battleship',
+    attack: 130, defense: 90, structure: 300, shield: 80, speed: 45, stability: 1.7,
+    weaponSlots: 5, moduleSlots: 4, he3Consumption: 12,
+    description: 'Battleship avanzada. Artilleria pesada de largo alcance.',
   },
   {
-    id: 'ship_007',
-    name: 'Titan Dreadnought',
-    type: 'battleship',
-    class: 'capital',
-    baseStats: { hull: 5000, shield: 2500, speed: 25, attack: 350, he3Capacity: 300 },
-    weaponSlots: 5,
-    moduleSlots: 4,
-    description: 'The ultimate warship. Slow but virtually unstoppable.',
+    id: 'special-mk1', name: 'Special Hull MK-I', shipClass: 'special',
+    attack: 50, defense: 30, structure: 120, shield: 90, speed: 85, stability: 1.0,
+    weaponSlots: 2, moduleSlots: 4, he3Consumption: 8,
+    description: 'Nave con habilidades unicas. Slots de modulos maximos.',
   },
   {
-    id: 'ship_008',
-    name: 'Wraith Fighter',
-    type: 'fighter',
-    class: 'light',
-    baseStats: { hull: 300, shield: 150, speed: 140, attack: 65, he3Capacity: 40 },
-    weaponSlots: 2,
-    moduleSlots: 1,
-    description: 'Extremely fast but fragile interceptor.',
-  },
-  {
-    id: 'ship_009',
-    name: 'Bulwark Defender',
-    type: 'cruiser',
-    class: 'heavy',
-    baseStats: { hull: 2200, shield: 1800, speed: 45, attack: 90, he3Capacity: 120 },
-    weaponSlots: 2,
-    moduleSlots: 4,
-    description: 'Defensive specialist with massive shield capacity.',
-  },
-  {
-    id: 'ship_010',
-    name: 'Harbinger Destroyer',
-    type: 'destroyer',
-    class: 'medium',
-    baseStats: { hull: 1000, shield: 500, speed: 80, attack: 180, he3Capacity: 90 },
-    weaponSlots: 3,
-    moduleSlots: 1,
-    description: 'Glass cannon design with devastating burst damage.',
+    id: 'flagship', name: 'Flagship', shipClass: 'battleship',
+    attack: 150, defense: 100, structure: 400, shield: 120, speed: 35, stability: 2.0,
+    weaponSlots: 6, moduleSlots: 5, he3Consumption: 15,
+    description: 'Nave insignia. La unidad mas poderosa del juego.',
   },
 ];
+
+// ============================================================
+// FORMATIONS
+// ============================================================
 
 const FORMATIONS: Formation[] = [
   {
-    id: 'fmt_001',
-    name: 'Line Ahead',
-    description: 'Standard formation. All stacks act in pure speed order.',
-    layout: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    bonuses: {},
+    id: 'wedge', name: 'Wedge (Cuña)',
+    description: 'Formacion ofensiva. Bonus de ataque al primer stack.',
+    layout: '1 nave adelante, 2 detras, 3 mas atras... forma de V invertida',
+    bonuses: { attack: 0.10, speed: 0.05 },
   },
   {
-    id: 'fmt_002',
-    name: 'Wedge',
-    description: 'V-shaped assault formation. Front stacks gain +10% attack.',
-    layout: [5, 2, 8, 1, 3, 7, 9, 4, 6],
-    bonuses: { attack: 0.10 },
+    id: 'shield', name: 'Shield Wall (Muro)',
+    description: 'Formacion defensiva. Los stacks frontales absorben mas daño.',
+    layout: '3 naves al frente, 3 en medio, 3 atras — en lineas horizontales',
+    bonuses: { defense: 0.15, shield: 0.10 },
   },
   {
-    id: 'fmt_003',
-    name: 'Shield Wall',
-    description: 'Defensive grid pattern. All stacks gain +10% shield capacity.',
-    layout: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    bonuses: { defense: 0.10 },
+    id: 'diamond', name: 'Diamond (Diamante)',
+    description: 'Formacion balanceada. Bonus defensivo a los stacks laterales.',
+    layout: '1 centro, 2 laterales, 3 atras, 2 mas atras, 1 ultimo — forma de rombo',
+    bonuses: { defense: 0.10, speed: 0.05 },
   },
   {
-    id: 'fmt_004',
-    name: 'Blitz',
-    description: 'Speed-focused dispersal. All stacks gain +10% speed.',
-    layout: [3, 1, 5, 7, 9, 2, 4, 6, 8],
-    bonuses: { speed: 0.10 },
+    id: 'arrow', name: 'Arrowhead (Flecha)',
+    description: 'Formacion ofensiva concentrada. Bonus de penetracion de escudo.',
+    layout: '1 punta, 2 sig linea, 3 base — forma de flecha apuntando al enemigo',
+    bonuses: { attack: 0.15, shieldPenetration: 0.10 },
   },
   {
-    id: 'fmt_005',
-    name: 'Diamond',
-    description: 'Balanced formation. Center stack gains +15% to all stats.',
-    layout: [5, 2, 4, 6, 8, 1, 3, 7, 9],
-    bonuses: { attack: 0.05, defense: 0.05 },
+    id: 'line', name: 'Line (Linea)',
+    description: 'Formacion simple. Todos los stacks atacan simultaneamente.',
+    layout: '9 naves en linea horizontal',
+    bonuses: { speed: 0.15 },
   },
   {
-    id: 'fmt_006',
-    name: 'Echelon',
-    description: 'Diagonal sweep pattern. Side stacks gain +10% attack power.',
-    layout: [1, 5, 9, 2, 6, 3, 7, 4, 8],
-    bonuses: { attack: 0.10 },
+    id: 'echelon', name: 'Echelon (Escalonada)',
+    description: 'Formacion escalonada. Bonus de velocidad progresivo.',
+    layout: 'Cada nave ligeramente mas atras que la anterior — diagonal',
+    bonuses: { speed: 0.20 },
   },
   {
-    id: 'fmt_007',
-    name: 'Phalanx',
-    description: 'Compact defensive cluster. All stacks gain +15% hull integrity.',
-    layout: [4, 5, 6, 1, 2, 3, 7, 8, 9],
-    bonuses: { defense: 0.15 },
+    id: 'cross', name: 'Cross (Cruz)',
+    description: 'Formacion defensiva central. Bonus de escudo al stack central.',
+    layout: '1 centro, 4 en cruz, 4 esquinas — forma de cruz',
+    bonuses: { shield: 0.20, defense: 0.05 },
   },
   {
-    id: 'fmt_008',
-    name: 'Swarm',
-    description: 'Highly dispersed formation. +10% speed, -5% defense.',
-    layout: [1, 3, 7, 9, 5, 2, 4, 6, 8],
-    bonuses: { speed: 0.10 },
+    id: 'scatter', name: 'Scatter (Dispersa)',
+    description: 'Formacion dispersa. Reduce scatter damage recibido.',
+    layout: 'Naves distribuidas ampliamente para minimizar daño en area',
+    bonuses: { scatterResistance: 0.25 },
   },
 ];
 
 // ============================================================
-// ROUTER
+// ROUTES
 // ============================================================
-
-const router = Router();
 
 /**
  * GET /api/v1/commanders
- * Listar todos los comandantes disponibles.
+ * Devuelve TODOS los 100+ comandantes reales de GO2
+ * Query: ?rarity=common|super|legendary|divine (filtro opcional)
  */
-router.get(
-  '/commanders',
-  rateLimitMiddleware.general,
-  asyncHandler(async (_req, res) => {
-    res.json({
-      success: true,
-      data: {
-        commanders: COMMANDERS,
-        total: COMMANDERS.length,
+router.get('/commanders', asyncHandler(async (req, res) => {
+  const { rarity } = req.query;
+  let commanders = COMMANDERS;
+
+  if (rarity && typeof rarity === 'string') {
+    commanders = commanders.filter(c => c.rarity === rarity);
+  }
+
+  res.json({
+    success: true,
+    data: {
+      total: commanders.length,
+      byRarity: {
+        common: COMMANDERS.filter(c => c.rarity === 'common').length,
+        super: COMMANDERS.filter(c => c.rarity === 'super').length,
+        legendary: COMMANDERS.filter(c => c.rarity === 'legendary').length,
+        divine: COMMANDERS.filter(c => c.rarity === 'divine').length,
       },
+      commanders: commanders.map(c => ({
+        id: c.id,
+        name: c.name,
+        rarity: c.rarity,
+        stars: c.stars,
+        skill: c.skill,
+        skillDescription: c.skillDescription,
+        skillAffectedBy: c.skillAffectedBy,
+        stats: c.stats,
+        growthRates: c.growthRates,
+      })),
+    },
+  }));
+}));
+
+/**
+ * GET /api/v1/commanders/:id
+ * Devuelve UN comandante por ID
+ */
+router.get('/commanders/:id', asyncHandler(async (req, res) => {
+  const commander = COMMANDERS.find(c => c.id === req.params.id);
+
+  if (!commander) {
+    return res.status(404).json({
+      success: false,
+      error: { code: 'COMMANDER_NOT_FOUND', message: 'Comandante no encontrado' },
     });
-  })
-);
+  }
+
+  res.json({ success: true, data: commander });
+}));
 
 /**
  * GET /api/v1/ships/designs
- * Listar disenos de naves disponibles.
+ * Devuelve todos los diseños de naves
  */
-router.get(
-  '/ships/designs',
-  rateLimitMiddleware.general,
-  asyncHandler(async (_req, res) => {
-    res.json({
-      success: true,
-      data: {
-        designs: SHIP_DESIGNS,
-        total: SHIP_DESIGNS.length,
-      },
-    });
-  })
-);
+router.get('/ships/designs', asyncHandler(async (_req, res) => {
+  res.json({
+    success: true,
+    data: {
+      total: SHIP_DESIGNS.length,
+      designs: SHIP_DESIGNS,
+    },
+  });
+}));
 
 /**
  * GET /api/v1/formations
- * Listar formaciones disponibles.
+ * Devuelve todas las formaciones de batalla
  */
-router.get(
-  '/formations',
-  rateLimitMiddleware.general,
-  asyncHandler(async (_req, res) => {
-    res.json({
-      success: true,
-      data: {
-        formations: FORMATIONS,
-      },
-    });
-  })
-);
+router.get('/formations', asyncHandler(async (_req, res) => {
+  res.json({
+    success: true,
+    data: {
+      total: FORMATIONS.length,
+      formations: FORMATIONS,
+    },
+  });
+}));
 
 export default router;

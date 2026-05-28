@@ -1,0 +1,2511 @@
+{
+  "total": 100,
+  "byRarity": {
+    "common": 22,
+    "super": 20,
+    "legendary": 23,
+    "divine": 35
+  },
+  "commanders": [
+    {
+      "id": "alicia",
+      "name": "Alicia",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Inspiration",
+      "skillDescription": "Has a chance to increase the damage dealt by the ship in the next slot of the formation by 30%.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 3.0,
+        "dodge": 7.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 3.1,
+        "speed": 1.1,
+        "dodge": 2.2,
+        "electron": 1.1
+      }
+    },
+    {
+      "id": "angla",
+      "name": "Angla",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Fleet EMT",
+      "skillDescription": "Reduces hospital time and prevents anyone from killing the Commander.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 4.0,
+        "speed": 4.0,
+        "dodge": 5.0,
+        "electron": 7.0
+      },
+      "growthRates": {
+        "accuracy": 0.9,
+        "speed": 1.2,
+        "dodge": 1.5,
+        "electron": 1.9
+      }
+    },
+    {
+      "id": "donna",
+      "name": "Donna",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Defensive Intensity",
+      "skillDescription": "Has a chance to restore 15% of maximum Shields at the start of each round.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 7.0,
+        "speed": 4.0,
+        "dodge": 4.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 2.4,
+        "speed": 1.1,
+        "dodge": 0.9,
+        "electron": 2.3
+      }
+    },
+    {
+      "id": "essido",
+      "name": "Essido",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Ship-based Expertise",
+      "skillDescription": "Increases the damage of Ship-based Weapons.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 5.0,
+        "dodge": 6.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 1.8,
+        "speed": 1.6,
+        "dodge": 2.0,
+        "electron": 1.9
+      }
+    },
+    {
+      "id": "heloyc",
+      "name": "Heloyce",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Stability",
+      "skillDescription": "Removes the formation penalty when a fleet is under attack and increases fleet stability.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 7.0,
+        "speed": 2.0,
+        "dodge": 8.0,
+        "electron": 4.0
+      },
+      "growthRates": {
+        "accuracy": 1.6,
+        "speed": 0.5,
+        "dodge": 2.6,
+        "electron": 1.4
+      }
+    },
+    {
+      "id": "jason",
+      "name": "Jason",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Save Energy",
+      "skillDescription": "Has a chance to prevent modules from consuming He3 while attacking or defending.",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 4.0,
+        "speed": 2.0,
+        "dodge": 5.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 0.9,
+        "speed": 0.7,
+        "dodge": 1.6,
+        "electron": 1.5
+      }
+    },
+    {
+      "id": "jerome",
+      "name": "Jerome",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Curse",
+      "skillDescription": "If attacked, the enemy will receive 10% more damage the next round (stackable).",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 8.0,
+        "dodge": 2.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 1.2,
+        "speed": 2.5,
+        "dodge": 0.5,
+        "electron": 1.1
+      }
+    },
+    {
+      "id": "kelly",
+      "name": "Kelly",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Resourceful",
+      "skillDescription": "Restores 15% of maximum Structures per round.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 3.0,
+        "speed": 9.0,
+        "dodge": 6.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 1.0,
+        "speed": 2.9,
+        "dodge": 1.8,
+        "electron": 1.8
+      }
+    },
+    {
+      "id": "lawrence",
+      "name": "Lawrence",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Ballistic Expertise",
+      "skillDescription": "Increases the damage of ballistic weapons.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 4.0,
+        "dodge": 6.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 2.5,
+        "speed": 0.9,
+        "dodge": 1.4,
+        "electron": 2.0
+      }
+    },
+    {
+      "id": "mantie",
+      "name": "Mantie",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Command Strike",
+      "skillDescription": "",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 14.0,
+        "speed": 14.0,
+        "dodge": 14.0,
+        "electron": 14.0
+      },
+      "growthRates": {
+        "accuracy": 5.0,
+        "speed": 4.2,
+        "dodge": 4.8,
+        "electron": 3.2
+      }
+    },
+    {
+      "id": "maxius",
+      "name": "Maxius",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Allied Strike",
+      "skillDescription": "Has a chance to increase the accuracy of all friendly forces within 4 spaces by 5.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 0.0,
+        "dodge": 5.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 2.9,
+        "speed": 0.0,
+        "dodge": 1.7,
+        "electron": 1.7
+      }
+    },
+    {
+      "id": "motima",
+      "name": "Motima",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Accuracy",
+      "skillDescription": "Has a chance to use the highest possible hit chance when attacking the enemy.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 2.0,
+        "dodge": 6.0,
+        "electron": 6.0
+      },
+      "growthRates": {
+        "accuracy": 2.6,
+        "speed": 0.6,
+        "dodge": 2.0,
+        "electron": 1.6
+      }
+    },
+    {
+      "id": "natiya",
+      "name": "Natiya",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "First Strike",
+      "skillDescription": "",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 8.0,
+        "dodge": 6.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 2.1,
+        "speed": 2.4,
+        "dodge": 1.8,
+        "electron": 2.0
+      }
+    },
+    {
+      "id": "panis",
+      "name": "Panis",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Intercept",
+      "skillDescription": "Increases the chance of air interception.",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 5.0,
+        "dodge": 6.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 1.8,
+        "speed": 1.7,
+        "dodge": 2.2,
+        "electron": 3.4
+      }
+    },
+    {
+      "id": "rayllf",
+      "name": "Rayllf",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Armor Repair",
+      "skillDescription": "Has a chance to increase ship defense by 5 per round. This effect lasts for 1 round.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 6.0,
+        "speed": 8.0,
+        "dodge": 7.0,
+        "electron": 7.0
+      },
+      "growthRates": {
+        "accuracy": 2.1,
+        "speed": 2.7,
+        "dodge": 2.6,
+        "electron": 2.4
+      }
+    },
+    {
+      "id": "reggie",
+      "name": "Reggie",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Paralyze",
+      "skillDescription": "",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 3.0,
+        "dodge": 8.0,
+        "electron": 4.0
+      },
+      "growthRates": {
+        "accuracy": 1.8,
+        "speed": 1.0,
+        "dodge": 2.3,
+        "electron": 1.3
+      }
+    },
+    {
+      "id": "shaba",
+      "name": "Shaba",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Allied Evasion",
+      "skillDescription": "Increases the dodge chance of friendly forces within 4 spaces by 5 (stackable).",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 10.0,
+        "dodge": 5.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 2.6,
+        "speed": 2.5,
+        "dodge": 1.4,
+        "electron": 1.4
+      }
+    },
+    {
+      "id": "sofia",
+      "name": "Sofia",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Maneuvering",
+      "skillDescription": "Has a chance to move an extra 3 spaces.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 7.0,
+        "speed": 5.0,
+        "dodge": 11.0,
+        "electron": 6.0
+      },
+      "growthRates": {
+        "accuracy": 1.5,
+        "speed": 1.3,
+        "dodge": 4.0,
+        "electron": 1.3
+      }
+    },
+    {
+      "id": "taude",
+      "name": "Taude",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Lucky Shot",
+      "skillDescription": "Has a chance to deal Lucky Shot, which increases the chance of shooting down a target by 50%.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 7.0,
+        "speed": 7.0,
+        "dodge": 4.0,
+        "electron": 4.0
+      },
+      "growthRates": {
+        "accuracy": 2.4,
+        "speed": 2.4,
+        "dodge": 1.5,
+        "electron": 1.0
+      }
+    },
+    {
+      "id": "tyren",
+      "name": "Tyren",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Missile Expertise",
+      "skillDescription": "Increases the damage of missiles.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 5.0,
+        "dodge": 7.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 3.3,
+        "speed": 1.3,
+        "dodge": 2.2,
+        "electron": 1.6
+      }
+    },
+    {
+      "id": "vinna",
+      "name": "Vinna",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Cunning",
+      "skillDescription": "Reduces level-up requirements by 30%. Also has a chance to increase one stat by 10 when an attack connects. This effect lasts until the end of combat.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 6.0,
+        "speed": 6.0,
+        "dodge": 6.0,
+        "electron": 6.0
+      },
+      "growthRates": {
+        "accuracy": 1.8,
+        "speed": 1.4,
+        "dodge": 1.6,
+        "electron": 1.5
+      }
+    },
+    {
+      "id": "wayne",
+      "name": "Wayne",
+      "rarity": "common",
+      "level": 1,
+      "exp": 0,
+      "expMax": 180,
+      "stars": 1,
+      "skill": "Lucky Hit",
+      "skillDescription": "Has a chance to deal double damage to the enemy.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 4.0,
+        "dodge": 9.0,
+        "electron": 2.0
+      },
+      "growthRates": {
+        "accuracy": 2.9,
+        "speed": 0.9,
+        "dodge": 2.1,
+        "electron": 0.7
+      }
+    },
+    {
+      "id": "andrew",
+      "name": "Andrew",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Acrobatics",
+      "skillDescription": "",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 10.0,
+        "dodge": 6.0,
+        "electron": 1.0
+      },
+      "growthRates": {
+        "accuracy": 2.2,
+        "speed": 5.0,
+        "dodge": 2.9,
+        "electron": 0.5
+      }
+    },
+    {
+      "id": "anna",
+      "name": "Anna",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Pierce",
+      "skillDescription": "Attacks have a chance to deal an extra 40% Piercing damage.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 8.0,
+        "dodge": 10.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 4.3,
+        "speed": 4.2,
+        "dodge": 5.5,
+        "electron": 2.7
+      }
+    },
+    {
+      "id": "annata",
+      "name": "Annata",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Allied Support",
+      "skillDescription": "Increases the Shields and Structures of friendly forces within 4 steps by 8% after each round.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 8.0,
+        "dodge": 5.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 4.3,
+        "speed": 3.9,
+        "dodge": 2.5,
+        "electron": 4.2
+      }
+    },
+    {
+      "id": "bruce",
+      "name": "Bruce",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Drain Supplies",
+      "skillDescription": "",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 6.0,
+        "speed": 8.0,
+        "dodge": 8.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 3.4,
+        "speed": 4.3,
+        "dodge": 3.4,
+        "electron": 6.6
+      }
+    },
+    {
+      "id": "eveline",
+      "name": "Eveline",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Find Weakness",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 7.0,
+        "speed": 6.0,
+        "dodge": 9.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 3.8,
+        "speed": 3.0,
+        "dodge": 4.0,
+        "electron": 2.2
+      }
+    },
+    {
+      "id": "evi",
+      "name": "Evi",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Directional Expertise",
+      "skillDescription": "Increases the damage of Directional Weapons.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 5.0,
+        "dodge": 9.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 4.5,
+        "speed": 2.4,
+        "dodge": 4.0,
+        "electron": 2.3
+      }
+    },
+    {
+      "id": "gastaf",
+      "name": "Gastaf",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Deadly Strike",
+      "skillDescription": "Has an increased chance to deal critical strikes.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 12.0,
+        "speed": 0.0,
+        "dodge": 10.0,
+        "electron": 7.0
+      },
+      "growthRates": {
+        "accuracy": 6.3,
+        "speed": 0.0,
+        "dodge": 5.7,
+        "electron": 3.8
+      }
+    },
+    {
+      "id": "jakar",
+      "name": "Jakar",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Aegis Shatter",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 3.0,
+        "dodge": 5.0,
+        "electron": 4.0
+      },
+      "growthRates": {
+        "accuracy": 4.5,
+        "speed": 1.6,
+        "dodge": 2.5,
+        "electron": 2.0
+      }
+    },
+    {
+      "id": "joseph",
+      "name": "Joseph",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Vengeance",
+      "skillDescription": "",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 4.0,
+        "speed": 10.0,
+        "dodge": 7.0,
+        "electron": 17.0
+      },
+      "growthRates": {
+        "accuracy": 2.2,
+        "speed": 4.4,
+        "dodge": 3.3,
+        "electron": 7.4
+      }
+    },
+    {
+      "id": "leo",
+      "name": "Leo",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Intimidate",
+      "skillDescription": "Has a chance to reduce the Durability, Structures and Shields of enemies within 2 steps by 5% after every turn.",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 9.0,
+        "dodge": 6.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 2.8,
+        "speed": 3.9,
+        "dodge": 3.5,
+        "electron": 4.4
+      }
+    },
+    {
+      "id": "linda",
+      "name": "Linda",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Broadside",
+      "skillDescription": "Attacks have a chance to deal an extra 50% Scattering damage.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 9.0,
+        "dodge": 7.0,
+        "electron": 7.0
+      },
+      "growthRates": {
+        "accuracy": 4.6,
+        "speed": 4.0,
+        "dodge": 3.8,
+        "electron": 3.2
+      }
+    },
+    {
+      "id": "lynn",
+      "name": "Lynn",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Victory Rush",
+      "skillDescription": "",
+      "skillAffectedBy": "Spaces Moved",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 5.0,
+        "dodge": 6.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 4.6,
+        "speed": 2.5,
+        "dodge": 3.4,
+        "electron": 1.5
+      }
+    },
+    {
+      "id": "nick",
+      "name": "Nick",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Divine Intervention",
+      "skillDescription": "Has a chance to avoid damage.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 4.0,
+        "dodge": 5.0,
+        "electron": 2.0
+      },
+      "growthRates": {
+        "accuracy": 2.1,
+        "speed": 2.0,
+        "dodge": 2.3,
+        "electron": 0.9
+      }
+    },
+    {
+      "id": "penni",
+      "name": "Penni",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Last Stand",
+      "skillDescription": "Has a chance to deal triple damage when attacking, but also inflicts 10% damage to the ship.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 10.0,
+        "dodge": 10.0,
+        "electron": 10.0
+      },
+      "growthRates": {
+        "accuracy": 5.0,
+        "speed": 4.9,
+        "dodge": 5.3,
+        "electron": 4.5
+      }
+    },
+    {
+      "id": "raslin",
+      "name": "Raslin",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Fear",
+      "skillDescription": "",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 7.0,
+        "dodge": 9.0,
+        "electron": 10.0
+      },
+      "growthRates": {
+        "accuracy": 4.6,
+        "speed": 3.6,
+        "dodge": 4.8,
+        "electron": 4.9
+      }
+    },
+    {
+      "id": "ringel",
+      "name": "Ringel",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Ignite",
+      "skillDescription": "Has a chance to inflict an additional 30% of the damage last dealt to the enemy when the next round begins.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 5.0,
+        "dodge": 9.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 4.4,
+        "speed": 2.6,
+        "dodge": 3.9,
+        "electron": 1.6
+      }
+    },
+    {
+      "id": "rocky",
+      "name": "Rocky",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Brutal Strength",
+      "skillDescription": "",
+      "skillAffectedBy": "Independent",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 12.0,
+        "speed": 4.0,
+        "dodge": 8.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 5.5,
+        "speed": 2.3,
+        "dodge": 3.9,
+        "electron": 2.8
+      }
+    },
+    {
+      "id": "sylva",
+      "name": "Sylva",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Smash",
+      "skillDescription": "Has a chance to deal up to 2.5 times the damage to a fortress.",
+      "skillAffectedBy": "Independent",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 7.0,
+        "speed": 5.0,
+        "dodge": 5.0,
+        "electron": 2.0
+      },
+      "growthRates": {
+        "accuracy": 3.3,
+        "speed": 2.8,
+        "dodge": 2.6,
+        "electron": 0.9
+      }
+    },
+    {
+      "id": "sylla",
+      "name": "Sylla",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Fleet Link",
+      "skillDescription": "Has a chance to reduce damage taken by 15% and enables all ships to share damage.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 9.0,
+        "dodge": 5.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 2.1,
+        "speed": 4.6,
+        "dodge": 2.5,
+        "electron": 2.7
+      }
+    },
+    {
+      "id": "todd",
+      "name": "Todd",
+      "rarity": "super",
+      "level": 1,
+      "exp": 0,
+      "expMax": 200,
+      "stars": 1,
+      "skill": "Consecutive Strike",
+      "skillDescription": "While attacking, there is a chance of attacking the target twice.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 30.0,
+        "speed": 8.0,
+        "dodge": 5.0,
+        "electron": 6.0
+      },
+      "growthRates": {
+        "accuracy": 15.1,
+        "speed": 4.2,
+        "dodge": 2.3,
+        "electron": 2.8
+      }
+    },
+    {
+      "id": "aileen",
+      "name": "Aileen",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Command Break",
+      "skillDescription": "",
+      "skillAffectedBy": "Electron & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 8.0,
+        "dodge": 8.0,
+        "electron": 8.0
+      },
+      "growthRates": {
+        "accuracy": 5.6,
+        "speed": 5.4,
+        "dodge": 5.3,
+        "electron": 5.6
+      }
+    },
+    {
+      "id": "bain",
+      "name": "Bain",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Reckoning",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy and Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 14.0,
+        "speed": 12.0,
+        "dodge": 18.0,
+        "electron": 16.0
+      },
+      "growthRates": {
+        "accuracy": 9.1,
+        "speed": 9.1,
+        "dodge": 13.1,
+        "electron": 11.4
+      }
+    },
+    {
+      "id": "bart",
+      "name": "Bart",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Raid",
+      "skillDescription": "Has a chance to dodge attacks and increase Attack Power by 15% for one round.",
+      "skillAffectedBy": "Electron & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 3.0,
+        "dodge": 5.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 3.6,
+        "speed": 2.0,
+        "dodge": 3.7,
+        "electron": 2.1
+      }
+    },
+    {
+      "id": "callisto",
+      "name": "Callisto",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "A Fire Rises",
+      "skillDescription": "While attacking, has a chance to increase attack strength by 10%. Can be stacked and remains in effect until end of the battle.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 14.0,
+        "speed": 20.0,
+        "dodge": 15.0,
+        "electron": 20.0
+      },
+      "growthRates": {
+        "accuracy": 9.3,
+        "speed": 13.2,
+        "dodge": 9.8,
+        "electron": 15.4
+      }
+    },
+    {
+      "id": "carlos",
+      "name": "Carlos",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Fear Fiend",
+      "skillDescription": "Deals additional damage to enemy fleet ship structures. Actual amounts are based on the amount of damage dealt to enemy ship shields.",
+      "skillAffectedBy": "Accuracy and Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 15.0,
+        "speed": 5.0,
+        "dodge": 10.0,
+        "electron": 10.0
+      },
+      "growthRates": {
+        "accuracy": 10.1,
+        "speed": 3.4,
+        "dodge": 7.0,
+        "electron": 6.5
+      }
+    },
+    {
+      "id": "cassius",
+      "name": "Cassius",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Knockout Blow",
+      "skillDescription": "When attacking, Cassius has a chance to move the enemy fleet back 3 spaces. Can only be used once per turn.",
+      "skillAffectedBy": "Accuracy and Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 15.0,
+        "speed": 15.0,
+        "dodge": 15.0,
+        "electron": 15.0
+      },
+      "growthRates": {
+        "accuracy": 9.4,
+        "speed": 11.0,
+        "dodge": 11.0,
+        "electron": 9.6
+      }
+    },
+    {
+      "id": "circe",
+      "name": "Circe",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Hex",
+      "skillDescription": "While defending against an attack, has a chance to prevent the enemy commander from using skills in the next Round.",
+      "skillAffectedBy": "Accuracy and Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 15.0,
+        "speed": 10.0,
+        "dodge": 12.0,
+        "electron": 22.0
+      },
+      "growthRates": {
+        "accuracy": 9.7,
+        "speed": 7.6,
+        "dodge": 9.2,
+        "electron": 16.1
+      }
+    },
+    {
+      "id": "dilira",
+      "name": "Dilira",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Renewal",
+      "skillDescription": "Has a chance to fully restore Shields and Durability.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 15.0,
+        "dodge": 10.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 7.3,
+        "speed": 11.4,
+        "dodge": 6.6,
+        "electron": 8.0
+      }
+    },
+    {
+      "id": "hellen",
+      "name": "Hellen",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Rapid Reload",
+      "skillDescription": "When attacking, there is a chance to instantly finish reloading weapons.",
+      "skillAffectedBy": "Accuracy & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 11.0,
+        "speed": 5.0,
+        "dodge": 7.0,
+        "electron": 16.0
+      },
+      "growthRates": {
+        "accuracy": 8.0,
+        "speed": 3.2,
+        "dodge": 4.6,
+        "electron": 10.5
+      }
+    },
+    {
+      "id": "krina-klaus",
+      "name": "Krina Klaus",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "",
+      "skillDescription": "",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 20.0,
+        "speed": 20.0,
+        "dodge": 20.0,
+        "electron": 20.0
+      },
+      "growthRates": {
+        "accuracy": 15.3,
+        "speed": 14.0,
+        "dodge": 13.4,
+        "electron": 13.7
+      }
+    },
+    {
+      "id": "maletiz",
+      "name": "Maletiz",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Revenge",
+      "skillDescription": "Has a chance to absorb all damage and reflect it back to the attacker.",
+      "skillAffectedBy": "Dodge & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 2.0,
+        "speed": 2.0,
+        "dodge": 2.0,
+        "electron": 2.0
+      },
+      "growthRates": {
+        "accuracy": 1.5,
+        "speed": 1.4,
+        "dodge": 1.4,
+        "electron": 1.4
+      }
+    },
+    {
+      "id": "marcus",
+      "name": "Marcus",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Breakthrough",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 6.0,
+        "dodge": 8.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 5.4,
+        "speed": 4.6,
+        "dodge": 6.0,
+        "electron": 2.0
+      }
+    },
+    {
+      "id": "medusa",
+      "name": "Medusa",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Gorgon Gaze",
+      "skillDescription": "Has a chance to cause the enemy fleet to skip its next Round when Medusa is attacked.",
+      "skillAffectedBy": "Dodge & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 20.0,
+        "speed": 14.0,
+        "dodge": 18.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 14.3,
+        "speed": 10.9,
+        "dodge": 12.3,
+        "electron": 8.4
+      }
+    },
+    {
+      "id": "miller",
+      "name": "Miller",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Pulverizer",
+      "skillDescription": "",
+      "skillAffectedBy": "Independent",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 0.0,
+        "speed": 0.0,
+        "dodge": 0.0,
+        "electron": 0.0
+      },
+      "growthRates": {
+        "accuracy": 0.0,
+        "speed": 0.0,
+        "dodge": 0.0,
+        "electron": 0.0
+      }
+    },
+    {
+      "id": "nora",
+      "name": "Nora",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Massacre",
+      "skillDescription": "Has a chance to destroy enemy troops when they attack. This effect can only be initiated once per round.",
+      "skillAffectedBy": "Accuracy & Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 4.0,
+        "dodge": 8.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 6.7,
+        "speed": 2.6,
+        "dodge": 5.1,
+        "electron": 2.1
+      }
+    },
+    {
+      "id": "rafia",
+      "name": "Rafia",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Stability Control",
+      "skillDescription": "",
+      "skillAffectedBy": "Total Stats",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 3.0,
+        "speed": 3.0,
+        "dodge": 5.0,
+        "electron": 2.0
+      },
+      "growthRates": {
+        "accuracy": 1.9,
+        "speed": 2.1,
+        "dodge": 3.7,
+        "electron": 1.4
+      }
+    },
+    {
+      "id": "rayo",
+      "name": "Rayo",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Superior Command",
+      "skillDescription": "",
+      "skillAffectedBy": "Total Stats",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 13.0,
+        "speed": 13.0,
+        "dodge": 13.0,
+        "electron": 13.0
+      },
+      "growthRates": {
+        "accuracy": 8.3,
+        "speed": 9.4,
+        "dodge": 9.3,
+        "electron": 9.1
+      }
+    },
+    {
+      "id": "robert",
+      "name": "Robert",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Massacre",
+      "skillDescription": "",
+      "skillAffectedBy": "Total Stats",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 20.0,
+        "speed": 4.0,
+        "dodge": 10.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 14.3,
+        "speed": 3.0,
+        "dodge": 7.6,
+        "electron": 3.1
+      }
+    },
+    {
+      "id": "sandora",
+      "name": "Sandora",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Lucky Strike",
+      "skillDescription": "Has a chance to deal 30% Scattering damage to all enemy forces.",
+      "skillAffectedBy": "Accuracy & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 7.0,
+        "dodge": 8.0,
+        "electron": 7.0
+      },
+      "growthRates": {
+        "accuracy": 6.5,
+        "speed": 4.9,
+        "dodge": 5.2,
+        "electron": 5.0
+      }
+    },
+    {
+      "id": "singhri",
+      "name": "Singhri",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Copycat",
+      "skillDescription": "",
+      "skillAffectedBy": "Independent",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 12.0,
+        "speed": 12.0,
+        "dodge": 12.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 8.3,
+        "speed": 7.7,
+        "dodge": 9.2,
+        "electron": 8.2
+      }
+    },
+    {
+      "id": "stani",
+      "name": "Stani",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Interference",
+      "skillDescription": "Has a chance to prevent the enemy from moving and attacking for the next round.",
+      "skillAffectedBy": "Accuracy & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 5.0,
+        "speed": 8.0,
+        "dodge": 5.0,
+        "electron": 10.0
+      },
+      "growthRates": {
+        "accuracy": 3.3,
+        "speed": 6.0,
+        "dodge": 3.6,
+        "electron": 7.2
+      }
+    },
+    {
+      "id": "titan",
+      "name": "Titan",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Adaptive Mutualism",
+      "skillDescription": "",
+      "skillAffectedBy": "None",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 35.0,
+        "speed": 35.0,
+        "dodge": 35.0,
+        "electron": 35.0
+      },
+      "growthRates": {
+        "accuracy": 22.2,
+        "speed": 23.3,
+        "dodge": 24.2,
+        "electron": 23.8
+      }
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "rarity": "legendary",
+      "level": 1,
+      "exp": 0,
+      "expMax": 250,
+      "stars": 1,
+      "skill": "Gift of Romance",
+      "skillDescription": "Increases damage negation of all shield modules in the fleet.",
+      "skillAffectedBy": "Dodge & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 15.0,
+        "speed": 23.0,
+        "dodge": 24.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 9.7,
+        "speed": 15.0,
+        "dodge": 18.4,
+        "electron": 7.5
+      }
+    },
+    {
+      "id": "carbuncle-cohort",
+      "name": "Carbuncle Cohort",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Corrosive Coil",
+      "skillDescription": "Will reflect 20% of the original damage taken, and then further reduce damage taken by 15%, and finally spread the remaining damage equally across all ships in the fleet.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 22.0,
+        "dodge": 11.0,
+        "electron": 15.0
+      },
+      "growthRates": {
+        "accuracy": 8.8,
+        "speed": 21.1,
+        "dodge": 12.1,
+        "electron": 14.1
+      }
+    },
+    {
+      "id": "deadly-duo",
+      "name": "Deadly Duo",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Crucifer Sweep",
+      "skillDescription": "This skill has a chance to deal an additional 50% Scattering Damage and 40% Piercing damage during all attacks.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 19.0,
+        "speed": 17.0,
+        "dodge": 17.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 17.7,
+        "speed": 16.6,
+        "dodge": 17.6,
+        "electron": 11.3
+      }
+    },
+    {
+      "id": "death-from-above",
+      "name": "Death from Above",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "",
+      "skillDescription": "",
+      "skillAffectedBy": "All",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 24.0,
+        "speed": 24.0,
+        "dodge": 24.0,
+        "electron": 24.0
+      },
+      "growthRates": {
+        "accuracy": 20.4,
+        "speed": 27.2,
+        "dodge": 22.0,
+        "electron": 25.4
+      }
+    },
+    {
+      "id": "desolate-prayers",
+      "name": "Desolate Prayers",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Decaying Wane",
+      "skillDescription": "This skill has the chance to lower all 4 stats of an enemy commander to 0. The target will also be immobilized in the next round.",
+      "skillAffectedBy": "Speed and Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 20.0,
+        "speed": 20.0,
+        "dodge": 13.0,
+        "electron": 18.0
+      },
+      "growthRates": {
+        "accuracy": 22.5,
+        "speed": 22.4,
+        "dodge": 13.9,
+        "electron": 15.3
+      }
+    },
+    {
+      "id": "dopplegangers",
+      "name": "Dopplegangers",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Fierce Mutation",
+      "skillDescription": "",
+      "skillAffectedBy": "All",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 34.0,
+        "speed": 45.0,
+        "dodge": 44.0,
+        "electron": 45.0
+      },
+      "growthRates": {
+        "accuracy": 32.6,
+        "speed": 40.3,
+        "dodge": 43.1,
+        "electron": 44.1
+      }
+    },
+    {
+      "id": "enduring-chorus",
+      "name": "Enduring Chorus",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Renewed Faith",
+      "skillDescription": "Has a chance each round to fully restore all Shield and Structure points and increase the Dodge attribute of all friendly forces within 4 spaces by 5. This buff can be stacked.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 8.0,
+        "speed": 19.0,
+        "dodge": 21.0,
+        "electron": 6.0
+      },
+      "growthRates": {
+        "accuracy": 7.3,
+        "speed": 21.8,
+        "dodge": 18.3,
+        "electron": 5.5
+      }
+    },
+    {
+      "id": "ererbus-errants",
+      "name": "Ererbus Errants",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Shadow Storm",
+      "skillDescription": "Each time Erebus Errants levels up, the total value of their 4 attributes will increase by an additional 5 points. Also has a chance to negate all damage when attacked.",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 31.0,
+        "speed": 22.0,
+        "dodge": 11.0,
+        "electron": 34.0
+      },
+      "growthRates": {
+        "accuracy": 35.1,
+        "speed": 19.3,
+        "dodge": 11.3,
+        "electron": 37.7
+      }
+    },
+    {
+      "id": "eschaton-adventists",
+      "name": "Eschaton Adventists",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Abject Humiliation",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy and Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 38.0,
+        "speed": 30.0,
+        "dodge": 31.0,
+        "electron": 25.0
+      },
+      "growthRates": {
+        "accuracy": 41.4,
+        "speed": 30.2,
+        "dodge": 27.0,
+        "electron": 24.9
+      }
+    },
+    {
+      "id": "eternal-terrors",
+      "name": "Eternal Terrors",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Battle Preparations",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy and Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 29.0,
+        "speed": 10.0,
+        "dodge": 11.0,
+        "electron": 23.0
+      },
+      "growthRates": {
+        "accuracy": 31.3,
+        "speed": 8.6,
+        "dodge": 12.3,
+        "electron": 20.5
+      }
+    },
+    {
+      "id": "fairy-fiend",
+      "name": "Fairy & Fiend",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Double Whammy",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy and Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 22.0,
+        "speed": 10.0,
+        "dodge": 20.0,
+        "electron": 10.0
+      },
+      "growthRates": {
+        "accuracy": 21.9,
+        "speed": 10.7,
+        "dodge": 21.9,
+        "electron": 11.3
+      }
+    },
+    {
+      "id": "fatal-furies",
+      "name": "Fatal Furies",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Battering Barrage",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy and Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 30.0,
+        "speed": 15.0,
+        "dodge": 14.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 28.3,
+        "speed": 14.3,
+        "dodge": 16.0,
+        "electron": 13.4
+      }
+    },
+    {
+      "id": "fearmongers",
+      "name": "Fearmongers",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Omen of Doom",
+      "skillDescription": "While attacking or defending, has a chance to increase enemy He3 cost by 5 times and reduce enemy attack power by 50% until end of next round.",
+      "skillAffectedBy": "Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 19.0,
+        "speed": 15.0,
+        "dodge": 12.0,
+        "electron": 21.0
+      },
+      "growthRates": {
+        "accuracy": 17.8,
+        "speed": 17.1,
+        "dodge": 10.7,
+        "electron": 21.6
+      }
+    },
+    {
+      "id": "feral-raptors",
+      "name": "Feral Raptors",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Suicide Strike",
+      "skillDescription": "Chance to deal 6x damage while attacking but also reflects 10% of damage back to your ships.",
+      "skillAffectedBy": "Accuracy and Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 18.0,
+        "speed": 14.0,
+        "dodge": 20.0,
+        "electron": 10.0
+      },
+      "growthRates": {
+        "accuracy": 18.0,
+        "speed": 15.5,
+        "dodge": 22.7,
+        "electron": 9.7
+      }
+    },
+    {
+      "id": "frontline-surge",
+      "name": "Frontline Surge",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Pioneer Prowl",
+      "skillDescription": "This skill has a chance to move fleets an additional 3 spaces and increase attack values by 10% for every space that fleet moves.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 15.0,
+        "speed": 10.0,
+        "dodge": 17.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 13.6,
+        "speed": 9.8,
+        "dodge": 17.5,
+        "electron": 2.9
+      }
+    },
+    {
+      "id": "hand-of-lelantos",
+      "name": "Hand of Lelantos",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Unseen Strike",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 36.0,
+        "speed": 34.0,
+        "dodge": 32.0,
+        "electron": 34.0
+      },
+      "growthRates": {
+        "accuracy": 39.3,
+        "speed": 30.5,
+        "dodge": 30.6,
+        "electron": 36.1
+      }
+    },
+    {
+      "id": "hekatian-witnesses",
+      "name": "Hekatian Witnesses",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Hekatian Edict",
+      "skillDescription": "Each time level up, the total increment of four attributes is increased by an additional 5 points. Have a chance to destroy an entire ship stack each time it is dealt damage.",
+      "skillAffectedBy": "Accuracy and Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 36.0,
+        "speed": 37.0,
+        "dodge": 35.0,
+        "electron": 34.0
+      },
+      "growthRates": {
+        "accuracy": 31.7,
+        "speed": 34.3,
+        "dodge": 39.5,
+        "electron": 30.1
+      }
+    },
+    {
+      "id": "homeric-hellions",
+      "name": "Homeric Hellions",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "TBD",
+      "skillDescription": "Each time level up, the total increment of four attributes is increased by an additional 5 points.",
+      "skillAffectedBy": "All",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 38.0,
+        "speed": 45.0,
+        "dodge": 25.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 37.8,
+        "speed": 45.9,
+        "dodge": 25.9,
+        "electron": 10.7
+      }
+    },
+    {
+      "id": "impending-doom",
+      "name": "Impending Doom",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Insidious Infliction",
+      "skillDescription": "This skill increases the dodge rate of your ships and, if attacked, will deal 10% more damage the next round (stackable).",
+      "skillAffectedBy": "Dodge & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 12.0,
+        "dodge": 7.0,
+        "electron": 17.0
+      },
+      "growthRates": {
+        "accuracy": 11.0,
+        "speed": 13.0,
+        "dodge": 7.9,
+        "electron": 15.3
+      }
+    },
+    {
+      "id": "indomitable-duo",
+      "name": "Indomitable Duo",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Divine Barrier",
+      "skillDescription": "",
+      "skillAffectedBy": "Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 12.0,
+        "speed": 25.0,
+        "dodge": 17.0,
+        "electron": 14.0
+      },
+      "growthRates": {
+        "accuracy": 13.4,
+        "speed": 22.5,
+        "dodge": 17.4,
+        "electron": 15.0
+      }
+    },
+    {
+      "id": "iron-maidens",
+      "name": "Iron Maidens",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Fountain of Youth",
+      "skillDescription": "",
+      "skillAffectedBy": "Speed and Dodge",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 10.0,
+        "speed": 21.0,
+        "dodge": 19.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 9.4,
+        "speed": 22.7,
+        "dodge": 21.0,
+        "electron": 5.7
+      }
+    },
+    {
+      "id": "kismet-beams",
+      "name": "Kismet Beams",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Supreme Smite",
+      "skillDescription": "This skill has a chance to deal 2x damage to the enemy and 30% Scattering damage to all enemy fleets.",
+      "skillAffectedBy": "Accuracy and Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 25.0,
+        "speed": 20.0,
+        "dodge": 10.0,
+        "electron": 5.0
+      },
+      "growthRates": {
+        "accuracy": 27.9,
+        "speed": 21.0,
+        "dodge": 10.3,
+        "electron": 4.3
+      }
+    },
+    {
+      "id": "leech-lurkers",
+      "name": "Leech Lurkers",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Covert Syphon",
+      "skillDescription": "Reduces the chance of being hit and increases Attack Power by 15% for one round. Additional chance to reduce the Durability, Structures and Shields of enemies within 2 steps by 5% each turn.",
+      "skillAffectedBy": "Accuracy and Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 17.0,
+        "speed": 12.0,
+        "dodge": 32.0,
+        "electron": 13.0
+      },
+      "growthRates": {
+        "accuracy": 18.3,
+        "speed": 13.7,
+        "dodge": 35.0,
+        "electron": 12.4
+      }
+    },
+    {
+      "id": "light-darkness",
+      "name": "Light & Darkness",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Darkened Halo",
+      "skillDescription": "This skill increases the Shield and Structure values of friendly fleets within 4 steps by 8% after each round and has a chance to reduce enemy Durability, structures, and Shields within 2 steps by 5% after every turn.",
+      "skillAffectedBy": "Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 12.0,
+        "speed": 15.0,
+        "dodge": 21.0,
+        "electron": 3.0
+      },
+      "growthRates": {
+        "accuracy": 10.5,
+        "speed": 14.7,
+        "dodge": 22.1,
+        "electron": 2.7
+      }
+    },
+    {
+      "id": "lurking-light",
+      "name": "Lurking Light",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Phasing Halo",
+      "skillDescription": "Has a chance to dodge attacks, increase Attack Power by 15% for one round, and increase Shield and Structure values of friendly forces within 4 spaces by 8% at end of the round.",
+      "skillAffectedBy": "Dodge & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 11.0,
+        "speed": 7.0,
+        "dodge": 24.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 11.5,
+        "speed": 7.0,
+        "dodge": 24.3,
+        "electron": 11.9
+      }
+    },
+    {
+      "id": "pernicious-princes",
+      "name": "Pernicious Princes",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Chain Vortex",
+      "skillDescription": "",
+      "skillAffectedBy": "All",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 20.0,
+        "speed": 20.0,
+        "dodge": 20.0,
+        "electron": 20.0
+      },
+      "growthRates": {
+        "accuracy": 19.7,
+        "speed": 21.3,
+        "dodge": 22.0,
+        "electron": 22.2
+      }
+    },
+    {
+      "id": "rays-of-destiny",
+      "name": "Rays of Destiny",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Judgement",
+      "skillDescription": "This skill has a chance to deal an additional 30% Scattering damage to all enemy forces and reflect all absorbed damage to its source.",
+      "skillAffectedBy": "Total Stats",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 21.0,
+        "speed": 12.0,
+        "dodge": 15.0,
+        "electron": 9.0
+      },
+      "growthRates": {
+        "accuracy": 21.9,
+        "speed": 11.1,
+        "dodge": 14.9,
+        "electron": 8.8
+      }
+    },
+    {
+      "id": "rex-scuta",
+      "name": "Rex Scuta",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Immunity",
+      "skillDescription": "",
+      "skillAffectedBy": "All",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 18.0,
+        "speed": 21.0,
+        "dodge": 15.0,
+        "electron": 18.0
+      },
+      "growthRates": {
+        "accuracy": 18.9,
+        "speed": 18.0,
+        "dodge": 15.7,
+        "electron": 17.0
+      }
+    },
+    {
+      "id": "the-ravagers",
+      "name": "The Ravagers",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Smash and Grab",
+      "skillDescription": "If all ships in a single enemy fleet slot are destroyed by ships in a single fleet slot, Attack Power of those ships will double. This buff can be stacked up to 8 times. There is also a chance that those ships will instantly reload all weapons.",
+      "skillAffectedBy": "Accuracy and Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 14.0,
+        "speed": 10.0,
+        "dodge": 13.0,
+        "electron": 11.0
+      },
+      "growthRates": {
+        "accuracy": 13.6,
+        "speed": 8.9,
+        "dodge": 14.9,
+        "electron": 9.8
+      }
+    },
+    {
+      "id": "suicidal-sirens",
+      "name": "Suicidal Sirens",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Risky Surge",
+      "skillDescription": "Chance to deal 3x damage and instantly reload weapons, but also reflects 10% damage to attacking ship.",
+      "skillAffectedBy": "Accuracy & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 31.0,
+        "speed": 3.0,
+        "dodge": 12.0,
+        "electron": 20.0
+      },
+      "growthRates": {
+        "accuracy": 34.8,
+        "speed": 2.6,
+        "dodge": 12.2,
+        "electron": 19.4
+      }
+    },
+    {
+      "id": "summa-cum-laude",
+      "name": "Summa Cum Laude",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Verdant Force",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy & Speed",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 24.0,
+        "speed": 9.0,
+        "dodge": 23.0,
+        "electron": 12.0
+      },
+      "growthRates": {
+        "accuracy": 24.6,
+        "speed": 7.8,
+        "dodge": 19.8,
+        "electron": 10.5
+      }
+    },
+    {
+      "id": "tactical-wizards",
+      "name": "Tactical Wizards",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Bamboozle",
+      "skillDescription": "Chance to avoid damage and increase enemy He3 costs by up to 5 times.",
+      "skillAffectedBy": "Dodge & Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 9.0,
+        "speed": 16.0,
+        "dodge": 12.0,
+        "electron": 22.0
+      },
+      "growthRates": {
+        "accuracy": 9.3,
+        "speed": 16.7,
+        "dodge": 10.9,
+        "electron": 25.2
+      }
+    },
+    {
+      "id": "the-twin-torpedoes",
+      "name": "The Twin Torpedoes",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Sharpshooter Storm",
+      "skillDescription": "This skill increases the critical strike rate of the commanded fleet and the chance of attacking the target twice.",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 30.0,
+        "speed": 0.0,
+        "dodge": 10.0,
+        "electron": 7.0
+      },
+      "growthRates": {
+        "accuracy": 25.5,
+        "speed": 0.0,
+        "dodge": 10.5,
+        "electron": 8.0
+      }
+    },
+    {
+      "id": "victory-roar",
+      "name": "Victory Roar",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Eradicate",
+      "skillDescription": "",
+      "skillAffectedBy": "Accuracy",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 17.0,
+        "speed": 16.0,
+        "dodge": 19.0,
+        "electron": 15.0
+      },
+      "growthRates": {
+        "accuracy": 18.7,
+        "speed": 17.4,
+        "dodge": 19.2,
+        "electron": 15.7
+      }
+    },
+    {
+      "id": "wildfire",
+      "name": "Wildfire",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "Trigger Happy",
+      "skillDescription": "Chance to deal 30% Scattering damage to enemy ships and instantly reload weapons.",
+      "skillAffectedBy": "Accuracy and Electron",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 35.0,
+        "speed": 5.0,
+        "dodge": 9.0,
+        "electron": 18.0
+      },
+      "growthRates": {
+        "accuracy": 30.7,
+        "speed": 5.2,
+        "dodge": 9.3,
+        "electron": 16.4
+      }
+    },
+    {
+      "id": "winter-knights",
+      "name": "Winter Knights",
+      "rarity": "divine",
+      "level": 1,
+      "exp": 0,
+      "expMax": 300,
+      "stars": 1,
+      "skill": "TBD",
+      "skillDescription": "Each time level up, the total increment of four attributes is increased by an additional 5 points.",
+      "skillAffectedBy": "All",
+      "status": "Normal",
+      "stats": {
+        "accuracy": 15.0,
+        "speed": 34.0,
+        "dodge": 30.0,
+        "electron": 20.0
+      },
+      "growthRates": {
+        "accuracy": 16.7,
+        "speed": 38.4,
+        "dodge": 30.1,
+        "electron": 19.3
+      }
+    }
+  ]
+}
