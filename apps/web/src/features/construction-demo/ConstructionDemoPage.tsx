@@ -1,111 +1,72 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { getCatalogItem } from './catalog';
-import {
-  canAfford,
-  loadSave,
-  newInstanceId,
-  persistSave,
-  refund,
-  resetSave,
-  spend,
-} from './storage';
-import type {
-  BuildingTypeId,
-  PlacedBuilding,
-  Resources,
-  Rotation,
-} from './types';
+import { useEffect, useRef, useState } from 'react';
 
-/* ─── Dynamic import of 3D planet (client-only, heavy Three.js) ─── */
-const Go2Planet3D = dynamic(
-  () => import('@/components/game/go2/planet').then((mod) => ({ default: mod.Go2Planet3D })),
-  {
-    ssr: false,
-    loading: () => (
-      <div style={{
-        width: '100vw',
-        height: '100vh',
-        background: '#050a14',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#8bb3d9',
-        fontSize: 16,
-        fontFamily: 'sans-serif',
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 32, marginBottom: 16 }}>🌍</div>
-          <div>Cargando planeta 3D...</div>
-          <div style={{ fontSize: 12, color: '#4a6a8a', marginTop: 8 }}>Preparando terreno y modelos</div>
-        </div>
-      </div>
-    ),
-  }
-);
+/**
+ * ConstructionDemoPage — Loads the 3D planet viewer via iframe.
+ * 
+ * The 3D scene (Three.js + GLB models) lives in /planet-3d/index.html
+ * as a standalone HTML file that loads Three.js from CDN via import map.
+ * 
+ * This avoids npm-installing Three.js into the Next.js build, preventing
+ * the package-lock.json desync issues we had before.
+ */
 
 export function ConstructionDemoPage() {
-  const [resources, setResources] = useState<Resources>(() => loadSave().resources);
-  const [buildings, setBuildings] = useState<PlacedBuilding[]>(() => loadSave().buildings);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Persist on change
   useEffect(() => {
-    persistSave({ version: 1, resources, buildings });
-  }, [resources, buildings]);
+    const iframe = iframeRef.current;
+    if (!iframe) return;
 
-  const handleBuild = useCallback((
-    typeId: BuildingTypeId,
-    col: number,
-    row: number,
-    rotation: Rotation
-  ) => {
-    const def = getCatalogItem(typeId);
-    if (!def) return;
-    const placed: PlacedBuilding = {
-      instanceId: newInstanceId(),
-      typeId,
-      col,
-      row,
-      rotation,
-    };
-    setBuildings((prev) => [...prev, placed]);
-    setResources((r) => spend(r, def.cost));
+    const onLoad = () => setLoading(false);
+    iframe.addEventListener('load', onLoad);
+    return () => iframe.removeEventListener('load', onLoad);
   }, []);
-
-  const handleDelete = useCallback((instanceId: string) => {
-    const target = buildings.find((b) => b.instanceId === instanceId);
-    if (!target) return;
-    const def = getCatalogItem(target.typeId);
-    setBuildings((prev) => prev.filter((b) => b.instanceId !== instanceId));
-    if (def) setResources((r) => refund(r, def.cost));
-  }, [buildings]);
-
-  const handleReset = useCallback(() => {
-    const fresh = resetSave();
-    setResources(fresh.resources);
-    setBuildings(fresh.buildings);
-  }, []);
-
-  const handleCanAfford = useCallback((cost: Resources) => {
-    return canAfford(resources, cost);
-  }, [resources]);
 
   return (
-    <Go2Planet3D
-      resources={resources}
-      buildings={buildings}
-      onBuild={handleBuild}
-      onDelete={handleDelete}
-      onReset={handleReset}
-      canAfford={handleCanAfford}
-      spendResources={(cost) => setResources((r) => spend(r, cost))}
-      refundResources={(cost) => setResources((r) => refund(r, cost))}
-      getBuildingCost={(typeId) => {
-        const def = getCatalogItem(typeId);
-        return def ? def.cost : null;
-      }}
-    />
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#050a14' }}>
+      {loading && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#8bb3d9',
+          fontSize: 16,
+          fontFamily: 'system-ui, sans-serif',
+          zIndex: 10,
+        }}>
+          <div style={{
+            width: 40,
+            height: 40,
+            border: '3px solid #1a3a5c',
+            borderTopColor: '#4a9eff',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            marginBottom: 16,
+          }} />
+          <div>Cargando planeta 3D...</div>
+          <div style={{ fontSize: 12, color: '#4a6a8a', marginTop: 8 }}>Preparando terreno y modelos GLB</div>
+          <style jsx>{`
+            @keyframes spin { to { transform: rotate(360deg); } }
+          `}</style>
+        </div>
+      )}
+      <iframe
+        ref={iframeRef}
+        src="/planet-3d/index.html"
+        style={{
+          width: '100%',
+          height: '100%',
+          border: 'none',
+          display: 'block',
+        }}
+        allow="fullscreen"
+      />
+    </div>
   );
 }

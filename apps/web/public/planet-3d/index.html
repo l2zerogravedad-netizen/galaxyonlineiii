@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planet 3D — Galaxy Online</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#000; overflow:hidden; font-family:system-ui,sans-serif; }
+#canvas-container { position:absolute; top:0; left:0; width:100%; height:100%; }
+#ui-panel {
+  position:absolute; left:0; top:0; bottom:0; width:220px;
+  background:linear-gradient(180deg,#0a1428,#0d1f3c);
+  border-right:2px solid #1a3a5c; display:flex; flex-direction:column;
+  z-index:10; overflow:hidden;
+}
+#resources { padding:12px 10px; border-bottom:1px solid #1a3a5c; }
+#resources h3 { font-size:11px; color:#8bb3d9; margin-bottom:6px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; }
+.res-row { display:flex; gap:8px; flex-wrap:wrap; }
+.res-badge { background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:bold; display:flex; align-items:center; gap:4px; }
+#buildings { flex:1; overflow-y:auto; padding:8px; }
+#buildings h3 { font-size:10px; color:#5a7a9a; margin-bottom:8px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; }
+.bld-btn { width:100%; padding:8px 10px; margin-bottom:6px; border-radius:8px; border:2px solid; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.15s; background:rgba(0,0,0,0.2); }
+.bld-btn.disabled { opacity:0.4; cursor:not-allowed; border-color:#1a2d44 !important; }
+.bld-btn:not(.disabled):hover { transform:translateX(3px); filter:brightness(1.2); }
+.bld-icon { font-size:20px; }
+.bld-info { text-align:left; flex:1; }
+.bld-name { font-size:12px; font-weight:bold; color:#e0e8f0; }
+.bld-cost { font-size:9px; color:#7a9aba; }
+#actions { padding:10px; border-top:1px solid #1a3a5c; display:flex; gap:6px; }
+.act-btn { flex:1; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); cursor:pointer; font-size:11px; font-weight:bold; }
+#toast { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(10,20,40,0.95); border:1px solid #1a3a5c; border-radius:8px; padding:10px 20px; color:#e0e8f0; font-size:13px; z-index:20; display:none; }
+#toast.show { display:block; animation:fadeUp 0.2s ease; }
+#hint { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:rgba(10,20,40,0.9); border:1px solid #1a3a5c; border-radius:8px; padding:8px 16px; color:#8bb3d9; font-size:12px; z-index:20; display:none; }
+#hint.show { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateX(-50%) translateY(10px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
+#loading { position:absolute; inset:0; background:#050a14; display:flex; align-items:center; justify-content:center; color:#8bb3d9; font-size:16px; z-index:100; flex-direction:column; }
+#loading .spinner { width:40px; height:40px; border:3px solid #1a3a5c; border-top-color:#4a9eff; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:16px; }
+@keyframes spin { to{transform:rotate(360deg);} }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="loading"><div class="spinner"></div><div>Cargando planeta 3D...</div></div>
+
+<div id="ui-panel">
+  <div id="resources">
+    <h3>Recursos</h3>
+    <div class="res-row">
+      <div class="res-badge" style="color:#b45309;">M <span id="res-metal">15000</span></div>
+      <div class="res-badge" style="color:#15803d;">E <span id="res-energy">12000</span></div>
+      <div class="res-badge" style="color:#0369a1;">C <span id="res-crystal">10000</span></div>
+    </div>
+  </div>
+  <div id="buildings">
+    <h3>Edificios</h3>
+    <div id="bld-list"></div>
+  </div>
+  <div id="actions">
+    <button class="act-btn" style="background:rgba(220,38,38,0.2);color:#dc2626;border-color:rgba(220,38,38,0.3);" onclick="deleteSelected()">Eliminar</button>
+    <button class="act-btn" style="background:rgba(107,114,128,0.2);color:#9ca3af;border-color:rgba(107,114,128,0.3);" onclick="resetAll()">Reiniciar</button>
+  </div>
+</div>
+
+<div id="canvas-container"></div>
+<div id="toast"></div>
+<div id="hint"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// ─── CONFIG ───
+const GRID_COLS = 12, GRID_ROWS = 10;
+const CELL_W = 3.8, CELL_H = 2.2;
+const GRID_OFF_X = -(GRID_COLS * CELL_W) / 2;
+const GRID_OFF_Z = -(GRID_ROWS * CELL_H) / 2;
+
+const CATALOG = [
+  { id:'metal_mine', name:'Mina de Metal', icon:'⛏', cost:{metal:120,energy:40,crystal:20}, color:'#b45309', accent:'#fbbf24', max:99, glb:'/models/buildings/metal_mine.glb', scale:0.7 },
+  { id:'power_plant', name:'Planta de Energia', icon:'⚡', cost:{metal:200,energy:80,crystal:60}, color:'#15803d', accent:'#4ade80', max:99, glb:'/models/buildings/power_plant.glb', scale:0.8 },
+  { id:'warehouse', name:'Almacen', icon:'📦', cost:{metal:150,energy:50,crystal:100}, color:'#a16207', accent:'#fde68a', max:99, glb:'/models/buildings/warehouse.glb', scale:0.65 },
+  { id:'shipyard', name:'Astillero', icon:'🚀', cost:{metal:800,energy:400,crystal:300}, color:'#1d4ed8', accent:'#60a5fa', max:2, glb:'/models/buildings/shipyard.glb', scale:0.6 },
+  { id:'command_center', name:'Centro de Comando', icon:'🏛', cost:{metal:500,energy:300,crystal:250}, color:'#7c3aed', accent:'#c4b5fd', max:1, glb:'/models/buildings/command_center.glb', scale:0.8 },
+];
+
+// ─── STATE ───
+let resources = { metal:15000, energy:12000, crystal:10000 };
+let buildings = [];
+let placingId = null;
+let placingRot = 0;
+let ghostMesh = null;
+let ghostValid = false;
+let selectedInstance = null;
+let gltfCache = {};
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+let terrainMesh = null;
+let camera, scene, renderer, controls;
+
+// ─── STORAGE ───
+const SK = 'go3-planet-3d-v1';
+function loadSave() {
+  try { const d = JSON.parse(localStorage.getItem(SK)); if(d) { resources=d.resources; buildings=d.buildings||[]; } } catch(e){}
+}
+function save() { localStorage.setItem(SK, JSON.stringify({resources,buildings})); }
+
+// ─── HELPERS ───
+function canAfford(cost) { return resources.metal>=cost.metal && resources.energy>=cost.energy && resources.crystal>=cost.crystal; }
+function spend(cost) { resources.metal-=cost.metal; resources.energy-=cost.energy; resources.crystal-=cost.crystal; }
+function refund(cost) { resources.metal+=cost.metal; resources.energy+=cost.energy; resources.crystal+=cost.crystal; }
+function countType(tid) { return buildings.filter(b=>b.typeId===tid).length; }
+function getDef(tid) { return CATALOG.find(c=>c.id===tid); }
+function newId() { return 'b_'+Date.now()+'_'+Math.random().toString(36).slice(2,7); }
+
+function worldToGrid(wx, wz) {
+  const lx = wx - GRID_OFF_X, lz = wz - GRID_OFF_Z;
+  const row = Math.floor(lz / (CELL_H * 0.5));
+  if(row<0||row>=GRID_ROWS) return null;
+  const off = row%2===0?0:CELL_W*0.5;
+  const col = Math.floor((lx-off)/CELL_W);
+  if(col<0||col>=GRID_COLS) return null;
+  return {col,row};
+}
+function gridToWorld(col, row) {
+  const off = row%2===0?0:CELL_W*0.5;
+  return [GRID_OFF_X+col*CELL_W+off+CELL_W*0.5, 0, GRID_OFF_Z+row*(CELL_H*0.5)+CELL_H*0.5];
+}
+function cellKey(c,r){return c+','+r;}
+function buildOccMap(exclude) {
+  const m = new Map();
+  for(const b of buildings) {
+    if(b.instanceId===exclude) continue;
+    const d = getDef(b.typeId);
+    if(!d) continue;
+    for(let r=b.row;r<b.row+1;r++) for(let c=b.col;c<b.col+1;c++) m.set(cellKey(c,r), b.instanceId);
+  }
+  return m;
+}
+function canPlace(col,row,occ) {
+  if(col<0||row<0||col>=GRID_COLS||row>=GRID_ROWS) return {ok:false,reason:'Fuera de la grilla'};
+  if(occ.has(cellKey(col,row))) return {ok:false,reason:'Ocupado'};
+  return {ok:true};
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function showHint(msg) {
+  const h = document.getElementById('hint');
+  h.textContent = msg; h.classList.add('show');
+}
+function hideHint() { document.getElementById('hint').classList.remove('show'); }
+
+function updateResUI() {
+  document.getElementById('res-metal').textContent = resources.metal.toLocaleString();
+  document.getElementById('res-energy').textContent = resources.energy.toLocaleString();
+  document.getElementById('res-crystal').textContent = resources.crystal.toLocaleString();
+  updateBldButtons();
+}
+
+function updateBldButtons() {
+  CATALOG.forEach(c => {
+    const btn = document.getElementById('btn-'+c.id);
+    if(!btn) return;
+    const ok = canAfford(c.cost) && countType(c.id) < c.max;
+    btn.classList.toggle('disabled', !ok);
+  });
+}
+
+// ─── GLB LOADER ───
+const loader = new GLTFLoader();
+function loadGLB(path) {
+  if(gltfCache[path]) return Promise.resolve(gltfCache[path]);
+  return new Promise((resolve, reject) => {
+    loader.load(path, (gltf) => { gltfCache[path] = gltf.scene; resolve(gltf.scene); }, undefined, reject);
+  });
+}
+
+// ─── TERRAIN SHADER ───
+const terrainVert = `
+varying vec2 vUv; varying vec3 vPos;
+void main(){ vUv=uv; vPos=(modelMatrix*vec4(position,1.0)).xyz; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }
+`;
+const terrainFrag = `
+varying vec2 vUv; varying vec3 vPos;
+float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+float noise(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y); }
+float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<5;i++){v+=a*noise(p);p*=2.0;a*=0.5;} return v; }
+void main(){
+  float n=fbm(vPos.xz*0.15), n2=fbm(vPos.xz*2.0+vec2(5.3,1.7));
+  vec3 c=mix(vec3(0.76,0.70,0.50),vec3(0.62,0.55,0.37),n);
+  c=mix(c,vec3(0.48,0.42,0.28),n2*0.6);
+  c=mix(c,vec3(0.40,0.36,0.30),smoothstep(0.6,0.9,n2)*0.3);
+  float gx=step(0.95,fract(vPos.x/3.8+0.5)), gz=step(0.95,fract(vPos.z/2.2+0.5));
+  c=mix(c,vec3(0.35,0.30,0.20),max(gx,gz)*0.08);
+  gl_FragColor=vec4(c,1.0);
+}
+`;
+
+// ─── INIT ───
+async function init() {
+  loadSave();
+  updateResUI();
+  buildUI();
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x050a14);
+  scene.fog = new THREE.Fog(0x050a14, 40, 90);
+
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 500);
+  camera.position.set(25, 20, 25);
+
+  renderer = new THREE.WebGLRenderer({ antialias:true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.minPolarAngle = 0.2;
+  controls.maxPolarAngle = Math.PI/2.2;
+  controls.minDistance = 10;
+  controls.maxDistance = 60;
+  controls.target.set(0, 0, 0);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffe8cc, 0.6));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 1.2);
+  sun.position.set(20, 30, 15);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.camera.left = -40; sun.shadow.camera.right = 40;
+  sun.shadow.camera.top = -40; sun.shadow.camera.bottom = 40;
+  scene.add(sun);
+  scene.add(new THREE.DirectionalLight(0xaaccff, 0.3).translateOnAxis(new THREE.Vector3(-15,10,-10),1));
+
+  // Terrain
+  const tGeo = new THREE.PlaneGeometry(60, 40);
+  const tMat = new THREE.ShaderMaterial({ vertexShader:terrainVert, fragmentShader:terrainFrag, side:THREE.DoubleSide });
+  terrainMesh = new THREE.Mesh(tGeo, tMat);
+  terrainMesh.rotation.x = -Math.PI/2;
+  terrainMesh.position.y = -0.5;
+  terrainMesh.receiveShadow = true;
+  scene.add(terrainMesh);
+
+  // Grid cells (subtle)
+  for(let r=0;r<GRID_ROWS;r++) for(let c=0;c<GRID_COLS;c++) {
+    const [x,y,z] = gridToWorld(c,r);
+    const g = new THREE.Mesh(new THREE.BoxGeometry(3.6,0.02,2.0), new THREE.MeshBasicMaterial({color:0x4a7c59,transparent:true,opacity:0.1}));
+    g.position.set(x, 0.02, z); scene.add(g);
+  }
+
+  // Place existing buildings
+  for(const b of buildings) await placeBuildingMesh(b);
+
+  // Event listeners
+  renderer.domElement.addEventListener('pointermove', onPointerMove);
+  renderer.domElement.addEventListener('click', onClick);
+  window.addEventListener('keydown', onKey);
+  window.addEventListener('resize', onResize);
+
+  document.getElementById('loading').style.display = 'none';
+  animate();
+}
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function getRayIntersection(clientX, clientY) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  if(!terrainMesh) return null;
+  const hits = raycaster.intersectObject(terrainMesh);
+  return hits.length > 0 ? hits[0].point : null;
+}
+
+function onPointerMove(e) {
+  if(!placingId) return;
+  const point = getRayIntersection(e.clientX, e.clientY);
+  if(!point) return;
+  const grid = worldToGrid(point.x, point.z);
+  if(!grid) { hideGhost(); return; }
+  updateGhost(grid.col, grid.row);
+}
+
+function onClick(e) {
+  if(!placingId) return;
+  const point = getRayIntersection(e.clientX, e.clientY);
+  if(!point) return;
+  const grid = worldToGrid(point.x, point.z);
+  if(!grid) { toast('Fuera de la grilla'); return; }
+
+  const def = getDef(placingId);
+  if(!def) return;
+  const occ = buildOccMap();
+  const place = canPlace(grid.col, grid.row, occ);
+  const afford = canAfford(def.cost);
+  const maxOk = countType(placingId) < def.max;
+
+  if(place.ok && afford && maxOk) {
+    const b = { instanceId:newId(), typeId:placingId, col:grid.col, row:grid.row, rotation:placingRot };
+    buildings.push(b);
+    spend(def.cost);
+    placeBuildingMesh(b);
+    save(); updateResUI();
+    toast(def.name + ' construido');
+    cancelPlace();
+  } else {
+    toast(!afford?'Recursos insuficientes':!maxOk?'Limite alcanzado':place.reason);
+  }
+}
+
+function onKey(e) {
+  if(e.key==='Escape') cancelPlace();
+  if((e.key==='r'||e.key==='R') && placingId) {
+    placingRot = placingRot===0?90:placingRot===90?180:placingRot===180?270:0;
+    if(ghostMesh) ghostMesh.rotation.y = placingRot * Math.PI/180;
+    toast('Rotacion ' + placingRot + '°');
+  }
+}
+
+// ─── GHOST ───
+async function updateGhost(col, row) {
+  if(!placingId) return;
+  const def = getDef(placingId);
+  if(!def) return;
+  const [x,y,z] = gridToWorld(col, row);
+
+  if(!ghostMesh) {
+    try {
+      const scene_glb = await loadGLB(def.glb);
+      ghostMesh = scene_glb.clone(true);
+      ghostMesh.traverse(c=>{ if(c.isMesh){ c.material=c.material.clone(); c.material.transparent=true; c.material.opacity=0.5; } });
+      ghostMesh.scale.setScalar(def.scale);
+      scene.add(ghostMesh);
+    } catch(err) { return; }
+  }
+  ghostMesh.position.set(x, y, z);
+  const occ = buildOccMap();
+  const place = canPlace(col, row, occ);
+  ghostValid = place.ok && canAfford(def.cost) && countType(placingId)<def.max;
+}
+
+function hideGhost() {
+  if(ghostMesh) { scene.remove(ghostMesh); ghostMesh = null; }
+}
+
+// ─── PLACE BUILDING ───
+async function placeBuildingMesh(b) {
+  const def = getDef(b.typeId);
+  if(!def) return;
+  try {
+    const s = await loadGLB(def.glb);
+    const m = s.clone(true);
+    m.traverse(c=>{ if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; } });
+    m.scale.setScalar(def.scale);
+    const [x,y,z] = gridToWorld(b.col, b.row);
+    m.position.set(x, y, z);
+    m.rotation.y = b.rotation * Math.PI/180;
+    m.userData = { instanceId: b.instanceId };
+    scene.add(m);
+  } catch(err) { console.warn('Failed to load GLB for', b.typeId, err); }
+}
+
+// ─── UI BUILDERS ───
+function buildUI() {
+  const list = document.getElementById('bld-list');
+  CATALOG.forEach(c => {
+    const btn = document.createElement('button');
+    btn.id = 'btn-'+c.id;
+    btn.className = 'bld-btn';
+    btn.style.borderColor = c.accent + '44';
+    btn.innerHTML = `<span class="bld-icon">${c.icon}</span><div class="bld-info"><div class="bld-name">${c.name}</div><div class="bld-cost">${c.cost.metal}M ${c.cost.energy}E ${c.cost.crystal}C${c.max<99?' max '+c.max:''}</div></div>`;
+    btn.onclick = () => selectBuilding(c.id);
+    list.appendChild(btn);
+  });
+}
+
+function selectBuilding(id) {
+  const def = getDef(id);
+  if(!def) return;
+  if(!canAfford(def.cost)) { toast('Recursos insuficientes'); return; }
+  if(countType(id) >= def.max) { toast('Maximo alcanzado'); return; }
+  placingId = id; placingRot = 0;
+  hideGhost(); ghostMesh = null;
+  showHint(def.name + ': click en el terreno para colocar | R rotar | ESC cancelar');
+  updateBldButtons();
+}
+
+function cancelPlace() {
+  placingId = null; placingRot = 0;
+  hideGhost(); ghostMesh = null;
+  hideHint();
+  updateBldButtons();
+}
+
+// ─── GLOBAL ACTIONS ───
+window.deleteSelected = function() {
+  if(!selectedInstance) { toast('Selecciona un edificio primero'); return; }
+  const b = buildings.find(x=>x.instanceId===selectedInstance);
+  if(!b) return;
+  const def = getDef(b.typeId);
+  buildings = buildings.filter(x=>x.instanceId!==selectedInstance);
+  if(def) refund(def.cost);
+  // Remove mesh
+  scene.traverse(c=>{ if(c.userData && c.userData.instanceId===selectedInstance) { c.parent.remove(c); } });
+  selectedInstance = null; save(); updateResUI();
+  toast('Edificio eliminado');
+};
+
+window.resetAll = function() {
+  if(!confirm('Reiniciar todo?')) return;
+  resources = {metal:15000, energy:12000, crystal:10000};
+  buildings = [];
+  // Remove all building meshes
+  const toRemove = [];
+  scene.traverse(c=>{ if(c.userData && c.userData.instanceId) toRemove.push(c); });
+  toRemove.forEach(c=>c.parent.remove(c));
+  save(); updateResUI();
+  toast('Partida reiniciada');
+};
+
+// ─── ANIMATE ───
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+// ─── START ───
+init().catch(err => { console.error('Init failed:', err); document.getElementById('loading').innerHTML = '<div style="color:#ff4444;">Error: ' + err.message + '</div>'; });
+</script>
+</body>
+</html>

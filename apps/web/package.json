@@ -10,15 +10,12 @@
   },
   "dependencies": {
     "@galaxy/shared": "*",
-    "@react-three/drei": "^9.105.0",
-    "@react-three/fiber": "^8.16.0",
     "@tanstack/react-query": "^5.32.0",
     "axios": "1.16.1",
     "lucide-react": "^0.460.0",
     "next": "16.2.6",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "three": "^0.160.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
