@@ -193,15 +193,9 @@ export function Go2GalaxyScreen() {
       {/* ==================== MINIMAP (Bottom Right, above nav) ==================== */}
       <div className="absolute bottom-[72px] right-3 z-30">
         <Go2GalaxyMinimap
-          planets={GALAXY_PLANETS}
           camera={camera}
-          mapWidth={GALAXY_PLANETS.reduce((max, p) => Math.max(max, p.x), 0) + 2}
-          mapHeight={GALAXY_PLANETS.reduce((max, p) => Math.max(max, p.y), 0) + 2}
-          viewportWidth={typeof window !== 'undefined' ? window.innerWidth : 1200}
-          viewportHeight={typeof window !== 'undefined' ? window.innerHeight : 800}
-          onViewportClick={(worldX, worldY) => {
-            console.log('Minimap click:', worldX, worldY);
-          }}
+          canvasWidth={typeof window !== 'undefined' ? window.innerWidth : 1200}
+          canvasHeight={typeof window !== 'undefined' ? window.innerHeight : 800}
         />
       </div>
 
