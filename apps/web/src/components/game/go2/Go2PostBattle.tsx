@@ -363,7 +363,7 @@ function RewardsPanel({ rewards }: { rewards: BattleReward[] }) {
       <div className="space-y-1">
         {rewards.map((reward, idx) => (
           <div key={idx} className="flex items-center gap-2 text-xs text-white/80">
-            <span className="text-base">{RewardIcon(reward.type)}</span>
+            <span className="text-base"><RewardIcon type={reward.type} /></span>
             <span className="font-bold">{reward.name}:</span>
             <span className="font-bold text-[#4caf50]">
               +{reward.amount.toLocaleString()}
