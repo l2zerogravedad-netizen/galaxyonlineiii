@@ -535,22 +535,18 @@ async function init() {
     g.position.set(x, 0.02, z); scene.add(g);
   }
 
-  // Place existing buildings
-  for(const b of buildings) await placeBuildingMesh(b);
-
-  // Pre-load all GLBs for instant placement
-  for(const item of ALL_ITEMS) {
-    try { await loadGLB(item.glb); } catch(e) {}
-  }
-
   // Events
   renderer.domElement.addEventListener('pointermove', onPointerMove);
   renderer.domElement.addEventListener('click', onClick);
   window.addEventListener('keydown', onKey);
   window.addEventListener('resize', onResize);
 
+  // Hide loading immediately — scene is ready
   document.getElementById('loading').classList.add('done');
   setTimeout(()=>document.getElementById('loading').style.display='none', 500);
+
+  // Load saved buildings in background (non-blocking)
+  for(const b of buildings) placeBuildingMesh(b);
 
   animate();
 }
