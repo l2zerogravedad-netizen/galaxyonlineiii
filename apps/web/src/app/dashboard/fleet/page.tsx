@@ -69,7 +69,7 @@ export default function FleetPage() {
         {tab === 'fleets' && <Go2FleetSystem commanders={COMMANDERS} />}
         {tab === 'merge' && <Go2CommanderMerge commanders={COMMANDERS} mergeScrolls={sampleScrolls.reduce((sum, s) => sum + s.quantity, 0)} />}
         {tab === 'gems' && <Go2GemInterface equippedGems={[null,null,null,null,null,null,null,null]} availableGems={sampleGems} onEquipGem={()=>{}} onUnequipGem={()=>{}} />}
-        {tab === 'hospital' && <Go2Hospital beds={3} injured={[]} />}
+        {tab === 'hospital' && <Go2Hospital totalBeds={3} beds={[]} />}
         {tab === 'draw' && <Go2DrawingSystem corsairsGold={1250} />}
         {tab === 'inventory' && <Go2InventoryGrid commanders={COMMANDERS} />}
       </div>
