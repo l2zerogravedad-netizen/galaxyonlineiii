@@ -6,37 +6,50 @@
 <title>Planet 3D — Galaxy Online</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { background:#000; overflow:hidden; font-family:system-ui,sans-serif; }
+body { background:#000; overflow:hidden; font-family:system-ui,-apple-system,sans-serif; }
 #canvas-container { position:absolute; top:0; left:0; width:100%; height:100%; }
 #ui-panel {
-  position:absolute; left:0; top:0; bottom:0; width:220px;
-  background:linear-gradient(180deg,#0a1428,#0d1f3c);
-  border-right:2px solid #1a3a5c; display:flex; flex-direction:column;
-  z-index:10; overflow:hidden;
+  position:absolute; left:0; top:0; bottom:0; width:240px;
+  background:linear-gradient(180deg,#0a1428ee,#0d1f3cee);
+  border-right:2px solid #1a3a5c;
+  display:flex; flex-direction:column; z-index:10; overflow:hidden;
+  backdrop-filter:blur(8px);
 }
 #resources { padding:12px 10px; border-bottom:1px solid #1a3a5c; }
 #resources h3 { font-size:11px; color:#8bb3d9; margin-bottom:6px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; }
-.res-row { display:flex; gap:8px; flex-wrap:wrap; }
-.res-badge { background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:bold; display:flex; align-items:center; gap:4px; }
+.res-row { display:flex; gap:6px; flex-wrap:wrap; }
+.res-badge { background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:3px 8px; font-size:11px; font-weight:bold; display:flex; align-items:center; gap:3px; transition:all 0.2s; }
 #buildings { flex:1; overflow-y:auto; padding:8px; }
-#buildings h3 { font-size:10px; color:#5a7a9a; margin-bottom:8px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; }
-.bld-btn { width:100%; padding:8px 10px; margin-bottom:6px; border-radius:8px; border:2px solid; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.15s; background:rgba(0,0,0,0.2); }
-.bld-btn.disabled { opacity:0.4; cursor:not-allowed; border-color:#1a2d44 !important; }
-.bld-btn:not(.disabled):hover { transform:translateX(3px); filter:brightness(1.2); }
-.bld-icon { font-size:20px; }
-.bld-info { text-align:left; flex:1; }
-.bld-name { font-size:12px; font-weight:bold; color:#e0e8f0; }
+#buildings h3 { font-size:10px; color:#5a7a9a; margin:10px 0 6px; font-weight:bold; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid #1a3a5c44; padding-bottom:3px; }
+#buildings h3:first-child { margin-top:0; }
+.bld-btn { width:100%; padding:7px 8px; margin-bottom:5px; border-radius:8px; border:2px solid; cursor:pointer; display:flex; align-items:center; gap:7px; transition:all 0.15s; background:rgba(0,0,0,0.2); position:relative; overflow:hidden; }
+.bld-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.04),transparent); opacity:0; transition:opacity 0.2s; }
+.bld-btn:hover::before { opacity:1; }
+.bld-btn.disabled { opacity:0.35; cursor:not-allowed; border-color:#1a2d44 !important; }
+.bld-btn:not(.disabled):hover { transform:translateX(3px); filter:brightness(1.15); }
+.bld-btn:not(.disabled):active { transform:translateX(1px) scale(0.98); }
+.bld-btn.selected { box-shadow:0 0 12px rgba(74,158,255,0.3); border-color:#4a9eff !important; }
+.bld-icon { font-size:18px; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+.bld-info { text-align:left; flex:1; min-width:0; }
+.bld-name { font-size:11px; font-weight:bold; color:#e0e8f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .bld-cost { font-size:9px; color:#7a9aba; }
 #actions { padding:10px; border-top:1px solid #1a3a5c; display:flex; gap:6px; }
-.act-btn { flex:1; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); cursor:pointer; font-size:11px; font-weight:bold; }
-#toast { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(10,20,40,0.95); border:1px solid #1a3a5c; border-radius:8px; padding:10px 20px; color:#e0e8f0; font-size:13px; z-index:20; display:none; }
-#toast.show { display:block; animation:fadeUp 0.2s ease; }
-#hint { position:absolute; top:10px; left:50%; transform:translateX(-50%); background:rgba(10,20,40,0.9); border:1px solid #1a3a5c; border-radius:8px; padding:8px 16px; color:#8bb3d9; font-size:12px; z-index:20; display:none; }
-#hint.show { display:block; }
-@keyframes fadeUp { from{opacity:0;transform:translateX(-50%) translateY(10px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
-#loading { position:absolute; inset:0; background:#050a14; display:flex; align-items:center; justify-content:center; color:#8bb3d9; font-size:16px; z-index:100; flex-direction:column; }
-#loading .spinner { width:40px; height:40px; border:3px solid #1a3a5c; border-top-color:#4a9eff; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:16px; }
+.act-btn { flex:1; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.12); cursor:pointer; font-size:11px; font-weight:bold; transition:all 0.15s; }
+.act-btn:hover { filter:brightness(1.2); transform:translateY(-1px); }
+#toast { position:absolute; bottom:24px; left:50%; transform:translateX(-50%) translateY(10px); background:rgba(10,20,40,0.95); border:1px solid #1a3a5c; border-radius:10px; padding:10px 24px; color:#e0e8f0; font-size:13px; z-index:20; opacity:0; transition:all 0.3s ease; pointer-events:none; backdrop-filter:blur(4px); }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+#hint { position:absolute; top:12px; left:50%; transform:translateX(-50%); background:rgba(10,20,40,0.92); border:1px solid #2a4a6c; border-radius:10px; padding:8px 20px; color:#8bb3d9; font-size:12px; z-index:20; opacity:0; transition:opacity 0.3s; pointer-events:none; backdrop-filter:blur(4px); }
+#hint.show { opacity:1; }
+#loading { position:absolute; inset:0; background:#050a14; display:flex; align-items:center; justify-content:center; color:#8bb3d9; font-size:16px; z-index:100; flex-direction:column; transition:opacity 0.5s; }
+#loading .spinner { width:48px; height:48px; border:3px solid #1a3a5c; border-top-color:#4a9eff; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:16px; box-shadow:0 0 20px rgba(74,158,255,0.2); }
+#loading.done { opacity:0; pointer-events:none; }
 @keyframes spin { to{transform:rotate(360deg);} }
+#tab-bar { display:flex; gap:2px; padding:8px 8px 0; border-bottom:1px solid #1a3a5c; }
+.tab { flex:1; padding:6px; border-radius:6px 6px 0 0; border:none; background:transparent; color:#5a7a9a; font-size:10px; font-weight:bold; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.15s; border-bottom:2px solid transparent; }
+.tab:hover { color:#8bb3d9; background:rgba(255,255,255,0.03); }
+.tab.active { color:#4a9eff; border-bottom-color:#4a9eff; background:rgba(74,158,255,0.05); }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
 </style>
 <script type="importmap">
 {
@@ -48,24 +61,30 @@ body { background:#000; overflow:hidden; font-family:system-ui,sans-serif; }
 </script>
 </head>
 <body>
-<div id="loading"><div class="spinner"></div><div>Cargando planeta 3D...</div></div>
+<div id="loading"><div class="spinner"></div><div>Cargando planeta 3D...</div><div style="font-size:12px;color:#4a6a8a;margin-top:8px">Galaxy Online III</div></div>
 
 <div id="ui-panel">
   <div id="resources">
     <h3>Recursos</h3>
     <div class="res-row">
-      <div class="res-badge" style="color:#b45309;">M <span id="res-metal">15000</span></div>
-      <div class="res-badge" style="color:#15803d;">E <span id="res-energy">12000</span></div>
-      <div class="res-badge" style="color:#0369a1;">C <span id="res-crystal">10000</span></div>
+      <div class="res-badge" style="color:#f59e0b;">M <span id="res-metal">15000</span></div>
+      <div class="res-badge" style="color:#22c55e;">E <span id="res-energy">12000</span></div>
+      <div class="res-badge" style="color:#3b82f6;">C <span id="res-crystal">10000</span></div>
     </div>
   </div>
+  <div id="tab-bar">
+    <button class="tab active" data-tab="buildings-tab" onclick="switchTab(this)">Edificios</button>
+    <button class="tab" data-tab="ships-tab" onclick="switchTab(this)">Naves</button>
+    <button class="tab" data-tab="props-tab" onclick="switchTab(this)">Props</button>
+  </div>
   <div id="buildings">
-    <h3>Edificios</h3>
-    <div id="bld-list"></div>
+    <div id="buildings-tab" class="tab-content active"><div id="bld-list"></div></div>
+    <div id="ships-tab" class="tab-content"><div id="ship-list"></div></div>
+    <div id="props-tab" class="tab-content"><div id="prop-list"></div></div>
   </div>
   <div id="actions">
-    <button class="act-btn" style="background:rgba(220,38,38,0.2);color:#dc2626;border-color:rgba(220,38,38,0.3);" onclick="deleteSelected()">Eliminar</button>
-    <button class="act-btn" style="background:rgba(107,114,128,0.2);color:#9ca3af;border-color:rgba(107,114,128,0.3);" onclick="resetAll()">Reiniciar</button>
+    <button class="act-btn" style="background:rgba(220,38,38,0.15);color:#ef4444;" onclick="deleteSelected()">Eliminar</button>
+    <button class="act-btn" style="background:rgba(107,114,128,0.15);color:#9ca3af;" onclick="resetAll()">Reiniciar</button>
   </div>
 </div>
 
@@ -78,116 +97,358 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// ─── CONFIG ───
+// ═══════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════
 const GRID_COLS = 12, GRID_ROWS = 10;
 const CELL_W = 3.8, CELL_H = 2.2;
 const GRID_OFF_X = -(GRID_COLS * CELL_W) / 2;
 const GRID_OFF_Z = -(GRID_ROWS * CELL_H) / 2;
 
-const CATALOG = [
-  { id:'metal_mine', name:'Mina de Metal', icon:'⛏', cost:{metal:120,energy:40,crystal:20}, color:'#b45309', accent:'#fbbf24', max:99, glb:'/models/buildings/metal_mine.glb', scale:0.7 },
-  { id:'power_plant', name:'Planta de Energia', icon:'⚡', cost:{metal:200,energy:80,crystal:60}, color:'#15803d', accent:'#4ade80', max:99, glb:'/models/buildings/power_plant.glb', scale:0.8 },
-  { id:'warehouse', name:'Almacen', icon:'📦', cost:{metal:150,energy:50,crystal:100}, color:'#a16207', accent:'#fde68a', max:99, glb:'/models/buildings/warehouse.glb', scale:0.65 },
-  { id:'shipyard', name:'Astillero', icon:'🚀', cost:{metal:800,energy:400,crystal:300}, color:'#1d4ed8', accent:'#60a5fa', max:2, glb:'/models/buildings/shipyard.glb', scale:0.6 },
-  { id:'command_center', name:'Centro de Comando', icon:'🏛', cost:{metal:500,energy:300,crystal:250}, color:'#7c3aed', accent:'#c4b5fd', max:1, glb:'/models/buildings/command_center.glb', scale:0.8 },
+// ═══════════════════════════════════════════════════════════
+// CATALOG — 3 categories
+// ═══════════════════════════════════════════════════════════
+const BUILDING_CAT = [
+  { id:'metal_mine', name:'Mina de Metal', icon:'⛏', cost:{metal:120,energy:40,crystal:20}, color:'#b45309', accent:'#fbbf24', max:99, glb:'/models/buildings/metal_mine.glb', scale:0.7, cat:'building' },
+  { id:'power_plant', name:'Planta de Energia', icon:'⚡', cost:{metal:200,energy:80,crystal:60}, color:'#15803d', accent:'#4ade80', max:99, glb:'/models/buildings/power_plant.glb', scale:0.8, cat:'building' },
+  { id:'warehouse', name:'Almacen', icon:'📦', cost:{metal:150,energy:50,crystal:100}, color:'#a16207', accent:'#fde68a', max:99, glb:'/models/buildings/warehouse.glb', scale:0.65, cat:'building' },
+  { id:'shipyard', name:'Astillero', icon:'🚀', cost:{metal:800,energy:400,crystal:300}, color:'#1d4ed8', accent:'#60a5fa', max:2, glb:'/models/buildings/shipyard.glb', scale:0.6, cat:'building' },
+  { id:'command_center', name:'Centro de Comando', icon:'🏛', cost:{metal:500,energy:300,crystal:250}, color:'#7c3aed', accent:'#c4b5fd', max:1, glb:'/models/buildings/command_center.glb', scale:0.8, cat:'building' },
 ];
 
-// ─── STATE ───
+const SHIP_CAT = [
+  { id:'fighter', name:'Caza Ligero', icon:'✈', cost:{metal:300,energy:150,crystal:100}, color:'#3b82f6', accent:'#60a5fa', max:20, glb:'/models/ships/fighter.glb', scale:0.5, cat:'ship' },
+  { id:'frigate', name:'Fragata', icon:'🛥', cost:{metal:600,energy:300,crystal:200}, color:'#06b6d4', accent:'#22d3ee', max:10, glb:'/models/ships/frigate.glb', scale:0.5, cat:'ship' },
+  { id:'cruiser', name:'Crucero', icon:'🚢', cost:{metal:1000,energy:500,crystal:400}, color:'#8b5cf6', accent:'#a78bfa', max:5, glb:'/models/ships/cruiser.glb', scale:0.45, cat:'ship' },
+  { id:'battleship', name:'Acorazado', icon:'⚓', cost:{metal:2000,energy:1000,crystal:800}, color:'#ef4444', accent:'#f87171', max:2, glb:'/models/ships/battleship.glb', scale:0.4, cat:'ship' },
+];
+
+const PROP_CAT = [
+  { id:'dome', name:'Domo Geodesico', icon:'🌐', cost:{metal:80,energy:20,crystal:10}, color:'#10b981', accent:'#34d399', max:50, glb:'/models/props/dome.glb', scale:0.8, cat:'prop' },
+  { id:'solar_array', name:'Panel Solar', icon:'☀', cost:{metal:50,energy:10,crystal:5}, color:'#f59e0b', accent:'#fbbf24', max:50, glb:'/models/props/solar_array.glb', scale:0.7, cat:'prop' },
+  { id:'antenna', name:'Antena', icon:'📡', cost:{metal:40,energy:30,crystal:20}, color:'#6b7280', accent:'#9ca3af', max:50, glb:'/models/props/antenna.glb', scale:0.8, cat:'prop' },
+  { id:'radar', name:'Radar', icon:'📶', cost:{metal:60,energy:40,crystal:10}, color:'#14b8a6', accent:'#2dd4bf', max:30, glb:'/models/props/radar.glb', scale:0.8, cat:'prop' },
+  { id:'rock_large', name:'Roca', icon:'🪨', cost:{metal:0,energy:0,crystal:0}, color:'#78716c', accent:'#a8a29e', max:99, glb:'/models/props/rock_large.glb', scale:1.0, cat:'prop' },
+  { id:'planet_small', name:'Planeta Deco', icon:'🪐', cost:{metal:0,energy:0,crystal:0}, color:'#8b5cf6', accent:'#a78bfa', max:10, glb:'/models/props/planet_small.glb', scale:0.6, cat:'prop' },
+];
+
+const ALL_ITEMS = [...BUILDING_CAT, ...SHIP_CAT, ...PROP_CAT];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
 let resources = { metal:15000, energy:12000, crystal:10000 };
 let buildings = [];
 let placingId = null;
 let placingRot = 0;
 let ghostMesh = null;
-let ghostValid = false;
 let selectedInstance = null;
 let gltfCache = {};
-let raycaster = new THREE.Raycaster();
-let mouse = new THREE.Vector2();
-let terrainMesh = null;
-let camera, scene, renderer, controls;
+let scene, camera, renderer, controls;
+let clock = new THREE.Clock();
 
-// ─── STORAGE ───
-const SK = 'go3-planet-3d-v1';
-function loadSave() {
-  try { const d = JSON.parse(localStorage.getItem(SK)); if(d) { resources=d.resources; buildings=d.buildings||[]; } } catch(e){}
-}
-function save() { localStorage.setItem(SK, JSON.stringify({resources,buildings})); }
+const SK = 'go3-planet-v2';
+function loadSave() { try { const d=JSON.parse(localStorage.getItem(SK)); if(d){resources=d.resources||resources; buildings=d.buildings||[];} }catch(e){} }
+function save() { localStorage.setItem(SK, JSON.stringify({resources, buildings})); }
 
-// ─── HELPERS ───
+function getDef(id) { return ALL_ITEMS.find(c=>c.id===id); }
 function canAfford(cost) { return resources.metal>=cost.metal && resources.energy>=cost.energy && resources.crystal>=cost.crystal; }
-function spend(cost) { resources.metal-=cost.metal; resources.energy-=cost.energy; resources.crystal-=cost.crystal; }
-function refund(cost) { resources.metal+=cost.metal; resources.energy+=cost.energy; resources.crystal+=cost.crystal; }
-function countType(tid) { return buildings.filter(b=>b.typeId===tid).length; }
-function getDef(tid) { return CATALOG.find(c=>c.id===tid); }
+function spendCost(cost) { resources.metal-=cost.metal; resources.energy-=cost.energy; resources.crystal-=cost.crystal; }
+function refundCost(cost) { resources.metal+=cost.metal; resources.energy+=cost.energy; resources.crystal+=cost.crystal; }
+function countType(id) { return buildings.filter(b=>b.typeId===id).length; }
 function newId() { return 'b_'+Date.now()+'_'+Math.random().toString(36).slice(2,7); }
 
 function worldToGrid(wx, wz) {
-  const lx = wx - GRID_OFF_X, lz = wz - GRID_OFF_Z;
-  const row = Math.floor(lz / (CELL_H * 0.5));
-  if(row<0||row>=GRID_ROWS) return null;
-  const off = row%2===0?0:CELL_W*0.5;
-  const col = Math.floor((lx-off)/CELL_W);
-  if(col<0||col>=GRID_COLS) return null;
+  const lx=wx-GRID_OFF_X, lz=wz-GRID_OFF_Z;
+  const row=Math.floor(lz/(CELL_H*0.5));
+  if(row<0||row>=GRID_ROWS)return null;
+  const off=row%2===0?0:CELL_W*0.5;
+  const col=Math.floor((lx-off)/CELL_W);
+  if(col<0||col>=GRID_COLS)return null;
   return {col,row};
 }
-function gridToWorld(col, row) {
-  const off = row%2===0?0:CELL_W*0.5;
+function gridToWorld(col,row) {
+  const off=row%2===0?0:CELL_W*0.5;
   return [GRID_OFF_X+col*CELL_W+off+CELL_W*0.5, 0, GRID_OFF_Z+row*(CELL_H*0.5)+CELL_H*0.5];
 }
 function cellKey(c,r){return c+','+r;}
+
 function buildOccMap(exclude) {
-  const m = new Map();
+  const m=new Map();
   for(const b of buildings) {
-    if(b.instanceId===exclude) continue;
-    const d = getDef(b.typeId);
-    if(!d) continue;
-    for(let r=b.row;r<b.row+1;r++) for(let c=b.col;c<b.col+1;c++) m.set(cellKey(c,r), b.instanceId);
+    if(b.instanceId===exclude)continue;
+    const d=getDef(b.typeId); if(!d)continue;
+    m.set(cellKey(b.col,b.row), b.instanceId);
   }
   return m;
 }
 function canPlace(col,row,occ) {
-  if(col<0||row<0||col>=GRID_COLS||row>=GRID_ROWS) return {ok:false,reason:'Fuera de la grilla'};
-  if(occ.has(cellKey(col,row))) return {ok:false,reason:'Ocupado'};
+  if(col<0||row<0||col>=GRID_COLS||row>=GRID_ROWS)return {ok:false,reason:'Fuera de la grilla'};
+  if(occ.has(cellKey(col,row)))return {ok:false,reason:'Ocupado'};
   return {ok:true};
 }
 
 function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2200);
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
 }
 function showHint(msg) {
-  const h = document.getElementById('hint');
-  h.textContent = msg; h.classList.add('show');
+  const h=document.getElementById('hint');
+  h.textContent=msg; h.classList.add('show');
 }
 function hideHint() { document.getElementById('hint').classList.remove('show'); }
 
 function updateResUI() {
-  document.getElementById('res-metal').textContent = resources.metal.toLocaleString();
-  document.getElementById('res-energy').textContent = resources.energy.toLocaleString();
-  document.getElementById('res-crystal').textContent = resources.crystal.toLocaleString();
-  updateBldButtons();
+  document.getElementById('res-metal').textContent=resources.metal.toLocaleString();
+  document.getElementById('res-energy').textContent=resources.energy.toLocaleString();
+  document.getElementById('res-crystal').textContent=resources.crystal.toLocaleString();
+  updateAllButtons();
 }
 
-function updateBldButtons() {
-  CATALOG.forEach(c => {
-    const btn = document.getElementById('btn-'+c.id);
-    if(!btn) return;
-    const ok = canAfford(c.cost) && countType(c.id) < c.max;
-    btn.classList.toggle('disabled', !ok);
-  });
-}
-
-// ─── GLB LOADER ───
+// ═══════════════════════════════════════════════════════════
+// GLB LOADER
+// ═══════════════════════════════════════════════════════════
 const loader = new GLTFLoader();
 function loadGLB(path) {
   if(gltfCache[path]) return Promise.resolve(gltfCache[path]);
-  return new Promise((resolve, reject) => {
-    loader.load(path, (gltf) => { gltfCache[path] = gltf.scene; resolve(gltf.scene); }, undefined, reject);
+  return new Promise((resolve,reject)=>{
+    loader.load(path,(gltf)=>{ gltfCache[path]=gltf.scene; resolve(gltf.scene); },undefined,reject);
   });
 }
 
-// ─── TERRAIN SHADER ───
+// ═══════════════════════════════════════════════════════════
+// FIX MATERIALS — prevents gray/colorless look
+// ═══════════════════════════════════════════════════════════
+function fixMaterials(mesh, isGhost=false) {
+  mesh.traverse(c=>{
+    if(c.isMesh && c.material) {
+      c.castShadow=true; c.receiveShadow=true;
+      if(Array.isArray(c.material)) {
+        c.material = c.material.map(m => {
+          const clone = m.clone();
+          clone.metalness = Math.min(clone.metalness||0, 0.3);
+          clone.roughness = Math.max(clone.roughness||0.4, 0.5);
+          clone.emissive = new THREE.Color(0x000000);
+          clone.emissiveIntensity = 0;
+          if(isGhost){ clone.transparent=true; clone.opacity=0.5; }
+          clone.needsUpdate = true;
+          return clone;
+        });
+      } else {
+        c.material = c.material.clone();
+        c.material.metalness = Math.min(c.material.metalness||0, 0.3);
+        c.material.roughness = Math.max(c.material.roughness||0.4, 0.5);
+        c.material.emissive = new THREE.Color(0x000000);
+        c.material.emissiveIntensity = 0;
+        if(isGhost){ c.material.transparent=true; c.material.opacity=0.5; }
+        c.material.needsUpdate = true;
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// SPECIAL EFFECTS
+// ═══════════════════════════════════════════════════════════
+
+// Laser Beam effect
+function createLaserBeam(start, end, color=0x00aaff) {
+  const dir = new THREE.Vector3().subVectors(end, start);
+  const len = dir.length();
+  const geo = new THREE.CylinderGeometry(0.03, 0.03, len, 8);
+  geo.rotateX(Math.PI/2);
+  const mat = new THREE.MeshBasicMaterial({
+    color, transparent:true, opacity:0.9,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const beam = new THREE.Mesh(geo, mat);
+  beam.position.copy(start).add(dir.multiplyScalar(0.5));
+  beam.lookAt(end);
+  scene.add(beam);
+
+  // Glow halo
+  const haloGeo = new THREE.CylinderGeometry(0.08, 0.08, len, 8);
+  haloGeo.rotateX(Math.PI/2);
+  const haloMat = new THREE.MeshBasicMaterial({
+    color, transparent:true, opacity:0.25,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const halo = new THREE.Mesh(haloGeo, haloMat);
+  halo.position.copy(beam.position);
+  halo.quaternion.copy(beam.quaternion);
+  scene.add(halo);
+
+  // Impact flash
+  const flashGeo = new THREE.SphereGeometry(0.2, 8, 8);
+  const flashMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff, transparent:true, opacity:0.8,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const flash = new THREE.Mesh(flashGeo, flashMat);
+  flash.position.copy(end);
+  scene.add(flash);
+
+  // Animate fade out
+  let life = 1.0;
+  function animateLaser() {
+    life -= 0.04;
+    if(life <= 0) {
+      scene.remove(beam); geo.dispose(); mat.dispose();
+      scene.remove(halo); haloGeo.dispose(); haloMat.dispose();
+      scene.remove(flash); flashGeo.dispose(); flashMat.dispose();
+      return;
+    }
+    mat.opacity = life * 0.9;
+    haloMat.opacity = life * 0.25;
+    flashMat.opacity = life * 0.8;
+    flash.scale.setScalar(1 + (1-life)*2);
+    requestAnimationFrame(animateLaser);
+  }
+  animateLaser();
+}
+
+// Shield bubble effect
+function createShield(position, color=0x4488ff) {
+  const geo = new THREE.SphereGeometry(1.5, 32, 32);
+  const mat = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    uniforms: {
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color(color) },
+      uOpacity: { value: 0.6 },
+    },
+    vertexShader: `
+      varying vec3 vNormal;
+      varying vec3 vPosition;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vPosition = position;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform float uTime;
+      uniform vec3 uColor;
+      uniform float uOpacity;
+      varying vec3 vNormal;
+      varying vec3 vPosition;
+      void main() {
+        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0,0,1))), 3.0);
+        float pulse = sin(uTime * 3.0 + vPosition.x * 2.0 + vPosition.y * 2.0) * 0.15 + 0.85;
+        float hex = step(0.92, sin(vPosition.x * 8.0) * sin(vPosition.y * 8.0) * sin(vPosition.z * 8.0));
+        vec3 color = mix(uColor, uColor * 1.5, fresnel * pulse);
+        color += vec3(hex * 0.3);
+        float alpha = fresnel * uOpacity * pulse;
+        gl_FragColor = vec4(color, alpha);
+      }
+    `,
+  });
+  const shield = new THREE.Mesh(geo, mat);
+  shield.position.set(position[0], position[1] + 1, position[2]);
+  scene.add(shield);
+
+  let time = 0;
+  let life = 3.0; // 3 seconds
+  function animateShield() {
+    time += 0.016;
+    life -= 0.016;
+    mat.uniforms.uTime.value = time;
+    if(life <= 0) {
+      scene.remove(shield); geo.dispose(); mat.dispose();
+      return;
+    }
+    mat.uniforms.uOpacity.value = Math.min(1, life) * 0.6;
+    shield.scale.setScalar(1 + Math.sin(time * 2) * 0.03);
+    requestAnimationFrame(animateShield);
+  }
+  animateShield();
+  return shield;
+}
+
+// Explosion effect
+function createExplosion(position, color=0xff6600) {
+  const particleCount = 40;
+  const geo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const velocities = [];
+  const sizes = new Float32Array(particleCount);
+
+  for(let i=0; i<particleCount; i++) {
+    positions[i*3] = position[0];
+    positions[i*3+1] = position[1];
+    positions[i*3+2] = position[2];
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.random() * Math.PI;
+    const speed = 2 + Math.random() * 6;
+    velocities.push({
+      x: Math.sin(phi) * Math.cos(theta) * speed,
+      y: Math.cos(phi) * speed,
+      z: Math.sin(phi) * Math.sin(theta) * speed,
+    });
+    sizes[i] = 0.1 + Math.random() * 0.3;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const mat = new THREE.PointsMaterial({
+    color, size: 0.3, transparent: true, opacity: 1,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+    sizeAttenuation: true,
+  });
+  const particles = new THREE.Points(geo, mat);
+  scene.add(particles);
+
+  // Shockwave ring
+  const ringGeo = new THREE.RingGeometry(0.1, 0.3, 32);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0xffaa44, transparent: true, opacity: 0.8,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.position.set(position[0], position[1] + 0.5, position[2]);
+  ring.rotation.x = -Math.PI/2;
+  scene.add(ring);
+
+  let time = 0;
+  function animateExplosion() {
+    time += 0.016;
+    const posAttr = particles.geometry.attributes.position;
+    for(let i=0; i<particleCount; i++) {
+      const idx = i*3;
+      posAttr.array[idx] += velocities[i].x * 0.016;
+      posAttr.array[idx+1] += velocities[i].y * 0.016;
+      posAttr.array[idx+2] += velocities[i].z * 0.016;
+      velocities[i].y -= 2.0 * 0.016; // gravity
+    }
+    posAttr.needsUpdate = true;
+
+    mat.opacity = Math.max(0, 1 - time * 1.5);
+    mat.size = 0.3 * (1 + time * 2);
+
+    const ringScale = 1 + time * 15;
+    ring.scale.set(ringScale, ringScale, 1);
+    ringMat.opacity = Math.max(0, 0.8 - time * 1.2);
+
+    if(time > 2) {
+      scene.remove(particles); geo.dispose(); mat.dispose();
+      scene.remove(ring); ringGeo.dispose(); ringMat.dispose();
+      return;
+    }
+    requestAnimationFrame(animateExplosion);
+  }
+  animateExplosion();
+}
+
+// ═══════════════════════════════════════════════════════════
+// TERRAIN SHADER — Smooth desert
+// ═══════════════════════════════════════════════════════════
 const terrainVert = `
 varying vec2 vUv; varying vec3 vPos;
 void main(){ vUv=uv; vPos=(modelMatrix*vec4(position,1.0)).xyz; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }
@@ -196,25 +457,22 @@ const terrainFrag = `
 varying vec2 vUv; varying vec3 vPos;
 float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
 float noise(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.0-2.0*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y); }
-float fbm(vec2 p){ float v=0.0,a=0.5; for(int i=0;i<4;i++){v+=a*noise(p);p*=2.0;a*=0.5;} return v; }
+float fbm(vec2 p){ float v=0.0,a=0.5; for(int k=0;k<4;k++){v+=a*noise(p);p*=2.0;a*=0.5;} return v; }
 void main(){
-  // Reduced frequency for smoother terrain
   float n=fbm(vPos.xz*0.06), n2=fbm(vPos.xz*0.12+vec2(5.3,1.7));
-  // Desert sand - smoother transitions
   vec3 c=mix(vec3(0.72,0.65,0.45),vec3(0.60,0.52,0.35),n);
   c=mix(c,vec3(0.52,0.44,0.30),n2*0.4);
-  // Subtle rock patches
   c=mix(c,vec3(0.42,0.37,0.30),smoothstep(0.55,0.85,n)*0.2);
-  // Softer grid lines
   float gx=step(0.96,fract(vPos.x/3.8+0.5)), gz=step(0.96,fract(vPos.z/2.2+0.5));
   c=mix(c,vec3(0.55,0.48,0.35),max(gx,gz)*0.15);
-  // Slight dither to reduce banding
-  c+=hash(vPos.xz*1000.0)*0.008;
+  c+=hash(vPos.xz*1000.0)*0.006;
   gl_FragColor=vec4(c,1.0);
 }
 `;
 
-// ─── INIT ───
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
 async function init() {
   loadSave();
   updateResUI();
@@ -238,54 +496,176 @@ async function init() {
   document.getElementById('canvas-container').appendChild(renderer.domElement);
 
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.minPolarAngle = 0.2;
-  controls.maxPolarAngle = Math.PI/2.2;
-  controls.minDistance = 10;
-  controls.maxDistance = 60;
+  controls.enableDamping = true; controls.dampingFactor = 0.05;
+  controls.minPolarAngle = 0.2; controls.maxPolarAngle = Math.PI/2.2;
+  controls.minDistance = 8; controls.maxDistance = 60;
   controls.target.set(0, 0, 0);
 
-  // Lights
+  // Lighting — Premium AAA
   scene.add(new THREE.AmbientLight(0xfff0dd, 0.8));
   scene.add(new THREE.HemisphereLight(0xffeedd, 0x3a3020, 0.5));
   const sun = new THREE.DirectionalLight(0xffffff, 1.8);
-  sun.position.set(15, 25, 10);
-  sun.castShadow = true;
+  sun.position.set(15, 25, 10); sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
   sun.shadow.camera.left = -35; sun.shadow.camera.right = 35;
   sun.shadow.camera.top = -35; sun.shadow.camera.bottom = -35;
   sun.shadow.camera.near = 1; sun.shadow.camera.far = 80;
   sun.shadow.bias = -0.0005;
   scene.add(sun);
-  scene.add(new THREE.DirectionalLight(0x99bbff, 0.4).position.set(-10, 5, -8));
+  const fill = new THREE.DirectionalLight(0x99bbff, 0.4);
+  fill.position.set(-10, 5, -8);
+  scene.add(fill);
+
   // Terrain
   const tGeo = new THREE.PlaneGeometry(60, 40);
   const tMat = new THREE.ShaderMaterial({ vertexShader:terrainVert, fragmentShader:terrainFrag, side:THREE.DoubleSide });
-  terrainMesh = new THREE.Mesh(tGeo, tMat);
-  terrainMesh.rotation.x = -Math.PI/2;
-  terrainMesh.position.y = -0.5;
-  terrainMesh.receiveShadow = true;
-  scene.add(terrainMesh);
+  const terrain = new THREE.Mesh(tGeo, tMat);
+  terrain.rotation.x = -Math.PI/2; terrain.position.y = -0.5;
+  terrain.receiveShadow = true;
+  scene.add(terrain);
+  window._terrain = terrain; // for raycasting
 
   // Grid cells (subtle)
-  for(let r=0;r<GRID_ROWS;r++) for(let c=0;c<GRID_COLS;c++) {
+  for(let r=0; r<GRID_ROWS; r++) for(let c=0; c<GRID_COLS; c++) {
     const [x,y,z] = gridToWorld(c,r);
-    const g = new THREE.Mesh(new THREE.BoxGeometry(3.6,0.02,2.0), new THREE.MeshBasicMaterial({color:0x4a7c59,transparent:true,opacity:0.1}));
+    const g = new THREE.Mesh(
+      new THREE.BoxGeometry(3.6, 0.02, 2.0),
+      new THREE.MeshBasicMaterial({color:0x4a7c59, transparent:true, opacity:0.08})
+    );
     g.position.set(x, 0.02, z); scene.add(g);
   }
 
   // Place existing buildings
   for(const b of buildings) await placeBuildingMesh(b);
 
-  // Event listeners
+  // Pre-load all GLBs for instant placement
+  for(const item of ALL_ITEMS) {
+    try { await loadGLB(item.glb); } catch(e) {}
+  }
+
+  // Events
   renderer.domElement.addEventListener('pointermove', onPointerMove);
   renderer.domElement.addEventListener('click', onClick);
   window.addEventListener('keydown', onKey);
   window.addEventListener('resize', onResize);
 
-  document.getElementById('loading').style.display = 'none';
+  document.getElementById('loading').classList.add('done');
+  setTimeout(()=>document.getElementById('loading').style.display='none', 500);
+
   animate();
+}
+
+// ═══════════════════════════════════════════════════════════
+// PLACE BUILDING
+// ═══════════════════════════════════════════════════════════
+async function placeBuildingMesh(b) {
+  const def = getDef(b.typeId); if(!def) return;
+  try {
+    const s = await loadGLB(def.glb);
+    const m = s.clone(true);
+    fixMaterials(m, false);
+    m.scale.setScalar(def.scale);
+    const [x,y,z] = gridToWorld(b.col, b.row);
+    m.position.set(x, y, z);
+    m.rotation.y = (b.rotation || 0) * Math.PI/180;
+    m.userData = { instanceId: b.instanceId, typeId: b.typeId };
+    scene.add(m);
+  } catch(err) { console.warn('GLB fail', b.typeId, err); }
+}
+
+// ═══════════════════════════════════════════════════════════
+// GHOST
+// ═══════════════════════════════════════════════════════════
+let ghostTargetGrid = null;
+
+async function updateGhost(col, row) {
+  if(!placingId) return;
+  const def = getDef(placingId); if(!def) return;
+  const [x,y,z] = gridToWorld(col, row);
+  ghostTargetGrid = {col, row};
+
+  if(!ghostMesh) {
+    try {
+      const s = await loadGLB(def.glb);
+      ghostMesh = s.clone(true);
+      fixMaterials(ghostMesh, true);
+      ghostMesh.scale.setScalar(def.scale);
+      scene.add(ghostMesh);
+    } catch(err) { return; }
+  }
+  ghostMesh.position.set(x, y, z);
+  ghostMesh.rotation.y = placingRot * Math.PI/180;
+}
+
+function hideGhost() {
+  if(ghostMesh) { scene.remove(ghostMesh); ghostMesh.traverse(c=>{ if(c.geometry)c.geometry.dispose(); if(c.material){ if(Array.isArray(c.material))c.material.forEach(m=>m.dispose()); else c.material.dispose(); } }); ghostMesh = null; }
+}
+
+// ═══════════════════════════════════════════════════════════
+// INPUT HANDLERS
+// ═══════════════════════════════════════════════════════════
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function getRayIntersection(cx, cy) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((cx - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((cy - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+  if(!window._terrain) return null;
+  const hits = raycaster.intersectObject(window._terrain);
+  return hits.length > 0 ? hits[0].point : null;
+}
+
+function onPointerMove(e) {
+  if(!placingId) return;
+  const pt = getRayIntersection(e.clientX, e.clientY);
+  if(!pt) return;
+  const grid = worldToGrid(pt.x, pt.z);
+  if(grid) updateGhost(grid.col, grid.row);
+}
+
+function onClick(e) {
+  if(!placingId || !ghostTargetGrid) return;
+  const def = getDef(placingId); if(!def) return;
+  const occ = buildOccMap();
+  const place = canPlace(ghostTargetGrid.col, ghostTargetGrid.row, occ);
+  const afford = canAfford(def.cost);
+  const maxOk = countType(placingId) < def.max;
+
+  if(place.ok && afford && maxOk) {
+    const b = { instanceId:newId(), typeId:placingId, col:ghostTargetGrid.col, row:ghostTargetGrid.row, rotation:placingRot };
+    buildings.push(b);
+    spendCost(def.cost);
+    placeBuildingMesh(b);
+
+    // Spawn effect based on type
+    const pos = gridToWorld(b.col, b.row);
+    if(def.cat === 'ship') {
+      createShield(pos, 0x4488ff);
+      setTimeout(()=>createLaserBeam(new THREE.Vector3(pos[0],pos[1]+2,pos[2]-3), new THREE.Vector3(pos[0],pos[1]+2,pos[2]+3), 0x00aaff), 300);
+    } else if(def.cat === 'building') {
+      createExplosion(pos, 0xffaa44);
+      createShield(pos, 0xffaa44);
+    } else {
+      createShield(pos, 0x44ff88);
+    }
+
+    save(); updateResUI();
+    toast(`${def.name} construido`);
+    cancelPlace();
+  } else {
+    toast(!afford ? 'Recursos insuficientes' : !maxOk ? 'Limite alcanzado' : place.reason);
+  }
+}
+
+function onKey(e) {
+  if(e.key === 'Escape') cancelPlace();
+  if((e.key === 'r' || e.key === 'R') && placingId) {
+    placingRot = placingRot === 0 ? 90 : placingRot === 90 ? 180 : placingRot === 180 ? 270 : 0;
+    if(ghostMesh) ghostMesh.rotation.y = placingRot * Math.PI/180;
+    toast(`Rotacion ${placingRot}°`);
+  }
 }
 
 function onResize() {
@@ -294,193 +674,134 @@ function onResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function getRayIntersection(clientX, clientY) {
-  const rect = renderer.domElement.getBoundingClientRect();
-  mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  if(!terrainMesh) return null;
-  const hits = raycaster.intersectObject(terrainMesh);
-  return hits.length > 0 ? hits[0].point : null;
-}
-
-function onPointerMove(e) {
-  if(!placingId) return;
-  const point = getRayIntersection(e.clientX, e.clientY);
-  if(!point) return;
-  const grid = worldToGrid(point.x, point.z);
-  if(!grid) { hideGhost(); return; }
-  updateGhost(grid.col, grid.row);
-}
-
-function onClick(e) {
-  if(!placingId) return;
-  const point = getRayIntersection(e.clientX, e.clientY);
-  if(!point) return;
-  const grid = worldToGrid(point.x, point.z);
-  if(!grid) { toast('Fuera de la grilla'); return; }
-
-  const def = getDef(placingId);
-  if(!def) return;
-  const occ = buildOccMap();
-  const place = canPlace(grid.col, grid.row, occ);
-  const afford = canAfford(def.cost);
-  const maxOk = countType(placingId) < def.max;
-
-  if(place.ok && afford && maxOk) {
-    const b = { instanceId:newId(), typeId:placingId, col:grid.col, row:grid.row, rotation:placingRot };
-    buildings.push(b);
-    spend(def.cost);
-    placeBuildingMesh(b);
-    save(); updateResUI();
-    toast(def.name + ' construido');
-    cancelPlace();
-  } else {
-    toast(!afford?'Recursos insuficientes':!maxOk?'Limite alcanzado':place.reason);
-  }
-}
-
-function onKey(e) {
-  if(e.key==='Escape') cancelPlace();
-  if((e.key==='r'||e.key==='R') && placingId) {
-    placingRot = placingRot===0?90:placingRot===90?180:placingRot===180?270:0;
-    if(ghostMesh) ghostMesh.rotation.y = placingRot * Math.PI/180;
-    toast('Rotacion ' + placingRot + '°');
-  }
-}
-
-// ─── GHOST ───
-async function updateGhost(col, row) {
-  if(!placingId) return;
-  const def = getDef(placingId);
-  if(!def) return;
-  const [x,y,z] = gridToWorld(col, row);
-
-  if(!ghostMesh) {
-    try {
-      const scene_glb = await loadGLB(def.glb);
-      ghostMesh = scene_glb.clone(true);
-      ghostMesh.traverse(c=>{
-        if(c.isMesh){
-          c.material=c.material.clone();
-          c.material.metalness = Math.min(c.material.metalness || 0, 0.3);
-          c.material.roughness = Math.max(c.material.roughness || 0.5, 0.6);
-          c.material.transparent=true; c.material.opacity=0.5;
-          c.material.emissive = new THREE.Color(0x000000);
-          c.material.needsUpdate = true;
-        }
-      });
-      ghostMesh.scale.setScalar(def.scale);
-      scene.add(ghostMesh);
-    } catch(err) { return; }
-  }
-  ghostMesh.position.set(x, y, z);
-  const occ = buildOccMap();
-  const place = canPlace(col, row, occ);
-  ghostValid = place.ok && canAfford(def.cost) && countType(placingId)<def.max;
-}
-
-function hideGhost() {
-  if(ghostMesh) { scene.remove(ghostMesh); ghostMesh = null; }
-}
-
-// ─── PLACE BUILDING ───
-async function placeBuildingMesh(b) {
-  const def = getDef(b.typeId);
-  if(!def) return;
-  try {
-    const s = await loadGLB(def.glb);
-    const m = s.clone(true);
-    m.traverse(c=>{
-      if(c.isMesh){
-        c.castShadow=true; c.receiveShadow=true;
-        // Force materials to respond properly to lighting
-        if(c.material) {
-          c.material = c.material.clone();
-          c.material.metalness = Math.min(c.material.metalness || 0, 0.3);
-          c.material.roughness = Math.max(c.material.roughness || 0.5, 0.6);
-          c.material.emissive = new THREE.Color(0x000000);
-          c.material.emissiveIntensity = 0;
-          c.material.needsUpdate = true;
-        }
-      }
-    });
-    m.scale.setScalar(def.scale);
-    const [x,y,z] = gridToWorld(b.col, b.row);
-    m.position.set(x, y, z);
-    m.rotation.y = b.rotation * Math.PI/180;
-    m.userData = { instanceId: b.instanceId };
-    scene.add(m);
-  } catch(err) { console.warn('Failed to load GLB for', b.typeId, err); }
-}
-
-// ─── UI BUILDERS ───
-function buildUI() {
-  const list = document.getElementById('bld-list');
-  CATALOG.forEach(c => {
-    const btn = document.createElement('button');
-    btn.id = 'btn-'+c.id;
-    btn.className = 'bld-btn';
-    btn.style.borderColor = c.accent + '44';
-    btn.innerHTML = `<span class="bld-icon">${c.icon}</span><div class="bld-info"><div class="bld-name">${c.name}</div><div class="bld-cost">${c.cost.metal}M ${c.cost.energy}E ${c.cost.crystal}C${c.max<99?' max '+c.max:''}</div></div>`;
-    btn.onclick = () => selectBuilding(c.id);
-    list.appendChild(btn);
-  });
-}
-
-function selectBuilding(id) {
-  const def = getDef(id);
-  if(!def) return;
+// ═══════════════════════════════════════════════════════════
+// SELECTION / CANCEL
+// ═══════════════════════════════════════════════════════════
+function selectItem(id) {
+  const def = getDef(id); if(!def) return;
   if(!canAfford(def.cost)) { toast('Recursos insuficientes'); return; }
-  if(countType(id) >= def.max) { toast('Maximo alcanzado'); return; }
+  if(countType(id) >= def.max) { toast(`Maximo ${def.max}`); return; }
+
+  // Deselect previous
+  document.querySelectorAll('.bld-btn.selected').forEach(b=>b.classList.remove('selected'));
+  const btn = document.getElementById('btn-'+id);
+  if(btn) btn.classList.add('selected');
+
   placingId = id; placingRot = 0;
-  hideGhost(); ghostMesh = null;
-  showHint(def.name + ': click en el terreno para colocar | R rotar | ESC cancelar');
-  updateBldButtons();
+  hideGhost(); ghostMesh = null; ghostTargetGrid = null;
+  showHint(`${def.name}: click en el terreno para colocar · R rotar · ESC cancelar`);
 }
 
 function cancelPlace() {
   placingId = null; placingRot = 0;
-  hideGhost(); ghostMesh = null;
+  hideGhost(); ghostTargetGrid = null;
   hideHint();
-  updateBldButtons();
+  document.querySelectorAll('.bld-btn.selected').forEach(b=>b.classList.remove('selected'));
 }
 
-// ─── GLOBAL ACTIONS ───
+window.switchTab = function(tabEl) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.getElementById(tabEl.dataset.tab).classList.add('active');
+};
+
 window.deleteSelected = function() {
-  if(!selectedInstance) { toast('Selecciona un edificio primero'); return; }
+  if(!selectedInstance) { toast('Selecciona un edificio primero (click derecho)'); return; }
   const b = buildings.find(x=>x.instanceId===selectedInstance);
   if(!b) return;
   const def = getDef(b.typeId);
   buildings = buildings.filter(x=>x.instanceId!==selectedInstance);
-  if(def) refund(def.cost);
+  if(def) refundCost(def.cost);
   // Remove mesh
-  scene.traverse(c=>{ if(c.userData && c.userData.instanceId===selectedInstance) { c.parent.remove(c); } });
+  const toRemove = [];
+  scene.traverse(c=>{ if(c.userData && c.userData.instanceId===selectedInstance) toRemove.push(c); });
+  toRemove.forEach(c=>c.parent.remove(c));
   selectedInstance = null; save(); updateResUI();
-  toast('Edificio eliminado');
+  toast('Eliminado');
 };
 
 window.resetAll = function() {
   if(!confirm('Reiniciar todo?')) return;
   resources = {metal:15000, energy:12000, crystal:10000};
   buildings = [];
-  // Remove all building meshes
   const toRemove = [];
   scene.traverse(c=>{ if(c.userData && c.userData.instanceId) toRemove.push(c); });
   toRemove.forEach(c=>c.parent.remove(c));
   save(); updateResUI();
-  toast('Partida reiniciada');
+  toast('Reiniciado');
 };
 
-// ─── ANIMATE ───
+// ═══════════════════════════════════════════════════════════
+// UI BUILDERS
+// ═══════════════════════════════════════════════════════════
+function createButton(item) {
+  const btn = document.createElement('button');
+  btn.id = 'btn-'+item.id;
+  btn.className = 'bld-btn';
+  btn.style.borderColor = item.accent + '33';
+  btn.innerHTML = `<span class="bld-icon">${item.icon}</span><div class="bld-info"><div class="bld-name">${item.name}</div><div class="bld-cost">${item.cost.metal}M ${item.cost.energy}E ${item.cost.crystal}C</div></div>`;
+  btn.onclick = () => selectItem(item.id);
+  return btn;
+}
+
+function buildUI() {
+  const bldList = document.getElementById('bld-list');
+  BUILDING_CAT.forEach(item => bldList.appendChild(createButton(item)));
+
+  const shipList = document.getElementById('ship-list');
+  SHIP_CAT.forEach(item => shipList.appendChild(createButton(item)));
+
+  const propList = document.getElementById('prop-list');
+  PROP_CAT.forEach(item => propList.appendChild(createButton(item)));
+}
+
+function updateAllButtons() {
+  ALL_ITEMS.forEach(item => {
+    const btn = document.getElementById('btn-'+item.id);
+    if(!btn) return;
+    const ok = canAfford(item.cost) && countType(item.id) < item.max;
+    btn.classList.toggle('disabled', !ok);
+  });
+}
+
+// Right-click to select building for deletion
+renderer?.domElement?.addEventListener?.('contextmenu', (e) => {
+  e.preventDefault();
+  const pt = getRayIntersection(e.clientX, e.clientY);
+  if(!pt) return;
+  // Raycast against placed building meshes
+  const hits = raycaster.intersectObjects(scene.children, true);
+  for(const hit of hits) {
+    let obj = hit.object;
+    while(obj) {
+      if(obj.userData && obj.userData.instanceId) {
+        selectedInstance = obj.userData.instanceId;
+        const def = getDef(obj.userData.typeId);
+        toast(`Seleccionado: ${def ? def.name : '?'}`);
+        return;
+      }
+      obj = obj.parent;
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// ANIMATE
+// ═══════════════════════════════════════════════════════════
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
 }
 
-// ─── START ───
-init().catch(err => { console.error('Init failed:', err); document.getElementById('loading').innerHTML = '<div style="color:#ff4444;">Error: ' + err.message + '</div>'; });
+// ═══════════════════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════════════════
+init().catch(err => {
+  console.error('Init failed:', err);
+  document.getElementById('loading').innerHTML = `<div style="color:#ff4444;">Error: ${err.message}</div>`;
+});
 </script>
 </body>
 </html>
