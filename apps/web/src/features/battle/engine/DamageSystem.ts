@@ -30,6 +30,7 @@ import {
   getEffectiveStack,
   calculateCritChance,
   calculateCritMultiplier,
+  getCriticalBonusFromSkills,
 } from './CommanderSystem';
 import { processEOS } from './ShieldSystem';
 
@@ -175,6 +176,42 @@ export function applyCritical(
   return { damage: baseDamage, isCritical: false, multiplier: 1.0 };
 }
 
+/**
+ * Versión de applyCritical con bonus adicional de skills (Lucky Strike, etc).
+ * El extraCritMultiplier se suma al multiplicador base del comandante.
+ *
+ * @param baseDamage - Daño base
+ * @param attacker - Comandante atacante
+ * @param rng - Generador RNG
+ * @param extraCritMultiplier - Bonus adicional (ej: 1.0 = +100%)
+ * @returns Daño final y si fue crítico
+ */
+export function applyCriticalWithSkillBonus(
+  baseDamage: number,
+  attacker: Commander | undefined,
+  rng: SeededRNG = globalRNG,
+  extraCritMultiplier: number = 0
+): { damage: number; isCritical: boolean; multiplier: number } {
+  if (!attacker) {
+    return { damage: baseDamage, isCritical: false, multiplier: 1.0 };
+  }
+
+  const critChance = calculateCritChance(attacker);
+  const critRoll = rng.next();
+
+  if (critRoll < critChance) {
+    const baseMultiplier = calculateCritMultiplier(attacker);
+    const multiplier = baseMultiplier + extraCritMultiplier;
+    return {
+      damage: Math.floor(baseDamage * multiplier),
+      isCritical: true,
+      multiplier,
+    };
+  }
+
+  return { damage: baseDamage, isCritical: false, multiplier: 1.0 };
+}
+
 // ============================================================================
 // SHIELD PENETRATION
 // ============================================================================
@@ -306,13 +343,45 @@ export function calculateScatterDamage(
  * @param rng - Generador RNG (opcional)
  * @returns Resultado completo del ataque
  */
+/**
+ * Extrae el número de hits binomiales para uso externo (ej: PPC intercept).
+ */
+export function computeBinomialHits(
+  attacker: ShipStack,
+  defender: ShipStack,
+  baseAccuracy: number = 0.70,
+  rng: SeededRNG = globalRNG
+): { hits: number; misses: number; effectiveStack: number; hitChance: number } {
+  const effectiveStack = getEffectiveStack(attacker);
+  if (effectiveStack <= 0) {
+    return { hits: 0, misses: 0, effectiveStack: 0, hitChance: 0 };
+  }
+
+  const hitChance = calculateHitChance(
+    attacker.commander,
+    defender.commander,
+    baseAccuracy
+  );
+
+  const hits = binomialHits(effectiveStack, hitChance, rng);
+  const misses = effectiveStack - hits;
+
+  return { hits, misses, effectiveStack, hitChance };
+}
+
 export function calculateAttack(
   attacker: ShipStack,
   defender: ShipStack,
   weapon: Weapon,
   baseAccuracy: number = 0.70,
   armorType: string = 'regen',
-  rng: SeededRNG = globalRNG
+  rng: SeededRNG = globalRNG,
+  /** Hits precomputados (ej: después de PPC intercept). Si se pasa, se salta el binomial. */
+  forcedHits?: number,
+  /** Bonus de daño de skills pasivas (ej: +0.25 = +25%) */
+  skillDamageBonus: number = 0,
+  /** Bonus de multiplicador crítico de skills (ej: +1.0 = +100%) */
+  extraCritMultiplier: number = 0
 ): AttackResult {
   const events: BattleEvent[] = [];
 
@@ -329,9 +398,17 @@ export function calculateAttack(
     baseAccuracy
   );
 
-  // 3. Binomial hits
-  const hits = binomialHits(effectiveStack, hitChance, rng);
-  const misses = effectiveStack - hits;
+  // 3. Binomial hits (o usar hits forzados si vienen de PPC intercept)
+  let hits: number;
+  let misses: number;
+
+  if (forcedHits !== undefined) {
+    hits = Math.max(0, Math.min(forcedHits, effectiveStack));
+    misses = effectiveStack - hits;
+  } else {
+    hits = binomialHits(effectiveStack, hitChance, rng);
+    misses = effectiveStack - hits;
+  }
 
   if (hits === 0) {
     // Todos fallaron
@@ -353,8 +430,18 @@ export function calculateAttack(
     // 4a. Roll damage
     let damageRoll = rollDamage(weapon, rng);
 
+    // 4a1. Aplicar bonus de daño de skills pasivas (ej: Ballistic Master +25%)
+    if (skillDamageBonus > 0) {
+      damageRoll = Math.floor(damageRoll * (1 + skillDamageBonus));
+    }
+
     // 4b. Crítico
-    const critResult = applyCritical(damageRoll, attacker.commander, rng);
+    const critResult = applyCriticalWithSkillBonus(
+      damageRoll,
+      attacker.commander,
+      rng,
+      extraCritMultiplier
+    );
     damageRoll = critResult.damage;
 
     if (critResult.isCritical) {
@@ -364,6 +451,15 @@ export function calculateAttack(
         damage: critResult.damage,
         multiplier: critResult.multiplier,
       });
+      // Emitir evento de Lucky Strike si el bonus vino de skills
+      if (extraCritMultiplier > 0) {
+        events.push({
+          type: 'LUCKY_STRIKE',
+          stackId: attacker.id,
+          damage: critResult.damage,
+          multiplier: critResult.multiplier,
+        });
+      }
     }
 
     // 4c. Armor multiplier
@@ -373,9 +469,8 @@ export function calculateAttack(
     );
     const damageAfterArmor = Math.floor(damageRoll * armorMult);
 
-    // 4d. Shield negation (Heat Diffusion, etc)
-    const shieldNegation = 0; // TODO: implementar desde defensor
-    const damageAfterNegation = Math.max(0, damageAfterArmor - shieldNegation);
+    // 4d. Damage Negation: Heat Diffusion Shield, etc. reduce damage BEFORE shields
+    const damageAfterNegation = Math.max(0, damageAfterArmor - defender.damageNegation);
 
     if (damageAfterNegation <= 0) {
       damageResults.push({
@@ -400,8 +495,8 @@ export function calculateAttack(
       rng
     );
 
-    // 4f. EOS check
-    const eosResult = processEOS(defender, penResult.hullDamage);
+    // 4f. EOS check (deterministic RNG for reproducibility)
+    const eosResult = processEOS(defender, penResult.hullDamage, rng);
     const finalHullDamage = eosResult.adjustedDamage;
 
     if (eosResult.triggered) {

@@ -31,6 +31,7 @@ const CURVES: Record<CanonicalBuildingTypeId, CostCurve> = {
   trading_center: { baseMetal: 400, basePlasma: 200, baseCredits: 600, growth: 1.5, baseMinutes: 7, minuteScale: 7 },
   radar: { baseMetal: 300, basePlasma: 100, baseCredits: 200, growth: 1.4, baseMinutes: 4, minuteScale: 4 },
   residential_area: { baseMetal: 150, basePlasma: 50, baseCredits: 100, growth: 1.3, baseMinutes: 1, minuteScale: 1 },
+  he3_extractor: { baseMetal: 80, basePlasma: 40, baseCredits: 60, growth: 1.5, baseMinutes: 1, minuteScale: 1 },
 };
 
 export function getBuildingLevelCost(

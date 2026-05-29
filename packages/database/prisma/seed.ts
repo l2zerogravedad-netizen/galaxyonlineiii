@@ -2,6 +2,131 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// ============================================================
+// COMMANDER DATA - 101 commanders from go2-commander-data.ts
+// Format: 4-stats GO2 (accuracy, speed, dodge, electron)
+// ============================================================
+
+interface CommanderSeedData {
+  name: string;
+  rarity: string;
+  skill: string;
+  accuracy: number;
+  speed: number;
+  dodge: number;
+  electron: number;
+}
+
+const COMMANDERS: CommanderSeedData[] = [
+  // --- COMMON (22) ---
+  { name: 'Alicia', rarity: 'common', skill: 'Inspiration', accuracy: 9, speed: 3, dodge: 7, electron: 5 },
+  { name: 'Angla', rarity: 'common', skill: 'Fleet EMT', accuracy: 4, speed: 4, dodge: 5, electron: 7 },
+  { name: 'Donna', rarity: 'common', skill: 'Defensive Intensity', accuracy: 7, speed: 4, dodge: 4, electron: 8 },
+  { name: 'Essido', rarity: 'common', skill: 'Ship-based Expertise', accuracy: 8, speed: 5, dodge: 6, electron: 8 },
+  { name: 'Heloyce', rarity: 'common', skill: 'Stability', accuracy: 7, speed: 2, dodge: 8, electron: 4 },
+  { name: 'Jason', rarity: 'common', skill: 'Save Energy', accuracy: 4, speed: 2, dodge: 5, electron: 5 },
+  { name: 'Jerome', rarity: 'common', skill: 'Curse', accuracy: 5, speed: 8, dodge: 2, electron: 5 },
+  { name: 'Kelly', rarity: 'common', skill: 'Resourceful', accuracy: 3, speed: 9, dodge: 6, electron: 5 },
+  { name: 'Lawrence', rarity: 'common', skill: 'Ballistic Expertise', accuracy: 9, speed: 4, dodge: 6, electron: 8 },
+  { name: 'Mantie', rarity: 'common', skill: 'Command Strike', accuracy: 14, speed: 14, dodge: 14, electron: 14 },
+  { name: 'Maxius', rarity: 'common', skill: 'Allied Strike', accuracy: 10, speed: 0, dodge: 5, electron: 5 },
+  { name: 'Motima', rarity: 'common', skill: 'Accuracy', accuracy: 8, speed: 2, dodge: 6, electron: 6 },
+  { name: 'Natiya', rarity: 'common', skill: 'First Strike', accuracy: 8, speed: 8, dodge: 6, electron: 8 },
+  { name: 'Panis', rarity: 'common', skill: 'Intercept', accuracy: 5, speed: 5, dodge: 6, electron: 12 },
+  { name: 'Rayllf', rarity: 'common', skill: 'Armor Repair', accuracy: 6, speed: 8, dodge: 7, electron: 7 },
+  { name: 'Reggie', rarity: 'common', skill: 'Paralyze', accuracy: 5, speed: 3, dodge: 8, electron: 4 },
+  { name: 'Shaba', rarity: 'common', skill: 'Allied Evasion', accuracy: 8, speed: 10, dodge: 5, electron: 5 },
+  { name: 'Sofia', rarity: 'common', skill: 'Maneuvering', accuracy: 7, speed: 5, dodge: 11, electron: 6 },
+  { name: 'Taude', rarity: 'common', skill: 'Lucky Shot', accuracy: 7, speed: 7, dodge: 4, electron: 4 },
+  { name: 'Tyren', rarity: 'common', skill: 'Missile Expertise', accuracy: 10, speed: 5, dodge: 7, electron: 5 },
+  { name: 'Vinna', rarity: 'common', skill: 'Cunning', accuracy: 6, speed: 6, dodge: 6, electron: 6 },
+  { name: 'Wayne', rarity: 'common', skill: 'Lucky Hit', accuracy: 8, speed: 4, dodge: 9, electron: 2 },
+
+  // --- SUPER (20) ---
+  { name: 'Andrew', rarity: 'super', skill: 'Acrobatics', accuracy: 5, speed: 10, dodge: 6, electron: 1 },
+  { name: 'Anna', rarity: 'super', skill: 'Pierce', accuracy: 9, speed: 8, dodge: 10, electron: 5 },
+  { name: 'Annata', rarity: 'super', skill: 'Allied Support', accuracy: 10, speed: 8, dodge: 5, electron: 8 },
+  { name: 'Bruce', rarity: 'super', skill: 'Drain Supplies', accuracy: 6, speed: 8, dodge: 8, electron: 12 },
+  { name: 'Eveline', rarity: 'super', skill: 'Find Weakness', accuracy: 7, speed: 6, dodge: 9, electron: 5 },
+  { name: 'Evi', rarity: 'super', skill: 'Directional Expertise', accuracy: 8, speed: 5, dodge: 9, electron: 5 },
+  { name: 'Gastaf', rarity: 'super', skill: 'Deadly Strike', accuracy: 12, speed: 0, dodge: 10, electron: 7 },
+  { name: 'Jakar', rarity: 'super', skill: 'Aegis Shatter', accuracy: 9, speed: 3, dodge: 5, electron: 4 },
+  { name: 'Joseph', rarity: 'super', skill: 'Vengeance', accuracy: 4, speed: 10, dodge: 7, electron: 17 },
+  { name: 'Leo', rarity: 'super', skill: 'Intimidate', accuracy: 5, speed: 9, dodge: 6, electron: 8 },
+  { name: 'Linda', rarity: 'super', skill: 'Broadside', accuracy: 10, speed: 9, dodge: 7, electron: 7 },
+  { name: 'Lynn', rarity: 'super', skill: 'Victory Rush', accuracy: 8, speed: 5, dodge: 6, electron: 3 },
+  { name: 'Nick', rarity: 'super', skill: 'Divine Intervention', accuracy: 5, speed: 4, dodge: 5, electron: 2 },
+  { name: 'Penni', rarity: 'super', skill: 'Last Stand', accuracy: 10, speed: 10, dodge: 10, electron: 10 },
+  { name: 'Raslin', rarity: 'super', skill: 'Fear', accuracy: 8, speed: 7, dodge: 9, electron: 10 },
+  { name: 'Ringel', rarity: 'super', skill: 'Ignite', accuracy: 9, speed: 5, dodge: 9, electron: 3 },
+  { name: 'Rocky', rarity: 'super', skill: 'Brutal Strength', accuracy: 12, speed: 4, dodge: 8, electron: 5 },
+  { name: 'Sylva', rarity: 'super', skill: 'Smash', accuracy: 7, speed: 5, dodge: 5, electron: 2 },
+  { name: 'Sylla', rarity: 'super', skill: 'Fleet Link', accuracy: 5, speed: 9, dodge: 5, electron: 5 },
+  { name: 'Todd', rarity: 'super', skill: 'Consecutive Strike', accuracy: 30, speed: 8, dodge: 5, electron: 6 },
+
+  // --- LEGENDARY (24) ---
+  { name: 'Aileen', rarity: 'legendary', skill: 'Command Break', accuracy: 8, speed: 8, dodge: 8, electron: 8 },
+  { name: 'Bain', rarity: 'legendary', skill: 'Reckoning', accuracy: 14, speed: 12, dodge: 18, electron: 16 },
+  { name: 'Bart', rarity: 'legendary', skill: 'Raid', accuracy: 5, speed: 3, dodge: 5, electron: 3 },
+  { name: 'Callisto', rarity: 'legendary', skill: 'A Fire Rises', accuracy: 14, speed: 20, dodge: 15, electron: 20 },
+  { name: 'Carlos', rarity: 'legendary', skill: 'Fear Fiend', accuracy: 15, speed: 5, dodge: 10, electron: 10 },
+  { name: 'Cassius', rarity: 'legendary', skill: 'Knockout Blow', accuracy: 15, speed: 15, dodge: 15, electron: 15 },
+  { name: 'Circe', rarity: 'legendary', skill: 'Hex', accuracy: 15, speed: 10, dodge: 12, electron: 22 },
+  { name: 'Dilira', rarity: 'legendary', skill: 'Renewal', accuracy: 10, speed: 15, dodge: 10, electron: 12 },
+  { name: 'Hellen', rarity: 'legendary', skill: 'Rapid Reload', accuracy: 11, speed: 5, dodge: 7, electron: 16 },
+  { name: 'Krina Klaus', rarity: 'legendary', skill: "Winter's Gift", accuracy: 20, speed: 20, dodge: 20, electron: 20 },
+  { name: 'Maletiz', rarity: 'legendary', skill: 'Revenge', accuracy: 2, speed: 2, dodge: 2, electron: 2 },
+  { name: 'Marcus', rarity: 'legendary', skill: 'Breakthrough', accuracy: 8, speed: 6, dodge: 8, electron: 3 },
+  { name: 'Medusa', rarity: 'legendary', skill: 'Gorgon Gaze', accuracy: 20, speed: 14, dodge: 18, electron: 12 },
+  { name: 'Miller', rarity: 'legendary', skill: 'Pulverizer', accuracy: 0, speed: 0, dodge: 0, electron: 0 },
+  { name: 'Nora', rarity: 'legendary', skill: 'Massacre', accuracy: 9, speed: 4, dodge: 8, electron: 3 },
+  { name: 'Rafia', rarity: 'legendary', skill: 'Stability Control', accuracy: 3, speed: 3, dodge: 5, electron: 2 },
+  { name: 'Rayo', rarity: 'legendary', skill: 'Superior Command', accuracy: 13, speed: 13, dodge: 13, electron: 13 },
+  { name: 'Robert', rarity: 'legendary', skill: 'Massacre', accuracy: 20, speed: 4, dodge: 10, electron: 5 },
+  { name: 'Sandora', rarity: 'legendary', skill: 'Lucky Strike', accuracy: 9, speed: 7, dodge: 8, electron: 7 },
+  { name: 'Singhri', rarity: 'legendary', skill: 'Copycat', accuracy: 12, speed: 12, dodge: 12, electron: 12 },
+  { name: 'Stani', rarity: 'legendary', skill: 'Interference', accuracy: 5, speed: 8, dodge: 5, electron: 10 },
+  { name: 'Titan', rarity: 'legendary', skill: 'Adaptive Mutualism', accuracy: 35, speed: 35, dodge: 35, electron: 35 },
+  { name: 'Venus', rarity: 'legendary', skill: 'Gift of Romance', accuracy: 15, speed: 23, dodge: 24, electron: 12 },
+
+  // --- DIVINE (35) ---
+  { name: 'Carbuncle Cohort', rarity: 'divine', skill: 'Corrosive Coil', accuracy: 9, speed: 22, dodge: 11, electron: 15 },
+  { name: 'Deadly Duo', rarity: 'divine', skill: 'Crucifer Sweep', accuracy: 19, speed: 17, dodge: 17, electron: 12 },
+  { name: 'Death from Above', rarity: 'divine', skill: "Death's Clutches", accuracy: 24, speed: 24, dodge: 24, electron: 24 },
+  { name: 'Desolate Prayers', rarity: 'divine', skill: 'Decaying Wane', accuracy: 20, speed: 20, dodge: 13, electron: 18 },
+  { name: 'Dopplegangers', rarity: 'divine', skill: 'Fierce Mutation', accuracy: 34, speed: 45, dodge: 44, electron: 45 },
+  { name: 'Enduring Chorus', rarity: 'divine', skill: 'Renewed Faith', accuracy: 8, speed: 19, dodge: 21, electron: 6 },
+  { name: 'Ererbus Errants', rarity: 'divine', skill: 'Shadow Storm', accuracy: 31, speed: 22, dodge: 11, electron: 34 },
+  { name: 'Eschaton Adventists', rarity: 'divine', skill: 'Abject Humiliation', accuracy: 38, speed: 30, dodge: 31, electron: 25 },
+  { name: 'Eternal Terrors', rarity: 'divine', skill: 'Battle Preparations', accuracy: 29, speed: 10, dodge: 11, electron: 23 },
+  { name: 'Fairy & Fiend', rarity: 'divine', skill: 'Double Whammy', accuracy: 22, speed: 10, dodge: 20, electron: 10 },
+  { name: 'Fatal Furies', rarity: 'divine', skill: 'Battering Barrage', accuracy: 30, speed: 15, dodge: 14, electron: 12 },
+  { name: 'Fearmongers', rarity: 'divine', skill: 'Omen of Doom', accuracy: 19, speed: 15, dodge: 12, electron: 21 },
+  { name: 'Feral Raptors', rarity: 'divine', skill: 'Suicide Strike', accuracy: 18, speed: 14, dodge: 20, electron: 10 },
+  { name: 'Frontline Surge', rarity: 'divine', skill: 'Pioneer Prowl', accuracy: 15, speed: 10, dodge: 17, electron: 3 },
+  { name: 'Hand of Lelantos', rarity: 'divine', skill: 'Unseen Strike', accuracy: 36, speed: 34, dodge: 32, electron: 34 },
+  { name: 'Hekatian Witnesses', rarity: 'divine', skill: 'Hekatian Edict', accuracy: 36, speed: 37, dodge: 35, electron: 34 },
+  { name: 'Homeric Hellions', rarity: 'divine', skill: 'TBD', accuracy: 38, speed: 45, dodge: 25, electron: 12 },
+  { name: 'Impending Doom', rarity: 'divine', skill: 'Insidious Infliction', accuracy: 10, speed: 12, dodge: 7, electron: 17 },
+  { name: 'Indomitable Duo', rarity: 'divine', skill: 'Divine Barrier', accuracy: 12, speed: 25, dodge: 17, electron: 14 },
+  { name: 'Iron Maidens', rarity: 'divine', skill: 'Fountain of Youth', accuracy: 10, speed: 21, dodge: 19, electron: 5 },
+  { name: 'Kismet Beams', rarity: 'divine', skill: 'Supreme Smite', accuracy: 25, speed: 20, dodge: 10, electron: 5 },
+  { name: 'Leech Lurkers', rarity: 'divine', skill: 'Covert Syphon', accuracy: 17, speed: 12, dodge: 32, electron: 13 },
+  { name: 'Light & Darkness', rarity: 'divine', skill: 'Darkened Halo', accuracy: 12, speed: 15, dodge: 21, electron: 3 },
+  { name: 'Lurking Light', rarity: 'divine', skill: 'Phasing Halo', accuracy: 11, speed: 7, dodge: 24, electron: 12 },
+  { name: 'Pernicious Princes', rarity: 'divine', skill: 'Chain Vortex', accuracy: 20, speed: 20, dodge: 20, electron: 20 },
+  { name: 'Rays of Destiny', rarity: 'divine', skill: 'Judgement', accuracy: 21, speed: 12, dodge: 15, electron: 9 },
+  { name: 'Rex Scuta', rarity: 'divine', skill: 'Immunity', accuracy: 18, speed: 21, dodge: 15, electron: 18 },
+  { name: 'The Ravagers', rarity: 'divine', skill: 'Smash and Grab', accuracy: 14, speed: 10, dodge: 13, electron: 11 },
+  { name: 'Suicidal Sirens', rarity: 'divine', skill: 'Risky Surge', accuracy: 31, speed: 3, dodge: 12, electron: 20 },
+  { name: 'Summa Cum Laude', rarity: 'divine', skill: 'Verdant Force', accuracy: 24, speed: 9, dodge: 23, electron: 12 },
+  { name: 'Tactical Wizards', rarity: 'divine', skill: 'Bamboozle', accuracy: 9, speed: 16, dodge: 12, electron: 22 },
+  { name: 'The Twin Torpedoes', rarity: 'divine', skill: 'Sharpshooter Storm', accuracy: 30, speed: 0, dodge: 10, electron: 7 },
+  { name: 'Victory Roar', rarity: 'divine', skill: 'Eradicate', accuracy: 17, speed: 16, dodge: 19, electron: 15 },
+  { name: 'Wildfire', rarity: 'divine', skill: 'Trigger Happy', accuracy: 35, speed: 5, dodge: 9, electron: 18 },
+  { name: 'Winter Knights', rarity: 'divine', skill: 'TBD', accuracy: 15, speed: 34, dodge: 30, electron: 20 },
+];
+
 async function main() {
   console.log('Seeding database...');
 
@@ -170,14 +295,22 @@ async function main() {
     },
   });
 
+  console.log(`- ${await prisma.technology.count()} technologies seeded`);
+
   // =====================================================
-  // NAVES (Blueprints) - Sistema Astillero Fase 3
+  // NAVES (Blueprints) - Sistema Astillero Fase 3 + GO2
   // =====================================================
 
-  // Nave 1: Explorador - Disponible desde inicio, muy barata y rápida
-  const explorer = await prisma.blueprint.upsert({
+  // Nave 1: Explorador - Disponible desde inicio
+  await prisma.blueprint.upsert({
     where: { id: 'bp-explorer' },
-    update: {},
+    update: {
+      ppcCount: 1,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 1, directional: 0, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 0, support: 0 }),
+      he3Consumption: 5,
+    },
     create: {
       id: 'bp-explorer',
       key: 'EXPLORER',
@@ -195,13 +328,24 @@ async function main() {
       defense: 1,
       speed: 40,
       cargoCapacity: 50,
+      ppcCount: 1,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 1, directional: 0, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 0, support: 0 }),
+      he3Consumption: 5,
     },
   });
 
-  // Nave 2: Fragata - Disponible desde inicio, básica de combate
-  const frigate = await prisma.blueprint.upsert({
+  // Nave 2: Fragata - Básica de combate
+  await prisma.blueprint.upsert({
     where: { id: 'bp-frigate' },
-    update: {},
+    update: {
+      ppcCount: 2,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 1, directional: 1, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 1, support: 0 }),
+      he3Consumption: 15,
+    },
     create: {
       id: 'bp-frigate',
       key: 'FRIGATE',
@@ -219,13 +363,24 @@ async function main() {
       defense: 8,
       speed: 25,
       cargoCapacity: 100,
+      ppcCount: 2,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 1, directional: 1, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 1, support: 0 }),
+      he3Consumption: 15,
     },
   });
 
-  // Nave 3: Interceptor - Requiere Propulsión Básica, muy rápido
-  const interceptor = await prisma.blueprint.upsert({
+  // Nave 3: Interceptor - Requiere Propulsión Básica
+  await prisma.blueprint.upsert({
     where: { id: 'bp-interceptor' },
-    update: {},
+    update: {
+      ppcCount: 1,
+      armorType: 'nano',
+      weaponSlots: JSON.stringify({ ballistic: 0, directional: 2, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 1, defense: 0, support: 0 }),
+      he3Consumption: 20,
+    },
     create: {
       id: 'bp-interceptor',
       key: 'INTERCEPTOR',
@@ -244,13 +399,24 @@ async function main() {
       defense: 3,
       speed: 50,
       cargoCapacity: 30,
+      ppcCount: 1,
+      armorType: 'nano',
+      weaponSlots: JSON.stringify({ ballistic: 0, directional: 2, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 1, defense: 0, support: 0 }),
+      he3Consumption: 20,
     },
   });
 
-  // Nave 4: Carguero - Requiere Logística Espacial, transporte masivo
-  const cargoShip = await prisma.blueprint.upsert({
+  // Nave 4: Carguero - Requiere Logística Espacial
+  await prisma.blueprint.upsert({
     where: { id: 'bp-cargo' },
-    update: {},
+    update: {
+      ppcCount: 1,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 0, directional: 0, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 0, support: 1 }),
+      he3Consumption: 8,
+    },
     create: {
       id: 'bp-cargo',
       key: 'CARGO_SHIP',
@@ -269,13 +435,24 @@ async function main() {
       defense: 5,
       speed: 8,
       cargoCapacity: 2000,
+      ppcCount: 1,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 0, directional: 0, missile: 0, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 0, support: 1 }),
+      he3Consumption: 8,
     },
   });
 
-  // Nave 5: Crucero - Requiere Armamento Láser, nave media de combate
-  const cruiser = await prisma.blueprint.upsert({
+  // Nave 5: Crucero - Requiere Armamento Láser
+  await prisma.blueprint.upsert({
     where: { id: 'bp-cruiser' },
-    update: {},
+    update: {
+      ppcCount: 3,
+      armorType: 'neutralizing',
+      weaponSlots: JSON.stringify({ ballistic: 1, directional: 1, missile: 1, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 1, defense: 1, support: 0 }),
+      he3Consumption: 40,
+    },
     create: {
       id: 'bp-cruiser',
       key: 'CRUISER',
@@ -294,13 +471,24 @@ async function main() {
       defense: 20,
       speed: 15,
       cargoCapacity: 300,
+      ppcCount: 3,
+      armorType: 'neutralizing',
+      weaponSlots: JSON.stringify({ ballistic: 1, directional: 1, missile: 1, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 1, defense: 1, support: 0 }),
+      he3Consumption: 40,
     },
   });
 
-  // Nave 6: Acorazado - Requiere Blindaje Ligero, nave pesada de combate
-  const battleship = await prisma.blueprint.upsert({
+  // Nave 6: Acorazado - Requiere Blindaje Ligero
+  await prisma.blueprint.upsert({
     where: { id: 'bp-battleship' },
-    update: {},
+    update: {
+      ppcCount: 4,
+      armorType: 'chrome',
+      weaponSlots: JSON.stringify({ ballistic: 2, directional: 1, missile: 1, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 1, defense: 2, support: 0 }),
+      he3Consumption: 80,
+    },
     create: {
       id: 'bp-battleship',
       key: 'BATTLESHIP',
@@ -319,8 +507,75 @@ async function main() {
       defense: 50,
       speed: 6,
       cargoCapacity: 500,
+      ppcCount: 4,
+      armorType: 'chrome',
+      weaponSlots: JSON.stringify({ ballistic: 2, directional: 1, missile: 1, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 1, defense: 2, support: 0 }),
+      he3Consumption: 80,
     },
   });
+
+  // Nave 7: Bombardero - Nuevo blueprint para GO2
+  await prisma.blueprint.upsert({
+    where: { id: 'bp-bomber' },
+    update: {},
+    create: {
+      id: 'bp-bomber',
+      key: 'BOMBER',
+      name: 'Bombardero',
+      type: 'COMBAT_HEAVY',
+      category: 'COMBAT',
+      description: 'Nave de asedio especializada en destruir fortalezas y estructuras estacionarias. Gran poder de fuego pero vulnerable.',
+      requiredTechId: techLaser.id,
+      requiredBuildingType: 'SHIPYARD',
+      costMetal: 1,
+      costPlasma: 1,
+      costCredits: 1,
+      buildTime: 240,
+      attack: 120,
+      hp: 100,
+      defense: 5,
+      speed: 10,
+      cargoCapacity: 50,
+      ppcCount: 2,
+      armorType: 'regen',
+      weaponSlots: JSON.stringify({ ballistic: 0, directional: 0, missile: 2, shipBased: 0 }),
+      moduleSlots: JSON.stringify({ attack: 2, defense: 0, support: 0 }),
+      he3Consumption: 60,
+    },
+  });
+
+  // Nave 8: Portanaves - Nuevo blueprint para GO2
+  await prisma.blueprint.upsert({
+    where: { id: 'bp-carrier' },
+    update: {},
+    create: {
+      id: 'bp-carrier',
+      key: 'CARRIER',
+      name: 'Portanaves',
+      type: 'COMBAT_HEAVY',
+      category: 'COMBAT',
+      description: 'Nave capital que despliega cazas interceptores. Débil por sí sola pero potente con escolta.',
+      requiredTechId: techPropulsion.id,
+      requiredBuildingType: 'SHIPYARD',
+      costMetal: 1,
+      costPlasma: 1,
+      costCredits: 1,
+      buildTime: 420,
+      attack: 10,
+      hp: 400,
+      defense: 30,
+      speed: 8,
+      cargoCapacity: 100,
+      ppcCount: 3,
+      armorType: 'nano',
+      weaponSlots: JSON.stringify({ ballistic: 0, directional: 0, missile: 0, shipBased: 3 }),
+      moduleSlots: JSON.stringify({ attack: 0, defense: 1, support: 2 }),
+      he3Consumption: 70,
+    },
+  });
+
+  console.log(`- ${await prisma.blueprint.count()} blueprints seeded`);
 
   // =====================================================
   // MISIONES PvE
@@ -421,16 +676,68 @@ async function main() {
     },
   });
 
-  console.log('Seeding completed!');
-  console.log('Created:');
-  console.log(`- ${await prisma.technology.count()} technologies`);
-  console.log(`- ${await prisma.blueprint.count()} blueprints`);
-  console.log(`- ${await prisma.mission.count()} missions`);
+  console.log(`- ${await prisma.mission.count()} missions seeded`);
+
+  // =====================================================
+  // COMMANDERS - 101 commanders from GO2 data
+  // =====================================================
+
+  // Check if we have at least one empire to attach commanders to
+  const empireCount = await prisma.empire.count();
+
+  if (empireCount > 0) {
+    // Get the first empire to attach commanders
+    const firstEmpire = await prisma.empire.findFirst({ orderBy: { createdAt: 'asc' } });
+
+    if (firstEmpire) {
+      // Seed commanders attached to the first empire
+      for (const cmd of COMMANDERS) {
+        const commanderId = `cmd-${cmd.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`;
+
+        await prisma.commander.upsert({
+          where: { id: commanderId },
+          update: {},
+          create: {
+            id: commanderId,
+            empireId: firstEmpire.id,
+            name: cmd.name,
+            rarity: cmd.rarity,
+            level: 1,
+            stars: 1,
+            accuracy: cmd.accuracy,
+            speed: cmd.speed,
+            dodge: cmd.dodge,
+            electron: cmd.electron,
+            skill: cmd.skill,
+            status: 'AVAILABLE',
+            gemSlots: JSON.stringify({ red: null, blue: null, green: null, diamond: null }),
+          },
+        });
+      }
+
+      console.log(`- ${await prisma.commander.count()} commanders seeded (attached to empire: ${firstEmpire.id})`);
+    }
+  } else {
+    console.log('- No empires found. Skipping commander seed (commanders require an empire).');
+    console.log('  Commanders will be seeded when an empire is created.');
+  }
+
+  // =====================================================
+  // SUMMARY
+  // =====================================================
+  console.log('\n========================================');
+  console.log('SEEDING COMPLETED SUCCESSFULLY!');
+  console.log('========================================');
+  console.log(`Technologies : ${await prisma.technology.count()}`);
+  console.log(`Blueprints   : ${await prisma.blueprint.count()}`);
+  console.log(`Missions     : ${await prisma.mission.count()}`);
+  console.log(`Commanders   : ${await prisma.commander.count()}`);
+  console.log('========================================');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Seed failed:', e);
     process.exit(1);
   })
   .finally(async () => {

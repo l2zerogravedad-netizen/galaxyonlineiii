@@ -363,15 +363,47 @@ export function isInterceptable(weapon: Weapon): boolean {
   return weapon.interceptable;
 }
 
+/** Chance base de intercept por cada módulo PPC en GO2: 55% */
+const PPC_INTERCEPT_CHANCE = 0.55;
+
 /**
- * Calcula la probabilidad base de interceptar un misil.
- * Basado en la diferencia de velocidad entre interceptor y atacante.
+ * Calcula la probabilidad de interceptar UN misil con UN módulo PPC.
+ * En GO2, cada PPC tiene 55% independiente de destruir UN misil entrante.
+ * No depende de Speed.
  */
-export function calculateInterceptChance(
-  interceptorSpeed: number,
-  attackerSpeed: number
+export function calculateInterceptChance(): number {
+  return PPC_INTERCEPT_CHANCE;
+}
+
+/**
+ * Intenta interceptar un misil entrante usando todos los PPC disponibles.
+ * Por cada PPC: 55% chance de destruir 1 misil. Cada intento es independiente.
+ *
+ * @param ppcCount - Número de módulos PPC en el stack defensor
+ * @param incomingMissiles - Número de misiles entrantes (hits del atacante)
+ * @param rng - Generador de números aleatorios con semilla
+ * @returns Número de misiles interceptados (destruidos)
+ */
+export function attemptPPCIntercept(
+  ppcCount: number,
+  incomingMissiles: number,
+  rng: { chance: (p: number) => boolean }
 ): number {
-  const baseChance = 0.25;
-  const speedDiff = interceptorSpeed - attackerSpeed;
-  return Math.max(0.05, Math.min(0.85, baseChance + speedDiff * 0.005));
+  if (ppcCount <= 0 || incomingMissiles <= 0) return 0;
+
+  let missilesDestroyed = 0;
+  const chance = calculateInterceptChance();
+
+  // Por cada misil entrante, intentar intercept con cada PPC disponible
+  // En GO2: cada PPC puede destruir 1 misil con 55% de probabilidad
+  for (let m = 0; m < incomingMissiles; m++) {
+    for (let p = 0; p < ppcCount; p++) {
+      if (rng.chance(chance)) {
+        missilesDestroyed++;
+        break; // Este PPC destruyó el misil, pasar al siguiente misil
+      }
+    }
+  }
+
+  return Math.min(missilesDestroyed, incomingMissiles);
 }

@@ -87,6 +87,67 @@ export interface AbilityEffect {
   procChance?: number;
 }
 
+// ============================================================================
+// COMMANDER SKILLS (Active & Passive)
+// ============================================================================
+
+/** Tipos de efectos de skill */
+export type SkillEffectType =
+  | 'damage_boost_weapon'   // Bonus de daño por tipo de arma (pasivo)
+  | 'damage_boost_all'      // Bonus de daño general (pasivo)
+  | 'shield_absorption'     // Bonus de absorción de escudo (pasivo)
+  | 'speed_boost'           // Bonus de velocidad (pasivo)
+  | 'paralyze'              // Paralizar stack enemigo (activo)
+  | 'lucky_strike'          // Daño crítico extra (activo)
+  | 'overdrive'             // Atacar 2 veces (activo)
+  | 'shield_boost'          // Regenerar escudo (activo)
+  | 'none';                 // Sin efecto
+
+/** Tipo de skill: pasiva (siempre activa) o activa (chance por ronda) */
+export type SkillType = 'passive_damage' | 'passive_defense' | 'passive_speed' | 'active_debuff' | 'active_burst';
+
+/** Efecto individual de una skill */
+export interface SkillEffect {
+  /** Estadística afectada o mecánica */
+  stat: string;
+  /** Valor numérico del efecto (ej: 0.25 = +25%) */
+  value: number;
+  /** Target del efecto */
+  target: 'self' | 'enemy';
+  /** Duración en rondas (0 = instantáneo/permanente) */
+  duration: number;
+  /** Tipo de efecto para categorización */
+  effectType: SkillEffectType;
+  /** Filtro de arma afectada (para pasivas de tipo de arma) */
+  weaponType?: WeaponType;
+}
+
+/** Definición de una skill de comandante */
+export interface CommanderSkill {
+  /** Nombre de la skill (ej: 'Ballistic Master') */
+  name: string;
+  /** Categoría de la skill */
+  type: SkillType;
+  /** Probabilidad de activación [0-1] (solo para activas) */
+  triggerChance: number;
+  /** Descripción legible */
+  description: string;
+  /** Efectos que aplica esta skill */
+  effects: SkillEffect[];
+  /** Stat del comandante que afecta la activación */
+  affectedBy?: string;
+}
+
+/** Estado de una skill activa en el stack (para duraciones > 0) */
+export interface ActiveSkillState {
+  skillName: string;
+  effect: SkillEffect;
+  /** Rondas restantes */
+  remainingRounds: number;
+  /** Stack que aplicó el efecto */
+  sourceStackId: string;
+}
+
 /** Datos de un comandante asignado a un stack */
 export interface Commander {
   id: string;
@@ -113,6 +174,9 @@ export interface Commander {
 
   /** Habilidad especial */
   specialAbility?: SpecialAbility;
+
+  /** Skill de comandante (mapeada desde datos GO2) */
+  skill?: CommanderSkill;
 }
 
 // ============================================================================
@@ -147,6 +211,8 @@ export interface ShipStack {
   stability: number;
   /** Casillas de movimiento por ronda */
   movement: number;
+  /** Negación de daño (Heat Diffusion Shield, etc). Reduce daño ANTES de escudos */
+  damageNegation: number;
 
   // --- Armas equipadas ---
   weapons: Weapon[];
@@ -165,6 +231,19 @@ export interface ShipStack {
 
   /** Facción: atacante o defensor */
   faction: 'attacker' | 'defender';
+
+  // --- Defensa GO2 ---
+  /** Número de módulos PPC (Particle Protection Cannon) equipados.
+   *  Cada PPC tiene 55% de destruir UN misil entrante individual.
+   *  Default: 0 */
+  ppcCount: number;
+  /** Tipo de armadura del stack. Afecta el multiplicador de daño.
+   *  Default: 'regen' */
+  armorType: ArmorType;
+
+  // --- Skills activas aplicadas a este stack ---
+  /** Estados de skills activas actualmente aplicadas (debuffs/buffs con duración) */
+  activeSkillStates: ActiveSkillState[];
 }
 
 // ============================================================================
@@ -189,6 +268,11 @@ export type BattleEvent =
   | { type: 'EOS_TRIGGER'; stackId: string; absorbed: number }
   | { type: 'CRITICAL_HIT'; stackId: string; damage: number; multiplier: number }
   | { type: 'DODGE'; stackId: string; attackerId: string }
+  | { type: 'SKILL_TRIGGER'; stackId: string; skillName: string; targetId?: string; description: string }
+  | { type: 'PARALYZE'; sourceId: string; targetId: string; duration: number }
+  | { type: 'SKILL_SHIELD_BOOST'; stackId: string; amount: number; totalShield: number }
+  | { type: 'LUCKY_STRIKE'; stackId: string; damage: number; multiplier: number }
+  | { type: 'OVERDRIVE'; stackId: string; extraAttacks: number }
   | { type: 'ROUND_END'; round: number }
   | { type: 'BATTLE_END'; winner: 'attacker' | 'defender' | 'draw'; reason: string };
 
@@ -313,3 +397,10 @@ export interface InitiativeEntry {
 export interface RNGState {
   seed: number;
 }
+
+/** Interfaz del generador de numeros aleatorios */
+export interface RNG {
+  next(): number;
+  nextInt(min: number, max: number): number;
+  chance(probability: number): boolean;
+} 

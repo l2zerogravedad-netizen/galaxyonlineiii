@@ -43,6 +43,7 @@ model Empire {
   ships         Ship[]
   fleets        Fleet[]
   shipConstructions ShipConstruction[]
+  commanders    Commander[]
   
   @@map("empires")
 }
@@ -50,14 +51,15 @@ model Empire {
 model Resource {
   id                  String   @id @default(uuid())
   empireId            String   @map("empire_id")
+  // Valid types: 'METAL' | 'PLASMA' | 'CREDITS' | 'HE3'
   type                String
   amount              Int      @default(0)
   capacity            Int      @default(1000)
   productionPerHour   Int      @default(0) @map("production_per_hour")
   updatedAt           DateTime @default(now()) @map("updated_at")
-  
+
   empire              Empire   @relation(fields: [empireId], references: [id])
-  
+
   @@unique([empireId, type])
   @@map("resources")
 }
@@ -152,6 +154,13 @@ model Blueprint {
   defense         Int      @default(0)
   speed           Int      @default(0)
   cargoCapacity   Int      @default(0) @map("cargo_capacity")
+
+  // GO2 ShipStack system fields
+  ppcCount        Int      @default(0) @map("ppc_count")
+  armorType       String   @default("regen") @map("armor_type") // regen | neutralizing | nano | chrome
+  weaponSlots     Json     @default("{}") @map("weapon_slots")
+  moduleSlots     Json     @default("{}") @map("module_slots")
+  he3Consumption  Int      @default(0) @map("he3_consumption")
   
   ships           Ship[]
   constructions   ShipConstruction[]
@@ -180,15 +189,38 @@ model ShipConstruction {
   empireId      String   @map("empire_id")
   blueprintId   String   @map("blueprint_id")
   quantity      Int      @default(1)
-  status        String   @default("BUILDING") // BUILDING, COMPLETED
+  status        String   @default("QUEUED") // QUEUED | BUILDING | COMPLETED
   startedAt     DateTime @default(now()) @map("started_at")
   endsAt        DateTime @map("ends_at")
   completedAt   DateTime? @map("completed_at")
+  createdAt     DateTime @default(now()) @map("created_at")
   
   empire        Empire   @relation(fields: [empireId], references: [id])
   blueprint     Blueprint @relation(fields: [blueprintId], references: [id])
   
   @@map("ship_constructions")
+}
+
+model Commander {
+  id          String   @id @default(uuid())
+  empireId    String   @map("empire_id")
+  name        String
+  rarity      String   // common | super | legendary | divine
+  level       Int      @default(1)
+  stars       Int      @default(1)
+  accuracy    Int      @default(5)
+  speed       Int      @default(5)
+  dodge       Int      @default(5)
+  electron    Int      @default(5)
+  skill       String   @default("")
+  status      String   @default("AVAILABLE") // AVAILABLE | INJURED | HOSPITAL
+  gemSlots    Json     @default("{\"red\":null,\"blue\":null,\"green\":null,\"diamond\":null}") @map("gem_slots")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  empire      Empire   @relation(fields: [empireId], references: [id])
+
+  @@map("commanders")
 }
 
 model Fleet {

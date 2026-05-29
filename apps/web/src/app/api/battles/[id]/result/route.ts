@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyAuth, handleApiError, ApiError } from '@/lib/api-auth';
+import {
+  setHospital,
+  type HospitalPayload,
+} from '../../commanders/_lib/commander-state';
 
 // ─────────────────────────────────────────────
 // Tipos
@@ -17,14 +21,19 @@ interface BattleResultBody {
   losses?: ShipLoss[];
   xpGained?: number;
   creditsGained?: number;
+  commanderIds?: string[]; // IDs de comandantes que participaron en la batalla
 }
+
+// 30% de probabilidad de herir un comandante tras perder una batalla
+const INJURY_CHANCE_ON_LOSS = 0.30;
 
 // ─────────────────────────────────────────────
 // POST /api/battles/[id]/result — Guardar resultado final
 // Body: {
 //   result: 'WIN' | 'LOSS',
 //   roundsPlayed: number,
-//   losses?: Array<{ blueprintId: string, quantity: number }>
+//   losses?: Array<{ blueprintId: string, quantity: number }>,
+//   commanderIds?: string[]
 // }
 // ─────────────────────────────────────────────
 
@@ -80,6 +89,42 @@ export async function POST(
     const baseCredits = body.result === 'WIN' ? 500 : 0;
     const xpGained = body.xpGained ?? baseXp;
     const creditsGained = body.creditsGained ?? baseCredits;
+
+    // ── Preparar datos de heridos (solo en LOSS) ──
+    const injuredCommanders: string[] = [];
+
+    // Si es LOSS, calcular heridos antes de la transaccion
+    if (body.result === 'LOSS') {
+      const commanderIds = body.commanderIds ?? [];
+
+      if (commanderIds.length > 0) {
+        // Aplicar 30% de chance a cada comandante participante
+        for (const cmdId of commanderIds) {
+          if (Math.random() < INJURY_CHANCE_ON_LOSS) {
+            injuredCommanders.push(cmdId);
+          }
+        }
+      } else {
+        // Fallback: obtener todos los comandantes del jugador
+        try {
+          const rows = await prisma.$queryRaw<
+            Array<{ commander_id: string }>
+          >`
+            SELECT commander_id FROM commander_states
+            WHERE empire_id = ${user.empireId}
+          `;
+
+          for (const row of rows) {
+            if (Math.random() < INJURY_CHANCE_ON_LOSS) {
+              injuredCommanders.push(row.commander_id);
+            }
+          }
+        } catch (e) {
+          // Si la tabla no existe, continuar sin heridos
+          console.warn('[BattleResult] No se pudieron obtener comandantes:', e);
+        }
+      }
+    }
 
     // ── Ejecutar todo en una transaccion ──
     const result = await prisma.$transaction(async (tx) => {
@@ -169,6 +214,22 @@ export async function POST(
       return { updatedBattle, lossesRecorded: losses.length };
     });
 
+    // ── Aplicar heridas fuera de la transaccion (commander-state usa raw SQL) ──
+    for (const cmdId of injuredCommanders) {
+      try {
+        const injuredState: HospitalPayload = {
+          status: 'INJURED',
+          recoveryEndsAt: null,
+          totalHealingTime: 0,
+          bedIndex: null,
+        };
+        await setHospital(user.empireId, cmdId, injuredState);
+      } catch (e) {
+        // Silenciar errores individuales de heridos
+        console.warn(`[BattleResult] No se pudo herir comandante ${cmdId}:`, e);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       data: {
@@ -178,6 +239,8 @@ export async function POST(
         xpGained: result.updatedBattle.xpGained,
         creditsGained: result.updatedBattle.creditsGained,
         lossesRecorded: result.lossesRecorded,
+        injuredCommanders,
+        injuriesApplied: injuredCommanders.length,
       },
     });
   } catch (error) {

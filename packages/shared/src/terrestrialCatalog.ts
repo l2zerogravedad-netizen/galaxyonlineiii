@@ -24,6 +24,7 @@ export interface TerrestrialBuildingSpec {
 export const WINDSURF_TERRESTRIAL_BUILDINGS: TerrestrialBuildingSpec[] = [
   { id: 'metal_extractor', catalogId: 'metal-extractor', name: 'Extractor de Metal', apiType: 'metal_extractor', uiTab: 'recursos', maxPerPlanet: 99, category: 'production' },
   { id: 'plasma_refinery', catalogId: 'plasma-refinery', name: 'Refinería de Plasma', apiType: 'plasma_refinery', uiTab: 'recursos', maxPerPlanet: 99, category: 'production' },
+  { id: 'he3_extractor', catalogId: 'he3-extractor', name: 'Extractor de He3', apiType: 'he3_extractor', uiTab: 'recursos', maxPerPlanet: 99, category: 'production' },
   { id: 'energy_generator', catalogId: 'energy-generator', name: 'Generador de Energía', apiType: 'energy_generator', uiTab: 'recursos', maxPerPlanet: 99, category: 'infrastructure' },
   { id: 'warehouse', catalogId: 'warehouse', name: 'Almacén', apiType: 'warehouse', uiTab: 'civil', maxPerPlanet: 99, category: 'storage' },
   { id: 'residential_area', catalogId: 'residential-area', name: 'Área Residencial', apiType: 'residential_area', uiTab: 'civil', maxPerPlanet: 99, category: 'infrastructure' },
