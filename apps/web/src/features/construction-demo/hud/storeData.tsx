@@ -15,6 +15,7 @@ export interface StoreItem {
   icon: React.ComponentType<{ className?: string }>;
 }
 
+// Verbatim from the user-provided design.
 export const storeData: Record<string, StoreItem[]> = {
   'All Items': [
     { id: 101, name: 'Coupon', price: 10, currency: 'cube', label: 'NEW', color: 'purple', icon: CouponIcon },
@@ -23,18 +24,6 @@ export const storeData: Record<string, StoreItem[]> = {
     { id: 104, name: 'Gaseous Planet', price: 80, currency: 'cube', label: 'NEW', color: 'green', icon: (p) => <PlanetIcon {...p} type="gas" /> },
     { id: 105, name: 'Adv. Truce Card', price: 80, currency: 'cube', label: 'HOT', color: 'blue', icon: CardIcon },
     { id: 106, name: 'Memory Chip', price: 35, currency: 'cube', label: 'HOT', color: 'blue', icon: ChipIcon },
-  ],
-  Development: [
-    { id: 501, name: 'Speed-Up x2', price: 40, currency: 'cube', label: 'NEW', color: 'cyan', icon: ChipIcon },
-    { id: 502, name: 'Auto Builder', price: 150, currency: 'cube', label: '', color: 'blue', icon: BlueprintIcon },
-    { id: 503, name: 'Resource Booster', price: 60, currency: 'cube', label: 'HOT', color: 'green', icon: (p) => <PlanetIcon {...p} type="gas" /> },
-    { id: 504, name: 'Slot Expansion', price: 90, currency: 'cube', label: '', color: 'purple', icon: CouponIcon },
-  ],
-  Battle: [
-    { id: 601, name: 'Fleet Reinforce', price: 100, currency: 'cube', label: 'HOT', color: 'blue', icon: CardIcon },
-    { id: 602, name: 'Temp Shield', price: 45, currency: 'cube', label: '', color: 'cyan', icon: (p) => <GemIcon {...p} color="#3b82f6" highlight="#93c5fd" /> },
-    { id: 603, name: 'Orbital Missile', price: 200, currency: 'cube', label: '', color: 'red', icon: (p) => <GemIcon {...p} color="#ef4444" highlight="#fca5a5" /> },
-    { id: 604, name: 'Instant Repair', price: 30, currency: 'cube', label: '', color: 'green', icon: ChipIcon },
   ],
   Honor: [
     { id: 201, name: 'Titan', price: 2500, currency: 'honor', label: 'NEW', color: 'green', icon: (p) => <BookIcon {...p} color="#4ade80" inner="#14532d" /> },
