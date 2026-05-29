@@ -61,7 +61,17 @@ export function ConstructionDemoPage() {
     if (!iframe) return;
     const onLoad = () => setLoading(false);
     iframe.addEventListener('load', onLoad);
-    return () => iframe.removeEventListener('load', onLoad);
+    // The iframe can finish loading before this effect attaches the listener
+    // (then 'load' never fires for us). Cover that case + a hard fallback so the
+    // overlay can never get stuck covering the HUD.
+    try {
+      if (iframe.contentDocument?.readyState === 'complete') setLoading(false);
+    } catch (_) { /* cross-origin guard, not applicable here */ }
+    const fallback = setTimeout(() => setLoading(false), 4000);
+    return () => {
+      iframe.removeEventListener('load', onLoad);
+      clearTimeout(fallback);
+    };
   }, []);
 
   const renderCurrency = (type: string) => {
@@ -202,8 +212,8 @@ export function ConstructionDemoPage() {
         </div>
       </div>
 
-      {/* ==================== MENÚ PRINCIPAL INFERIOR (SOBRE FRIENDS) ==================== */}
-      <div className="absolute bottom-[110px] right-[10%] z-20 flex items-end drop-shadow-2xl">
+      {/* ==================== MENÚ PRINCIPAL INFERIOR (CENTRADO SOBRE FRIENDS) ==================== */}
+      <div className="absolute bottom-[110px] left-1/2 -translate-x-1/2 z-20 flex items-end drop-shadow-2xl">
 
         {/* Bloque Izquierdo: Bases/Navegación */}
         <div className="relative w-44 h-28 mr-2">
