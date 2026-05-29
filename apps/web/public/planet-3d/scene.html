@@ -367,8 +367,9 @@ fill.position.set(-10, 5, -8);
 scene.add(fill);
 
 // ===== TERRAIN =====
-const GRID_C = 12, GRID_R = 10;
-const CW = 3.8, CH = 2.2;
+// Square build area: equal columns/rows and square cells so the border is a true square.
+const GRID_C = 12, GRID_R = 12;
+const CW = 3.0, CH = 3.0;
 const OX = -(GRID_C * CW) / 2;
 const OZ = -(GRID_R * CH) / 2;
 
@@ -510,7 +511,7 @@ const zoneW = GRID_C * CW;   // total width of the build area
 const zoneD = GRID_R * CH;   // total depth
 const cx = OX + zoneW / 2;
 const cz = OZ + zoneD / 2;
-const BORDER = 0.125;        // thickness of the border bar (half of before, again)
+const BORDER = 0.0625;       // thickness of the border bar (half again)
 const BY = 0.06;             // sit just above the sand
 const borderMat = new THREE.MeshBasicMaterial({ color: 0x000000 }); // solid black, no glow
 const borderGroup = new THREE.Group();
