@@ -453,9 +453,9 @@ const zoneW = GRID_C * CW;   // total width of the build area
 const zoneD = GRID_R * CH;   // total depth
 const cx = OX + zoneW / 2;
 const cz = OZ + zoneD / 2;
-const BORDER = 0.5;          // thickness of the border bar
+const BORDER = 0.25;         // thickness of the border bar (half of before)
 const BY = 0.06;             // sit just above the sand
-const borderMat = new THREE.MeshBasicMaterial({ color: 0x37e0ff }); // bright cyan
+const borderMat = new THREE.MeshBasicMaterial({ color: 0x000000 }); // solid black, no glow
 const borderGroup = new THREE.Group();
 function addBar(w, d, x, z) {
   const bar = new THREE.Mesh(new THREE.BoxGeometry(w, 0.08, d), borderMat);
@@ -469,18 +469,6 @@ addBar(zoneW + BORDER, BORDER, cx, OZ + zoneD);
 addBar(BORDER, zoneD + BORDER, OX, cz);
 addBar(BORDER, zoneD + BORDER, OX + zoneW, cz);
 scene.add(borderGroup);
-
-// Subtle glow underlay (slightly larger, translucent) for a sci-fi edge
-const glowMat = new THREE.MeshBasicMaterial({ color: 0x37e0ff, transparent: true, opacity: 0.25 });
-function addGlow(w, d, x, z) {
-  const bar = new THREE.Mesh(new THREE.BoxGeometry(w, 0.04, d), glowMat);
-  bar.position.set(x, BY - 0.01, z);
-  scene.add(bar);
-}
-addGlow(zoneW + BORDER * 2.5, BORDER * 2.5, cx, OZ);
-addGlow(zoneW + BORDER * 2.5, BORDER * 2.5, cx, OZ + zoneD);
-addGlow(BORDER * 2.5, zoneD + BORDER * 2.5, OX, cz);
-addGlow(BORDER * 2.5, zoneD + BORDER * 2.5, OX + zoneW, cz);
 
 // Cell highlight cursor
 const hlGeo = new THREE.BoxGeometry(CW * 0.9, 0.05, CH * 0.9);
