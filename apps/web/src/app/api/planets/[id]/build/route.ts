@@ -6,6 +6,7 @@ import {
 } from '@galaxy/shared';
 import { verifyAuth } from '@/lib/api-auth';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import {
   syncEmpireGameState,
   finalizeCompletedBuildings,
@@ -152,7 +153,7 @@ export async function POST(
     const endsAt = new Date(Date.now() + totalCost.time * 1000);
 
     // Execute transaction: deduct resources + create/update building
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Tx) => {
       await tx.resource.update({
         where: { id: metal.id },
         data: { amount: { decrement: totalCost.metal } },

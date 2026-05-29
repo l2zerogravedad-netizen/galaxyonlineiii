@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError } from '@/lib/api-auth';
 
 // GET: Listar alianzas con opcion de busqueda
@@ -76,7 +77,7 @@ export async function POST(request: Request) {
     }
 
     // Crear alianza + miembro lider en transaccion atomica
-    const alliance = await prisma.$transaction(async (tx) => {
+    const alliance = await prisma.$transaction(async (tx: Tx) => {
       const a = await tx.alliance.create({
         data: {
           name,

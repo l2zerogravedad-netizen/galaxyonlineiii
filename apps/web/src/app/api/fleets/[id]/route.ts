@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError } from '@/lib/api-auth';
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -29,7 +30,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     });
     if (!fleet) return NextResponse.json({ success: false, error: 'Flota no encontrada' }, { status: 404 });
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Tx) => {
       const formations = await tx.fleetFormation.findMany({ where: { fleetId: id } });
       for (const f of formations) {
         await tx.ship.update({ where: { id: f.shipId }, data: { quantity: { increment: f.quantity }, fleetId: null } });

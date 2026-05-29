@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError, ApiError } from '@/lib/api-auth';
 
 // ============================================================
@@ -134,7 +135,7 @@ export async function POST(request: Request) {
     const now = new Date();
     const endsAt = new Date(now.getTime() + totalBuildTime * 1000);
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Tx) => {
       // Descontar recursos
       await tx.resource.update({
         where: { id: metal.id },

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
     // Crear usuario con Empire + Planeta + Recursos + Edificios
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Tx) => {
       // 1. Usuario
       const user = await tx.user.create({
         data: { email, passwordHash, username },

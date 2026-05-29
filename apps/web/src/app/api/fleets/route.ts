@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError } from '@/lib/api-auth';
 
 // GET /api/fleets — Listar flotas del jugador
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     }
 
     // Crear flota con transacción
-    const fleet = await prisma.$transaction(async (tx) => {
+    const fleet = await prisma.$transaction(async (tx: Tx) => {
       // Crear fleet
       const f = await tx.fleet.create({
         data: {

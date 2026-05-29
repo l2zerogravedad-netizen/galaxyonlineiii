@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError } from '@/lib/api-auth';
 
 // GET: Detalle de alianza con miembros
@@ -81,7 +82,7 @@ export async function POST(
     }
 
     // Unirse en transaccion atomica
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Tx) => {
       await tx.allianceMember.create({
         data: {
           allianceId: id,
@@ -133,7 +134,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Tx) => {
       await tx.allianceMember.delete({ where: { id: member.id } });
 
       const newCount = alliance!.memberCount - 1;

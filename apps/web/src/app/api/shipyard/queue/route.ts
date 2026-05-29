@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError } from '@/lib/api-auth';
 
 // ============================================================
@@ -61,7 +62,7 @@ export async function GET(request: Request) {
     for (const c of constructions) {
       if (c.status === 'BUILDING' && c.endsAt && new Date(c.endsAt) <= now) {
         // Completar: añadir naves al inventario
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx: Tx) => {
           // Buscar si ya existe un Ship para este blueprint
           const existingShip = await tx.ship.findFirst({
             where: {

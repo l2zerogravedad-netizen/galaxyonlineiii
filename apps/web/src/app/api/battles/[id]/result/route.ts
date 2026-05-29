@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError, ApiError } from '@/lib/api-auth';
 import {
   setHospital,
@@ -127,7 +128,7 @@ export async function POST(
     }
 
     // ── Ejecutar todo en una transaccion ──
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Tx) => {
       // 1. Actualizar batalla con resultado
       const updatedBattle = await tx.battle.update({
         where: { id: battleId },

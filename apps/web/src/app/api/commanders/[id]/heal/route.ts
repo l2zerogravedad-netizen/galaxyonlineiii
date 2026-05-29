@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import type { Tx } from "@/lib/prisma";
 import { verifyAuth, handleApiError, ApiError } from '@/lib/api-auth';
 import {
   getHospital,
@@ -138,7 +139,7 @@ export async function POST(
       }
 
       // Descontar créditos y curar
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: Tx) => {
         await tx.resource.update({
           where: { id: creditResource.id },
           data: { amount: { decrement: healCost } },
