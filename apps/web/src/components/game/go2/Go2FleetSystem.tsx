@@ -1,15 +1,22 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   type Commander,
   type Rarity,
   RARITY_COLORS,
   RARITY_DOT_CLASS,
 } from './go2-commander-data';
+import {
+  getFleets,
+  createFleet,
+  deleteFleet,
+  type FleetData,
+  type FormationSlotPayload,
+} from '@/lib/game/fleetClient';
 
 /* ═══════════════════════════════════════════════════════════════
-   Galaxy Online 2 — Fleet Management System
+   Galaxy Online 2 — Fleet Management System (API Connected)
    Every fleet MUST have a commander assigned, or it cannot deploy.
    ═══════════════════════════════════════════════════════════════ */
 
@@ -85,6 +92,36 @@ function StarDisplay({ count, max = 9 }: { count: number; max?: number }) {
       ))}
     </span>
   );
+}
+
+/* ─────────────────────── API helpers ─────────────────────── */
+
+/** Convert API FleetData to local Fleet format */
+function apiFleetToLocal(f: FleetData, index: number): Fleet {
+  return {
+    id: typeof f.id === 'string' ? parseInt(f.id, 10) || index + 1 : f.id,
+    name: f.name || `Fleet ${index + 1}`,
+    unlocked: f.unlocked ?? true,
+    commander: null,
+    formation: Array.from({ length: FORMATION_SIZE }, (_, j) => ({
+      index: j,
+      ship: null,
+    })),
+  };
+}
+
+/** Build default mock fleets as fallback */
+function buildMockFleets(maxFleets: number): Fleet[] {
+  return Array.from({ length: maxFleets }, (_, i) => ({
+    id: i + 1,
+    name: `Fleet ${i + 1}`,
+    unlocked: i < DEFAULT_UNLOCKED,
+    commander: null,
+    formation: Array.from({ length: FORMATION_SIZE }, (_, j) => ({
+      index: j,
+      ship: null,
+    })),
+  }));
 }
 
 /* ─────────────────────── commander selector modal ─────────────────────── */
@@ -298,22 +335,68 @@ export function Go2FleetSystem({
   /* local state for fleet data if not provided externally */
   const [localFleets, setLocalFleets] = useState<Fleet[]>(() => {
     if (propFleets) return propFleets;
-    return Array.from({ length: maxFleets }, (_, i) => ({
-      id: i + 1,
-      name: `Fleet ${i + 1}`,
-      unlocked: i < DEFAULT_UNLOCKED,
-      commander: null,
-      formation: Array.from({ length: FORMATION_SIZE }, (_, j) => ({
-        index: j,
-        ship: null,
-      })),
-    }));
+    return buildMockFleets(maxFleets);
   });
+
+  /* API state */
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(false);
+
+  /* Load fleets from API on mount */
+  useEffect(() => {
+    if (propFleets) return; // Skip if fleets provided externally
+
+    let cancelled = false;
+    async function loadFleets() {
+      setLoading(true);
+      setError(null);
+      setUsingFallback(false);
+      try {
+        const data = await getFleets();
+        if (cancelled) return;
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((f: FleetData, i: number) => apiFleetToLocal(f, i));
+          // Fill remaining slots up to maxFleets
+          while (mapped.length < maxFleets) {
+            mapped.push({
+              id: mapped.length + 1,
+              name: `Fleet ${mapped.length + 1}`,
+              unlocked: false,
+              commander: null,
+              formation: Array.from({ length: FORMATION_SIZE }, (_, j) => ({
+                index: j,
+                ship: null,
+              })),
+            });
+          }
+          setLocalFleets(mapped.slice(0, maxFleets));
+        } else {
+          // API returned empty — keep mock fallback
+          setUsingFallback(true);
+        }
+      } catch (err) {
+        if (cancelled) return;
+        console.warn('[Go2FleetSystem] API error, using mock fallback:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load fleets');
+        setUsingFallback(true);
+        // Keep default mock fleets already in state
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    loadFleets();
+    return () => { cancelled = true; };
+  }, [propFleets, maxFleets]);
 
   const fleets = propFleets ?? localFleets;
 
   const [activeFleetId, setActiveFleetId] = useState<number>(1);
   const [showCommanderSelector, setShowCommanderSelector] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newFleetName, setNewFleetName] = useState('');
+  const [creating, setCreating] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const activeFleet = fleets.find((f) => f.id === activeFleetId) ?? fleets[0];
 
@@ -362,6 +445,58 @@ export function Go2FleetSystem({
     const hasShips = activeFleet.formation.some((s) => s.ship !== null);
     return hasShips;
   }, [activeFleet]);
+
+  /* ─── API: create fleet ─── */
+  const handleCreateFleet = useCallback(async () => {
+    if (!newFleetName.trim()) return;
+    setCreating(true);
+    try {
+      const formationSlots: FormationSlotPayload[] = [];
+      const result = await createFleet(newFleetName.trim(), 'home-planet', formationSlots);
+      if (result) {
+        const newFleet = apiFleetToLocal(result, fleets.filter(f => f.unlocked).length);
+        newFleet.unlocked = true;
+        setLocalFleets((prev) => {
+          const updated = [...prev];
+          // Find first locked slot to replace, or append
+          const lockedIdx = updated.findIndex((f) => !f.unlocked);
+          if (lockedIdx >= 0) {
+            updated[lockedIdx] = { ...newFleet, id: updated[lockedIdx].id };
+          } else {
+            updated.push(newFleet);
+          }
+          return updated;
+        });
+        setShowCreateModal(false);
+        setNewFleetName('');
+      }
+    } catch (err) {
+      console.error('[Go2FleetSystem] Failed to create fleet:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create fleet');
+    } finally {
+      setCreating(false);
+    }
+  }, [newFleetName, fleets]);
+
+  /* ─── API: delete fleet ─── */
+  const handleDeleteFleet = useCallback(async (fleetId: number) => {
+    setDeletingId(fleetId);
+    try {
+      await deleteFleet(String(fleetId));
+      setLocalFleets((prev) =>
+        prev.map((f) =>
+          f.id === fleetId
+            ? { ...f, unlocked: false, commander: null, formation: Array.from({ length: FORMATION_SIZE }, (_, j) => ({ index: j, ship: null })) }
+            : f
+        )
+      );
+    } catch (err) {
+      console.error('[Go2FleetSystem] Failed to delete fleet:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete fleet');
+    } finally {
+      setDeletingId(null);
+    }
+  }, []);
 
   /* handlers */
   const handleAssignCommander = useCallback(
@@ -507,6 +642,16 @@ export function Go2FleetSystem({
           Fleet Management
         </span>
         <div className="flex items-center gap-2">
+          {loading && (
+            <span className="text-[10px] text-yellow-300 animate-pulse">
+              Loading...
+            </span>
+          )}
+          {usingFallback && (
+            <span className="text-[10px] text-white/40" title="Using local data">
+              ● OFFLINE
+            </span>
+          )}
           <span className="text-[11px] text-white/60">Fleets:</span>
           <span
             className="rounded-sm px-3 py-0.5 text-[11px] font-bold"
@@ -521,6 +666,26 @@ export function Go2FleetSystem({
         </div>
       </div>
 
+      {/* ═══ error banner ═══ */}
+      {error && (
+        <div
+          className="px-4 py-1.5 text-[10px] font-bold uppercase text-center"
+          style={{
+            backgroundColor: '#330000',
+            color: '#ff4444',
+            borderBottom: '1px solid #CC0000',
+          }}
+        >
+          ⚠ {error}
+          <button
+            className="ml-3 underline"
+            onClick={() => setError(null)}
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       {/* ═══ fleet tabs ═══ */}
       <div className="flex border-b-2" style={{ borderColor: '#0066CC' }}>
         {fleets.map((fleet) => (
@@ -531,19 +696,32 @@ export function Go2FleetSystem({
             onClick={() => setActiveFleetId(fleet.id)}
           />
         ))}
-        {/* unlock button */}
-        {fleets.some((f) => !f.unlocked) && (
+        {/* unlock / create buttons */}
+        <div className="flex items-center">
+          {fleets.some((f) => !f.unlocked) && (
+            <button
+              className="flex items-center gap-1 px-3 py-2 text-[11px] font-bold uppercase text-white transition-colors hover:brightness-125"
+              style={{
+                backgroundColor: '#001155',
+                borderLeft: '2px solid #000033',
+              }}
+              onClick={handleUnlockFleet}
+            >
+              <span className="text-sm">+</span> Unlock
+            </button>
+          )}
           <button
             className="flex items-center gap-1 px-3 py-2 text-[11px] font-bold uppercase text-white transition-colors hover:brightness-125"
             style={{
-              backgroundColor: '#001155',
+              backgroundColor: '#002244',
               borderLeft: '2px solid #000033',
             }}
-            onClick={handleUnlockFleet}
+            onClick={() => setShowCreateModal(true)}
+            title="Create new fleet"
           >
-            <span className="text-sm">+</span> Unlock
+            <span className="text-sm">++</span> New
           </button>
-        )}
+        </div>
       </div>
 
       {/* ═══ main content ═══ */}
@@ -781,15 +959,29 @@ export function Go2FleetSystem({
 
           {/* ── action buttons ── */}
           <div className="mt-auto flex items-center justify-between pt-2">
-            <button
-              className="px-5 py-2 text-[11px] font-bold uppercase text-white transition-colors hover:brightness-110"
-              style={{
-                backgroundColor: '#0033AA',
-                border: '2px solid #0066FF',
-              }}
-            >
-              Save Formation
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className="px-5 py-2 text-[11px] font-bold uppercase text-white transition-colors hover:brightness-110"
+                style={{
+                  backgroundColor: '#0033AA',
+                  border: '2px solid #0066FF',
+                }}
+              >
+                Save Formation
+              </button>
+              <button
+                className="px-3 py-2 text-[10px] font-bold uppercase text-white transition-colors hover:brightness-110"
+                style={{
+                  backgroundColor: deletingId === activeFleetId ? '#333355' : '#551100',
+                  border: '2px solid #CC3300',
+                  opacity: deletingId === activeFleetId ? 0.5 : 1,
+                }}
+                onClick={() => handleDeleteFleet(activeFleetId)}
+                disabled={deletingId === activeFleetId}
+              >
+                {deletingId === activeFleetId ? 'Deleting...' : 'Delete Fleet'}
+              </button>
+            </div>
 
             <div className="flex items-center gap-3">
               {!canDeploy && (
@@ -845,6 +1037,70 @@ export function Go2FleetSystem({
           onSelect={handleAssignCommander}
           onClose={() => setShowCommanderSelector(false)}
         />
+      )}
+
+      {/* ═══ create fleet modal ═══ */}
+      {showCreateModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+          onClick={() => setShowCreateModal(false)}
+        >
+          <div
+            className="w-[380px] overflow-hidden rounded-sm border-2"
+            style={{
+              backgroundColor: '#000044',
+              borderColor: '#0066CC',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className="border-b-2 px-4 py-2.5 text-center text-sm font-bold uppercase tracking-wider text-white"
+              style={{ backgroundColor: '#003399', borderColor: '#0066CC' }}
+            >
+              Create New Fleet
+            </div>
+            <div className="p-4 flex flex-col gap-3">
+              <label className="text-[11px] text-white/60 uppercase font-bold">
+                Fleet Name
+              </label>
+              <input
+                type="text"
+                value={newFleetName}
+                onChange={(e) => setNewFleetName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleCreateFleet(); }}
+                placeholder="Enter fleet name..."
+                className="px-3 py-2 text-xs text-white border-2 rounded-sm"
+                style={{
+                  backgroundColor: '#000066',
+                  borderColor: '#0066CC',
+                  outline: 'none',
+                }}
+                autoFocus
+              />
+            </div>
+            <div
+              className="border-t-2 px-4 py-2.5 flex justify-center gap-3"
+              style={{ backgroundColor: '#003399', borderColor: '#0066CC' }}
+            >
+              <button
+                className="px-6 py-1.5 text-xs font-bold uppercase text-white"
+                style={{ backgroundColor: '#0033AA', border: '2px solid #0066FF' }}
+                onClick={handleCreateFleet}
+                disabled={creating || !newFleetName.trim()}
+              >
+                {creating ? 'Creating...' : 'Create'}
+              </button>
+              <button
+                className="px-6 py-1.5 text-xs font-bold uppercase text-white"
+                style={{ backgroundColor: '#333355', border: '2px solid #555577' }}
+                onClick={() => { setShowCreateModal(false); setNewFleetName(''); }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

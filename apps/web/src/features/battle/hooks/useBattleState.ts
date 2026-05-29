@@ -10,7 +10,7 @@
  * ========================================================================
  */
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import type { BattleEngine } from '../engine';
 import { createBattleEngine } from '../engine';
 import type {
@@ -21,6 +21,14 @@ import type {
 } from '../engine/types';
 import { useBattleEffects } from '../effects/useBattleEffects';
 import type { FloatingDamageItem } from '../components/FloatingDamage';
+import {
+  initiateBattle,
+  saveBattleResult,
+  getBattles,
+  devSimulateBattle,
+  simulateRound,
+  getBattleState as getBattleStateApi,
+} from '@/lib/game/battleClient';
 
 // ============================================================================
 // CONSTANTS
@@ -66,6 +74,28 @@ export interface UseBattleStateReturn {
   setPlaybackSpeed: (speed: number) => void;
   selectStack: (stackId: string) => void;
   resetBattle: () => void;
+
+  // --- Integracion con Backend ---
+  battleId: string | null;
+  battleHistory: Array<{
+    id: string;
+    attackerId: string;
+    defenderId: string;
+    winner: string;
+    roundsPlayed: number;
+    status: string;
+    createdAt: string;
+  }>;
+  startBattleWithBackend: (
+    attackerFleetId: string,
+    defenderId: string
+  ) => Promise<{ battleId: string } | null>;
+  endBattleWithBackend: (result: 'WIN' | 'LOSS' | 'DRAW') => Promise<void>;
+  loadBattleHistory: () => Promise<void>;
+  devSimulate: (
+    attacker: ShipStack[],
+    defender: ShipStack[]
+  ) => Promise<unknown>;
 
   // --- Informacion adicional ---
   winner: 'attacker' | 'defender' | 'draw' | null;
@@ -170,10 +200,28 @@ export function useBattleState(): UseBattleStateReturn {
   const [floatingDamages, setFloatingDamages] = useState<FloatingDamageItem[]>([]);
   const [winner, setWinner] = useState<'attacker' | 'defender' | 'draw' | null>(null);
 
+  // --- Backend integration state ---
+  const [battleId, setBattleId] = useState<string | null>(null);
+  const [battleHistory, setBattleHistory] = useState<
+    Array<{
+      id: string;
+      attackerId: string;
+      defenderId: string;
+      winner: string;
+      roundsPlayed: number;
+      status: string;
+      createdAt: string;
+    }>
+  >([]);
+
   // --- Refs para control de auto-play ---
   const isPausedRef = useRef(isPaused);
   const speedRef = useRef(speed);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // --- Refs para tracking de ships iniciales (perdidas) ---
+  const initialAttackerShipsRef = useRef<number>(0);
+  const initialDefenderShipsRef = useRef<number>(0);
 
   // Sincronizar refs con estado
   useEffect(() => {
@@ -258,6 +306,17 @@ export function useBattleState(): UseBattleStateReturn {
       setSelectedStack(null);
       setWinner(null);
       setIsPaused(true);
+      setBattleId(null);
+
+      // Guardar ships iniciales para calcular perdidas
+      initialAttackerShipsRef.current = attacker.reduce(
+        (sum, s) => sum + s.totalShips,
+        0
+      );
+      initialDefenderShipsRef.current = defender.reduce(
+        (sum, s) => sum + s.totalShips,
+        0
+      );
 
       // Crear engine
       const engine = createBattleEngine({
@@ -330,7 +389,119 @@ export function useBattleState(): UseBattleStateReturn {
     setSelectedStack(null);
     setFloatingDamages([]);
     setWinner(null);
+    setBattleId(null);
+    initialAttackerShipsRef.current = 0;
+    initialDefenderShipsRef.current = 0;
   }, []);
+
+  // ============================================================================
+  // BACKEND INTEGRATION
+  // ============================================================================
+
+  /**
+   * Inicia una batalla en el backend contra otro jugador.
+   * Guarda el battleId para operaciones posteriores.
+   */
+  const startBattleWithBackend = useCallback(
+    async (attackerFleetId: string, defenderId: string) => {
+      try {
+        const result = await initiateBattle(attackerFleetId, defenderId);
+        if (result?.id) {
+          setBattleId(result.id);
+          return { battleId: result.id };
+        }
+        return null;
+      } catch (e) {
+        console.warn('[useBattleState] Backend battle init failed:', e);
+        return null;
+      }
+    },
+    []
+  );
+
+  /**
+   * Calcula las perdidas comparando ships iniciales vs actuales.
+   */
+  const computeLosses = useCallback(() => {
+    const losses: Array<{ blueprintId: string; quantity: number }> = [];
+    // Para el atacante: recorrer stacks actuales y calcular diferencia
+    const currentAttackerIds = new Set(attackerStacks.map((s) => s.id));
+    // Nota: Necesitariamos los stacks iniciales para calcular perdidas exactas.
+    // Como simplificacion, usamos los stacks actuales del engine.
+    attackerStacks.forEach((stack) => {
+      if (stack.currentShips < stack.totalShips) {
+        losses.push({
+          blueprintId: stack.shipType,
+          quantity: stack.totalShips - stack.currentShips,
+        });
+      }
+    });
+    defenderStacks.forEach((stack) => {
+      if (stack.currentShips < stack.totalShips) {
+        losses.push({
+          blueprintId: stack.shipType,
+          quantity: stack.totalShips - stack.currentShips,
+        });
+      }
+    });
+    return losses;
+  }, [attackerStacks, defenderStacks]);
+
+  /**
+   * Guarda el resultado de la batalla en el backend.
+   * Solo funciona si hay un battleId activo.
+   */
+  const endBattleWithBackend = useCallback(
+    async (result: 'WIN' | 'LOSS' | 'DRAW') => {
+      if (!battleId) {
+        console.warn('[useBattleState] No battleId to save result');
+        return;
+      }
+      try {
+        const losses = computeLosses();
+        await saveBattleResult(battleId, result, currentRound, losses);
+        console.log('[useBattleState] Battle result saved:', battleId);
+      } catch (e) {
+        console.warn('[useBattleState] Failed to save battle result:', e);
+      }
+    },
+    [battleId, currentRound, computeLosses]
+  );
+
+  /**
+   * Carga el historial de batallas del jugador desde el backend.
+   */
+  const loadBattleHistory = useCallback(async () => {
+    try {
+      const battles = await getBattles();
+      setBattleHistory(battles || []);
+    } catch (e) {
+      console.warn('[useBattleState] Failed to load battle history:', e);
+      setBattleHistory([]);
+    }
+  }, []);
+
+  /**
+   * Simula una batalla completa via endpoint dev (sin auth).
+   * Util para testing y balanceo.
+   */
+  const devSimulate = useCallback(
+    async (attacker: ShipStack[], defender: ShipStack[]) => {
+      try {
+        const result = await devSimulateBattle(attacker, defender);
+        return result;
+      } catch (e) {
+        console.warn('[useBattleState] Dev simulate failed:', e);
+        throw e;
+      }
+    },
+    []
+  );
+
+  // --- Cargar historial al montar el hook ---
+  useEffect(() => {
+    loadBattleHistory();
+  }, [loadBattleHistory]);
 
   // --- Auto-play loop ---
   useEffect(() => {
@@ -374,12 +545,22 @@ export function useBattleState(): UseBattleStateReturn {
   }, [battleState, syncFromEngine]); // Re-crear cuando cambia battleState (engine nuevo)
 
   // --- Computed values ---
-  const isBattleOver = battleState === 'ATTACKER_WINS' || battleState === 'DEFENDER_WINS' || battleState === 'DRAW';
+  const isBattleOver =
+    battleState === 'ATTACKER_WINS' ||
+    battleState === 'DEFENDER_WINS' ||
+    battleState === 'DRAW';
 
-  const totalAttackerShips = attackerStacks.reduce((sum, s) => sum + s.currentShips, 0);
-  const totalDefenderShips = defenderStacks.reduce((sum, s) => sum + s.currentShips, 0);
+  const totalAttackerShips = attackerStacks.reduce(
+    (sum, s) => sum + s.currentShips,
+    0
+  );
+  const totalDefenderShips = defenderStacks.reduce(
+    (sum, s) => sum + s.currentShips,
+    0
+  );
 
   return {
+    // --- Estado de la batalla ---
     battleState,
     currentRound,
     maxRounds,
@@ -391,12 +572,24 @@ export function useBattleState(): UseBattleStateReturn {
     speed,
     selectedStack,
     floatingDamages,
+
+    // --- Acciones ---
     initBattle,
     step,
     togglePause,
     setPlaybackSpeed,
     selectStack,
     resetBattle,
+
+    // --- Backend integration ---
+    battleId,
+    battleHistory,
+    startBattleWithBackend,
+    endBattleWithBackend,
+    loadBattleHistory,
+    devSimulate,
+
+    // --- Informacion adicional ---
     winner,
     isBattleOver,
     totalAttackerShips,

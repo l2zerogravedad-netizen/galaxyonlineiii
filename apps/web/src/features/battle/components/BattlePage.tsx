@@ -40,6 +40,8 @@ function BattleResultScreen({
   initialDefenderShips,
   onReset,
   onNewBattle,
+  onSaveBattle,
+  battleSaved,
 }: {
   winner: 'attacker' | 'defender' | 'draw' | null;
   currentRound: number;
@@ -49,6 +51,8 @@ function BattleResultScreen({
   initialDefenderShips: number;
   onReset: () => void;
   onNewBattle: () => void;
+  onSaveBattle?: () => void;
+  battleSaved?: boolean;
 }) {
   const isVictory = winner === 'attacker';
   const isDefeat = winner === 'defender';
@@ -113,6 +117,21 @@ function BattleResultScreen({
             </div>
           </div>
         </div>
+
+        {/* Save Battle button */}
+        {onSaveBattle && (
+          <button
+            onClick={onSaveBattle}
+            disabled={battleSaved}
+            className={`w-full mb-3 px-4 py-2.5 rounded-lg text-sm font-bold border transition-all ${
+              battleSaved
+                ? 'bg-green-600/20 border-green-600 text-green-400 cursor-default'
+                : 'bg-[#1a2d4f] hover:bg-[#243d6f] text-cyan-400 border-[#2a4a6f]'
+            }`}
+          >
+            {battleSaved ? 'Saved ✓' : 'Save Battle'}
+          </button>
+        )}
 
         {/* Actions */}
         <div className="flex gap-3">
@@ -223,6 +242,11 @@ export function BattlePage() {
     isBattleOver,
     totalAttackerShips,
     totalDefenderShips,
+    // Backend integration
+    battleId,
+    battleHistory,
+    endBattleWithBackend,
+    loadBattleHistory,
   } = useBattleState();
 
   // Estado para tracking de ships iniciales
@@ -231,6 +255,12 @@ export function BattlePage() {
 
   // Estado para mostrar/ocultar selector de preset
   const [showPresetSelector, setShowPresetSelector] = useState(true);
+
+  // Estado para mostrar/ocultar panel de historial
+  const [showHistory, setShowHistory] = useState(false);
+
+  // Estado para tracking si la batalla fue guardada
+  const [battleSaved, setBattleSaved] = useState(false);
 
   // Inicializar batalla con preset seleccionado
   const handleSelectPreset = (preset: BattlePreset) => {
@@ -242,24 +272,37 @@ export function BattlePage() {
     initBattle(preset.attacker, preset.defender);
   };
 
-  // Reiniciar con mismo preset (usar stacks actuales como base)
+  // Reiniciar con mismo preset
   const handleReset = () => {
     resetBattle();
     setShowPresetSelector(true);
+    setBattleSaved(false);
   };
 
   // Nueva batalla (volver a selector)
   const handleNewBattle = () => {
     resetBattle();
     setShowPresetSelector(true);
+    setBattleSaved(false);
   };
 
-  // Auto-inicializar con demo basico al montar (opcional, pero el selector lo hace mejor)
-  // useEffect(() => {
-  //   if (!showPresetSelector && battleState === 'SETUP') {
-  //     handleSelectPreset(demoBattleBasic);
-  //   }
-  // }, []);
+  // Guardar resultado de batalla en backend
+  const handleSaveBattle = async () => {
+    if (!isBattleOver || !winner) return;
+    const result: 'WIN' | 'LOSS' | 'DRAW' =
+      winner === 'attacker' ? 'WIN' : winner === 'defender' ? 'LOSS' : 'DRAW';
+    await endBattleWithBackend(result);
+    setBattleSaved(true);
+    await loadBattleHistory();
+  };
+
+  // Toggle panel de historial
+  const handleToggleHistory = () => {
+    setShowHistory((prev) => !prev);
+    if (!showHistory) {
+      loadBattleHistory();
+    }
+  };
 
   // --- Derivar datos para UI ---
 
@@ -423,12 +466,14 @@ export function BattlePage() {
             initialDefenderShips={initialDefenderShips}
             onReset={handleReset}
             onNewBattle={handleNewBattle}
+            onSaveBattle={handleSaveBattle}
+            battleSaved={battleSaved}
           />
         )}
       </div>
 
       {/* ============ BOTTOM CONTROLS ============ */}
-      <div className="h-16 bg-[#12182b] border-t border-[#1e2a4a] flex items-center px-4 gap-4">
+      <div className="h-16 bg-[#12182b] border-t border-[#1e2a4a] flex items-center px-4 gap-4 relative">
         {/* Timeline (izquierda, expande) */}
         <div className="flex-1 min-w-0">
           <BattleTimeline
@@ -502,7 +547,72 @@ export function BattlePage() {
             <span className="text-[#3a5a7a] text-xs font-normal">/{maxRounds}</span>
           </div>
         </div>
+
+        {/* History toggle */}
+        <button
+          onClick={handleToggleHistory}
+          className={`shrink-0 ml-3 px-3 py-2 rounded-lg text-sm font-bold border transition-all ${
+            showHistory
+              ? 'bg-cyan-600/20 border-cyan-600 text-cyan-400'
+              : 'bg-[#1a2d4f] border-[#2a4a6f] text-cyan-400 hover:bg-[#243d6f]'
+          }`}
+        >
+          History
+        </button>
       </div>
+
+      {/* ============ HISTORY PANEL OVERLAY ============ */}
+      {showHistory && (
+        <div className="absolute bottom-16 right-4 z-40 w-80 max-h-96 overflow-y-auto rounded-xl border border-[#1e2a4a] bg-[#0a0e1a]/95 backdrop-blur-sm shadow-2xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-white font-bold text-sm">Battle History</h3>
+            <button
+              onClick={() => setShowHistory(false)}
+              className="text-[#5a7a9a] hover:text-white text-xs transition-colors"
+            >
+              Close
+            </button>
+          </div>
+
+          {battleHistory.length === 0 ? (
+            <div className="text-[#5a7a9a] text-xs text-center py-4">
+              No battles recorded yet
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {battleHistory.map((battle) => (
+                <div
+                  key={battle.id}
+                  className="rounded-lg border border-[#1a2535] bg-[#0d1118] p-3 text-xs"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-cyan-400 font-bold">
+                      vs {battle.defenderId?.slice(0, 8) ?? 'Unknown'}
+                    </span>
+                    <span
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        battle.winner === 'attacker'
+                          ? 'bg-green-600/20 text-green-400'
+                          : battle.winner === 'defender'
+                          ? 'bg-rose-600/20 text-rose-400'
+                          : 'bg-yellow-600/20 text-yellow-400'
+                      }`}
+                    >
+                      {battle.winner}
+                    </span>
+                  </div>
+                  <div className="text-[#5a6a7a] text-[10px]">
+                    Rounds: {battle.roundsPlayed} | Status: {battle.status}
+                  </div>
+                  <div className="text-[#4a5a6f] text-[10px] mt-1">
+                    {new Date(battle.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

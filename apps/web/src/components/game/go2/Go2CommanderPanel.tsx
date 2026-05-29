@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   type Commander,
   COMMANDERS,
@@ -11,6 +11,8 @@ import {
 } from './go2-commander-data';
 import { Go2CommanderLevel } from './Go2CommanderLevel';
 import { Go2CommanderEquipment } from './Go2CommanderEquipment';
+import { getCommanders } from '@/lib/game/commanderClient';
+import type { ApiCommander } from '@/lib/game/commanderClient';
 
 /* ────────────────────────── helpers ────────────────────────── */
 
@@ -29,6 +31,34 @@ function StarRow({ count }: { count: number }) {
       ))}
     </div>
   );
+}
+
+/**
+ * Convert an API commander to the local Commander format.
+ */
+function apiToLocalCommander(api: ApiCommander): Commander {
+  return {
+    id: api.id,
+    name: api.name,
+    rarity: api.rarity as Commander['rarity'],
+    level: api.level,
+    exp: api.exp,
+    expMax: api.expMax,
+    stars: api.stars,
+    skill: api.skill,
+    skillDescription: api.skillDescription,
+    skillAffectedBy: api.skillAffectedBy,
+    status: api.status,
+    stats: api.stats,
+    growthRates: api.growthRates,
+    equipment: {
+      weapons: api.equipment?.weapons ?? [null, null, null, null],
+      defense: api.equipment?.defense ?? [null, null, null, null],
+    },
+    gems: (api.gems ?? [null, null, null]) as Commander['gems'],
+    injuryTime: api.injuryTime,
+    isDead: api.isDead,
+  };
 }
 
 /* ────────────────────────── sub-components ────────────────────────── */
@@ -220,8 +250,6 @@ function CommanderCard({
 function FleetPanel() {
   const [activeTab, setActiveTab] = useState<'min' | 'obj'>('min');
 
-  const slots = Array.from({ length: 9 }, (_, i) => i);
-
   return (
     <div className="flex w-[240px] shrink-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-[#141428]/80 to-[#0a0a19]/95">
       {/* tabs */}
@@ -298,7 +326,25 @@ export function Go2CommanderPanel() {
   const [selectedId, setSelectedId] = useState<string>('reggie');
   const [commanderState, setCommanderState] = useState<Record<string, { exp: number; level: number; equipment: Commander['equipment'] }>>({});
 
-  const baseSelected = COMMANDERS.find((c) => c.id === selectedId) ?? COMMANDERS[0];
+  /* Attempt to load commanders from the API; fall back to local data */
+  const [apiCommanders, setApiCommanders] = useState<Commander[] | null>(null);
+
+  useEffect(() => {
+    getCommanders()
+      .then((data) => {
+        if (data?.commanders && data.commanders.length > 0) {
+          setApiCommanders(data.commanders.map(apiToLocalCommander));
+        }
+      })
+      .catch(() => {
+        /* silent fail — local data will be used as fallback */
+      });
+  }, []);
+
+  /* Use API data if available, otherwise fall back to local COMMANDERS */
+  const displayCommanders = apiCommanders ?? COMMANDERS;
+
+  const baseSelected = displayCommanders.find((c) => c.id === selectedId) ?? displayCommanders[0];
 
   // Merge runtime state with base commander data
   const saved = commanderState[baseSelected.id];
@@ -369,9 +415,19 @@ export function Go2CommanderPanel() {
           Commander Fleet
         </span>
         <div className="flex items-center gap-2">
+          {/* Show data source indicator */}
+          <span
+            className={`rounded px-2 py-0.5 text-[9px] font-bold uppercase ${
+              apiCommanders
+                ? 'border border-green-500/30 bg-green-500/10 text-green-400'
+                : 'border border-white/10 bg-white/5 text-white/30'
+            }`}
+          >
+            {apiCommanders ? 'API' : 'Local'}
+          </span>
           <span className="text-xs text-[#90caf9]">Slots:</span>
           <div className="rounded-full border border-[#ffd54f]/30 bg-black/40 px-4 py-1 text-[13px] font-bold text-[#ffd54f]">
-            10 / 50
+            {displayCommanders.length} / 50
           </div>
         </div>
       </div>
@@ -379,7 +435,7 @@ export function Go2CommanderPanel() {
       {/* main 3-panel area */}
       <div className="flex min-h-0 flex-1 gap-3 p-3">
         <CommanderList
-          commanders={COMMANDERS}
+          commanders={displayCommanders}
           selectedId={selectedId}
           onSelect={setSelectedId}
           commanderState={commanderState}
