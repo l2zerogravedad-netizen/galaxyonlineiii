@@ -288,6 +288,61 @@ function saveState() { localStorage.setItem(SK, JSON.stringify({ R, placed })); 
 function canAff(it) { return R.m >= it.cost.m && R.e >= it.cost.e && R.c >= it.cost.c; }
 function cntType(id) { return placed.filter(p => p.typeId === id).length; }
 
+// ===== BACKEND SYNC (real empire persistence; additive, gated by login token) =====
+// When a session token exists (shared localStorage with the React HUD) the base loads the
+// real buildings from /api/empire and persists new placements via POST /build. Guests are
+// fully unaffected: every branch below is gated by BACKEND and wrapped in try/catch, so any
+// network/API problem degrades gracefully to the local sandbox.
+const AUTH_TOKEN = (() => { try { return localStorage.getItem('token'); } catch (e) { return null; } })();
+const BACKEND = !!AUTH_TOKEN;
+let PLANET_ID = null;
+const BK_COLS = 8, BK_ROWS = 10; // backend = 80 slots (8x10), a sub-grid of the 12x12 board
+function cellToSlot(col, row) { return (col >= 0 && col < BK_COLS && row >= 0 && row < BK_ROWS) ? row * BK_COLS + col : -1; }
+function slotToCell(slot) { return { col: ((slot % BK_COLS) + BK_COLS) % BK_COLS, row: Math.floor(slot / BK_COLS) }; }
+// scene catalogId -> canonical apiType accepted by the build endpoint
+const TYPE_TO_API = { metal_mine: 'metal_extractor', power_plant: 'energy_generator', warehouse: 'warehouse', shipyard: 'shipyard', command_center: 'control_center' };
+// any backend type (canonical or legacy) -> closest scene GLB id, for rendering real buildings
+function apiToSceneType(t) {
+  const k = String(t || '').toLowerCase();
+  if (k.indexOf('metal') >= 0 || k.indexOf('he3') >= 0) return 'metal_mine';
+  if (k.indexOf('gas') >= 0 || k.indexOf('plasma') >= 0 || k.indexOf('energy') >= 0 || k.indexOf('solar') >= 0) return 'power_plant';
+  if (k.indexOf('warehouse') >= 0 || k.indexOf('storage') >= 0) return 'warehouse';
+  if (k.indexOf('shipyard') >= 0 || k.indexOf('foundry') >= 0 || k.indexOf('hangar') >= 0) return 'shipyard';
+  if (k.indexOf('command') >= 0 || k.indexOf('control') >= 0 || k.indexOf('nexus') >= 0 || k.indexOf('research') >= 0 || k.indexOf('lab') >= 0 || k.indexOf('academy') >= 0 || k.indexOf('credit') >= 0 || k.indexOf('trading') >= 0) return 'command_center';
+  return 'warehouse';
+}
+async function apiGet(path) { const r = await fetch(path, { headers: { Authorization: 'Bearer ' + AUTH_TOKEN } }); if (!r.ok) throw new Error(path + ' ' + r.status); return r.json(); }
+async function apiPost(path, body) { const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + AUTH_TOKEN }, body: JSON.stringify(body) }); let j = {}; try { j = await r.json(); } catch (e) {} if (!r.ok || (j && j.success === false)) throw new Error((j && j.error) || ('HTTP ' + r.status)); return j; }
+async function refreshBackendResources() {
+  try {
+    const e = await apiGet('/api/empire');
+    const find = (t) => (e.resources || []).find((x) => x.type === t);
+    const m = find('METAL'), g = find('GAS') || find('PLASMA'), c = find('CREDITS');
+    R = { m: Math.floor(m?.amount ?? R.m), e: Math.floor(g?.amount ?? R.e), c: Math.floor(c?.amount ?? R.c) };
+    updateUI();
+  } catch (err) { /* keep last known resources */ }
+}
+async function loadBackendBase() {
+  try {
+    const e = await apiGet('/api/empire');
+    const find = (t) => (e.resources || []).find((x) => x.type === t);
+    const m = find('METAL'), g = find('GAS') || find('PLASMA'), c = find('CREDITS');
+    R = { m: Math.floor(m?.amount ?? R.m), e: Math.floor(g?.amount ?? R.e), c: Math.floor(c?.amount ?? R.c) };
+    const planet = (e.planets || [])[0];
+    PLANET_ID = planet ? planet.id : null;
+    const blds = (planet && planet.buildings) || [];
+    for (const b of blds) {
+      const cell = slotToCell(b.slotIndex);
+      if (cell.col >= GRID_C || cell.row >= GRID_R) continue;
+      if (placed.some((p) => p.col === cell.col && p.row === cell.row)) continue;
+      const sceneType = apiToSceneType(b.type);
+      placed.push({ typeId: sceneType, col: cell.col, row: cell.row, rot: 0 });
+      await placeItem(sceneType, cell.col, cell.row, 0);
+    }
+    updateUI();
+  } catch (err) { showErr('Backend: ' + err.message); }
+}
+
 // ===== THREE.JS SETUP =====
 const canvas = document.getElementById('gameCanvas');
 const scene = new THREE.Scene();
@@ -669,6 +724,30 @@ canvas.addEventListener('click', async e => {
   await placeItem(def.id, g.col, g.row, selRot);
   spawnShield(g2w(g.col, g.row));
   saveState();
+  // Persist to the backend when logged in (sandbox-only otherwise).
+  if (BACKEND && PLANET_ID) {
+    const slot = cellToSlot(g.col, g.row);
+    const apiType = TYPE_TO_API[def.id];
+    if (slot >= 0 && apiType) {
+      try {
+        await apiPost('/api/planets/' + PLANET_ID + '/build', { slotIndex: slot, type: apiType });
+        await refreshBackendResources();
+        showHint(def.name + ' en construcción!');
+        setTimeout(hideHint, 1500);
+        return;
+      } catch (err) {
+        // roll back the optimistic local placement so the 3D never lies about the backend
+        removeVisual(g.col, g.row);
+        const ri = placed.findIndex((p) => p.col === g.col && p.row === g.row);
+        if (ri !== -1) placed.splice(ri, 1);
+        saveState();
+        await refreshBackendResources();
+        showHint('No se pudo construir: ' + err.message);
+        setTimeout(hideHint, 2400);
+        return;
+      }
+    }
+  }
   updateUI();
   showHint(def.name + ' construido!');
   setTimeout(hideHint, 1500);
@@ -680,6 +759,9 @@ canvas.addEventListener('contextmenu', e => {
   if (!pt) return;
   const g = w2g(pt.x, pt.z);
   if (!g) return;
+  // Real (backend) buildings can't be demolished yet — there is no delete endpoint, so
+  // removing one locally would just reappear on reload. Block it inside the backend region.
+  if (BACKEND && cellToSlot(g.col, g.row) >= 0) { showHint('La demolición de edificios reales estará disponible pronto'); setTimeout(hideHint, 2000); return; }
   const occ = occMap();
   if (!occ.has(g.col + ',' + g.row)) return;
   const idx = placed.findIndex(p => p.col === g.col && p.row === g.row);
@@ -900,13 +982,15 @@ updateUI = function () { _origUpdateUI(); postResources(); };
 // ===== INIT =====
 async function init() {
   loadState();
+  if (BACKEND) { placed = []; } // logged in: backend is the source of truth, ignore local sandbox
   updateUI();
   // Re-fit to the iframe now that it's laid out (initial size may have been 0/300).
   resizeRenderer();
   setTimeout(resizeRenderer, 100);
   setTimeout(resizeRenderer, 500);
-  // Place saved
-  for (const p of placed) await placeItem(p.typeId, p.col, p.row, p.rot);
+  // Logged in → load the real empire buildings; guest → restore the local sandbox.
+  if (BACKEND) { await loadBackendBase(); }
+  else { for (const p of placed) await placeItem(p.typeId, p.col, p.row, p.rot); }
   document.getElementById('load').style.opacity = '0';
   setTimeout(() => document.getElementById('load').style.display = 'none', 500);
   postCatalog();

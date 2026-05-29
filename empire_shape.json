@@ -1,0 +1,99 @@
+{
+  "id": "a58a4154-4488-4c30-9164-0fc88b5d1f42",
+  "name": "Imperio de shp_1780096364001",
+  "level": 1,
+  "experience": 0,
+  "resources": [
+    {
+      "id": "4005e8db-6425-417d-af43-dac71c4bf630",
+      "empireId": "a58a4154-4488-4c30-9164-0fc88b5d1f42",
+      "type": "METAL",
+      "amount": 10000,
+      "capacity": 50000,
+      "productionPerHour": 100,
+      "updatedAt": "2026-05-29T23:12:44.927Z"
+    },
+    {
+      "id": "d89bcc0d-47d6-4cf2-a041-1b7790790ab7",
+      "empireId": "a58a4154-4488-4c30-9164-0fc88b5d1f42",
+      "type": "PLASMA",
+      "amount": 10000,
+      "capacity": 50000,
+      "productionPerHour": 80,
+      "updatedAt": "2026-05-29T23:12:44.927Z"
+    },
+    {
+      "id": "6a39fc6e-38b2-4d91-97ba-d75343e2e548",
+      "empireId": "a58a4154-4488-4c30-9164-0fc88b5d1f42",
+      "type": "CREDITS",
+      "amount": 10000,
+      "capacity": 50000,
+      "productionPerHour": 60,
+      "updatedAt": "2026-05-29T23:12:44.927Z"
+    }
+  ],
+  "planets": [
+    {
+      "id": "197d8f26-e499-4110-bcce-f2267b81a852",
+      "name": "Planeta Principal",
+      "type": "HABITABLE",
+      "maxBuildingSlots": 80,
+      "buildings": [
+        {
+          "id": "72e3dc7f-916e-41b5-afed-b0e72044875b",
+          "planetId": "197d8f26-e499-4110-bcce-f2267b81a852",
+          "type": "COMMAND_CENTER",
+          "level": 1,
+          "slotIndex": 40,
+          "status": "IDLE",
+          "constructionEndsAt": null
+        },
+        {
+          "id": "890e4e2b-01b2-46ba-bd70-d26ebb42819a",
+          "planetId": "197d8f26-e499-4110-bcce-f2267b81a852",
+          "type": "METAL_MINE",
+          "level": 1,
+          "slotIndex": 10,
+          "status": "IDLE",
+          "constructionEndsAt": null
+        },
+        {
+          "id": "be007fca-f49e-4580-98c5-a370e763adaf",
+          "planetId": "197d8f26-e499-4110-bcce-f2267b81a852",
+          "type": "PLASMA_EXTRACTOR",
+          "level": 1,
+          "slotIndex": 11,
+          "status": "IDLE",
+          "constructionEndsAt": null
+        },
+        {
+          "id": "63afdb9a-2bea-4cc5-937a-6b62b83ecfa5",
+          "planetId": "197d8f26-e499-4110-bcce-f2267b81a852",
+          "type": "CREDIT_MINT",
+          "level": 1,
+          "slotIndex": 12,
+          "status": "IDLE",
+          "constructionEndsAt": null
+        },
+        {
+          "id": "29e71da4-e64f-4bb1-9b81-8d28c535aeb5",
+          "planetId": "197d8f26-e499-4110-bcce-f2267b81a852",
+          "type": "SHIPYARD",
+          "level": 1,
+          "slotIndex": 30,
+          "status": "IDLE",
+          "constructionEndsAt": null
+        },
+        {
+          "id": "3130c067-fcd3-428c-a848-d46e65eb0559",
+          "planetId": "197d8f26-e499-4110-bcce-f2267b81a852",
+          "type": "RESEARCH_LAB",
+          "level": 1,
+          "slotIndex": 31,
+          "status": "IDLE",
+          "constructionEndsAt": null
+        }
+      ]
+    }
+  ]
+}
