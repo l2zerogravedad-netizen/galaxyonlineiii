@@ -1,6 +1,9 @@
 [build]
 builder = "RAILPACK"
-buildCommand = "cd apps/web && npm run build"
+# Generate the Prisma client (from packages/database schema) BEFORE building the web app —
+# next build collects page data for /api routes that import @prisma/client, which fails
+# with "did not initialize yet" if the client wasn't generated during the build.
+buildCommand = "cd packages/database && npx prisma generate && cd ../../apps/web && npm run build"
 
 [deploy]
 startCommand = "cd apps/web && npx next start"
