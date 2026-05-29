@@ -10,13 +10,19 @@ import React from 'react';
  */
 type Props = { src: string; alt?: string; className?: string };
 
+/**
+ * The Meshy PNGs have a baked square/dark background. Rendering them `object-contain`
+ * showed the square corners poking out of the round button ("lines"). Instead we fill
+ * the button and clip to a circle (`rounded-full object-cover`), so the baked corners
+ * are cropped away and only the centered symbol shows on the round face.
+ */
 export function MenuImageIcon({ src, alt = '', className }: Props) {
   return (
     <img
       src={src}
       alt={alt}
       draggable={false}
-      className={`${className ?? ''} object-contain select-none pointer-events-none`}
+      className={`${className ?? ''} w-full h-full rounded-full object-cover select-none pointer-events-none`}
       style={{ imageRendering: 'auto' }}
     />
   );
