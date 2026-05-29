@@ -6,6 +6,11 @@
  * Coordina todas las fases: ROUND_START → MOVEMENT → INITIATIVE →
  * ATTACK → DEFENSE → RESOLUTION → ROUND_END.
  *
+ * Incluye mecánica de Successive Strikes (M08):
+ * - Cada punto de Speed del comandante da +0.05% chance de ataque adicional
+ * - Máximo 3 ataques sucesivos por stack por ronda
+ * - Evento SUCCESSIVE_STRIKE emitido para animación en frontend
+ *
  * Basado en las mecánicas de Galaxy Online 2 (GO2).
  *
  * @module battle/engine/BattleEngine
@@ -21,7 +26,7 @@ import type {
   BattlePhase,
   Faction,
 } from './types';
-import { BattleState } from './types';
+import { BattleState, MAX_SUCCESSIVE_STRIKES, SUCCESSIVE_STRIKE_CHANCE_PER_SPEED } from './types';
 import { SeededRNG } from './DamageSystem';
 import { calculateAttack, aggregateDamage } from './DamageSystem';
 import {
@@ -94,6 +99,10 @@ export class BattleEngine {
 
   // --- Debug ---
   private debugMode: boolean = false;
+
+  // --- Successive Strike tracking (M08) ---
+  /** Map<stackId, strikesUsedThisRound> para tracking de successive strikes */
+  private successiveStrikesUsed: Map<string, number> = new Map();
 
   /**
    * Crea una nueva instancia del motor de batalla.
@@ -230,6 +239,9 @@ export class BattleEngine {
     if (this.isBattleOver()) return false;
 
     this.currentRound++;
+
+    // Reiniciar tracking de successive strikes al inicio de cada ronda
+    this.successiveStrikesUsed.clear();
 
     // Verificar límite de rondas
     if (this.currentRound > this.maxRounds) {
@@ -400,7 +412,112 @@ export class BattleEngine {
 
       // Ejecutar ataque del stack
       this.executeStackAttack(stack);
+
+      // ── M08: Successive Strikes ────────────────────────────────────────
+      // Después del ataque inicial, intentar ataques adicionales basados
+      // en la velocidad del comandante.
+      this.processSuccessiveStrikes(stack);
     }
+  }
+
+  // ============================================================================
+  // SUCCESSIVE STRIKES (M08)
+  // ============================================================================
+
+  /**
+   * Procesa los successive strikes para un stack después de su ataque inicial.
+   *
+   * Mecánica GO2: "Successive Strike Rate: The chance to attack multiple times
+   * per round. 1 speed = +0.05% chance"
+   *
+   * - chance = commander.speed * 0.0005 (0.05% por punto de speed)
+   * - Máximo 3 ataques sucesivos por stack por ronda
+   * - Emite evento SUCCESSIVE_STRIKE para animación en frontend
+   */
+  private processSuccessiveStrikes(originalStack: ShipStack): void {
+    // Solo si el stack tiene comandante
+    if (!originalStack.commander) return;
+
+    const commanderSpeed = originalStack.commander.speed;
+    if (commanderSpeed <= 0) return;
+
+    // Calcular chance base: speed * 0.05%
+    const strikeChance = commanderSpeed * SUCCESSIVE_STRIKE_CHANCE_PER_SPEED;
+
+    for (
+      let strikeNumber = 2;
+      strikeNumber <= MAX_SUCCESSIVE_STRIKES;
+      strikeNumber++
+    ) {
+      if (this.isBattleOver()) break;
+
+      // Verificar que el stack sigue vivo (obtener versión actualizada)
+      const currentStack = this.findStackById(originalStack.id);
+      if (!currentStack || currentStack.currentShips <= 0) break;
+
+      // Verificar límite de strikes para este stack en esta ronda
+      const strikesUsed = this.successiveStrikesUsed.get(originalStack.id) ?? 0;
+      if (strikesUsed >= MAX_SUCCESSIVE_STRIKES - 1) break; // -1 porque el ataque inicial no cuenta
+
+      // RNG check para successive strike
+      if (!this.rng.chance(strikeChance)) {
+        // Falló el RNG, no hay strike adicional
+        break;
+      }
+
+      // ── Successive Strike exitoso ─────────────────────────────────────
+
+      // Incrementar contador
+      this.successiveStrikesUsed.set(originalStack.id, strikesUsed + 1);
+
+      // Emitir evento SUCCESSIVE_STRIKE para animación frontend
+      this.emit({
+        type: 'SUCCESSIVE_STRIKE',
+        stackId: currentStack.id,
+        attackNumber: strikeNumber,
+        commanderName: currentStack.commander?.name ?? 'Unknown',
+        speed: commanderSpeed,
+      });
+
+      // Ejecutar ataque adicional
+      this.executeStackAttack(currentStack);
+    }
+  }
+
+  /** Busca un stack por ID en los arrays de atacante o defensor */
+  private findStackById(stackId: string): ShipStack | undefined {
+    return (
+      this.attackerStacks.find((s) => s.id === stackId) ??
+      this.defenderStacks.find((s) => s.id === stackId)
+    );
+  }
+
+  // ============================================================================
+  // STACK ATTACK
+  // ============================================================================
+
+  /**
+   * D05: Calcula la distancia entre dos posiciones en el grid.
+   */
+  private calculateDistance(posA: number, posB: number): number {
+    return Math.abs(posA - posB);
+  }
+
+  /**
+   * D05: Selecciona el objetivo más débil que esté dentro del rango de movement.
+   * Naves con menos movement no pueden alcanzar objetivos lejanos.
+   */
+  private selectTarget(attacker: ShipStack, enemies: ShipStack[]): ShipStack | null {
+    // Encontrar enemigos en rango (movement del atacante)
+    const inRange = enemies.filter((e) => {
+      const distance = this.calculateDistance(attacker.position, e.position);
+      return distance <= attacker.movement && e.currentShips > 0;
+    });
+
+    if (inRange.length === 0) return null;
+
+    // Seleccionar el más débil (menor currentHull)
+    return inRange.sort((a, b) => a.currentHull - b.currentHull)[0];
   }
 
   /**
@@ -429,11 +546,11 @@ export class BattleEngine {
     for (const weapon of weapons) {
       if (attacker.he3 < weapon.he3Consumption) continue;
 
-      // Encontrar objetivos en rango
+      // Encontrar objetivos en rango (arma + movement)
       const validTargets = findValidTargets(attacker, aliveEnemies, weapon);
       if (validTargets.length === 0) continue;
 
-      // Seleccionar objetivo (más débil por defecto)
+      // Seleccionar objetivo (más débil en rango de movement)
       const target = selectWeakestTarget(validTargets);
       if (!target) continue;
 
@@ -671,10 +788,7 @@ export class BattleEngine {
   ): boolean {
     if (!isInterceptable(weapon)) return false;
 
-    const chance = calculateInterceptChance(
-      interceptor.commander?.speed ?? 0,
-      attacker.commander?.speed ?? 0
-    );
+    const chance = calculateInterceptChance();
 
     const success = this.rng.chance(chance);
 

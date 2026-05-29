@@ -5,7 +5,7 @@ export type BuildingStatus = "active" | "locked" | "building" | "available" | "m
 
 export type BuildingType =
   | "metal_extractor"
-  | "plasma_refinery"
+  | "gas_refinery"
   | "warehouse"
   | "energy_generator"
   | "control_center"
@@ -124,7 +124,7 @@ export const resources: Resource[] = [
   },
   {
     key: "plasma",
-    label: "Plasma",
+    label: "Gas",
     value: 831,
     max: 1000,
     rate: 50,
@@ -192,15 +192,15 @@ export const allBuildings: Building[] = [
   },
   {
     id: "b2",
-    type: "plasma_refinery",
-    name: "Refinería de Plasma",
+    type: "gas_refinery",
+    name: "Refinería de Gas",
     level: 1,
     maxLevel: 20,
-    description: "Procesa plasma bruto extraído del subsuelo para su uso en tecnologías avanzadas y construcción.",
+    description: "Procesa gas bruto extraído del subsuelo para su uso en tecnologías avanzadas y construcción.",
     category: "production",
     status: "active",
-    image: "/game/assets/buildings/plasma-refinery.webp",
-    webpName: "plasma-refinery",
+    image: "/game/assets/buildings/gas-refinery.webp",
+    webpName: "gas-refinery",
     glow: "purple",
     production: { plasma: 50 },
     consumption: { energy: 15 },

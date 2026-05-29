@@ -5,6 +5,7 @@ import { MAX_PER_PLANET_BY_TYPE } from './terrestrialCatalog';
 export function productionFromBuilding(type: string, level: number): {
   metal?: number;
   plasma?: number;
+  he3?: number;
   credits?: number;
 } {
   const t = normalizeBuildingType(type);
@@ -12,8 +13,10 @@ export function productionFromBuilding(type: string, level: number): {
   switch (t) {
     case 'metal_extractor':
       return { metal: 20 * level };
-    case 'plasma_refinery':
+    case 'gas_refinery':
       return { plasma: 10 * level };
+    case 'he3_extractor':
+      return { he3: 8 * level };
     case 'control_center':
       return { credits: 5 * level };
     case 'trading_center':
@@ -28,10 +31,11 @@ export function productionFromBuilding(type: string, level: number): {
 export function capacityBonusFromBuilding(type: string, level: number): {
   metal?: number;
   plasma?: number;
+  he3?: number;
 } {
   const t = normalizeBuildingType(type);
   if (t === 'warehouse' && level >= 1) {
-    return { metal: 500 * level, plasma: 300 * level };
+    return { metal: 500 * level, plasma: 300 * level, he3: 250 * level };
   }
   return {};
 }

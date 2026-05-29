@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server';
 import { verifyAuth, handleApiError } from '@/lib/api-auth';
 import {
-  getGems,
-  setGems,
-  type GemData,
-  type GemsPayload,
+  getGo2Gems,
+  setGo2Gems,
+  type Go2GemSlot,
+  type Go2GemData,
+  GO2_GEM_SLOT_STATS,
+  GO2_GEM_BONUS_PER_SLOT,
 } from '../../_lib/commander-state';
 
 // ============================================================
-// GET /api/commanders/[id]/gems — Gemas equipadas del comandante
+// GET /api/commanders/[id]/gems — Listar gemas equipadas (GO2)
+// Returns 4 slots: red, blue, green, diamond + stat bonuses
 // ============================================================
 export async function GET(
   request: Request,
@@ -18,13 +21,32 @@ export async function GET(
     const user = verifyAuth(request);
     const { id: commanderId } = await params;
 
-    const gems = await getGems(user.empireId, commanderId);
+    const gemState = await getGo2Gems(user.empireId, commanderId);
+
+    // Calculate stat bonuses
+    const bonuses: Record<string, number> = {
+      accuracy: 0,
+      speed: 0,
+      dodge: 0,
+      electron: 0,
+    };
+
+    for (const [slot, gem] of Object.entries(gemState.slots)) {
+      if (gem) {
+        const stat = GO2_GEM_SLOT_STATS[slot as Go2GemSlot];
+        if (stat) {
+          bonuses[stat] += GO2_GEM_BONUS_PER_SLOT;
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,
       data: {
         commanderId,
-        gems,
+        gems: gemState.slots,
+        bonuses,
+        totalBonus: Object.values(bonuses).reduce((a, b) => a + b, 0),
       },
     });
   } catch (error) {
@@ -33,10 +55,8 @@ export async function GET(
 }
 
 // ============================================================
-// POST /api/commanders/[id]/gems — Equipar / desequipar gema
-// Body: { action: 'equip', slotIndex: 0|1|2, gem: GemData }
-//       { action: 'unequip', slotIndex: 0|1|2 }
-//       { action: 'replace', slots: (GemData|null)[] }
+// POST /api/commanders/[id]/gems — Equipar gema
+// Body: { slot: 'red' | 'blue' | 'green' | 'diamond', gemId: string }
 // ============================================================
 export async function POST(
   request: Request,
@@ -46,118 +66,135 @@ export async function POST(
     const user = verifyAuth(request);
     const { id: commanderId } = await params;
     const body = (await request.json()) as {
-      action: 'equip' | 'unequip' | 'replace';
-      slotIndex?: number;
-      gem?: GemData;
-      slots?: (GemData | null)[];
+      slot: Go2GemSlot;
+      gemId: string;
     };
 
-    const current = await getGems(user.empireId, commanderId);
-    let updated: GemsPayload;
-
-    switch (body.action) {
-      case 'equip': {
-        if (
-          body.slotIndex === undefined ||
-          body.slotIndex < 0 ||
-          body.slotIndex > 2
-        ) {
-          return NextResponse.json(
-            { success: false, error: 'slotIndex debe ser 0, 1 o 2' },
-            { status: 400 }
-          );
-        }
-        if (!body.gem) {
-          return NextResponse.json(
-            { success: false, error: 'gem es requerida para equipar' },
-            { status: 400 }
-          );
-        }
-        // Validar tipo de gema
-        const validTypes = ['red', 'blue', 'green', 'yellow', 'purple'];
-        if (!validTypes.includes(body.gem.type)) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: `Tipo de gema inválido. Valores: ${validTypes.join(', ')}`,
-            },
-            { status: 400 }
-          );
-        }
-        // Validar nivel
-        if (body.gem.level < 1 || body.gem.level > 10) {
-          return NextResponse.json(
-            { success: false, error: 'Nivel de gema debe ser 1-10' },
-            { status: 400 }
-          );
-        }
-        // Validar calidad
-        const validQualities = ['normal', 'refined', 'perfect'];
-        if (!validQualities.includes(body.gem.quality)) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: `Calidad inválida. Valores: ${validQualities.join(', ')}`,
-            },
-            { status: 400 }
-          );
-        }
-
-        const newSlots = [...current.slots];
-        newSlots[body.slotIndex] = body.gem;
-        updated = { slots: newSlots };
-        break;
-      }
-
-      case 'unequip': {
-        if (
-          body.slotIndex === undefined ||
-          body.slotIndex < 0 ||
-          body.slotIndex > 2
-        ) {
-          return NextResponse.json(
-            { success: false, error: 'slotIndex debe ser 0, 1 o 2' },
-            { status: 400 }
-          );
-        }
-        const newSlots = [...current.slots];
-        newSlots[body.slotIndex] = null;
-        updated = { slots: newSlots };
-        break;
-      }
-
-      case 'replace': {
-        if (!body.slots || !Array.isArray(body.slots)) {
-          return NextResponse.json(
-            { success: false, error: 'slots array requerido' },
-            { status: 400 }
-          );
-        }
-        // Normalizar a exactamente 3 slots
-        const normalized = body.slots.slice(0, 3);
-        while (normalized.length < 3) normalized.push(null);
-        updated = { slots: normalized };
-        break;
-      }
-
-      default:
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Acción inválida. Usa: equip, unequip, replace',
-          },
-          { status: 400 }
-        );
+    // Validate slot
+    const validSlots: Go2GemSlot[] = ['red', 'blue', 'green', 'diamond'];
+    if (!body.slot || !validSlots.includes(body.slot)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Slot inválido. Valores válidos: ${validSlots.join(', ')}`,
+        },
+        { status: 400 }
+      );
     }
 
-    await setGems(user.empireId, commanderId, updated);
+    // Validate gemId
+    if (!body.gemId || typeof body.gemId !== 'string') {
+      return NextResponse.json(
+        { success: false, error: 'gemId es requerido y debe ser un string' },
+        { status: 400 }
+      );
+    }
+
+    const current = await getGo2Gems(user.empireId, commanderId);
+
+    // Equip gem in the specified slot
+    const updatedSlots = { ...current.slots };
+    updatedSlots[body.slot] = { gemId: body.gemId, slot: body.slot };
+
+    await setGo2Gems(user.empireId, commanderId, { slots: updatedSlots });
+
+    // Calculate updated bonuses
+    const bonuses: Record<string, number> = {
+      accuracy: 0,
+      speed: 0,
+      dodge: 0,
+      electron: 0,
+    };
+    for (const [slot, gem] of Object.entries(updatedSlots)) {
+      if (gem) {
+        const stat = GO2_GEM_SLOT_STATS[slot as Go2GemSlot];
+        if (stat) bonuses[stat] += GO2_GEM_BONUS_PER_SLOT;
+      }
+    }
 
     return NextResponse.json({
       success: true,
       data: {
         commanderId,
-        gems: updated,
-        action: body.action,
+        gems: updatedSlots,
+        equipped: { slot: body.slot, gemId: body.gemId },
+        bonuses,
+        message: `Gema equipada en slot ${body.slot} (+10 ${GO2_GEM_SLOT_STATS[body.slot]})`,
+      },
+    });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+// ============================================================
+// DELETE /api/commanders/[id]/gems — Desequipar gema
+// Body: { slot: 'red' | 'blue' | 'green' | 'diamond' }
+// ============================================================
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const user = verifyAuth(request);
+    const { id: commanderId } = await params;
+    const body = (await request.json()) as { slot: Go2GemSlot };
+
+    // Validate slot
+    const validSlots: Go2GemSlot[] = ['red', 'blue', 'green', 'diamond'];
+    if (!body.slot || !validSlots.includes(body.slot)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Slot inválido. Valores válidos: ${validSlots.join(', ')}`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const current = await getGo2Gems(user.empireId, commanderId);
+
+    // Check if slot has a gem equipped
+    if (!current.slots[body.slot]) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `No hay gema equipada en el slot ${body.slot}`,
+        },
+        { status: 404 }
+      );
+    }
+
+    const removedGem = current.slots[body.slot];
+
+    // Unequip gem from the specified slot
+    const updatedSlots = { ...current.slots };
+    updatedSlots[body.slot] = null;
+
+    await setGo2Gems(user.empireId, commanderId, { slots: updatedSlots });
+
+    // Calculate updated bonuses
+    const bonuses: Record<string, number> = {
+      accuracy: 0,
+      speed: 0,
+      dodge: 0,
+      electron: 0,
+    };
+    for (const [slot, gem] of Object.entries(updatedSlots)) {
+      if (gem) {
+        const stat = GO2_GEM_SLOT_STATS[slot as Go2GemSlot];
+        if (stat) bonuses[stat] += GO2_GEM_BONUS_PER_SLOT;
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        commanderId,
+        gems: updatedSlots,
+        removed: removedGem,
+        bonuses,
+        message: `Gema desequipada del slot ${body.slot}`,
       },
     });
   } catch (error) {

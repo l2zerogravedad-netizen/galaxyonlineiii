@@ -9,8 +9,11 @@ function effectiveProductionRate(type, baseRate, techBonuses) {
     if (canonical === 'METAL' && techBonuses.METAL_PRODUCTION) {
         return baseRate * (1 + techBonuses.METAL_PRODUCTION);
     }
-    if (canonical === 'PLASMA' && techBonuses.PLASMA_PRODUCTION) {
-        return baseRate * (1 + techBonuses.PLASMA_PRODUCTION);
+    if (canonical === 'GAS' && techBonuses.GAS_PRODUCTION) {
+        return baseRate * (1 + techBonuses.GAS_PRODUCTION);
+    }
+    if (canonical === 'HE3' && techBonuses.HE3_PRODUCTION) {
+        return baseRate * (1 + techBonuses.HE3_PRODUCTION);
     }
     return baseRate;
 }
@@ -27,14 +30,16 @@ function accrueResource(resource, techBonuses = {}, now = new Date()) {
     };
 }
 function sumCollected(rows) {
-    const out = { metal: 0, plasma: 0, credits: 0 };
+    const out = { metal: 0, plasma: 0, he3: 0, credits: 0 };
     for (const row of rows) {
         const c = (0, resources_1.normalizeResourceType)(row.type);
         const delta = Math.max(0, row.after - row.before);
         if (c === 'METAL')
             out.metal += delta;
-        else if (c === 'PLASMA')
+        else if (c === 'GAS')
             out.plasma += delta;
+        else if (c === 'HE3')
+            out.he3 += delta;
         else if (c === 'CREDITS')
             out.credits += delta;
     }

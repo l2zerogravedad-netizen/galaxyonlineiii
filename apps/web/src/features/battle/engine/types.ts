@@ -86,6 +86,76 @@ export interface AbilityEffect {
   procChance?: number;
 }
 
+/** Tipos de efectos de skill */
+export type SkillEffectType =
+  | 'damage_boost_weapon'   // Bonus de daño por tipo de arma (pasivo)
+  | 'damage_boost_all'      // Bonus de daño general (pasivo)
+  | 'shield_absorption'     // Bonus de absorción de escudo (pasivo)
+  | 'speed_boost'           // Bonus de velocidad (pasivo)
+  | 'paralyze'              // Paralizar stack enemigo (activo)
+  | 'lucky_strike'          // Daño crítico extra (activo)
+  | 'overdrive'             // Atacar 2 veces (activo)
+  | 'shield_boost'          // Regenerar escudo (activo)
+  | 'none';                 // Sin efecto
+
+/** Tipo de skill: pasiva (siempre activa) o activa (chance por ronda) */
+export type SkillType = 'passive_damage' | 'passive_defense' | 'passive_speed' | 'active_debuff' | 'active_burst';
+
+/** Efecto individual de una skill */
+export interface SkillEffect {
+  /** Estadística afectada o mecánica */
+  stat: string;
+  /** Valor numérico del efecto (ej: 0.25 = +25%) */
+  value: number;
+  /** Target del efecto */
+  target: 'self' | 'enemy';
+  /** Duración en rondas (0 = instantáneo/permanente) */
+  duration: number;
+  /** Tipo de efecto para categorización */
+  effectType: SkillEffectType;
+  /** Filtro de arma afectada (para pasivas de tipo de arma) */
+  weaponType?: WeaponType;
+}
+
+/** Definición de una skill de comandante */
+export interface CommanderSkill {
+  /** Nombre de la skill (ej: 'Ballistic Master') */
+  name: string;
+  /** Categoría de la skill */
+  type: SkillType;
+  /** Probabilidad de activación [0-1] (solo para activas) */
+  triggerChance: number;
+  /** Descripción legible */
+  description: string;
+  /** Efectos que aplica esta skill */
+  effects: SkillEffect[];
+  /** Stat del comandante que afecta la activación */
+  affectedBy?: string;
+}
+
+/** Estado de una skill activa en el stack (para duraciones > 0) */
+export interface ActiveSkillState {
+  skillName: string;
+  effect: SkillEffect;
+  /** Rondas restantes */
+  remainingRounds: number;
+  /** Stack que aplicó el efecto */
+  sourceStackId: string;
+}
+
+/** Grado de expertise de un comandante (S mejor, D peor). GO2: D02/D03. */
+export type ExpertiseGrade = 'S' | 'A' | 'B' | 'C' | 'D';
+
+/** Expertise del comandante por tipo de arma. */
+export type WeaponExpertise = Record<WeaponType, ExpertiseGrade>;
+
+/** Expertise del comandante por clase de nave. */
+export interface ShipExpertise {
+  frigate: ExpertiseGrade;
+  cruiser: ExpertiseGrade;
+  battleship: ExpertiseGrade;
+}
+
 /** Datos de un comandante asignado a un stack */
 export interface Commander {
   id: string;
@@ -95,7 +165,7 @@ export interface Commander {
 
   /** Precisión: 0-100, afecta hit chance */
   accuracy: number;
-  /** Velocidad: 0-100, determina orden de ataque */
+  /** Velocidad: 0-100, determina orden de ataque y successive strikes */
   speed: number;
   /** Evasión: 0-100, reduce hit chance del enemigo */
   dodge: number;
@@ -109,6 +179,14 @@ export interface Commander {
   hasEOS?: boolean;
   /** Multiplicador de absorción EOS (típicamente 2.0) */
   eosMultiplier?: number;
+
+  /** Expertise por tipo de arma (D02) */
+  weaponExpertise?: WeaponExpertise;
+  /** Expertise por clase de nave (D03) */
+  shipExpertise?: ShipExpertise;
+
+  /** Skill parseada del comandante (pasiva/activa) */
+  skill?: CommanderSkill;
 
   /** Habilidad especial */
   specialAbility?: SpecialAbility;
@@ -146,6 +224,10 @@ export interface ShipStack {
   stability: number;
   /** Casillas de movimiento por ronda */
   movement: number;
+  /** Negación de daño (Heat Diffusion Shield, etc). Reduce daño ANTES de escudos */
+  damageNegation: number;
+  /** Negación de daño al casco (reduce daño que llega al hull) */
+  hullNegation: number;
 
   // --- Armas equipadas ---
   weapons: Weapon[];
@@ -164,6 +246,14 @@ export interface ShipStack {
 
   /** Facción: atacante o defensor */
   faction: 'attacker' | 'defender';
+
+  /** Número de módulos PPC equipados (cada uno 55% de interceptar 1 misil). Default 0 */
+  ppcCount: number;
+  /** Tipo de armadura del stack (afecta multiplicador de daño). Default 'regen' */
+  armorType: ArmorType;
+
+  /** Skills activas con duración aplicadas a este stack */
+  activeSkillStates: ActiveSkillState[];
 }
 
 // ============================================================================
@@ -187,7 +277,9 @@ export type BattleEvent =
   | { type: 'HE3_DEPLETED'; stackId: string }
   | { type: 'EOS_TRIGGER'; stackId: string; absorbed: number }
   | { type: 'CRITICAL_HIT'; stackId: string; damage: number; multiplier: number }
+  | { type: 'LUCKY_STRIKE'; stackId: string; damage: number; multiplier: number }
   | { type: 'DODGE'; stackId: string; attackerId: string }
+  | { type: 'SUCCESSIVE_STRIKE'; stackId: string; attackNumber: number; commanderName: string; speed: number }
   | { type: 'ROUND_END'; round: number }
   | { type: 'BATTLE_END'; winner: 'attacker' | 'defender' | 'draw'; reason: string };
 
@@ -286,12 +378,38 @@ export const CRIT_CHANCE_DIVISOR = 200;
 /** Porcentaje de scatter por cada casilla adyacente */
 export const SCATTER_PERCENT_PER_TILE = 0.15;
 
-/** Movimiento por tipo de nave */
+/** Movimiento por tipo de nave (GO2 balance) */
 export const MOVEMENT_BY_SHIP_TYPE: Record<ShipType, number> = {
-  frigate: 2,
-  cruiser: 1,
-  battleship: 1,
+  frigate: 5,
+  cruiser: 4,
+  battleship: 3,
 };
+
+/** Movimiento mínimo recomendado por tipo de arma (GO2 balance - D05) */
+export const MOVEMENT_BY_WEAPON_TYPE: Record<WeaponType, number> = {
+  ballistic: 4,
+  directional: 4,
+  missile: 5,
+  ship_based: 6,
+};
+
+/**
+ * Obtiene el movimiento mínimo recomendado para un tipo de arma.
+ * D05: GO2 recomienda:
+ *   - Ballistic weapons: al menos 4 movement
+ *   - Directional weapons: al menos 4 movement
+ *   - Missile weapons: al menos 5 movement
+ *   - Ship-Based weapons: al menos 6 movement
+ */
+export function getMinMovementForWeapon(weaponType: WeaponType): number {
+  return MOVEMENT_BY_WEAPON_TYPE[weaponType] ?? 4;
+}
+
+/** Máximo de successive strikes por stack por ronda */
+export const MAX_SUCCESSIVE_STRIKES = 3;
+
+/** Chance base de successive strike por punto de speed (0.05%) */
+export const SUCCESSIVE_STRIKE_CHANCE_PER_SPEED = 0.0005;
 
 // ============================================================================
 // UTILITY TYPES
@@ -311,4 +429,11 @@ export interface InitiativeEntry {
 /** Estado del RNG */
 export interface RNGState {
   seed: number;
+}
+
+/** Interfaz del generador de numeros aleatorios */
+export interface RNG {
+  next(): number;
+  nextInt(min: number, max: number): number;
+  chance(probability: number): boolean;
 }

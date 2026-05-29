@@ -22,8 +22,9 @@ export async function fetchGameDashboard(): Promise<GameDashboardDto> {
 
 function empireToDashboard(empire: ApiEmpire): GameDashboardDto {
   const metal = empire.resources.find((r) => r.type === 'METAL');
-  const plasma = empire.resources.find((r) => r.type === 'PLASMA');
+  const plasma = empire.resources.find((r) => r.type === 'GAS');
   const credits = empire.resources.find((r) => r.type === 'CREDITS');
+  const he3 = empire.resources.find((r) => r.type === 'HE3');
   const planet = empire.planets[0];
 
   return {
@@ -38,10 +39,13 @@ function empireToDashboard(empire: ApiEmpire): GameDashboardDto {
       metal: metal?.amount ?? 0,
       plasma: plasma?.amount ?? 0,
       credits: credits?.amount ?? 0,
+      he3: he3?.amount ?? 0,
       metalCapacity: metal?.capacity ?? 0,
       plasmaCapacity: plasma?.capacity ?? 0,
+      he3Capacity: he3?.capacity ?? 0,
       metalProduction: metal?.productionPerHour ?? 0,
       plasmaProduction: plasma?.productionPerHour ?? 0,
+      he3Production: he3?.productionPerHour ?? 0,
     },
     planet: {
       id: planet?.id ?? '',

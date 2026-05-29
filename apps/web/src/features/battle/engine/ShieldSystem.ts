@@ -1,38 +1,84 @@
 /**
- * ========================================================================
- * Galaxy Online 3 — Shield & Hull System
- * ========================================================================
- * Gestiona escudos (regeneran entre rondas) y casco (daño permanente).
- * Incluye regeneración de escudos, cálculo de supervivencia, y
- * destrucción de naves.
+ * =======================================================================
+ * Galaxy Online 3 -- Shield System
+ * =======================================================================
+ * Gestiona escudos, casco, regeneracion, y destruccion de naves.
  *
- * Reglas GO2:
- *   - Escudos regeneran 100% al inicio de cada ronda
- *   - Casco NO regenera — daño permanente
- *   - La destrucción se calcula: floor(hullDamage / (hullPoints * stability))
+ * Formulas:
+ *   - Shield absorbs damage 1:1 (hasta depletion)
+ *   - Hull damage cuando shield = 0
+ *   - Naves destruidas: damage / (hullPoints * stability)
+ *   - Shield regeneration: 3-5% por ronda (configurable)
+ *   - EOS: 30% chance de absorber x2 (Extra Overloading Shield)
+ *   - PPC: Particle Protection Cannon intercepta misiles
  *
  * @module battle/engine/ShieldSystem
- * ========================================================================
+ * =======================================================================
  */
 
-import type { ShipStack, ShipType, BattleEvent } from './types';
+import type {
+  ShipStack,
+  ShipType,
+  ArmorType,
+  BattleEvent,
+} from './types';
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+/** HP base por tipo de nave */
+const BASE_HULL: Record<ShipType, number> = {
+  frigate: 180,
+  cruiser: 600,
+  battleship: 800,
+};
+
+/** Shield base por tipo de nave */
+const BASE_SHIELD: Record<ShipType, number> = {
+  frigate: 60,
+  cruiser: 200,
+  battleship: 270,
+};
+
+/** Estabilidad base por tipo de nave (factor de supervivencia) */
+const BASE_STABILITY: Record<ShipType, number> = {
+  frigate: 0.5,
+  cruiser: 1.0,
+  battleship: 1.5,
+};
+
+/** He3 base por tipo de nave */
+const BASE_HE3: Record<ShipType, number> = {
+  frigate: 20,
+  cruiser: 40,
+  battleship: 60,
+};
+
+/** Porcentaje de regeneracion de escudo por ronda (3-5%) */
+const SHIELD_REGEN_PERCENT = 0.04; // 4% base
 
 // ============================================================================
 // SHIELD REGENERATION
 // ============================================================================
 
 /**
- * Regenera los escudos de un stack al 100%.
- * Se llama en la fase ROUND_START de cada ronda.
+ * Regenera el escudo de un stack al inicio de cada ronda.
+ * El escudo regenera un porcentaje del maximo por ronda.
  *
- * @param stack - Stack de naves
- * @returns Stack con escudos regenerados
+ * @param stack - Stack a regenerar
+ * @returns Stack con escudo regenerado
  */
-export function regenerateShields(stack: ShipStack): ShipStack {
-  const totalShield = stack.shieldPoints * stack.currentShips;
+export function regenerateShield(stack: ShipStack): ShipStack {
+  const maxShield = stack.shieldPoints * stack.currentShips;
+  if (maxShield <= 0) return stack;
+
+  const regenAmount = Math.floor(maxShield * SHIELD_REGEN_PERCENT);
+  const newShield = Math.min(maxShield, stack.totalShield + regenAmount);
+
   return {
     ...stack,
-    totalShield,
+    totalShield: newShield,
   };
 }
 
@@ -40,285 +86,225 @@ export function regenerateShields(stack: ShipStack): ShipStack {
  * Regenera escudos de todos los stacks vivos.
  */
 export function regenerateAllShields(stacks: ShipStack[]): ShipStack[] {
-  return stacks.map((s) => (s.currentShips > 0 ? regenerateShields(s) : s));
+  return stacks.map((s) => {
+    if (s.currentShips <= 0) return s;
+    return regenerateShield(s);
+  });
 }
 
 // ============================================================================
-// HULL DAMAGE APPLICATION
-// ============================================================================
-
-/**
- * Aplica daño al casco de un stack y calcula naves destruidas.
- *
- * Fórmula de destrucción:
- *   shipsDestroyed = floor(hullDamage / (hullPoints * stability))
- *
- * @param stack - Stack de naves a dañar
- * @param hullDamage - Daño total al casco
- * @returns Stack actualizado y número de naves destruidas
- */
-export function applyHullDamage(
-  stack: ShipStack,
-  hullDamage: number
-): { stack: ShipStack; shipsDestroyed: number; events: BattleEvent[] } {
-  const events: BattleEvent[] = [];
-
-  if (hullDamage <= 0 || stack.currentShips <= 0) {
-    return { stack, shipsDestroyed: 0, events };
-  }
-
-  // Calcular cuántas naves se destruyen
-  const damagePerShip = stack.hullPoints * stack.stability;
-  const shipsDestroyed = Math.min(
-    stack.currentShips,
-    Math.floor(hullDamage / damagePerShip)
-  );
-
-  // HP total restante
-  const totalHullBefore = stack.currentHull * stack.currentShips;
-  const totalHullAfter = Math.max(0, totalHullBefore - hullDamage);
-  const remainingShips = stack.currentShips - shipsDestroyed;
-
-  let currentHull = remainingShips > 0 ? totalHullAfter / remainingShips : 0;
-  currentHull = Math.min(stack.hullPoints, Math.max(0, currentHull));
-
-  const newStack: ShipStack = {
-    ...stack,
-    currentShips: remainingShips,
-    currentHull,
-    totalHull: currentHull * remainingShips,
-    // Recalcular shield total
-    totalShield: stack.shieldPoints * remainingShips,
-  };
-
-  if (hullDamage > 0) {
-    events.push({
-      type: 'HULL_DAMAGE',
-      targetId: stack.id,
-      damage: hullDamage,
-      shipsLost: shipsDestroyed,
-    });
-  }
-
-  if (shipsDestroyed > 0) {
-    events.push({
-      type: 'SHIPS_DESTROYED',
-      stackId: stack.id,
-      count: shipsDestroyed,
-    });
-  }
-
-  if (remainingShips <= 0) {
-    events.push({
-      type: 'STACK_DESTROYED',
-      stackId: stack.id,
-    });
-  }
-
-  return { stack: newStack, shipsDestroyed, events };
-}
-
-// ============================================================================
-// SHIELD DAMAGE APPLICATION
+// SHIELD DAMAGE
 // ============================================================================
 
 /**
  * Aplica daño a los escudos de un stack.
- * Si los escudos llegan a 0, el excedente pasa al casco.
+ * Los escudos absorben daño 1:1 hasta agotarse.
  *
- * @param stack - Stack de naves
+ * @param stack - Stack objetivo
  * @param damage - Daño a aplicar
- * @returns Stack actualizado, daño absorbido por escudo, y overflow al casco
+ * @returns Stack actualizado y overflow de daño al casco
  */
 export function applyShieldDamage(
   stack: ShipStack,
   damage: number
-): {
-  stack: ShipStack;
-  absorbed: number;
-  overflow: number;
-  depleted: boolean;
-  events: BattleEvent[];
-} {
+): { stack: ShipStack; overflow: number; events: BattleEvent[] } {
   const events: BattleEvent[] = [];
 
   if (damage <= 0 || stack.currentShips <= 0) {
-    return { stack, absorbed: 0, overflow: 0, depleted: false, events };
+    return { stack, overflow: 0, events };
   }
 
   const currentShield = stack.totalShield;
+
+  if (currentShield <= 0) {
+    // Sin escudo, todo va al casco
+    return { stack, overflow: damage, events };
+  }
+
   const absorbed = Math.min(currentShield, damage);
+  const newShield = currentShield - absorbed;
   const overflow = damage - absorbed;
-  const remainingShield = currentShield - absorbed;
-  const depleted = remainingShield <= 0;
 
   events.push({
     type: 'SHIELD_HIT',
     targetId: stack.id,
     absorbed,
-    remaining: remainingShield,
+    remaining: newShield,
   });
 
-  if (depleted && currentShield > 0) {
+  if (newShield <= 0) {
     events.push({
       type: 'SHIELD_DEPLETED',
       targetId: stack.id,
     });
   }
 
-  const newStack: ShipStack = {
-    ...stack,
-    totalShield: remainingShield,
+  return {
+    stack: {
+      ...stack,
+      totalShield: newShield,
+    },
+    overflow,
+    events,
   };
-
-  return { stack: newStack, absorbed, overflow, depleted, events };
 }
 
 // ============================================================================
-// COMBINED DAMAGE APPLICATION
+// HULL DAMAGE
 // ============================================================================
 
 /**
- * Aplica daño completo (escudo + casco) a un stack.
- * Primero consume escudos, luego lo sobrante va al casco.
+ * Aplica daño al casco de un stack, destruyendo naves según corresponda.
+ *
+ * Formula:
+ *   damagePerShip = hullPoints * stability
+ *   shipsLost = floor(damage / damagePerShip)
+ *   remainingDamage = damage % damagePerShip
  *
  * @param stack - Stack objetivo
- * @param totalDamage - Daño total a aplicar
- * @returns Stack actualizado y eventos generados
+ * @param damage - Daño al casco (después de escudos)
+ * @returns Stack actualizado con naves destruidas
  */
-export function applyDamage(
+export function applyHullDamage(
   stack: ShipStack,
-  totalDamage: number
+  damage: number
 ): { stack: ShipStack; events: BattleEvent[] } {
   const events: BattleEvent[] = [];
 
-  if (totalDamage <= 0 || stack.currentShips <= 0) {
+  if (damage <= 0 || stack.currentShips <= 0) {
     return { stack, events };
   }
 
-  // 1. Aplicar a escudos
-  const shieldResult = applyShieldDamage(stack, totalDamage);
-  events.push(...shieldResult.events);
-  let currentStack = shieldResult.stack;
+  const damagePerShip = stack.hullPoints * stack.stability;
+  const shipsLost =
+    damagePerShip > 0 ? Math.floor(damage / damagePerShip) : 0;
 
-  // 2. Overflow al casco
-  if (shieldResult.overflow > 0) {
-    const hullResult = applyHullDamage(currentStack, shieldResult.overflow);
-    events.push(...hullResult.events);
-    currentStack = hullResult.stack;
+  const newShips = Math.max(0, stack.currentShips - shipsLost);
+  const remainingDamage = damage % damagePerShip;
+
+  // Ajustar totalShield proporcionalmente a las naves perdidas
+  const shieldPerShip = stack.shieldPoints;
+  const newTotalShield = Math.min(
+    newShips * shieldPerShip,
+    stack.totalShield
+  );
+
+  if (shipsLost > 0) {
+    events.push({
+      type: 'SHIPS_DESTROYED',
+      stackId: stack.id,
+      count: shipsLost,
+    });
   }
 
-  return { stack: currentStack, events };
+  events.push({
+    type: 'HULL_DAMAGE',
+    targetId: stack.id,
+    damage,
+    shipsLost,
+  });
+
+  if (newShips <= 0) {
+    events.push({
+      type: 'STACK_DESTROYED',
+      stackId: stack.id,
+    });
+  }
+
+  return {
+    stack: {
+      ...stack,
+      currentShips: newShips,
+      currentHull:
+        newShips > 0
+          ? stack.hullPoints - remainingDamage / newShips
+          : 0,
+      totalShield: newTotalShield,
+    },
+    events,
+  };
 }
 
 // ============================================================================
-// STACK HELPERS
+// EOS (Extra Overloading Shield)
 // ============================================================================
 
 /**
- * Verifica si un stack sigue vivo.
+ * Procesa el EOS (Extra Overloading Shield) de un stack.
+ * 30% chance de absorber el doble de daño (shield absorbe 2:1).
+ *
+ * @param stack - Stack defensor
+ * @param incomingDamage - Daño al casco entrante
+ * @returns Daño ajustado y si EOS se activó
+ */
+export function processEOS(
+  stack: ShipStack,
+  incomingDamage: number
+): { adjustedDamage: number; triggered: boolean; absorbedExtra: number } {
+  if (!stack.commander?.hasEOS || incomingDamage <= 0) {
+    return {
+      adjustedDamage: incomingDamage,
+      triggered: false,
+      absorbedExtra: 0,
+    };
+  }
+
+  const chance = 0.30; // 30% base
+  if (Math.random() < chance) {
+    const multiplier = stack.commander.eosMultiplier ?? 2.0;
+    // El shield absorbe mas, reduciendo el hull damage
+    const absorbedExtra = Math.floor(incomingDamage * (multiplier - 1));
+    const adjustedDamage = Math.max(0, incomingDamage - absorbedExtra);
+
+    return {
+      adjustedDamage,
+      triggered: true,
+      absorbedExtra,
+    };
+  }
+
+  return {
+    adjustedDamage: incomingDamage,
+    triggered: false,
+    absorbedExtra: 0,
+  };
+}
+
+// ============================================================================
+// PPC INTERCEPT (Particle Protection Cannon)
+// ============================================================================
+
+// NOTE: attemptPPCIntercept lives in WeaponSystem.ts (canonical GO2 implementation).
+// The duplicate that used to be here was removed to avoid an export-name collision
+// via the barrel (index.ts re-exports both modules).
+
+// ============================================================================
+// STACK UTILITIES
+// ============================================================================
+
+/**
+ * Verifica si un stack sigue vivo (tiene naves).
  */
 export function isStackAlive(stack: ShipStack): boolean {
   return stack.currentShips > 0;
 }
 
 /**
- * Cuenta stacks vivos de una facción.
+ * Cuenta stacks vivos en un array.
  */
 export function countAliveStacks(stacks: ShipStack[]): number {
   return stacks.filter(isStackAlive).length;
 }
 
 /**
- * Cuenta naves totales vivas de una facción.
+ * Verifica condicion de derrota (0 stacks vivos).
  */
-export function countTotalShips(stacks: ShipStack[]): number {
-  return stacks.reduce((sum, s) => sum + s.currentShips, 0);
-}
-
-/**
- * Verifica si todos los stacks están destruidos.
- */
-export function isFleetDestroyed(stacks: ShipStack[]): boolean {
+export function checkDefeat(stacks: ShipStack[]): boolean {
   return countAliveStacks(stacks) === 0;
 }
 
 /**
- * Verifica si una facción ha perdido (todos sus stacks destruidos).
- */
-export function checkDefeat(stacks: ShipStack[]): boolean {
-  return isFleetDestroyed(stacks);
-}
-
-// ============================================================================
-// EOS (EXTRA OVERLOADING SHIELD)
-// ============================================================================
-
-/**
- * Procesa el efecto EOS en un stack defensor.
- * 30% de probabilidad de que el escudo absorba el doble de daño.
- *
- * @param stack - Stack con EOS
- * @param incomingDamage - Daño entrante
- * @returns Daño ajustado y si se activó EOS
- */
-export function processEOS(
-  stack: ShipStack,
-  incomingDamage: number
-): { adjustedDamage: number; triggered: boolean; absorbedExtra: number } {
-  const commander = stack.commander;
-  if (!commander?.hasEOS || incomingDamage <= 0) {
-    return { adjustedDamage: incomingDamage, triggered: false, absorbedExtra: 0 };
-  }
-
-  const triggerChance = 0.30;
-  if (Math.random() >= triggerChance) {
-    return { adjustedDamage: incomingDamage, triggered: false, absorbedExtra: 0 };
-  }
-
-  const multiplier = commander.eosMultiplier ?? 2.0;
-  // El escudo absorbe "multiplier" veces más: el daño efectivo se reduce
-  // porque el escudo tiene más capacidad efectiva
-  const absorbedExtra = incomingDamage * (multiplier - 1);
-  const adjustedDamage = Math.max(0, incomingDamage - absorbedExtra);
-
-  return { adjustedDamage, triggered: true, absorbedExtra };
-}
-
-// ============================================================================
-// SHIP CREATION HELPERS
-// ============================================================================
-
-/** HP base por tipo de nave */
-const BASE_HULL: Record<ShipType, number> = {
-  frigate: 400,
-  cruiser: 800,
-  battleship: 1500,
-};
-
-/** Shield base por tipo de nave */
-const BASE_SHIELD: Record<ShipType, number> = {
-  frigate: 200,
-  cruiser: 500,
-  battleship: 1000,
-};
-
-/** Estabilidad base por tipo de nave */
-const BASE_STABILITY: Record<ShipType, number> = {
-  frigate: 0.8,
-  cruiser: 1.0,
-  battleship: 1.5,
-};
-
-/** He3 base por tipo de nave */
-const BASE_HE3: Record<ShipType, number> = {
-  frigate: 200,
-  cruiser: 400,
-  battleship: 800,
-};
-
-/**
- * Crea un ShipStack con valores por defecto según el tipo.
+ * Crea un ShipStack con valores por defecto segun el tipo.
  */
 export function createShipStack(partial: {
   id: string;
@@ -333,6 +319,10 @@ export function createShipStack(partial: {
   commander?: ShipStack['commander'];
   he3?: number;
   movement?: number;
+  damageNegation?: number;
+  hullNegation?: number;
+  ppcCount?: number;
+  armorType?: ArmorType;
 }): ShipStack {
   const shipType = partial.shipType;
   const totalShips = partial.totalShips;
@@ -340,6 +330,8 @@ export function createShipStack(partial: {
   const shieldPoints = partial.shieldPoints ?? BASE_SHIELD[shipType];
   const stability = partial.stability ?? BASE_STABILITY[shipType];
   const he3 = partial.he3 ?? BASE_HE3[shipType];
+  const damageNegation = partial.damageNegation ?? 0;
+  const hullNegation = partial.hullNegation ?? 0;
 
   return {
     ...partial,
@@ -347,6 +339,8 @@ export function createShipStack(partial: {
     shieldPoints,
     stability,
     he3,
+    damageNegation,
+    hullNegation,
     currentShips: totalShips,
     currentHull: hullPoints,
     totalShield: shieldPoints * totalShips,
@@ -354,5 +348,9 @@ export function createShipStack(partial: {
     movement: partial.movement ?? (shipType === 'frigate' ? 2 : 1),
     weapons: partial.weapons ?? [],
     weaponCooldowns: new Map(),
+    ppcCount: partial.ppcCount ?? 0,
+    armorType: partial.armorType ?? 'regen',
+    // --- Skills activas: inicializar vacio ---
+    activeSkillStates: [],
   };
 }

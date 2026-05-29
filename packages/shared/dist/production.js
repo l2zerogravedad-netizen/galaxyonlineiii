@@ -15,8 +15,10 @@ function productionFromBuilding(type, level) {
     switch (t) {
         case 'metal_extractor':
             return { metal: 20 * level };
-        case 'plasma_refinery':
+        case 'gas_refinery':
             return { plasma: 10 * level };
+        case 'he3_extractor':
+            return { he3: 8 * level };
         case 'control_center':
             return { credits: 5 * level };
         case 'trading_center':
@@ -30,7 +32,7 @@ function productionFromBuilding(type, level) {
 function capacityBonusFromBuilding(type, level) {
     const t = (0, legacyBuildingTypes_1.normalizeBuildingType)(type);
     if (t === 'warehouse' && level >= 1) {
-        return { metal: 500 * level, plasma: 300 * level };
+        return { metal: 500 * level, plasma: 300 * level, he3: 250 * level };
     }
     return {};
 }

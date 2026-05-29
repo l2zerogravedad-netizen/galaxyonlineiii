@@ -53,7 +53,7 @@ export default function PlaceholderBuilding({
           </svg>
         );
 
-      case "plasma_refinery":
+      case "gas_refinery":
         return (
           <svg width={width} height={height} viewBox="0 0 120 120" fill="none">
             <ellipse cx="60" cy="98" rx="40" ry="10" fill={color} opacity="0.15" />

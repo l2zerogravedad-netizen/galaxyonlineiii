@@ -187,7 +187,7 @@ export const MAIN_TUTORIALS: Tutorial[] = [
         type: 'tooltip',
         content: {
           title: 'Panel de Recursos',
-          text: 'Estos son tus recursos. Metal y Plasma son los recursos básicos que necesitarás para construir. Los créditos se usan para compras y contratar.',
+          text: 'Estos son tus recursos. Metal y Gas son los recursos básicos que necesitarás para construir. Los créditos se usan para compras y contratar.',
           image: '/images/tutorials/resource_panel.png'
         },
         highlight: {
@@ -616,15 +616,15 @@ export const INFO_CARDS: InfoCard[] = [
     ]
   },
   {
-    id: 'info_plasma_plant',
-    title: 'Planta de Plasma',
-    content: 'La Planta de Plasma genera energía de plasma, recurso avanzado necesario para tecnologías de alta gama.',
+    id: 'info_gas_plant',
+    title: 'Planta de Gas',
+    content: 'La Planta de Gas genera energía de gas, recurso avanzado necesario para tecnologías de alta gama.',
     image: '/images/buildings/plasma_plant.png',
     category: 'building',
     level: 'basic',
     relatedIds: ['info_metal_extractor'],
     tips: [
-      'Plasma es más valioso que metal',
+      'Gas es más valioso que metal',
       'Necesario para investigaciones avanzadas'
     ]
   },

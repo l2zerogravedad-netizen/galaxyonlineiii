@@ -18,5 +18,6 @@ export declare function sumCollected(rows: {
 }[]): {
     metal: number;
     plasma: number;
+    he3: number;
     credits: number;
 };

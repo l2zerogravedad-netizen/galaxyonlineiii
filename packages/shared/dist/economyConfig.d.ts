@@ -8,5 +8,6 @@ export declare const INITIAL_PLAYER_RESOURCES: {
 export declare const INITIAL_RESOURCE_CAPACITY: {
     readonly metal: 50000;
     readonly plasma: 50000;
+    readonly he3: 25000;
     readonly credits: 999999999;
 };

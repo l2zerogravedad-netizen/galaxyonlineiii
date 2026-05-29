@@ -8,6 +8,6 @@ export interface ResourceRow {
     updatedAt?: Date | string;
     id?: string;
 }
-export declare function normalizeResourceType(type: string): 'METAL' | 'PLASMA' | 'CREDITS' | null;
-export declare function getResourceRow(resources: ResourceRow[], canonical: 'METAL' | 'PLASMA' | 'CREDITS'): ResourceRow | undefined;
+export declare function normalizeResourceType(type: string): 'METAL' | 'GAS' | 'CREDITS' | 'HE3' | null;
+export declare function getResourceRow(resources: ResourceRow[], canonical: 'METAL' | 'GAS' | 'CREDITS' | 'HE3'): ResourceRow | undefined;
 export declare function toGameResourcesDto(resources: ResourceRow[]): GameResourcesDto;

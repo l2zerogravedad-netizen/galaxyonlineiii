@@ -20,7 +20,7 @@ type CostCurve = {
 
 const CURVES: Record<CanonicalBuildingTypeId, CostCurve> = {
   metal_extractor: { baseMetal: 60, basePlasma: 10, baseCredits: 50, growth: 1.5, baseMinutes: 1, minuteScale: 1 },
-  plasma_refinery: { baseMetal: 100, basePlasma: 50, baseCredits: 80, growth: 1.6, baseMinutes: 2, minuteScale: 1 },
+  gas_refinery: { baseMetal: 100, basePlasma: 50, baseCredits: 80, growth: 1.6, baseMinutes: 2, minuteScale: 1 },
   warehouse: { baseMetal: 200, basePlasma: 100, baseCredits: 150, growth: 1.4, baseMinutes: 1, minuteScale: 1.2 },
   energy_generator: { baseMetal: 150, basePlasma: 80, baseCredits: 120, growth: 1.45, baseMinutes: 1, minuteScale: 1.3 },
   control_center: { baseMetal: 500, basePlasma: 300, baseCredits: 400, growth: 2, baseMinutes: 5, minuteScale: 5 },
@@ -31,6 +31,7 @@ const CURVES: Record<CanonicalBuildingTypeId, CostCurve> = {
   trading_center: { baseMetal: 400, basePlasma: 200, baseCredits: 600, growth: 1.5, baseMinutes: 7, minuteScale: 7 },
   radar: { baseMetal: 300, basePlasma: 100, baseCredits: 200, growth: 1.4, baseMinutes: 4, minuteScale: 4 },
   residential_area: { baseMetal: 150, basePlasma: 50, baseCredits: 100, growth: 1.3, baseMinutes: 1, minuteScale: 1 },
+  he3_extractor: { baseMetal: 80, basePlasma: 40, baseCredits: 60, growth: 1.5, baseMinutes: 1, minuteScale: 1 },
 };
 
 export function getBuildingLevelCost(

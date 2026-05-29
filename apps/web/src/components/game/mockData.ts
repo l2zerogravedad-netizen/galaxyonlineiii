@@ -54,7 +54,7 @@ export const BUILDING_CATALOG: BuildingDefinition[] = WINDSURF_TERRESTRIAL_BUILD
   const preset: Partial<BuildingDefinition> = {};
   if (spec.apiType === 'metal_extractor') {
     Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 0, production: '+100/h metal' });
-  } else if (spec.apiType === 'plasma_refinery') {
+  } else if (spec.apiType === 'gas_refinery') {
     Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 1, production: '+50/h plasma' });
   } else if (spec.apiType === 'control_center') {
     Object.assign(preset, { level: 1, status: 'active' as const, slotIndex: 40 });

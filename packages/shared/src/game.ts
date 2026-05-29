@@ -2,7 +2,7 @@
 
 import type { CanonicalBuildingTypeId } from './planetLayout';
 
-export type ApiResourceType = 'METAL' | 'PLASMA' | 'CREDITS';
+export type ApiResourceType = 'METAL' | 'GAS' | 'CREDITS' | 'HE3';
 
 export type ApiBuildingType = CanonicalBuildingTypeId | string;
 
@@ -55,14 +55,17 @@ export interface GamePlayerDto {
 export interface GameResourcesDto {
   metal: number;
   plasma: number;
+  he3: number;
   credits: number;
   /** Legacy Nova API field — same as credits */
   crystal?: number;
   metalCapacity: number;
   plasmaCapacity: number;
+  he3Capacity: number;
   crystalCapacity?: number;
   metalProduction: number;
   plasmaProduction: number;
+  he3Production: number;
   crystalProduction?: number;
 }
 

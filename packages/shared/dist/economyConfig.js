@@ -11,5 +11,6 @@ exports.INITIAL_PLAYER_RESOURCES = {
 exports.INITIAL_RESOURCE_CAPACITY = {
     metal: 50000,
     plasma: 50000,
+    he3: 25000,
     credits: 999999999,
 };

@@ -9,7 +9,7 @@
  *   - Ballistic:    Corto alcance, CD 0, scatter, bajo He3
  *   - Directional:  Medio alcance, CD 1, buena penetración
  *   - Missile:      Largo alcance, CD 2, interceptable
- *   - ShipBased:    Muy largo alcance, CD 3, alto He3, máximo daño
+ *   - ShipBased:    Muy largo alcance, CD 4, alto He3, máximo daño
  *
  * @module battle/engine/WeaponSystem
  * ========================================================================
@@ -94,7 +94,8 @@ export function createMissileWeapon(
 
 /**
  * Crea una instancia de arma ship-based (cazas/bombarderos).
- * Rango muy largo [6,10], CD 3, alto He3, máximo daño.
+ * Rango muy largo [6,10], CD 4, alto He3, máximo daño.
+ * NOTA: Cooldown cambiado de 3 a 4 (D04) para balance GO2.
  */
 export function createShipBasedWeapon(
   minDamage: number = 200,
@@ -106,7 +107,7 @@ export function createShipBasedWeapon(
     minDamage,
     maxDamage,
     range: [6, 10],
-    cooldown: 3,
+    cooldown: 4,  // D04: Corregido de 3 a 4 para balance GO2
     he3Consumption: 50,
     pierceChance: 0.15,
     interceptable: false,
@@ -240,6 +241,25 @@ export function hasHe3ForWeapons(stack: ShipStack): boolean {
 // ============================================================================
 
 /**
+ * Calcula la distancia entre dos posiciones en el grid.
+ */
+export function calculateDistance(posA: number, posB: number): number {
+  return Math.abs(posA - posB);
+}
+
+/**
+ * Verifica si un objetivo está dentro del rango de movement del atacante.
+ * D05: Naves con menos movement no pueden alcanzar objetivos lejanos.
+ */
+export function isInMovementRange(
+  attacker: ShipStack,
+  target: ShipStack
+): boolean {
+  const distance = calculateDistance(attacker.position, target.position);
+  return distance <= attacker.movement;
+}
+
+/**
  * Verifica si un objetivo está dentro del rango de un arma.
  *
  * @param attackerPos - Posición del atacante (1-24)
@@ -258,6 +278,7 @@ export function isInRange(
 
 /**
  * Encuentra objetivos válidos para un arma dentro del rango.
+ * D05: Ahora también verifica que el objetivo está en rango de movement.
  */
 export function findValidTargets(
   attacker: ShipStack,
@@ -267,7 +288,8 @@ export function findValidTargets(
   return enemies.filter(
     (target) =>
       target.currentShips > 0 &&
-      isInRange(attacker.position, target.position, weapon.range)
+      isInRange(attacker.position, target.position, weapon.range) &&
+      isInMovementRange(attacker, target)
   );
 }
 
@@ -364,15 +386,47 @@ export function isInterceptable(weapon: Weapon): boolean {
   return weapon.interceptable;
 }
 
+/** Chance base de intercept por cada módulo PPC en GO2: 55% */
+const PPC_INTERCEPT_CHANCE = 0.55;
+
 /**
- * Calcula la probabilidad base de interceptar un misil.
- * Basado en la diferencia de velocidad entre interceptor y atacante.
+ * Calcula la probabilidad de interceptar UN misil con UN módulo PPC.
+ * En GO2, cada PPC tiene 55% independiente de destruir UN misil entrante.
+ * No depende de Speed.
  */
-export function calculateInterceptChance(
-  interceptorSpeed: number,
-  attackerSpeed: number
+export function calculateInterceptChance(): number {
+  return PPC_INTERCEPT_CHANCE;
+}
+
+/**
+ * Intenta interceptar un misil entrante usando todos los PPC disponibles.
+ * Por cada PPC: 55% chance de destruir 1 misil. Cada intento es independiente.
+ *
+ * @param ppcCount - Número de módulos PPC en el stack defensor
+ * @param incomingMissiles - Número de misiles entrantes (hits del atacante)
+ * @param rng - Generador de números aleatorios con semilla
+ * @returns Número de misiles interceptados (destruidos)
+ */
+export function attemptPPCIntercept(
+  ppcCount: number,
+  incomingMissiles: number,
+  rng: { chance: (p: number) => boolean }
 ): number {
-  const baseChance = 0.25;
-  const speedDiff = interceptorSpeed - attackerSpeed;
-  return Math.max(0.05, Math.min(0.85, baseChance + speedDiff * 0.005));
+  if (ppcCount <= 0 || incomingMissiles <= 0) return 0;
+
+  let missilesDestroyed = 0;
+  const chance = calculateInterceptChance();
+
+  // Por cada misil entrante, intentar intercept con cada PPC disponible
+  // En GO2: cada PPC puede destruir 1 misil con 55% de probabilidad
+  for (let m = 0; m < incomingMissiles; m++) {
+    for (let p = 0; p < ppcCount; p++) {
+      if (rng.chance(chance)) {
+        missilesDestroyed++;
+        break; // Este PPC destruyó el misil, pasar al siguiente misil
+      }
+    }
+  }
+
+  return Math.min(missilesDestroyed, incomingMissiles);
 }

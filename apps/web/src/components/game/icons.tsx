@@ -80,7 +80,7 @@ export function BuildingIcon({ type, large }: { type: BuildingType; large?: bool
   switch (type) {
     case "metal_extractor":
       return <svg width={sz} height={sz} viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="98" rx="40" ry="10" fill={c} opacity="0.12"/><path d="M24 84H96L84 56H36L24 84Z" fill={d} stroke={c} strokeWidth="1.5"/><path d="M34 58H86V84H34V58Z" fill="#3D3D3D"/><path d="M43 48H53V58H43V48Z" fill="#FF9138"/><path d="M67 45H77V58H67V45Z" fill="#FF9138"/><path d="M44 68H76" stroke="#747474" strokeWidth="4"/></svg>;
-    case "plasma_refinery":
+    case "gas_refinery":
       return <svg width={sz} height={sz} viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="98" rx="40" ry="10" fill={c} opacity="0.15"/><path d="M30 86H90V58H30V86Z" fill="#162D54" stroke="#0FD7FF"/><rect x="50" y="28" width="20" height="58" rx="8" fill="#6D35E8" stroke="#D88BFF"/><circle cx="60" cy="34" r="11" fill={c} opacity="0.5"/></svg>;
     case "warehouse":
       return <svg width={sz} height={sz} viewBox="0 0 120 120" fill="none"><ellipse cx="60" cy="98" rx="40" ry="10" fill={c} opacity="0.10"/><rect x="28" y="52" width="64" height="38" rx="6" fill="#26374D" stroke="#7E9DBE"/><path d="M34 46H86V56H34V46Z" fill="#A6B5C7"/><path d="M43 68H77" stroke="#0FD7FF" strokeWidth="3"/></svg>;

@@ -28,7 +28,7 @@ interface Building {
 const BUILDING_TYPES = [
   { type: 'COMMAND_CENTER', name: 'Centro de Comando', description: 'Edificio principal del planeta' },
   { type: 'METAL_MINE', name: 'Mina de Metal', description: 'Produce metal cada hora' },
-  { type: 'PLASMA_EXTRACTOR', name: 'Extractor de Plasma', description: 'Extrae plasma de las profundidades' },
+  { type: 'GAS_EXTRACTOR', name: 'Extractor de Gas', description: 'Extrae gas de las profundidades' },
   { type: 'SHIPYARD', name: 'Astillero', description: 'Construye naves espaciales' },
   { type: 'RESEARCH_LAB', name: 'Laboratorio', description: 'Investiga nuevas tecnologías' },
   { type: 'WAREHOUSE', name: 'Almacén', description: 'Aumenta capacidad de recursos' },
@@ -40,7 +40,7 @@ const BUILDING_TYPES = [
 const BASE_COSTS: Record<string, { metal: number; plasma: number; time: number }> = {
   COMMAND_CENTER: { metal: 1, plasma: 1, time: 10 },
   METAL_MINE: { metal: 1, plasma: 1, time: 5 },
-  PLASMA_EXTRACTOR: { metal: 1, plasma: 1, time: 5 },
+  GAS_EXTRACTOR: { metal: 1, plasma: 1, time: 5 },
   SHIPYARD: { metal: 1, plasma: 1, time: 10 },
   RESEARCH_LAB: { metal: 1, plasma: 1, time: 10 },
   WAREHOUSE: { metal: 1, plasma: 1, time: 10 },
@@ -134,7 +134,7 @@ export default function BuildPage() {
     if (!cost) return false;
 
     const metal = resources.find((r) => r.type === 'METAL')?.amount || 0;
-    const plasma = resources.find((r) => r.type === 'PLASMA')?.amount || 0;
+    const plasma = resources.find((r) => r.type === 'GAS')?.amount || 0;
 
     return metal >= cost.metal && plasma >= cost.plasma;
   };
@@ -192,9 +192,9 @@ export default function BuildPage() {
             </p>
           </div>
           <div className="bg-slate-800 p-4 rounded-lg">
-            <p className="text-gray-400">Plasma</p>
+            <p className="text-gray-400">Gas</p>
             <p className="text-xl font-bold">
-              {Math.floor(resources.find((r) => r.type === 'PLASMA')?.amount || 0).toLocaleString()}
+              {Math.floor(resources.find((r) => r.type === 'GAS')?.amount || 0).toLocaleString()}
             </p>
           </div>
         </div>
@@ -242,8 +242,8 @@ export default function BuildPage() {
                     <p className={resources.find(r => r.type === 'METAL')!.amount >= cost.metal ? '' : 'text-red-400'}>
                       Metal: {cost.metal.toLocaleString()}
                     </p>
-                    <p className={resources.find(r => r.type === 'PLASMA')!.amount >= cost.plasma ? '' : 'text-red-400'}>
-                      Plasma: {cost.plasma.toLocaleString()}
+                    <p className={resources.find(r => r.type === 'GAS')!.amount >= cost.plasma ? '' : 'text-red-400'}>
+                      Gas: {cost.plasma.toLocaleString()}
                     </p>
                     <p className="text-gray-400">Tiempo: {formatTime(cost.time)}</p>
                     <p className="text-blue-400">Nivel: {nextLevel}</p>

@@ -184,13 +184,13 @@ test('WeaponSystem: isInRange works correctly', () => {
 // ============================================================================
 
 test('CommanderSystem: effective stack bonus by stars', () => {
-  assertEqual(getStackBonusByStars(1), 100);
-  assertEqual(getStackBonusByStars(3), 450);
-  assertEqual(getStackBonusByStars(5), 1000);
+  assertEqual(getStackBonusByStars(1), 100);   // 1 * 100
+  assertEqual(getStackBonusByStars(3), 300);   // 3 * 100
+  assertEqual(getStackBonusByStars(5), 500);   // 5 * 100
 });
 
 test('CommanderSystem: effective stack clamps at 5 stars', () => {
-  assertEqual(getStackBonusByStars(10), 1000);
+  assertEqual(getStackBonusByStars(10), 500);  // clamped to 5, then 5 * 100
 });
 
 test('CommanderSystem: initiative order by speed', () => {

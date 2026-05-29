@@ -222,7 +222,8 @@ const DEFAULT_MISSIONS: MissionData[] = [
 /** Recursos iniciales que recibe todo nuevo jugador */
 const INITIAL_RESOURCES = [
   { type: 'METAL',  amount: 10000, capacity: 50000, productionPerHour: 100 },
-  { type: 'PLASMA', amount: 10000, capacity: 50000, productionPerHour: 80 },
+  { type: 'GAS', amount: 10000, capacity: 50000, productionPerHour: 80 },
+  { type: 'HE3',    amount: 5000,  capacity: 25000, productionPerHour: 50 },
   { type: 'CREDITS',amount: 10000, capacity: 50000, productionPerHour: 60 },
 ] as const;
 
@@ -230,7 +231,8 @@ const INITIAL_RESOURCES = [
 const INITIAL_BUILDINGS = [
   { type: 'COMMAND_CENTER',  slotIndex: 40, status: 'IDLE' as const },
   { type: 'METAL_MINE',      slotIndex: 10, status: 'IDLE' as const },
-  { type: 'PLASMA_EXTRACTOR',slotIndex: 11, status: 'IDLE' as const },
+  { type: 'GAS_EXTRACTOR',slotIndex: 11, status: 'IDLE' as const },
+  { type: 'HE3_EXTRACTOR',   slotIndex: 13, status: 'IDLE' as const },
   { type: 'CREDIT_MINT',     slotIndex: 12, status: 'IDLE' as const },
   { type: 'SHIPYARD',        slotIndex: 30, status: 'IDLE' as const },
   { type: 'RESEARCH_LAB',    slotIndex: 31, status: 'IDLE' as const },

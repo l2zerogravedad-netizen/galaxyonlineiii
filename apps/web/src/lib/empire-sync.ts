@@ -113,9 +113,11 @@ export async function recalculateEmpireProduction(empireId: string): Promise<voi
 
   let metalPerHour = 0;
   let plasmaPerHour = 0;
+  let he3PerHour = 0;
   let creditsPerHour = 0;
   let metalCapacity = INITIAL_RESOURCE_CAPACITY.metal;
   let plasmaCapacity = INITIAL_RESOURCE_CAPACITY.plasma;
+  let he3Capacity = INITIAL_RESOURCE_CAPACITY.he3 ?? 25000;
 
   for (const b of planet?.buildings ?? []) {
     if (b.status === 'CONSTRUCTING') continue;
@@ -123,10 +125,12 @@ export async function recalculateEmpireProduction(empireId: string): Promise<voi
     const prod = productionFromBuilding(t, b.level);
     metalPerHour += prod.metal ?? 0;
     plasmaPerHour += prod.plasma ?? 0;
+    he3PerHour += prod.he3 ?? 0;
     creditsPerHour += prod.credits ?? 0;
     const cap = capacityBonusFromBuilding(t, b.level);
     metalCapacity += cap.metal ?? 0;
     plasmaCapacity += cap.plasma ?? 0;
+    he3Capacity += cap.he3 ?? 0;
   }
 
   await prisma.$transaction([
@@ -135,8 +139,12 @@ export async function recalculateEmpireProduction(empireId: string): Promise<voi
       data: { productionPerHour: metalPerHour, capacity: metalCapacity },
     }),
     prisma.resource.updateMany({
-      where: { empireId, type: 'PLASMA' },
+      where: { empireId, type: 'GAS' },
       data: { productionPerHour: plasmaPerHour, capacity: plasmaCapacity },
+    }),
+    prisma.resource.updateMany({
+      where: { empireId, type: 'HE3' },
+      data: { productionPerHour: he3PerHour, capacity: he3Capacity },
     }),
     prisma.resource.updateMany({
       where: { empireId, type: 'CREDITS' },
@@ -176,7 +184,7 @@ export async function completeDueBuildingsForEmpire(empireId: string): Promise<n
 
 export interface SyncResult {
   resources: GameResourcesDto;
-  collected: { metal: number; plasma: number; credits: number };
+  collected: { metal: number; plasma: number; he3: number; credits: number };
 }
 
 /* ──────────────────── Sync empire game state ─────────────────────── */

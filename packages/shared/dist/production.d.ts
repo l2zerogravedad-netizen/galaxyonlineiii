@@ -2,11 +2,13 @@
 export declare function productionFromBuilding(type: string, level: number): {
     metal?: number;
     plasma?: number;
+    he3?: number;
     credits?: number;
 };
 export declare function capacityBonusFromBuilding(type: string, level: number): {
     metal?: number;
     plasma?: number;
+    he3?: number;
 };
 export declare function countBuildingsOfType(buildings: {
     type: string;

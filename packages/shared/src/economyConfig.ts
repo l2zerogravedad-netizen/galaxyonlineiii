@@ -9,5 +9,6 @@ export const INITIAL_PLAYER_RESOURCES = {
 export const INITIAL_RESOURCE_CAPACITY = {
   metal: 50_000,
   plasma: 50_000,
+  he3: 25_000,
   credits: 999_999_999,
 } as const;

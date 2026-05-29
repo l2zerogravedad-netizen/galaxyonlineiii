@@ -24,7 +24,7 @@ function productionLabel(type: string, dto: GameDashboardDto['resources']): stri
   if (t === 'metal_extractor' && dto.metalProduction > 0) {
     return `+${dto.metalProduction.toLocaleString()}/h metal`;
   }
-  if (t === 'plasma_refinery' && dto.plasmaProduction > 0) {
+  if (t === 'gas_refinery' && dto.plasmaProduction > 0) {
     return `+${dto.plasmaProduction.toLocaleString()}/h plasma`;
   }
   return '—';
