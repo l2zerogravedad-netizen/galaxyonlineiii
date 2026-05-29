@@ -14,7 +14,9 @@ import {
   ConstructBuildingIcon, HelmetIcon, QuestBoardIcon, MailEnvelopeIcon, CubeItemIcon,
 } from './hud/BuildQuestIcons';
 import { storeData, storeTabs as tabs, type StoreItem } from './hud/storeData';
-import { MenuImageIcon, MENU_ICONS } from './hud/MenuImageIcon';
+import {
+  AAAResearchIcon, AAAReactorIcon, AAAShipIcon, AAABaseIcon, AAAAllianceIcon, AAAMainIcon,
+} from './hud/AAAMenuIcons';
 import { questData, buildingsData, type BuildingDef } from './hud/questBuildData';
 
 /**
@@ -220,19 +222,19 @@ export function ConstructionDemoPage() {
           <div className="absolute bottom-1 left-2 w-40 h-20 bg-gradient-to-t from-[#1e293b] via-[#334155] to-[#475569] rounded-[40px] border border-[#64748b] shadow-[0_15px_25px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.2)]"></div>
 
           <button className="absolute top-1 left-[38%] w-12 h-12 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-20">
-            <MenuImageIcon src={MENU_ICONS.science} alt="Investigación" className="w-9 h-9" />
+            <AAAResearchIcon className="w-9 h-9" />
           </button>
 
           <button className="absolute top-10 left-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
-            <MenuImageIcon src={MENU_ICONS.reactor} alt="Reactor" className="w-8 h-8" />
+            <AAAReactorIcon className="w-8 h-8" />
           </button>
 
           <button className="absolute top-10 right-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
-            <MenuImageIcon src={MENU_ICONS.ship} alt="Construir naves" className="w-8 h-8" />
+            <AAAShipIcon className="w-8 h-8" />
           </button>
 
           <button className="absolute bottom-0 left-[35%] w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(56,189,248,0.8),inset_0_0_10px_#000] z-30">
-            <MenuImageIcon src={MENU_ICONS.base} alt="Base" className="w-9 h-9 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
+            <AAABaseIcon className="w-9 h-9 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
           </button>
         </div>
 
@@ -264,7 +266,7 @@ export function ConstructionDemoPage() {
             <button
               onClick={(e) => { e.stopPropagation(); setIsGlobeMenuOpen(!isGlobeMenuOpen); setIsAllianceMenuOpen(false); setIsFlyoutOpen(false); }}
               className={`w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center transition-transform shadow-[0_0_10px_rgba(56,189,248,0.4),inset_0_0_15px_#000] ${isGlobeMenuOpen ? 'scale-110 border-yellow-400 shadow-[0_0_15px_#facc15]' : 'hover:scale-105'}`}>
-              <MenuImageIcon src={MENU_ICONS.main} alt="Construir" className="w-9 h-9" />
+              <AAAMainIcon className="w-9 h-9" />
             </button>
           </div>
 
@@ -298,7 +300,7 @@ export function ConstructionDemoPage() {
             <button
               onClick={(e) => { e.stopPropagation(); setIsAllianceMenuOpen(!isAllianceMenuOpen); setIsGlobeMenuOpen(false); setIsFlyoutOpen(false); }}
               className={`w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center transition-transform shadow-[0_0_10px_rgba(56,189,248,0.4),inset_0_0_15px_#000] ${isAllianceMenuOpen ? 'scale-110 border-yellow-400 shadow-[0_0_15px_#facc15]' : 'hover:scale-105'}`}>
-              <MenuImageIcon src={MENU_ICONS.alliance} alt="Alianza" className="w-9 h-9" />
+              <AAAAllianceIcon className="w-9 h-9" />
             </button>
           </div>
 
