@@ -371,10 +371,9 @@ export function BattleHUD({
 
       {/* ====== BOTTOM TIMELINE ====== */}
       <BattleTimeline
-        currentRound={currentRound}
+        round={currentRound}
         maxRounds={maxRounds}
         events={events}
-        phase={phase}
       />
 
       {/* ====== GLOBAL STYLES ====== */}

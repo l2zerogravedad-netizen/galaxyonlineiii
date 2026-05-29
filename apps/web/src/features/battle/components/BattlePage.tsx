@@ -364,14 +364,18 @@ export function BattlePage() {
   const mapUnits = useMemo((): MapUnit[] => {
     const units: MapUnit[] = [];
 
+    // Engine ship types -> minimap unit types
+    const toMapType = (shipType: string): MapUnit['type'] =>
+      shipType === 'battleship' ? 'destroyer' : (shipType as MapUnit['type']);
+
     attackerStacks.forEach((stack, i) => {
       units.push({
         id: stack.id,
         x: 10 + (i * 15) % 40,
         y: 20 + (i % 3) * 25,
-        faction: 'attacker',
-        shipType: stack.shipType,
-        alive: stack.currentShips > 0,
+        team: 'ally',
+        type: toMapType(stack.shipType),
+        isDestroyed: stack.currentShips <= 0,
       });
     });
 
@@ -380,9 +384,9 @@ export function BattlePage() {
         id: stack.id,
         x: 55 + (i * 15) % 40,
         y: 20 + (i % 3) * 25,
-        faction: 'defender',
-        shipType: stack.shipType,
-        alive: stack.currentShips > 0,
+        team: 'enemy',
+        type: toMapType(stack.shipType),
+        isDestroyed: stack.currentShips <= 0,
       });
     });
 
@@ -405,7 +409,7 @@ export function BattlePage() {
       <BattleTopBar
         attacker={attackerInfo}
         defender={defenderInfo}
-        round={currentRound}
+        currentRound={currentRound}
         maxRounds={maxRounds}
         phase={phaseDisplay}
         battleState={battleState}
@@ -418,7 +422,7 @@ export function BattlePage() {
           attackerStacks={attackerStacks}
           defenderStacks={defenderStacks}
           events={events}
-          selectedStackId={selectedStack}
+          selectedStackId={selectedStack ?? undefined}
           onStackClick={selectStack}
           phase={currentPhase}
           round={currentRound}
@@ -428,7 +432,7 @@ export function BattlePage() {
         <FloatingDamage damages={floatingDamages} />
 
         {/* Commander Portraits */}
-        {attackerStacks.length > 0 && (
+        {attackerStacks.length > 0 && activeAttacker && (
           <div className="absolute bottom-20 left-4 z-20">
             <CommanderPortrait
               commander={activeAttacker}
@@ -438,7 +442,7 @@ export function BattlePage() {
           </div>
         )}
 
-        {defenderStacks.length > 0 && (
+        {defenderStacks.length > 0 && activeDefender && (
           <div className="absolute bottom-20 right-4 z-20">
             <CommanderPortrait
               commander={activeDefender}
@@ -451,7 +455,7 @@ export function BattlePage() {
         {/* MiniMap */}
         {attackerStacks.length > 0 && defenderStacks.length > 0 && (
           <div className="absolute bottom-20 right-48 z-20">
-            <MiniMap units={mapUnits} round={currentRound} />
+            <MiniMap units={mapUnits} />
           </div>
         )}
 

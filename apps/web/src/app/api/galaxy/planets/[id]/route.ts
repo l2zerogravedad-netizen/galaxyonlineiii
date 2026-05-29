@@ -22,7 +22,7 @@ export async function GET(
     const planet = await prisma.planet.findFirst({
       where: { id: planetId, empireId: user.empireId },
       include: {
-        buildings: { orderBy: { createdAt: 'asc' } },
+        buildings: { orderBy: { slotIndex: 'asc' } },
         fleets: { where: { status: 'IDLE' } },
       },
     });

@@ -56,6 +56,7 @@ export interface Shockwave {
 
 export interface ShieldRipple {
   x: number;
+  y: number;
   radius: number;
   maxRadius: number;
   speed: number;

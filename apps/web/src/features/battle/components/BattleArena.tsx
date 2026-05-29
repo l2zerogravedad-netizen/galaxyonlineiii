@@ -26,13 +26,13 @@ import type {
 // TYPES & CONFIG
 // ============================================================================
 
-interface BattleArenaProps {
+export interface BattleArenaProps {
   attackerStacks: ShipStack[];
   defenderStacks: ShipStack[];
   events: BattleEvent[];
   selectedStackId?: string;
   onStackClick: (stackId: string) => void;
-  onHexClick: (q: number, r: number) => void;
+  onHexClick?: (q: number, r: number) => void;
   phase: BattlePhase;
   round: number;
   width?: number;
@@ -1137,7 +1137,7 @@ export const BattleArena: React.FC<BattleArenaProps> = ({
         // Check hex click
         const hex = pixelToHex(wx, wy);
         if (hex.q >= 0 && hex.q < GRID_COLS && hex.r >= 0 && hex.r < GRID_ROWS) {
-          onHexClick(hex.q, hex.r);
+          onHexClick?.(hex.q, hex.r);
           return;
         }
       }

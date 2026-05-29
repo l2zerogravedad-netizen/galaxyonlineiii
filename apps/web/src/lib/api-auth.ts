@@ -8,6 +8,8 @@ export interface AuthPayload {
   empireId: string;
   email?: string;
   username?: string;
+  /** Present only if the JWT was issued with alliance membership; routes fall back to a query/param otherwise. */
+  allianceId?: string;
 }
 
 /**

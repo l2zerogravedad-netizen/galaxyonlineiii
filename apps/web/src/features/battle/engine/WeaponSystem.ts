@@ -21,6 +21,7 @@ import type {
   DamageType,
   ArmorType,
   ShipStack,
+  ShipType,
 } from './types';
 
 // ============================================================================

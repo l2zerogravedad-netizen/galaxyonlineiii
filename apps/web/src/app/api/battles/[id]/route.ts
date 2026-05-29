@@ -26,8 +26,8 @@ interface BattleEvent {
 
 interface FormationWithShip {
   id: string;
-  shipCount: number;
-  position: number | null;
+  quantity: number;
+  slotIndex: number;
   ship: {
     id: string;
     blueprintId: string;
@@ -48,8 +48,8 @@ interface BattleWithFleet {
   id: string;
   empireId: string;
   fleetId: string;
-  seed: string;
-  result: string;
+  seed: string | null;
+  result: string | null;
   rounds: string | null;
   xpGained: number;
   creditsGained: number;
@@ -112,7 +112,7 @@ async function simulateBattleRound(
           },
         },
         orderBy: {
-          position: 'asc',
+          slotIndex: 'asc',
         },
       },
     },
@@ -128,14 +128,14 @@ async function simulateBattleRound(
   }
 
   // Inicializar RNG con seed de la batalla + ronda
-  const seedNum = parseInt(battle.seed, 10) || 0;
+  const seedNum = parseInt(battle.seed ?? '0', 10) || 0;
   const rng = new SeededRNG(seedNum + round * 7919);
 
   const formations = fleet.formations as unknown as FormationWithShip[];
 
   // Calcular orden de turno por iniciativa
   const turnOrder = [...formations]
-    .filter((f) => f.shipCount > 0)
+    .filter((f) => f.quantity > 0)
     .sort((a, b) => {
       const initA = a.ship.blueprint.initiative ?? 10;
       const initB = b.ship.blueprint.initiative ?? 10;
@@ -170,7 +170,7 @@ async function simulateBattleRound(
     const baseAttack = blueprint.attack ?? 10;
     const speedFactor = (blueprint.speed ?? 10) / 10;
     const variation = rng.nextInt(-10, 11); // +/- 10 variacion
-    let damage = Math.floor(baseAttack * speedFactor * (formation.shipCount / 10 + 0.5)) + variation;
+    let damage = Math.floor(baseAttack * speedFactor * (formation.quantity / 10 + 0.5)) + variation;
     damage = Math.max(1, damage); // Minimo 1 de daño
 
     // Chance de critico (10% base, escalado por ataque)

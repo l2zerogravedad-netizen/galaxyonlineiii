@@ -13,11 +13,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import type { BattleEngine } from '../engine';
 import { createBattleEngine } from '../engine';
+import { BattleState } from '../engine/types';
 import type {
   BattleEvent,
   BattlePhase,
   ShipStack,
-  BattleState,
 } from '../engine/types';
 import { useBattleEffects } from '../effects/useBattleEffects';
 import type { FloatingDamageItem } from '../components/FloatingDamage';
@@ -187,7 +187,7 @@ export function useBattleState(): UseBattleStateReturn {
   const effects = useBattleEffects();
 
   // --- Estado React ---
-  const [battleState, setBattleState] = useState<BattleState>('SETUP');
+  const [battleState, setBattleState] = useState<BattleState>(BattleState.SETUP);
   const [currentRound, setCurrentRound] = useState(0);
   const [currentPhase, setCurrentPhase] = useState<BattlePhase>('ROUND_START');
   const [maxRounds, setMaxRounds] = useState(25);
@@ -377,7 +377,7 @@ export function useBattleState(): UseBattleStateReturn {
       intervalRef.current = null;
     }
     engineRef.current = null;
-    setBattleState('SETUP');
+    setBattleState(BattleState.SETUP);
     setCurrentRound(0);
     setCurrentPhase('ROUND_START');
     setMaxRounds(25);

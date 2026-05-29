@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { getMessages, sendMessage, type ChatMessageData } from '@/lib/game/chatClient';
+import { getMessages, sendMessage, type ChatMessage as ApiChatMessage } from '@/lib/game/chatClient';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -41,14 +41,15 @@ const INITIAL_MESSAGES: ChatMessage[] = [
 /* ------------------------------------------------------------------ */
 
 /** Convert API message to local format */
-function apiMessageToLocal(msg: ChatMessageData): ChatMessage {
+function apiMessageToLocal(msg: ApiChatMessage): ChatMessage {
+  const sender = msg.username || 'Unknown';
   return {
     id: msg.id || Date.now().toString(),
-    sender: msg.sender || 'Unknown',
-    tag: msg.tag || '[SYS]',
-    text: msg.text || '',
-    color: msg.color || '#90a4ae',
-    type: (msg.type as MessageType) || 'system',
+    sender,
+    tag: `[${sender}]`,
+    text: msg.message || '',
+    color: getSenderColor(sender),
+    type: 'global',
   };
 }
 
@@ -145,16 +146,10 @@ export const Go2GalaxyChat: React.FC = () => {
     setIsLoading(true);
     setApiError(null);
     try {
-      const result = await sendMessage(trimmedText);
-      if (result) {
-        // Replace local optimistic message with server response if available
-        setMessages((prev) => {
-          const filtered = prev.filter((m) => m.id !== newMsg.id);
-          const serverMsg = apiMessageToLocal(result);
-          return [...filtered, serverMsg];
-        });
-        setUsingBackend(true);
-      }
+      await sendMessage(trimmedText);
+      // Send succeeded (no response body); keep the optimistic message and
+      // let the next poll reconcile with the server's canonical copy.
+      setUsingBackend(true);
     } catch (err) {
       console.warn('[Go2GalaxyChat] Send failed, keeping local message:', err);
       setApiError(err instanceof Error ? err.message : 'Send failed');

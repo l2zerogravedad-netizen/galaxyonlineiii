@@ -71,9 +71,9 @@ export async function POST(request: Request) {
 
       // 6. Blueprints básicos
       const blueprints = [
-        { name: 'Frigate MK-I', key: 'frigate-mk1', type: 'COMBAT', attack: 30, hp: 80, defense: 15, speed: 100, costMetal: 100, costPlasma: 50, costCredits: 0, buildTime: 60 },
-        { name: 'Cruiser MK-I', key: 'cruiser-mk1', type: 'COMBAT', attack: 60, hp: 150, defense: 40, speed: 70, costMetal: 300, costPlasma: 150, costCredits: 50, buildTime: 120 },
-        { name: 'Battleship MK-I', key: 'battleship-mk1', type: 'COMBAT', attack: 100, hp: 250, defense: 70, speed: 40, costMetal: 800, costPlasma: 400, costCredits: 200, buildTime: 300 },
+        { name: 'Frigate MK-I', key: 'frigate-mk1', type: 'COMBAT', description: 'Nave de combate ligera y veloz.', attack: 30, hp: 80, defense: 15, speed: 100, costMetal: 100, costPlasma: 50, costCredits: 0, buildTime: 60 },
+        { name: 'Cruiser MK-I', key: 'cruiser-mk1', type: 'COMBAT', description: 'Crucero de combate equilibrado.', attack: 60, hp: 150, defense: 40, speed: 70, costMetal: 300, costPlasma: 150, costCredits: 50, buildTime: 120 },
+        { name: 'Battleship MK-I', key: 'battleship-mk1', type: 'COMBAT', description: 'Acorazado pesado de gran poder de fuego.', attack: 100, hp: 250, defense: 70, speed: 40, costMetal: 800, costPlasma: 400, costCredits: 200, buildTime: 300 },
       ];
       for (const bp of blueprints) {
         await tx.blueprint.upsert({ where: { key: bp.key }, update: {}, create: bp });

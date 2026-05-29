@@ -79,12 +79,12 @@ export function createCommander(partial: {
 }): Commander {
   const stars = Math.min(5, Math.max(1, partial.stars));
   return {
+    ...partial,
     level: partial.level ?? 1,
     stars,
     effectiveStackBonus: getStackBonusByStars(stars),
     hasEOS: partial.hasEOS ?? false,
     eosMultiplier: partial.eosMultiplier ?? 2.0,
-    ...partial,
   };
 }
 

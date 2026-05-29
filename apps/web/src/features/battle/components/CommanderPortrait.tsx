@@ -5,12 +5,19 @@ import React, { useMemo } from 'react';
 export type Rarity = 'legendary' | 'epic' | 'rare' | 'common';
 
 export interface Commander {
+  id?: string;
   name: string;
   level: number;
   stars: number; // 1-6
   rarity: Rarity;
   avatarUrl?: string;
   faction?: string;
+  // Optional combat stats (carried from engine commander; not all consumers use them)
+  accuracy?: number;
+  speed?: number;
+  dodge?: number;
+  electron?: number;
+  skill?: string;
   activeSkill?: {
     name: string;
     icon: string;
@@ -22,7 +29,8 @@ export interface Commander {
 export interface CommanderPortraitProps {
   commander: Commander;
   isActive: boolean;
-  he3Percent: number; // 0-100
+  he3Percent?: number; // 0-100
+  faction?: 'attacker' | 'defender';
   cooldowns?: Record<string, number>;
   className?: string;
 }
@@ -161,7 +169,7 @@ function CooldownOverlay({
 export function CommanderPortrait({
   commander,
   isActive,
-  he3Percent,
+  he3Percent = 0,
   cooldowns = {},
   className = '',
 }: CommanderPortraitProps) {

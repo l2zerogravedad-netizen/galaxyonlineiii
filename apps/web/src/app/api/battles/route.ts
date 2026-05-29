@@ -68,8 +68,8 @@ export async function POST(request: Request): Promise<NextResponse> {
       stackId: formation.id,
       blueprintId: formation.ship.blueprintId,
       shipName: formation.ship.blueprint.name,
-      shipCount: formation.shipCount,
-      currentCount: formation.shipCount,
+      shipCount: formation.quantity,
+      currentCount: formation.quantity,
       maxHull: formation.ship.blueprint.hull ?? 100,
       currentHull: formation.ship.blueprint.hull ?? 100,
       maxShield: formation.ship.blueprint.shield ?? 0,
@@ -78,7 +78,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       defense: formation.ship.blueprint.defense ?? 5,
       speed: formation.ship.blueprint.speed ?? 10,
       initiative: formation.ship.blueprint.initiative ?? 10,
-      position: formation.position ?? 0,
+      position: formation.slotIndex ?? 0,
     }));
 
     return NextResponse.json({

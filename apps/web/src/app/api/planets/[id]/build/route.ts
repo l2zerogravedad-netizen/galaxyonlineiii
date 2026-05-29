@@ -14,9 +14,6 @@ import {
   recalculateEmpireProduction,
 } from '@/lib/empire-sync';
 
-/** Prisma transaction client type */
-type TxClient = typeof prisma;
-
 interface BuildBody {
   slotIndex: number;
   type: string;
@@ -155,7 +152,7 @@ export async function POST(
     const endsAt = new Date(Date.now() + totalCost.time * 1000);
 
     // Execute transaction: deduct resources + create/update building
-    const result = await prisma.$transaction(async (tx: TxClient) => {
+    const result = await prisma.$transaction(async (tx) => {
       await tx.resource.update({
         where: { id: metal.id },
         data: { amount: { decrement: totalCost.metal } },

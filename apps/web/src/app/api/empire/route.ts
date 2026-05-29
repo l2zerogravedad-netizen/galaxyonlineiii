@@ -116,7 +116,15 @@ export async function GET(request: Request) {
           type: p.type,
           maxBuildingSlots: p.maxBuildingSlots,
           buildings: p.buildings.map(
-            (b: { constructionEndsAt: Date | null }) => ({
+            (b: {
+              id: string;
+              planetId: string;
+              type: string;
+              level: number;
+              slotIndex: number;
+              status: string;
+              constructionEndsAt: Date | null;
+            }) => ({
               ...b,
               constructionEndsAt: b.constructionEndsAt?.toISOString() ?? null,
             })

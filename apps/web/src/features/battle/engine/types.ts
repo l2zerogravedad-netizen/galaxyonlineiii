@@ -14,15 +14,14 @@
 // ============================================================================
 
 /** Fases de cada ronda de batalla */
-export enum BattlePhase {
-  ROUND_START = 'ROUND_START',
-  MOVEMENT = 'MOVEMENT',
-  INITIATIVE = 'INITIATIVE',
-  ATTACK = 'ATTACK',
-  DEFENSE = 'DEFENSE',
-  RESOLUTION = 'RESOLUTION',
-  ROUND_END = 'ROUND_END',
-}
+export type BattlePhase =
+  | 'ROUND_START'
+  | 'MOVEMENT'
+  | 'INITIATIVE'
+  | 'ATTACK'
+  | 'DEFENSE'
+  | 'RESOLUTION'
+  | 'ROUND_END';
 
 /** Estados de la batalla */
 export enum BattleState {

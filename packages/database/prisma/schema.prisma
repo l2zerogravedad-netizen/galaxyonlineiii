@@ -43,7 +43,8 @@ model Empire {
   ships         Ship[]
   fleets        Fleet[]
   shipConstructions ShipConstruction[]
-  
+  allianceMembership AllianceMember?
+
   @@map("empires")
 }
 
@@ -74,7 +75,8 @@ model Planet {
   
   empire            Empire   @relation(fields: [empireId], references: [id])
   buildings         Building[]
-  
+  fleets            Fleet[]
+
   @@map("planets")
 }
 
@@ -151,11 +153,14 @@ model Blueprint {
   hp              Int      @default(0)
   defense         Int      @default(0)
   speed           Int      @default(0)
+  hull            Int      @default(0)
+  shield          Int      @default(0)
+  initiative      Int      @default(0)
   cargoCapacity   Int      @default(0) @map("cargo_capacity")
-  
+
   ships           Ship[]
   constructions   ShipConstruction[]
-  
+
   @@map("blueprints")
 }
 
@@ -200,11 +205,13 @@ model Fleet {
   totalPower    Int      @default(0) @map("total_power")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
-  
+
   empire        Empire   @relation(fields: [empireId], references: [id])
+  planet        Planet?  @relation(fields: [planetId], references: [id])
   formations    FleetFormation[]
   missionRuns   MissionRun[]
-  
+  battles       Battle[]
+
   @@map("fleets")
 }
 
@@ -263,15 +270,18 @@ model Battle {
   empireId          String   @map("empire_id")
   missionRunId      String?  @map("mission_run_id")
   fleetId           String   @map("fleet_id")
+  defenderId        String?  @map("defender_id")
   result            String?
   rounds            String?
   seed              String?
   xpGained          Int      @default(0) @map("xp_gained")
   creditsGained     Int      @default(0) @map("credits_gained")
   createdAt         DateTime @default(now()) @map("created_at")
-  
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
+
+  fleet             Fleet    @relation(fields: [fleetId], references: [id])
   losses            BattleLoss[]
-  
+
   @@map("battles")
 }
 
@@ -323,8 +333,21 @@ model AllianceMember {
   joinedAt   DateTime @default(now()) @map("joined_at")
 
   alliance   Alliance @relation(fields: [allianceId], references: [id], onDelete: Cascade)
+  empire     Empire   @relation(fields: [empireId], references: [id])
 
   @@map("alliance_members")
+}
+
+model EmpireLog {
+  id         String   @id @default(uuid())
+  empireId   String   @map("empire_id")
+  type       String
+  message    String
+  metadata   String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([empireId])
+  @@map("empire_logs")
 }
 
 // Enums converted to String for SQLite compatibility

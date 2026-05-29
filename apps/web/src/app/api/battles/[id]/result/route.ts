@@ -114,15 +114,15 @@ export async function POST(
           );
 
           if (formation) {
-            const newCount = Math.max(0, formation.shipCount - loss.quantity);
-            await tx.formation.update({
+            const newCount = Math.max(0, formation.quantity - loss.quantity);
+            await tx.fleetFormation.update({
               where: { id: formation.id },
-              data: { shipCount: newCount },
+              data: { quantity: newCount },
             });
 
             // Si la formacion queda sin naves, eliminarla
             if (newCount === 0) {
-              await tx.formation.delete({
+              await tx.fleetFormation.delete({
                 where: { id: formation.id },
               });
             }

@@ -40,8 +40,29 @@ import {
   // Tipos
   type Squadron,
   type Weapon,
+  type Commander,
   type AttackEvent,
 } from './SequentialAttackSystem';
+
+// =============================================================================
+// FACTORY DE COMANDANTE PARA TESTS
+// =============================================================================
+
+/**
+ * Crea un Commander completo y válido para tests.
+ * El helper `createTestSquadron` espera un Commander completo (su tipo de
+ * parámetro resuelve a `Commander & Partial<Commander>`), así que pasamos
+ * objetos completos en lugar de literales parciales.
+ */
+const mkCommander = (over: Partial<Commander> = {}): Commander => ({
+  id: 't',
+  name: 'T',
+  speed: 100,
+  accuracy: 0,
+  dodge: 0,
+  critRate: 0,
+  ...over,
+});
 
 // =============================================================================
 // UTILIDAD DE TESTING
@@ -117,9 +138,9 @@ console.log('══════════════════════�
 console.log('\n📦 SUITE 1: sortBySpeed — Orden de ataque por velocidad');
 
 test('ordena por speed descendente (mayor primero)', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 50 } });
-  const s2 = createTestSquadron('s2', { commander: { speed: 200 } });
-  const s3 = createTestSquadron('s3', { commander: { speed: 100 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 50 }) });
+  const s2 = createTestSquadron('s2', { commander: mkCommander({ speed: 200 }) });
+  const s3 = createTestSquadron('s3', { commander: mkCommander({ speed: 100 }) });
 
   const sorted = sortBySpeed([s1, s2, s3]);
 
@@ -129,8 +150,8 @@ test('ordena por speed descendente (mayor primero)', () => {
 });
 
 test('no modifica el array original', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 100 } });
-  const s2 = createTestSquadron('s2', { commander: { speed: 200 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 100 }) });
+  const s2 = createTestSquadron('s2', { commander: mkCommander({ speed: 200 }) });
   const original = [s1, s2];
 
   sortBySpeed(original);
@@ -140,8 +161,8 @@ test('no modifica el array original', () => {
 });
 
 test('desempate: atacante va primero si mismo speed', () => {
-  const attacker = createTestSquadron('att', { faction: 'attacker', commander: { speed: 100 } });
-  const defender = createTestSquadron('def', { faction: 'defender', commander: { speed: 100 } });
+  const attacker = createTestSquadron('att', { faction: 'attacker', commander: mkCommander({ speed: 100 }) });
+  const defender = createTestSquadron('def', { faction: 'defender', commander: mkCommander({ speed: 100 }) });
 
   const sorted = sortBySpeed([defender, attacker]);
 
@@ -282,7 +303,7 @@ test('proyectiles tienen posición de origen y destino', () => {
 test('proyectiles con crítico se marcan correctamente', () => {
   const attacker = createTestSquadron('att', {
     position: { x: 0, y: 0 },
-    commander: { critRate: 1.0 }, // 100% crítico
+    commander: mkCommander({ critRate: 1.0 }), // 100% crítico
     shipCount: 10,
   });
   const target = createTestSquadron('tgt', {
@@ -519,9 +540,9 @@ test('ataque reporta daño de escudo correctamente', () => {
 console.log('\n📦 SUITE 9: createAttackSequence — Secuencia de ataque');
 
 test('crea secuencia ordenada por speed', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 50 } });
-  const s2 = createTestSquadron('s2', { commander: { speed: 200 } });
-  const s3 = createTestSquadron('s3', { commander: { speed: 100 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 50 }) });
+  const s2 = createTestSquadron('s2', { commander: mkCommander({ speed: 200 }) });
+  const s3 = createTestSquadron('s3', { commander: mkCommander({ speed: 100 }) });
 
   const seq = createAttackSequence([s1, s2, s3]);
 
@@ -539,8 +560,8 @@ test('crea secuencia ordenada por speed', () => {
 console.log('\n📦 SUITE 10: advanceToNextSquadron — Avance de turno');
 
 test('avanza al siguiente escuadrón', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 300 } });
-  const s2 = createTestSquadron('s2', { commander: { speed: 200 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 300 }) });
+  const s2 = createTestSquadron('s2', { commander: mkCommander({ speed: 200 }) });
 
   let seq = createAttackSequence([s1, s2]);
   seq = advanceToNextSquadron(seq);
@@ -549,8 +570,8 @@ test('avanza al siguiente escuadrón', () => {
 });
 
 test('vuelve al inicio al completar todos', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 300 } });
-  const s2 = createTestSquadron('s2', { commander: { speed: 200 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 300 }) });
+  const s2 = createTestSquadron('s2', { commander: mkCommander({ speed: 200 }) });
 
   let seq = createAttackSequence([s1, s2]);
   seq = { ...seq, currentIndex: 1 }; // En el último
@@ -567,8 +588,8 @@ test('vuelve al inicio al completar todos', () => {
 console.log('\n📦 SUITE 11: removeDeadSquadrons — Limpieza de escuadrones muertos');
 
 test('elimina escuadrones con todas las naves muertas', () => {
-  const alive = createTestSquadron('alive', { commander: { speed: 300 } });
-  const dead = createTestSquadron('dead', { commander: { speed: 200 } });
+  const alive = createTestSquadron('alive', { commander: mkCommander({ speed: 300 }) });
+  const dead = createTestSquadron('dead', { commander: mkCommander({ speed: 200 }) });
   dead.ships.forEach(s => { s.isAlive = false; s.hull = 0; });
 
   let seq = createAttackSequence([alive, dead]);
@@ -585,9 +606,9 @@ test('elimina escuadrones con todas las naves muertas', () => {
 console.log('\n📦 SUITE 12: computeAttackOrder — Números de orden');
 
 test('asigna números 1-based correctamente', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 50 } });
-  const s2 = createTestSquadron('s2', { commander: { speed: 200 } });
-  const s3 = createTestSquadron('s3', { commander: { speed: 100 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 50 }) });
+  const s2 = createTestSquadron('s2', { commander: mkCommander({ speed: 200 }) });
+  const s3 = createTestSquadron('s3', { commander: mkCommander({ speed: 100 }) });
 
   const order = computeAttackOrder([s1, s2, s3]);
 
@@ -603,8 +624,8 @@ test('asigna números 1-based correctamente', () => {
 console.log('\n📦 SUITE 13: SequentialAttackEngine — Motor principal');
 
 test('engine inicializa correctamente', () => {
-  const s1 = createTestSquadron('s1', { commander: { speed: 100 } });
-  const s2 = createTestSquadron('s2', { faction: 'defender', commander: { speed: 50 } });
+  const s1 = createTestSquadron('s1', { commander: mkCommander({ speed: 100 }) });
+  const s2 = createTestSquadron('s2', { faction: 'defender', commander: mkCommander({ speed: 50 }) });
 
   const engine = new SequentialAttackEngine([s1, s2]);
 
@@ -614,12 +635,12 @@ test('engine inicializa correctamente', () => {
 
 test('engine emite eventos al iniciar', () => {
   const s1 = createTestSquadron('s1', {
-    commander: { speed: 100, name: 'Zhang' },
+    commander: mkCommander({ speed: 100, name: 'Zhang' }),
     faction: 'attacker',
   });
   const s2 = createTestSquadron('s2', {
     faction: 'defender',
-    commander: { speed: 50 },
+    commander: mkCommander({ speed: 50 }),
     position: { x: 2, y: 0 },
   });
 
@@ -658,12 +679,12 @@ test('engine detecta batalla terminada', () => {
 
 test('engine avanza correctamente por las fases', () => {
   const s1 = createTestSquadron('s1', {
-    commander: { speed: 100 },
+    commander: mkCommander({ speed: 100 }),
     faction: 'attacker',
   });
   const s2 = createTestSquadron('s2', {
     faction: 'defender',
-    commander: { speed: 50 },
+    commander: mkCommander({ speed: 50 }),
     position: { x: 2, y: 0 },
   });
 

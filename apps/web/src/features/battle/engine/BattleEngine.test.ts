@@ -12,6 +12,7 @@ import {
   BattleState,
   BASE_EFFECTIVE_STACK,
   EOS_TRIGGER_CHANCE,
+  type ShipStack,
 } from './types';
 
 import {
@@ -750,7 +751,8 @@ test('EffectiveStack: commander bonus increases effective', () => {
       speed: 50,
       dodge: 50,
       electron: 50,
-      effectiveStackBonus: 1000,
+      // effectiveStackBonus es calculado por createCommander a partir de stars
+      // (stars: 5 → 1000), no es un input del constructor.
     }),
   });
   // min(currentShips=2000, base+bonus=2100) = 2000
