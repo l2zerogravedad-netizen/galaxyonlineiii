@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galaxy Online 3 — Planeta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04070f; --panel:#0b1830; --panel2:#0e2240; --edge:#1f4e7a; --edge2:#2f6fb0;
+  --cyan:#4fb6ff; --cyan-glow:#7fd0ff; --amber:#ffb43c; --green:#4ade80; --blue:#5b8cff;
+  --txt:#dfeaf6; --dim:#7d9ec2; --gold:#f0c14b;
+  --hud-font:'Rajdhani','Segoe UI',system-ui,sans-serif;
+  --title-font:'Orbitron','Rajdhani',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-family:var(--hud-font);color:var(--txt);-webkit-user-select:none;user-select:none}
+#gameCanvas{position:absolute;inset:0;display:block}
+/* Scene-only mode: the React HUD (parent page) renders the UI over this iframe.
+   Hide the built-in HTML HUD but keep the nodes in the DOM so the existing scene JS
+   that touches #rM / #list / #tabs never hits a null reference. */
+#topbar,#buildPanel,#actionBar,#hotbar,#chatBox,#shopOverlay{display:none!important}
+
+/* ============ TOP BAR (avatar + level + resources) ============ */
+#topbar{position:absolute;top:0;left:0;right:0;height:62px;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 14px;
+  background:linear-gradient(180deg,rgba(6,14,28,0.96),rgba(6,14,28,0.55) 70%,rgba(6,14,28,0));pointer-events:none}
+#topbar>*{pointer-events:auto}
+.profile{display:flex;align-items:center;gap:10px}
+.avatar{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#1d3f63,#0a1c33);border:2px solid var(--edge2);
+  box-shadow:0 0 10px rgba(79,182,255,0.4),inset 0 0 8px rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-size:22px;position:relative}
+.avatar .lvbadge{position:absolute;bottom:-4px;right:-4px;background:linear-gradient(180deg,var(--amber),#c8841f);color:#1a0f00;font-weight:900;font-size:10px;
+  border-radius:8px;padding:1px 5px;border:1px solid #ffd27a;font-family:var(--title-font)}
+.pmeta{display:flex;flex-direction:column;gap:3px;min-width:160px}
+.pname{font-family:var(--title-font);font-weight:700;font-size:14px;letter-spacing:0.5px;text-shadow:0 0 6px rgba(79,182,255,0.5)}
+.xpwrap{display:flex;align-items:center;gap:6px}
+.xpbar{flex:1;height:8px;border-radius:5px;background:rgba(0,0,0,0.5);border:1px solid var(--edge);overflow:hidden}
+.xpfill{height:100%;width:37%;background:linear-gradient(90deg,#2f9bff,#7fd0ff);box-shadow:0 0 8px rgba(79,182,255,0.7)}
+.xptxt{font-size:11px;color:var(--dim);font-weight:600}
+.restop{display:flex;gap:8px;align-items:center}
+.rpill{display:flex;align-items:center;gap:6px;background:linear-gradient(180deg,rgba(12,28,52,0.95),rgba(8,18,36,0.95));
+  border:1px solid var(--edge);border-radius:20px;padding:5px 12px 5px 8px;box-shadow:inset 0 0 6px rgba(0,0,0,0.5),0 0 4px rgba(0,0,0,0.4)}
+.rpill .ri{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.18),rgba(0,0,0,0.4))}
+.rpill .rv{font-family:var(--title-font);font-weight:700;font-size:14px;min-width:48px;text-align:right}
+
+/* ============ BUILD PANEL (left, GO2 sci-fi) ============ */
+#buildPanel{position:absolute;left:10px;top:72px;width:216px;max-height:calc(100% - 200px);z-index:35;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,rgba(11,24,48,0.94),rgba(8,18,36,0.94));border:1px solid var(--edge);border-radius:12px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.55),inset 0 0 18px rgba(31,78,122,0.25);overflow:hidden}
+.bp-head{display:flex;align-items:center;gap:8px;padding:9px 12px;background:linear-gradient(90deg,rgba(47,111,176,0.35),rgba(47,111,176,0));
+  border-bottom:1px solid var(--edge)}
+.bp-head .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.bp-head h3{font-family:var(--title-font);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan-glow)}
+#tabs{display:flex;padding:6px 6px 0}
+.t{flex:1;padding:7px 4px;border:none;background:transparent;color:var(--dim);font-size:10px;font-weight:700;font-family:var(--hud-font);
+  text-transform:uppercase;cursor:pointer;letter-spacing:0.5px;border-bottom:2px solid transparent;transition:all .15s}
+.t.active{color:var(--cyan);border-bottom-color:var(--cyan);text-shadow:0 0 6px rgba(79,182,255,0.5)}
+.t:hover{color:var(--cyan-glow)}
+#list{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
+#list::-webkit-scrollbar{width:6px}#list::-webkit-scrollbar-thumb{background:var(--edge);border-radius:3px}
+.it{width:100%;padding:8px;border-radius:9px;border:1px solid rgba(47,111,176,0.4);
+  background:linear-gradient(180deg,rgba(14,34,64,0.7),rgba(8,18,36,0.7));color:var(--txt);font-size:12px;cursor:pointer;
+  display:flex;align-items:center;gap:9px;transition:all .15s;position:relative}
+.it:hover{border-color:var(--edge2);background:linear-gradient(180deg,rgba(20,46,82,0.85),rgba(12,26,48,0.85));transform:translateX(2px)}
+.it.sel{border-color:var(--cyan);box-shadow:0 0 12px rgba(79,182,255,0.45),inset 0 0 10px rgba(79,182,255,0.12)}
+.it .ico{font-size:20px;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%,rgba(47,111,176,0.5),rgba(0,0,0,0.35));border:1px solid rgba(47,111,176,0.5)}
+.it .n{font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .c{font-size:10px;color:var(--dim);font-weight:600;letter-spacing:0.3px}
+.it.disabled{opacity:0.4;cursor:not-allowed}.it.disabled:hover{transform:none}
+#btns{padding:8px;border-top:1px solid var(--edge);display:flex;gap:6px}
+.ab{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(220,38,38,0.4);font-size:11px;font-weight:700;cursor:pointer;
+  color:#fca5a5;background:linear-gradient(180deg,rgba(120,28,28,0.4),rgba(60,14,14,0.4));font-family:var(--hud-font);text-transform:uppercase;letter-spacing:0.5px}
+.ab:hover{background:linear-gradient(180deg,rgba(150,38,38,0.55),rgba(80,18,18,0.55))}
+
+/* ============ RIGHT ACTION BUTTONS (circular, GO2) ============ */
+#actionBar{position:absolute;right:14px;bottom:96px;z-index:35;display:flex;flex-direction:column;gap:10px}
+.act{width:54px;height:54px;border-radius:50%;cursor:pointer;border:2px solid var(--edge2);position:relative;
+  background:radial-gradient(circle at 35% 28%,#163a5e,#08182f);box-shadow:0 0 12px rgba(0,0,0,0.5),inset 0 0 10px rgba(79,182,255,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .15s}
+.act:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(79,182,255,0.6),inset 0 0 12px rgba(79,182,255,0.3);transform:scale(1.06)}
+.act .lbl{position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;color:var(--cyan-glow);
+  background:rgba(4,10,20,0.85);padding:1px 5px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.act.shop{border-color:var(--gold);background:radial-gradient(circle at 35% 28%,#5a4a18,#2a1f08);box-shadow:0 0 14px rgba(240,193,75,0.5)}
+.act.shop:hover{box-shadow:0 0 20px rgba(240,193,75,0.8)}
+
+/* ============ HOTBAR (bottom, decorative slots) ============ */
+#hotbar{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:35;display:flex;gap:6px}
+.slot{width:52px;height:52px;border-radius:8px;border:1px solid var(--edge);background:linear-gradient(180deg,rgba(40,32,12,0.6),rgba(20,16,6,0.6));
+  box-shadow:inset 0 0 10px rgba(0,0,0,0.6);position:relative}
+.slot::before{content:'';position:absolute;inset:3px;border:1px solid rgba(240,193,75,0.25);border-radius:5px}
+
+/* ============ CHAT (bottom-left stub) ============ */
+#chatBox{position:absolute;left:10px;bottom:12px;width:216px;z-index:35;background:linear-gradient(180deg,rgba(8,18,36,0.9),rgba(6,12,24,0.9));
+  border:1px solid var(--edge);border-radius:10px;overflow:hidden}
+#chatBox .ch-head{padding:5px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);
+  background:rgba(47,111,176,0.2);border-bottom:1px solid var(--edge)}
+#chatBox .ch-body{padding:7px 10px;font-size:11px;color:var(--dim);line-height:1.5;height:64px;overflow-y:auto}
+#chatBox .ch-body b{color:var(--cyan-glow)}
+
+/* ============ SHOP MODAL (GO2 store window) ============ */
+#shopOverlay{position:absolute;inset:0;z-index:80;background:rgba(2,5,12,0.66);display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+#shopOverlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#shop{width:min(880px,92vw);max-height:88vh;display:flex;flex-direction:column;position:relative;
+  background:linear-gradient(180deg,#11335c,#0a1c38 10%,#08182f);
+  border:2px solid var(--edge2);border-radius:14px;box-shadow:0 16px 60px rgba(0,0,0,0.7),inset 0 0 30px rgba(31,78,122,0.3),0 0 0 1px rgba(127,208,255,0.15)}
+.shop-top{display:flex;align-items:center;justify-content:center;padding:12px;position:relative;border-bottom:1px solid var(--edge)}
+.shop-top h2{font-family:var(--title-font);font-size:18px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan-glow);text-shadow:0 0 12px rgba(79,182,255,0.6)}
+.shop-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;cursor:pointer;
+  border:1px solid #b44;background:radial-gradient(circle at 35% 30%,#7a2222,#3a0e0e);color:#ffb0b0;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.shop-close:hover{box-shadow:0 0 12px rgba(220,60,60,0.7)}
+.shop-tabs{display:flex;gap:6px;padding:12px 14px 0;flex-wrap:wrap}
+.stab{padding:8px 18px;cursor:pointer;font-family:var(--hud-font);font-weight:700;font-size:13px;letter-spacing:0.8px;color:var(--dim);
+  background:linear-gradient(180deg,rgba(14,34,64,0.8),rgba(8,18,36,0.8));border:1px solid var(--edge);
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:all .15s}
+.stab:hover{color:var(--cyan-glow)}
+.stab.active{color:#04101f;background:linear-gradient(180deg,#7fd0ff,#2f9bff);border-color:#7fd0ff;text-shadow:none;box-shadow:0 0 14px rgba(79,182,255,0.6)}
+.shop-grid{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.shop-grid::-webkit-scrollbar{width:8px}.shop-grid::-webkit-scrollbar-thumb{background:var(--edge);border-radius:4px}
+.card{position:relative;display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;cursor:pointer;
+  background:linear-gradient(180deg,rgba(16,40,72,0.7),rgba(8,18,36,0.7));border:1px solid var(--edge);transition:all .15s}
+.card:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(79,182,255,0.4);transform:translateY(-2px)}
+.card .cico{width:54px;height:54px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:30px;
+  background:radial-gradient(circle at 35% 28%,rgba(47,111,176,0.55),rgba(0,0,0,0.4));border:1px solid var(--edge2)}
+.card .cinfo{flex:1;min-width:0}
+.card .cname{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .cprice{display:flex;align-items:center;gap:5px;margin-top:5px;font-family:var(--title-font);font-weight:700;font-size:14px;color:var(--cyan-glow)}
+.card .cprice .gem{font-size:13px}
+.ribbon{position:absolute;top:8px;right:-2px;font-size:9px;font-weight:900;font-family:var(--title-font);letter-spacing:0.5px;color:#04101f;
+  padding:2px 8px;border-radius:4px 0 0 4px}
+.ribbon.new{background:linear-gradient(90deg,#34d399,#10b981)}
+.ribbon.hot{background:linear-gradient(90deg,#fb923c,#f97316)}
+.ribbon.limited{background:linear-gradient(90deg,#c084fc,#a855f7);color:#fff}
+.shop-bottom{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--edge);gap:12px}
+.wallet{display:flex;gap:12px}
+.wallet .w{display:flex;align-items:center;gap:6px;font-family:var(--title-font);font-weight:700;font-size:14px}
+.pager{display:flex;align-items:center;gap:10px}
+.pbtn{width:30px;height:30px;border-radius:50%;cursor:pointer;border:1px solid var(--edge2);background:radial-gradient(circle at 35% 30%,#163a5e,#08182f);
+  color:var(--cyan-glow);font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.pbtn:hover{box-shadow:0 0 10px rgba(79,182,255,0.5)}
+.pginfo{font-family:var(--title-font);font-weight:700;font-size:13px;color:var(--dim)}
+.buypts{padding:8px 18px;cursor:pointer;font-family:var(--hud-font);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#04101f;
+  border:1px solid #ffd27a;border-radius:8px;background:linear-gradient(180deg,#ffd27a,#e0a838);box-shadow:0 0 14px rgba(240,193,75,0.5)}
+.buypts:hover{box-shadow:0 0 20px rgba(240,193,75,0.8)}
+
+/* ============ OVERLAYS (error / hint / loader) ============ */
+#err{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:rgba(180,30,30,0.92);color:#fff;padding:8px 16px;border-radius:8px;font-size:12px;z-index:100;display:none;max-width:80%;text-align:center}
+#hint{position:absolute;bottom:78px;left:50%;transform:translateX(-50%);background:linear-gradient(180deg,rgba(12,28,52,0.97),rgba(8,18,36,0.97));border:1px solid var(--edge2);color:var(--cyan-glow);padding:9px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:50;display:none;white-space:nowrap;box-shadow:0 0 16px rgba(0,0,0,0.5)}
+#load{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--cyan-glow);z-index:200;transition:opacity 0.5s;font-family:var(--title-font);letter-spacing:1px}
+#load .sp{width:44px;height:44px;border:3px solid var(--edge);border-top-color:var(--cyan);border-radius:50%;animation:sp 1s linear infinite;margin-bottom:14px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="load"><div class="sp"></div><div>CARGANDO PLANETA...</div></div>
+<div id="err"></div>
+<div id="hint"></div>
+
+<!-- ===== TOP BAR: avatar + level + resources ===== -->
+<div id="topbar">
+  <div class="profile">
+    <div class="avatar">👨‍🚀<div class="lvbadge">LV <span id="lvNum">2</span></div></div>
+    <div class="pmeta">
+      <div class="pname" id="cmdName">Comandante</div>
+      <div class="xpwrap">
+        <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+        <span class="xptxt" id="xpTxt">37%</span>
+      </div>
+    </div>
+  </div>
+  <div class="restop">
+    <div class="rpill"><div class="ri" style="color:#f0c14b;background:radial-gradient(circle at 35% 30%,#6a5a2a,#2a2008)">⛏</div><span class="rv" id="rM" style="color:#f0c14b">15000</span></div>
+    <div class="rpill"><div class="ri" style="color:#4ade80;background:radial-gradient(circle at 35% 30%,#1e5a36,#082011)">⚡</div><span class="rv" id="rE" style="color:#4ade80">12000</span></div>
+    <div class="rpill"><div class="ri" style="color:#5b8cff;background:radial-gradient(circle at 35% 30%,#1d2f6a,#080f2a)">💰</div><span class="rv" id="rC" style="color:#7fa0ff">10000</span></div>
+    <div class="rpill"><div class="ri" style="color:#c084fc;background:radial-gradient(circle at 35% 30%,#3d2a5a,#160a28)">💎</div><span class="rv" id="rGem" style="color:#d8b0ff">68</span></div>
+  </div>
+</div>
+
+<!-- ===== BUILD PANEL (left) ===== -->
+<div id="buildPanel">
+  <div class="bp-head"><span class="dot"></span><h3>Construcción</h3></div>
+  <div id="tabs">
+    <button class="t active" onclick="switchTab(0)">Edificios</button>
+    <button class="t" onclick="switchTab(1)">Naves</button>
+    <button class="t" onclick="switchTab(2)">Props</button>
+  </div>
+  <div id="list"></div>
+  <div id="btns">
+    <button class="ab" onclick="resetMap()">Reset</button>
+  </div>
+</div>
+
+<!-- ===== RIGHT ACTION BUTTONS ===== -->
+<div id="actionBar">
+  <div class="act shop" onclick="openShop()" title="Tienda">🛒<div class="lbl">Tienda</div></div>
+  <div class="act" onclick="showHint('Galaxia — próximamente');setTimeout(hideHint,1400)" title="Galaxia">🌌<div class="lbl">Galaxia</div></div>
+  <div class="act" onclick="showHint('Flotas — próximamente');setTimeout(hideHint,1400)" title="Flotas">🛰️<div class="lbl">Flotas</div></div>
+  <div class="act" onclick="showHint('Misiones — próximamente');setTimeout(hideHint,1400)" title="Misiones">🎯<div class="lbl">Misiones</div></div>
+</div>
+
+<!-- ===== CHAT STUB ===== -->
+<div id="chatBox">
+  <div class="ch-head">Mundo</div>
+  <div class="ch-body"><div><b>[Sistema]</b> Bienvenido, Comandante.</div><div><b>[Vega]</b> Bienvenido a la galaxia!</div></div>
+</div>
+
+<!-- ===== HOTBAR ===== -->
+<div id="hotbar">
+  <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+  <div class="slot"></div><div class="slot"></div><div class="slot"></div>
+</div>
+
+<!-- ===== SHOP MODAL ===== -->
+<div id="shopOverlay" onclick="if(event.target===this)closeShop()">
+  <div id="shop">
+    <div class="shop-top"><h2>Tienda</h2><div class="shop-close" onclick="closeShop()">✕</div></div>
+    <div class="shop-tabs" id="shopTabs"></div>
+    <div class="shop-grid" id="shopGrid"></div>
+    <div class="shop-bottom">
+      <div class="wallet">
+        <div class="w" style="color:#d8b0ff">💎 <span id="rGem2">68</span></div>
+        <div class="w" style="color:#f0c14b">🪙 <span id="goldPts">1</span></div>
+      </div>
+      <div class="pager">
+        <div class="pbtn" onclick="shopPage(-1)">‹</div>
+        <div class="pginfo"><span id="shopPg">1</span>/<span id="shopPgN">1</span></div>
+        <div class="pbtn" onclick="shopPage(1)">›</div>
+      </div>
+      <div class="buypts" onclick="showHint('Compra de puntos — próximamente');setTimeout(hideHint,1400)">Comprar Puntos</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// ===== ERROR HANDLING =====
+window.onerror = (msg, src, line) => { showErr(msg + ' line:' + line); };
+function showErr(m) { console.error(m); const e = document.getElementById('err'); e.textContent = m; e.style.display = 'block'; }
+function showHint(m) { const h = document.getElementById('hint'); h.textContent = m; h.style.display = 'block'; }
+function hideHint() { document.getElementById('hint').style.display = 'none'; }
+
+// ===== CATALOG =====
+const CATS = [
+  { tab: 'Edificios', items: [
+    { id: 'metal_mine', name: 'Mina de Metal', icon: '\u26CF', cost: {m: 120, e: 40, c: 20}, max: 99, glb: '/models/buildings/metal_mine.glb', sc: 0.7 },
+    { id: 'power_plant', name: 'Planta de Energia', icon: '\u26A1', cost: {m: 200, e: 80, c: 60}, max: 99, glb: '/models/buildings/power_plant.glb', sc: 0.8 },
+    { id: 'warehouse', name: 'Almacen', icon: '\uD83D\uDCE6', cost: {m: 150, e: 50, c: 100}, max: 99, glb: '/models/buildings/warehouse.glb', sc: 0.65 },
+    { id: 'shipyard', name: 'Astillero', icon: '\uD83D\uDE80', cost: {m: 800, e: 400, c: 300}, max: 2, glb: '/models/buildings/shipyard.glb', sc: 0.6 },
+    { id: 'command_center', name: 'Centro de Comando', icon: '\uD83C\uDFDB', cost: {m: 500, e: 300, c: 250}, max: 1, glb: '/models/buildings/command_center.glb', sc: 0.8 },
+  ]},
+  { tab: 'Naves', items: [
+    { id: 'fighter', name: 'Caza Ligero', icon: '\u2708', cost: {m: 300, e: 150, c: 100}, max: 20, glb: '/models/ships/fighter.glb', sc: 0.5 },
+    { id: 'frigate', name: 'Fragata', icon: '\uD83D\uDEE5', cost: {m: 600, e: 300, c: 200}, max: 10, glb: '/models/ships/frigate.glb', sc: 0.5 },
+    { id: 'cruiser', name: 'Crucero', icon: '\uD83D\uDEA2', cost: {m: 1000, e: 500, c: 400}, max: 5, glb: '/models/ships/cruiser.glb', sc: 0.45 },
+    { id: 'battleship', name: 'Acorazado', icon: '\u2693', cost: {m: 2000, e: 1000, c: 800}, max: 2, glb: '/models/ships/battleship.glb', sc: 0.4 },
+  ]},
+  { tab: 'Props', items: [
+    { id: 'dome', name: 'Domo', icon: '\uD83C\uDF10', cost: {m: 80, e: 20, c: 10}, max: 50, glb: '/models/props/dome.glb', sc: 0.8 },
+    { id: 'solar_array', name: 'Panel Solar', icon: '\u2600', cost: {m: 50, e: 10, c: 5}, max: 50, glb: '/models/props/solar_array.glb', sc: 0.7 },
+    { id: 'antenna', name: 'Antena', icon: '\uD83D\uDCE1', cost: {m: 40, e: 30, c: 20}, max: 50, glb: '/models/props/antenna.glb', sc: 0.8 },
+    { id: 'radar', name: 'Radar', icon: '\uD83D\uDCF6', cost: {m: 60, e: 40, c: 10}, max: 30, glb: '/models/props/radar.glb', sc: 0.8 },
+    { id: 'rock_large', name: 'Roca', icon: '\uD83E\uDEA8', cost: {m: 0, e: 0, c: 0}, max: 99, glb: '/models/props/rock_large.glb', sc: 1.0 },
+    { id: 'planet_small', name: 'Planeta Deco', icon: '\uD83D\uDE90', cost: {m: 0, e: 0, c: 0}, max: 10, glb: '/models/props/planet_small.glb', sc: 0.6 },
+  ]},
+];
+const ALL = CATS.flatMap(c => c.items);
+function getDef(id) { return ALL.find(x => x.id === id); }
+
+// ===== STATE =====
+let R = { m: 15000, e: 12000, c: 10000 };
+let placed = []; // { id, typeId, col, row, rot }
+let selectedId = null; // current item being placed
+let selRot = 0;
+let ghost = null; // ghost mesh
+let curTab = 0;
+const SK = 'go3c_v1';
+
+function loadState() { try { const d = JSON.parse(localStorage.getItem(SK)); if (d) { R = d.R || R; placed = d.placed || placed; } } catch (e) {} }
+function saveState() { localStorage.setItem(SK, JSON.stringify({ R, placed })); }
+function canAff(it) { return R.m >= it.cost.m && R.e >= it.cost.e && R.c >= it.cost.c; }
+function cntType(id) { return placed.filter(p => p.typeId === id).length; }
+
+// ===== THREE.JS SETUP =====
+const canvas = document.getElementById('gameCanvas');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x050a14);
+scene.fog = new THREE.Fog(0x050a14, 80, 200);
+
+const camera = new THREE.PerspectiveCamera(35, canvas.clientWidth / canvas.clientHeight, 0.1, 500);
+camera.position.set(18, 14, 18);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.3;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.minPolarAngle = 0.2;
+controls.maxPolarAngle = Math.PI / 2.2;
+controls.minDistance = 8;
+controls.maxDistance = 60;
+
+// ===== LIGHTING =====
+scene.add(new THREE.AmbientLight(0xfff0dd, 0.8));
+scene.add(new THREE.HemisphereLight(0xffeedd, 0x3a3020, 0.5));
+const sun = new THREE.DirectionalLight(0xffffff, 1.8);
+sun.position.set(15, 25, 10);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -35; sun.shadow.camera.right = 35;
+sun.shadow.camera.top = -35; sun.shadow.camera.bottom = -35;
+sun.shadow.camera.near = 1; sun.shadow.camera.far = 80;
+sun.shadow.bias = -0.0005;
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0x99bbff, 0.4);
+fill.position.set(-10, 5, -8);
+scene.add(fill);
+
+// ===== TERRAIN =====
+const GRID_C = 12, GRID_R = 10;
+const CW = 3.8, CH = 2.2;
+const OX = -(GRID_C * CW) / 2;
+const OZ = -(GRID_R * CH) / 2;
+
+const tGeo = new THREE.PlaneGeometry(60, 40);
+const tMat = new THREE.MeshStandardMaterial({ color: 0x8b7355, roughness: 0.95, metalness: 0.0 });
+// Add subtle texture-like variation via vertex colors
+const tc = new Float32Array(tGeo.attributes.position.count * 3);
+for (let i = 0; i < tc.length; i += 3) {
+  const r = 0.6 + Math.random() * 0.15;
+  tc[i] = r; tc[i + 1] = r * 0.85; tc[i + 2] = r * 0.6;
+}
+tGeo.setAttribute('color', new THREE.BufferAttribute(tc, 3));
+tMat.vertexColors = true;
+tMat.needsUpdate = true;
+
+const terrain = new THREE.Mesh(tGeo, tMat);
+terrain.rotation.x = -Math.PI / 2;
+terrain.position.y = -0.5;
+terrain.receiveShadow = true;
+scene.add(terrain);
+
+// Grid lines
+const gPts = [];
+for (let c = 0; c <= GRID_C; c++) { gPts.push(OX + c * CW, 0.01, OZ); gPts.push(OX + c * CW, 0.01, OZ + GRID_R * CH); }
+for (let r = 0; r <= GRID_R; r++) { gPts.push(OX, 0.01, OZ + r * CH); gPts.push(OX + GRID_C * CW, 0.01, OZ + r * CH); }
+const gGeo = new THREE.BufferGeometry();
+gGeo.setAttribute('position', new THREE.Float32BufferAttribute(gPts, 3));
+const gMat = new THREE.LineBasicMaterial({ color: 0x4a3c2a, transparent: true, opacity: 0.3 });
+scene.add(new THREE.LineSegments(gGeo, gMat));
+
+// Cell highlight cursor
+const hlGeo = new THREE.BoxGeometry(CW * 0.9, 0.05, CH * 0.9);
+const hlMat = new THREE.MeshBasicMaterial({ color: 0x4a9eff, transparent: true, opacity: 0 });
+const highlight = new THREE.Mesh(hlGeo, hlMat);
+scene.add(highlight);
+
+// ===== COORD CONVERSION =====
+function w2g(wx, wz) {
+  const c = Math.floor((wx - OX) / CW);
+  const r = Math.floor((wz - OZ) / CH);
+  if (c < 0 || r < 0 || c >= GRID_C || r >= GRID_R) return null;
+  return { col: c, row: r };
+}
+function g2w(col, row) {
+  return [OX + col * CW + CW / 2, 0, OZ + row * CH + CH / 2];
+}
+function occMap() {
+  const m = new Set();
+  for (const p of placed) m.add(p.col + ',' + p.row);
+  return m;
+}
+
+// ===== GLB LOADING =====
+const loader = new GLTFLoader();
+const cache = {};
+
+async function loadGlb(path) {
+  if (cache[path]) return cache[path].clone();
+  return new Promise((resolve, reject) => {
+    loader.load(path, (gltf) => {
+      const scene_gltf = gltf.scene;
+      // Fix materials
+      scene_gltf.traverse(ch => {
+        if (ch.isMesh && ch.material) {
+          ch.castShadow = true;
+          ch.receiveShadow = true;
+          const m = ch.material.clone();
+          m.metalness = Math.min(m.metalness || 0, 0.2);
+          m.roughness = Math.max(m.roughness || 0.5, 0.6);
+          m.emissive = new THREE.Color(0x000000);
+          m.emissiveIntensity = 0;
+          m.needsUpdate = true;
+          ch.material = m;
+        }
+      });
+      cache[path] = scene_gltf;
+      resolve(scene_gltf.clone());
+    }, undefined, reject);
+  });
+}
+
+// ===== PLACE / REMOVE BUILDING =====
+async function placeItem(typeId, col, row, rot) {
+  const def = getDef(typeId);
+  if (!def) return;
+  try {
+    const mesh = await loadGlb(def.glb);
+    mesh.scale.setScalar(def.sc);
+    const [x, y, z] = g2w(col, row);
+    mesh.position.set(x, y, z);
+    mesh.rotation.y = rot * Math.PI / 180;
+    mesh.userData = { key: typeId + '_' + col + '_' + row };
+    scene.add(mesh);
+  } catch (e) { showErr('Error cargando ' + def.name + ': ' + e.message); }
+}
+
+function removeVisual(col, row) {
+  const key = placed.find(p => p.col === col && p.row === row)?.typeId + '_' + col + '_' + row;
+  if (!key) return;
+  scene.traverse(ch => {
+    if (ch.userData && ch.userData.key === key) {
+      scene.remove(ch);
+    }
+  });
+}
+
+// ===== SHIELD EFFECT =====
+function spawnShield(pos) {
+  const g = new THREE.SphereGeometry(1.2, 16, 16);
+  const m = new THREE.MeshBasicMaterial({ color: 0x4488ff, transparent: true, opacity: 0.15, wireframe: true, blending: THREE.AdditiveBlending, depthWrite: false });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.position.set(pos[0], pos[1] + 1, pos[2]);
+  scene.add(mesh);
+  let t = 0;
+  function anim() {
+    t += 0.02;
+    m.opacity = 0.15 * Math.max(0, 1 - t);
+    mesh.scale.setScalar(1 + t * 0.5);
+    if (t < 1) requestAnimationFrame(anim);
+    else { scene.remove(mesh); g.dispose(); m.dispose(); }
+  }
+  anim();
+}
+
+// ===== INPUT =====
+const ray = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function getPoint(cx, cy) {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = ((cx - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((cy - rect.top) / rect.height) * 2 + 1;
+  ray.setFromCamera(mouse, camera);
+  const hits = ray.intersectObject(terrain);
+  return hits.length > 0 ? hits[0].point : null;
+}
+
+canvas.addEventListener('pointermove', e => {
+  if (!selectedId) { highlight.visible = false; return; }
+  const pt = getPoint(e.clientX, e.clientY);
+  if (!pt) { highlight.visible = false; return; }
+  const g = w2g(pt.x, pt.z);
+  if (!g) { highlight.visible = false; return; }
+  const [x, y, z] = g2w(g.col, g.row);
+  highlight.position.set(x, y + 0.02, z);
+  highlight.visible = true;
+  const occupied = occMap().has(g.col + ',' + g.row);
+  hlMat.color.setHex(occupied ? 0xff4444 : 0x44ff44);
+  hlMat.opacity = 0.3;
+  // Update ghost
+  if (ghost) { ghost.position.set(x, y, z); ghost.visible = true; }
+});
+
+canvas.addEventListener('click', async e => {
+  if (!selectedId) return;
+  const pt = getPoint(e.clientX, e.clientY);
+  if (!pt) return;
+  const g = w2g(pt.x, pt.z);
+  if (!g) return;
+  const def = getDef(selectedId);
+  if (!def) return;
+  if (occMap().has(g.col + ',' + g.row)) { showHint('Celda ocupada'); setTimeout(hideHint, 1500); return; }
+  if (!canAff(def)) { showHint('Sin recursos'); setTimeout(hideHint, 1500); return; }
+  if (cntType(def.id) >= def.max) { showHint('Limite alcanzado'); setTimeout(hideHint, 1500); return; }
+
+  // Spend
+  R.m -= def.cost.m; R.e -= def.cost.e; R.c -= def.cost.c;
+  placed.push({ typeId: def.id, col: g.col, row: g.row, rot: selRot });
+  await placeItem(def.id, g.col, g.row, selRot);
+  spawnShield(g2w(g.col, g.row));
+  saveState();
+  updateUI();
+  showHint(def.name + ' construido!');
+  setTimeout(hideHint, 1500);
+});
+
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  const pt = getPoint(e.clientX, e.clientY);
+  if (!pt) return;
+  const g = w2g(pt.x, pt.z);
+  if (!g) return;
+  const occ = occMap();
+  if (!occ.has(g.col + ',' + g.row)) return;
+  const idx = placed.findIndex(p => p.col === g.col && p.row === g.row);
+  if (idx === -1) return;
+  const p = placed[idx];
+  const def = getDef(p.typeId);
+  if (def) { R.m += def.cost.m * 0.5; R.e += def.cost.e * 0.5; R.c += def.cost.c * 0.5; }
+  removeVisual(g.col, g.row);
+  placed.splice(idx, 1);
+  saveState();
+  updateUI();
+});
+
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { selectedId = null; hideHint(); if (ghost) { scene.remove(ghost); ghost = null; } highlight.visible = false; updateUI(); }
+  if ((e.key === 'r' || e.key === 'R') && selectedId) { selRot = (selRot + 90) % 360; showHint('Rotacion ' + selRot + '\u00B0'); setTimeout(hideHint, 1000); if (ghost) ghost.rotation.y = selRot * Math.PI / 180; }
+});
+
+window.addEventListener('resize', () => {
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+});
+
+// ===== UI =====
+function buildUI() {
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  const cat = CATS[curTab];
+  cat.items.forEach(it => {
+    const btn = document.createElement('button');
+    btn.className = 'it' + (selectedId === it.id ? ' sel' : '');
+    const n = cntType(it.id);
+    btn.innerHTML = `<span class="ico">${it.icon}</span><div style="flex:1;min-width:0"><div class="n">${it.name}</div><div class="c">${it.cost.m}M ${it.cost.e}E ${it.cost.c}C${n > 0 ? ' (' + n + '/' + it.max + ')' : ''}</div></div>`;
+    btn.onclick = () => selectItem(it.id);
+    if (!canAff(it) || n >= it.max) btn.classList.add('disabled');
+    list.appendChild(btn);
+  });
+}
+
+window.switchTab = function(t) {
+  curTab = t;
+  document.querySelectorAll('.t').forEach((b, i) => b.classList.toggle('active', i === t));
+  buildUI();
+};
+
+async function selectItem(id) {
+  const def = getDef(id);
+  if (!def) return;
+  if (!canAff(def)) return;
+  if (cntType(def.id) >= def.max) return;
+  selectedId = id;
+  selRot = 0;
+  showHint(`${def.name}: click para colocar | R rotar | ESC cancelar | click derecho en edificio para eliminar`);
+  // Create ghost
+  if (ghost) { scene.remove(ghost); ghost = null; }
+  try {
+    const g = await loadGlb(def.glb);
+    g.scale.setScalar(def.sc);
+    g.traverse(ch => {
+      if (ch.isMesh && ch.material) {
+        ch.material = ch.material.clone();
+        ch.material.transparent = true;
+        ch.material.opacity = 0.4;
+        ch.material.needsUpdate = true;
+      }
+    });
+    scene.add(g);
+    ghost = g;
+  } catch (e) {}
+  buildUI();
+}
+
+window.resetMap = function() {
+  if (!confirm('Eliminar todos los edificios?')) return;
+  placed.forEach(p => removeVisual(p.col, p.row));
+  placed = [];
+  R = { m: 15000, e: 12000, c: 10000 };
+  saveState();
+  updateUI();
+};
+
+function updateUI() {
+  document.getElementById('rM').textContent = R.m.toLocaleString();
+  document.getElementById('rE').textContent = R.e.toLocaleString();
+  document.getElementById('rC').textContent = R.c.toLocaleString();
+  buildUI();
+}
+
+// ===== SHOP (GO2-style store modal) =====
+const SHOP = {
+  'Todos': [
+    { name: 'Cupón', icon: '📘', price: 10, tag: 'new' },
+    { name: 'Herramienta MVP', icon: '⭐', price: 120, tag: 'new' },
+    { name: 'Chip de Memoria', icon: '💾', price: 35, tag: 'new' },
+    { name: 'Planeta Lujoso', icon: '🪐', price: 80, tag: 'new' },
+    { name: 'Planeta Metálico', icon: '🥉', price: 80, tag: 'new' },
+    { name: 'Planeta Gaseoso', icon: '🌑', price: 80, tag: 'new' },
+    { name: 'Impuesto Extra', icon: '📈', price: 24, tag: 'hot' },
+    { name: 'Carta de Tregua', icon: '🕊', price: 80, tag: 'hot' },
+    { name: 'Pack de Oro', icon: '🪙', price: 5, tag: 'limited' },
+  ],
+  'Desarrollo': [
+    { name: 'Acelerador x2', icon: '⏩', price: 40, tag: 'new' },
+    { name: 'Constructor Auto', icon: '🔧', price: 150 },
+    { name: 'Booster Recursos', icon: '📦', price: 60, tag: 'hot' },
+    { name: 'Expansión Slot', icon: '➕', price: 90 },
+  ],
+  'Batalla': [
+    { name: 'Refuerzo Flota', icon: '🛰', price: 100, tag: 'hot' },
+    { name: 'Escudo Temporal', icon: '🛡', price: 45 },
+    { name: 'Misil Orbital', icon: '🚀', price: 200, tag: 'limited' },
+    { name: 'Reparación Instant.', icon: '🔩', price: 30 },
+  ],
+  'Gemas': [
+    { name: 'Gema Ataque', icon: '🔴', price: 50 },
+    { name: 'Gema Defensa', icon: '🔵', price: 50 },
+    { name: 'Gema Velocidad', icon: '🟢', price: 50 },
+    { name: 'Gema Crítico', icon: '🟣', price: 75, tag: 'hot' },
+  ],
+  'Insignia': [
+    { name: 'Insignia Bronce', icon: '🥉', price: 20 },
+    { name: 'Insignia Plata', icon: '🥈', price: 60 },
+    { name: 'Insignia Oro', icon: '🥇', price: 120, tag: 'limited' },
+  ],
+  'Honor': [
+    { name: 'Marco Honor', icon: '🎖', price: 80 },
+    { name: 'Título Élite', icon: '👑', price: 200, tag: 'limited' },
+    { name: 'Estandarte', icon: '🚩', price: 110, tag: 'hot' },
+  ],
+};
+const SHOP_TABS = Object.keys(SHOP);
+let shopTab = 'Todos';
+let shopPg = 1;
+const SHOP_PER_PAGE = 9;
+
+window.openShop = function() {
+  document.getElementById('rGem2').textContent = document.getElementById('rGem').textContent;
+  shopTab = 'Todos'; shopPg = 1;
+  renderShopTabs();
+  renderShop();
+  document.getElementById('shopOverlay').classList.add('open');
+};
+window.closeShop = function() { document.getElementById('shopOverlay').classList.remove('open'); };
+window.shopPage = function(d) {
+  const items = SHOP[shopTab] || [];
+  const pages = Math.max(1, Math.ceil(items.length / SHOP_PER_PAGE));
+  shopPg = Math.min(pages, Math.max(1, shopPg + d));
+  renderShop();
+};
+
+function renderShopTabs() {
+  const c = document.getElementById('shopTabs');
+  c.innerHTML = '';
+  SHOP_TABS.forEach(t => {
+    const b = document.createElement('div');
+    b.className = 'stab' + (t === shopTab ? ' active' : '');
+    b.textContent = t;
+    b.onclick = () => { shopTab = t; shopPg = 1; renderShopTabs(); renderShop(); };
+    c.appendChild(b);
+  });
+}
+
+function renderShop() {
+  const items = SHOP[shopTab] || [];
+  const pages = Math.max(1, Math.ceil(items.length / SHOP_PER_PAGE));
+  shopPg = Math.min(shopPg, pages);
+  const start = (shopPg - 1) * SHOP_PER_PAGE;
+  const page = items.slice(start, start + SHOP_PER_PAGE);
+  const grid = document.getElementById('shopGrid');
+  grid.innerHTML = '';
+  page.forEach(it => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const ribbon = it.tag ? `<div class="ribbon ${it.tag}">${it.tag === 'new' ? 'NUEVO' : it.tag === 'hot' ? 'HOT' : 'LÍMITE'}</div>` : '';
+    card.innerHTML = `${ribbon}<div class="cico">${it.icon}</div><div class="cinfo"><div class="cname">${it.name}</div><div class="cprice"><span class="gem">💎</span>${it.price}</div></div>`;
+    card.onclick = () => buyItem(it);
+    grid.appendChild(card);
+  });
+  document.getElementById('shopPg').textContent = shopPg;
+  document.getElementById('shopPgN').textContent = pages;
+}
+
+function buyItem(it) {
+  const gemEl = document.getElementById('rGem');
+  let gems = parseInt(gemEl.textContent, 10) || 0;
+  if (gems < it.price) { showHint('Gemas insuficientes'); setTimeout(hideHint, 1500); return; }
+  gems -= it.price;
+  gemEl.textContent = gems;
+  document.getElementById('rGem2').textContent = gems;
+  showHint(it.name + ' comprado!');
+  setTimeout(hideHint, 1500);
+}
+
+// ===== REACT HUD BRIDGE (postMessage) =====
+// When embedded as an iframe under the React HUD, the parent drives building
+// selection and receives resource updates so the GO2 top-bar stays in sync.
+function postResources() {
+  try {
+    window.parent.postMessage({ type: 'go3:resources', R: { m: R.m, e: R.e, c: R.c } }, '*');
+  } catch (e) {}
+}
+function postCatalog() {
+  try {
+    const cats = CATS.map(c => ({ tab: c.tab, items: c.items.map(it => ({ id: it.id, name: it.name, icon: it.icon, cost: it.cost, max: it.max })) }));
+    window.parent.postMessage({ type: 'go3:catalog', cats }, '*');
+  } catch (e) {}
+}
+window.addEventListener('message', (ev) => {
+  const d = ev.data;
+  if (!d || typeof d !== 'object') return;
+  if (d.type === 'go3:select' && d.id) selectItem(d.id);
+  else if (d.type === 'go3:cancel') { selectedId = null; hideHint(); if (ghost) { scene.remove(ghost); ghost = null; } highlight.visible = false; }
+  else if (d.type === 'go3:reset') resetMap();
+  else if (d.type === 'go3:requestCatalog') { postCatalog(); postResources(); }
+});
+
+// Mirror resource changes to the parent whenever the local UI refreshes.
+const _origUpdateUI = updateUI;
+updateUI = function () { _origUpdateUI(); postResources(); };
+
+// ===== INIT =====
+async function init() {
+  loadState();
+  updateUI();
+  // Place saved
+  for (const p of placed) await placeItem(p.typeId, p.col, p.row, p.rot);
+  document.getElementById('load').style.opacity = '0';
+  setTimeout(() => document.getElementById('load').style.display = 'none', 500);
+  postCatalog();
+  postResources();
+  animate();
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+init().catch(e => showErr('Init: ' + e.message));
+</script>
+</body>
+</html>

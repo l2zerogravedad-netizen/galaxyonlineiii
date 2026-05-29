@@ -16,6 +16,15 @@ module.exports = {
           accent: '#f59e0b',
         },
       },
+      keyframes: {
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translate(-50%, 8px)' },
+          '100%': { opacity: '1', transform: 'translate(-50%, 0)' },
+        },
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 0.2s ease-out',
+      },
     },
   },
   plugins: [],
