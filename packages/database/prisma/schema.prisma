@@ -221,7 +221,7 @@ model Commander {
   status      String   @default("AVAILABLE") // AVAILABLE | INJURED | HOSPITAL
   gemSlots    Json     @default("{\"red\":null,\"blue\":null,\"green\":null,\"diamond\":null}") @map("gem_slots")
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
   empire      Empire   @relation(fields: [empireId], references: [id])
 
@@ -236,7 +236,7 @@ model Fleet {
   planetId      String?  @map("planet_id")
   totalPower    Int      @default(0) @map("total_power")
   createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
   empire        Empire   @relation(fields: [empireId], references: [id])
   planet        Planet?  @relation(fields: [planetId], references: [id])
