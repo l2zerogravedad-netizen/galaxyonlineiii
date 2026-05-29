@@ -46,9 +46,9 @@ export async function POST(request: Request) {
     }
 
     // ── Verificar shipyard ──
-    const hasShipyard = empire.planets.some((planet) =>
+    const hasShipyard = empire.planets.some((planet: (typeof empire.planets)[number]) =>
       planet.buildings.some(
-        (b) =>
+        (b: (typeof planet.buildings)[number]) =>
           b.type === 'SHIPYARD' ||
           b.type === 'shipyard'
       )
@@ -108,9 +108,9 @@ export async function POST(request: Request) {
     );
 
     // ── Verificar recursos suficientes ──
-    const metal = empire.resources.find((r) => r.type === 'METAL');
-    const plasma = empire.resources.find((r) => r.type === 'GAS');
-    const credits = empire.resources.find((r) => r.type === 'CREDITS');
+    const metal = empire.resources.find((r: (typeof empire.resources)[number]) => r.type === 'METAL');
+    const plasma = empire.resources.find((r: (typeof empire.resources)[number]) => r.type === 'GAS');
+    const credits = empire.resources.find((r: (typeof empire.resources)[number]) => r.type === 'CREDITS');
 
     if (!metal || metal.amount < totalCostMetal) {
       throw new ApiError(

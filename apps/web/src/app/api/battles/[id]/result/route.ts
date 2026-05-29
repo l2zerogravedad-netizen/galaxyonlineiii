@@ -156,7 +156,8 @@ export async function POST(
         // 3. Descontar naves destruidas de las formaciones de la flota (perdida permanente PvP)
         for (const loss of losses) {
           const formation = existingBattle.fleet.formations.find(
-            (f) => f.shipId === loss.blueprintId || f.id === loss.blueprintId
+            (f: (typeof existingBattle.fleet.formations)[number]) =>
+              f.shipId === loss.blueprintId || f.id === loss.blueprintId
           );
 
           if (formation) {

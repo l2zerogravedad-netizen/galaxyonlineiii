@@ -64,7 +64,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     });
 
     // ── Construir estado inicial para el frontend ──
-    const attackerStacks = fleet.formations.map((formation) => ({
+    const attackerStacks = fleet.formations.map((formation: (typeof fleet.formations)[number]) => ({
       stackId: formation.id,
       blueprintId: formation.ship.blueprintId,
       shipName: formation.ship.blueprint.name,
