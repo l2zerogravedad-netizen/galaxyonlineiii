@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@/utils/logger';
 import { executeQuery, executeSingleRowQuery, executeInsertQuery, executeUpdateQuery } from '@/database/connection';
 import { User, ApiResponse } from '@/types';
+import { seedService } from '@/services/seedService';
 
 interface LoginRequest {
   email: string;
@@ -204,7 +205,7 @@ class AuthService {
       // Hash password
       const { hash, salt } = await this.hashPassword(password);
 
-      // Create user
+      // Create user (SQL raw — legacy schema)
       const userData = await this.createUser({
         username,
         email,
@@ -213,6 +214,17 @@ class AuthService {
         clientType,
         referralCode
       });
+
+      // ── Seed Prisma: Empire, Planet, Resources, Buildings ────────────
+      // El seed es idempotente: si el usuario ya tiene datos, no duplica.
+      // Se ejecuta con graceful degradation: si falla, el registro sigue.
+      try {
+        await seedService.initializeNewUser(userData.id, userData.username);
+        logger.info(`[AuthService] Prisma seed completado para usuario ${userData.id}`);
+      } catch (seedErr) {
+        logger.error(`[AuthService] Prisma seed falló para usuario ${userData.id}:`, seedErr);
+        // No lanzamos el error para no afectar el registro exitoso
+      }
 
       // Generate tokens
       const tokens = await this.generateTokens(userData.id);
