@@ -3,9 +3,15 @@ builder = "RAILPACK"
 # Generate the Prisma client (from packages/database schema) BEFORE building the web app —
 # next build collects page data for /api routes that import @prisma/client, which fails
 # with "did not initialize yet" if the client wasn't generated during the build.
-buildCommand = "cd packages/database && npx prisma db push --skip-generate && npx prisma generate && cd ../../apps/web && npm run build"
+# NOTE: the build network can't reach the private Postgres host (P1001), so db push must
+# run at runtime (startCommand), not here.
+buildCommand = "cd packages/database && npx prisma generate && cd ../../apps/web && npm run build"
 
 [deploy]
-startCommand = "cd apps/web && npx next start"
+# Sync the DB schema at startup, where the private Postgres host IS reachable. Made
+# NON-BLOCKING with `|| true` so a push hiccup can never crash the container — next start
+# always runs and the site stays up. Schema now has @default(now()) on @updatedAt so the
+# additive push succeeds on tables that already have rows.
+startCommand = "npx prisma db push --schema packages/database/prisma/schema.prisma --skip-generate || true ; cd apps/web && npx next start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
