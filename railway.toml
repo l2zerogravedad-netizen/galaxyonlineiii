@@ -6,6 +6,8 @@ builder = "RAILPACK"
 buildCommand = "cd packages/database && npx prisma generate && cd ../../apps/web && npm run build"
 
 [deploy]
-startCommand = "cd apps/web && npx next start"
+# Sync the DB schema (additive) on container start — runs INSIDE Railway where the private
+# Postgres host is reachable and DATABASE_URL is injected. Idempotent: a no-op once synced.
+startCommand = "npx prisma db push --schema packages/database/prisma/schema.prisma --skip-generate && cd apps/web && npx next start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
