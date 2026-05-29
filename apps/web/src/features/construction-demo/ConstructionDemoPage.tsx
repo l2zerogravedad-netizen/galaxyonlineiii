@@ -56,6 +56,50 @@ export function ConstructionDemoPage() {
     setIsFlyoutOpen(false);
   };
 
+  // ── Live empire data (real resources/level from the backend, if logged in) ──
+  // Falls back to the demo numbers when there is no session token, so the page still
+  // renders for guests without breaking the HUD structure.
+  const [empire, setEmpire] = useState<null | {
+    name: string;
+    level: number;
+    experience: number;
+    metal: number;
+    plasma: number;
+    credits: number;
+    he3: number;
+  }>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const token = localStorage.getItem('token');
+    if (!token) return; // guest → keep demo HUD numbers
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/empire', { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) return;
+        const d = await res.json();
+        const find = (t: string) =>
+          (d.resources ?? []).find((r: { type: string }) => r.type === t)?.amount ?? 0;
+        if (cancelled) return;
+        setEmpire({
+          name: d.name ?? 'Comandante',
+          level: d.level ?? 1,
+          experience: d.experience ?? 0,
+          metal: find('METAL'),
+          plasma: find('PLASMA'),
+          credits: find('CREDITS'),
+          he3: find('HE3'),
+        });
+      } catch {
+        /* network/parse error → stay on demo numbers */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const fmt = (n: number) => n.toLocaleString('en-US');
+
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -156,12 +200,12 @@ export function ConstructionDemoPage() {
         </div>
         <div className="flex flex-col gap-1 w-48">
           <div className="flex items-center justify-between bg-blue-950/80 border border-blue-500/50 rounded px-2 py-0.5">
-            <span className="text-sm font-bold text-blue-200">Rayder</span>
+            <span className="text-sm font-bold text-blue-200">{empire ? empire.name : 'Rayder'}</span>
             <Crosshair size={14} className="text-blue-400" />
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-blue-300">LV.</span>
-            <span className="text-sm font-bold text-blue-100">2</span>
+            <span className="text-sm font-bold text-blue-100">{empire ? empire.level : 2}</span>
             <div className="flex-1 h-2.5 bg-gray-900 border border-gray-600 rounded relative">
               <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-600 to-green-400 rounded-sm w-[37%] shadow-[0_0_5px_#4ade80]"></div>
             </div>
@@ -192,21 +236,21 @@ export function ConstructionDemoPage() {
         <div className="flex gap-1">
           <div className="bg-black/80 border border-gray-700 flex items-center gap-2 px-2 py-0.5 rounded w-32 justify-between">
             <Coins size={12} className="text-yellow-500" />
-            <span className="text-xs font-mono text-gray-200">8,823</span>
+            <span className="text-xs font-mono text-gray-200">{empire ? fmt(empire.metal) : '8,823'}</span>
           </div>
           <div className="bg-black/80 border border-gray-700 flex items-center gap-2 px-2 py-0.5 rounded w-32 justify-between">
             <div className="w-2.5 h-2.5 bg-blue-500 rotate-45 shadow-[0_0_3px_#3b82f6]"></div>
-            <span className="text-xs font-mono text-gray-200">8,802</span>
+            <span className="text-xs font-mono text-gray-200">{empire ? fmt(empire.plasma) : '8,802'}</span>
           </div>
         </div>
         <div className="flex gap-1 mt-0.5">
           <div className="bg-black/80 border border-gray-700 flex items-center gap-2 px-2 py-0.5 rounded w-32 justify-between">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-sm shadow-[0_0_3px_#22c55e]"></div>
-            <span className="text-xs font-mono text-gray-200">9,656</span>
+            <span className="text-xs font-mono text-gray-200">{empire ? fmt(empire.credits) : '9,656'}</span>
           </div>
           <div className="bg-black/80 border border-gray-700 flex items-center gap-2 px-2 py-0.5 rounded w-32 justify-between">
             <div className="w-2.5 h-2.5 bg-red-500 rotate-45 shadow-[0_0_3px_#ef4444]"></div>
-            <span className="text-xs font-mono text-gray-200">0</span>
+            <span className="text-xs font-mono text-gray-200">{empire ? fmt(empire.he3) : '0'}</span>
           </div>
         </div>
         <div className="text-[10px] text-blue-300 font-mono mt-1 bg-blue-950/60 px-2 rounded border border-blue-800">
