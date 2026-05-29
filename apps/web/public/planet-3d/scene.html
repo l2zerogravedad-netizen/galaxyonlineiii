@@ -300,8 +300,17 @@ const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clien
 camera.position.set(14, 9, 16);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+// Size from the viewport, and pass `false` so Three doesn't overwrite the canvas's
+// CSS (which is inset:0 / 100%). Using clientWidth here can be 0/300 before layout.
+function resizeRenderer() {
+  const w = window.innerWidth || canvas.clientWidth || 1;
+  const h = window.innerHeight || canvas.clientHeight || 1;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+resizeRenderer();
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -592,11 +601,7 @@ window.addEventListener('keydown', e => {
   if ((e.key === 'r' || e.key === 'R') && selectedId) { selRot = (selRot + 90) % 360; showHint('Rotacion ' + selRot + '\u00B0'); setTimeout(hideHint, 1000); if (ghost) ghost.rotation.y = selRot * Math.PI / 180; }
 });
 
-window.addEventListener('resize', () => {
-  camera.aspect = canvas.clientWidth / canvas.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-});
+window.addEventListener('resize', resizeRenderer);
 
 // ===== UI =====
 function buildUI() {
@@ -799,6 +804,10 @@ updateUI = function () { _origUpdateUI(); postResources(); };
 async function init() {
   loadState();
   updateUI();
+  // Re-fit to the iframe now that it's laid out (initial size may have been 0/300).
+  resizeRenderer();
+  setTimeout(resizeRenderer, 100);
+  setTimeout(resizeRenderer, 500);
   // Place saved
   for (const p of placed) await placeItem(p.typeId, p.col, p.row, p.rot);
   document.getElementById('load').style.opacity = '0';
