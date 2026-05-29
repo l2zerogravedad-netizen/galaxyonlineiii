@@ -291,9 +291,10 @@ function cntType(id) { return placed.filter(p => p.typeId === id).length; }
 // ===== THREE.JS SETUP =====
 const canvas = document.getElementById('gameCanvas');
 const scene = new THREE.Scene();
-// Warm desert atmosphere to match the GO2 terrestrial-base look (tan ground, hazy horizon).
-scene.background = new THREE.Color(0x6e5a3c);
-scene.fog = new THREE.Fog(0x8b7355, 55, 140);
+// Background + fog matched to the sand base (#bb9b69) so the horizon blends into the
+// ground uniformly — no two-tone diagonal seam between terrain and distance.
+scene.background = new THREE.Color(0xbb9b69);
+scene.fog = new THREE.Fog(0xbb9b69, 70, 160);
 
 const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 500);
 // Lower, closer angle so the terrain fills the view instead of floating in space.
@@ -349,9 +350,11 @@ function clampPan() {
 controls.addEventListener('change', clampPan);
 
 // ===== LIGHTING =====
-scene.add(new THREE.AmbientLight(0xfff0dd, 0.8));
-scene.add(new THREE.HemisphereLight(0xffeedd, 0x3a3020, 0.5));
-const sun = new THREE.DirectionalLight(0xffffff, 1.8);
+// Mostly flat/ambient so the large ground reads UNIFORM (no bright diagonal patch).
+// The directional sun is kept low — just enough to cast soft shadows from buildings.
+scene.add(new THREE.AmbientLight(0xfff2e0, 1.35));
+scene.add(new THREE.HemisphereLight(0xffeedd, 0x6a5a3a, 0.6));
+const sun = new THREE.DirectionalLight(0xffffff, 0.7);
 sun.position.set(15, 25, 10);
 sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
@@ -370,66 +373,63 @@ const CW = 3.8, CH = 2.2;
 const OX = -(GRID_C * CW) / 2;
 const OZ = -(GRID_R * CH) / 2;
 
-// ----- Procedural desert sand texture (GO2 look: dunes, patches, speckle) -----
+// ----- Procedural SEAMLESS desert sand texture (uniform, no visible tiling) -----
+// No corner gradient and no diagonal dune bands (those caused the "stitched images"
+// look). Just a flat base + tileable grain + soft blobs stamped with toroidal wrap so
+// every feature crosses tile edges cleanly.
 function makeSandTexture() {
-  const S = 1024;
+  const S = 512;
   const cv = document.createElement('canvas');
   cv.width = cv.height = S;
   const ctx = cv.getContext('2d');
 
-  // Base sand gradient
-  const g = ctx.createLinearGradient(0, 0, S, S);
-  g.addColorStop(0, '#c9ad7a');
-  g.addColorStop(0.5, '#b89866');
-  g.addColorStop(1, '#a8895a');
-  ctx.fillStyle = g;
+  // Flat, uniform base sand colour (no gradient → no light/dark side).
+  ctx.fillStyle = '#bb9b69';
   ctx.fillRect(0, 0, S, S);
 
-  // Soft dune bands (diagonal wavy streaks)
-  ctx.save();
-  ctx.translate(S / 2, S / 2);
-  ctx.rotate(-0.5);
-  ctx.translate(-S / 2, -S / 2);
-  for (let i = -S; i < S * 2; i += 26) {
-    const shade = 150 + Math.floor(Math.random() * 40);
-    ctx.strokeStyle = `rgba(${shade},${Math.floor(shade * 0.84)},${Math.floor(shade * 0.55)},0.18)`;
-    ctx.lineWidth = 8 + Math.random() * 14;
-    ctx.beginPath();
-    ctx.moveTo(i, 0);
-    ctx.bezierCurveTo(i + 60, S * 0.33, i - 40, S * 0.66, i + 30, S);
-    ctx.stroke();
+  // Helper: stamp a shape at (x,y) and at all 8 wrapped offsets so it tiles seamlessly.
+  function wrapStamp(x, y, draw) {
+    for (let ox = -1; ox <= 1; ox++)
+      for (let oy = -1; oy <= 1; oy++)
+        draw(x + ox * S, y + oy * S);
   }
-  ctx.restore();
 
-  // Fine grain speckle
+  // Soft tonal blobs — large, low-opacity, evenly spread (gentle dune feel, no bands).
+  for (let i = 0; i < 90; i++) {
+    const x = Math.random() * S, y = Math.random() * S, r = 40 + Math.random() * 90;
+    const lighter = Math.random() < 0.5;
+    const col = lighter ? '200,172,120' : '150,124,80';
+    wrapStamp(x, y, (px, py) => {
+      const rg = ctx.createRadialGradient(px, py, 0, px, py, r);
+      rg.addColorStop(0, `rgba(${col},0.10)`);
+      rg.addColorStop(1, `rgba(${col},0)`);
+      ctx.fillStyle = rg;
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+
+  // Fine grain speckle (tiles by definition — per-pixel, no edge features).
   const img = ctx.getImageData(0, 0, S, S);
   const d = img.data;
   for (let i = 0; i < d.length; i += 4) {
-    const n = (Math.random() - 0.5) * 28;
+    const n = (Math.random() - 0.5) * 18;
     d[i] = Math.max(0, Math.min(255, d[i] + n));
     d[i + 1] = Math.max(0, Math.min(255, d[i + 1] + n * 0.9));
     d[i + 2] = Math.max(0, Math.min(255, d[i + 2] + n * 0.7));
   }
   ctx.putImageData(img, 0, 0);
 
-  // Scattered darker patches (rocky/wet sand) + tiny vegetation dots
-  for (let i = 0; i < 140; i++) {
-    const x = Math.random() * S, y = Math.random() * S, r = 6 + Math.random() * 34;
-    const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
-    rg.addColorStop(0, 'rgba(120,98,60,0.30)');
-    rg.addColorStop(1, 'rgba(120,98,60,0)');
-    ctx.fillStyle = rg;
-    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
-  }
-  for (let i = 0; i < 260; i++) {
+  // Tiny rock/vegetation specks, also wrapped so none get clipped at the seam.
+  for (let i = 0; i < 220; i++) {
     const x = Math.random() * S, y = Math.random() * S;
-    ctx.fillStyle = Math.random() < 0.5 ? 'rgba(90,110,55,0.5)' : 'rgba(70,55,35,0.5)';
-    ctx.fillRect(x, y, 1 + Math.random() * 2, 1 + Math.random() * 2);
+    const sz = 1 + Math.random() * 1.5;
+    ctx.fillStyle = Math.random() < 0.4 ? 'rgba(90,105,55,0.35)' : 'rgba(80,62,40,0.4)';
+    wrapStamp(x, y, (px, py) => ctx.fillRect(px, py, sz, sz));
   }
 
   const tex = new THREE.CanvasTexture(cv);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(3, 3);
+  tex.repeat.set(6, 6);
   tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
