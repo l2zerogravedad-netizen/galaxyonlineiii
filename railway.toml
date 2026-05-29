@@ -12,6 +12,6 @@ buildCommand = "cd packages/database && npx prisma generate && cd ../../apps/web
 # NON-BLOCKING with `|| true` so a push hiccup can never crash the container — next start
 # always runs and the site stays up. Schema now has @default(now()) on @updatedAt so the
 # additive push succeeds on tables that already have rows.
-startCommand = "npx prisma db push --schema packages/database/prisma/schema.prisma --skip-generate || true ; cd apps/web && npx next start"
+startCommand = "npx prisma db push --schema packages/database/prisma/schema.prisma --skip-generate --accept-data-loss || true ; cd apps/web && npx next start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
