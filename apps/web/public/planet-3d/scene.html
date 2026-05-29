@@ -319,11 +319,34 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.minPolarAngle = 0.2;
-controls.maxPolarAngle = Math.PI / 2.2;
-controls.minDistance = 8;
-controls.maxDistance = 60;
+controls.dampingFactor = 0.08;
+
+// Right button pans ACROSS the ground plane (lateral), never up into the sky.
+controls.screenSpacePanning = false;
+controls.mouseButtons = {
+  LEFT: THREE.MOUSE.ROTATE,
+  MIDDLE: THREE.MOUSE.DOLLY,
+  RIGHT: THREE.MOUSE.PAN,
+};
+
+// Zoom limits (also caps how far the camera can see → lighter to draw).
+controls.minDistance = 12;
+controls.maxDistance = 46;
+
+// Never look from below the horizon (can't see under the terrain),
+// and keep a minimum tilt so it stays an angled RTS view.
+controls.minPolarAngle = 0.5;            // ~29° from top
+controls.maxPolarAngle = Math.PI / 2.15; // ~84°, just above horizontal
+
+// Lateral pan limits — keep the camera target over the playable area.
+const PAN_X = 22, PAN_Z = 14;
+function clampPan() {
+  const t = controls.target;
+  t.x = Math.max(-PAN_X, Math.min(PAN_X, t.x));
+  t.z = Math.max(-PAN_Z, Math.min(PAN_Z, t.z));
+  t.y = 0; // keep the focus on the ground, never above/below it
+}
+controls.addEventListener('change', clampPan);
 
 // ===== LIGHTING =====
 scene.add(new THREE.AmbientLight(0xfff0dd, 0.8));
