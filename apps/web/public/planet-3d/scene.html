@@ -291,10 +291,9 @@ function cntType(id) { return placed.filter(p => p.typeId === id).length; }
 // ===== THREE.JS SETUP =====
 const canvas = document.getElementById('gameCanvas');
 const scene = new THREE.Scene();
-// Background + fog matched to the rocky mid-tone so the horizon blends into the
-// ground uniformly — no two-tone seam between terrain and distance.
-scene.background = new THREE.Color(0x8a7252);
-scene.fog = new THREE.Fog(0x8a7252, 70, 170);
+// Background + fog matched to the light tan surface so the horizon blends uniformly.
+scene.background = new THREE.Color(0xbb9b69);
+scene.fog = new THREE.Fog(0xbb9b69, 70, 170);
 
 const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 500);
 // Lower, closer angle so the terrain fills the view instead of floating in space.
@@ -434,16 +433,22 @@ function makeRockyTerrain() {
   const colCv = document.createElement('canvas'); colCv.width = colCv.height = S;
   const cctx = colCv.getContext('2d');
   const cimg = cctx.createImageData(S, S); const cd = cimg.data;
-  // rocky palette: dark basalt -> mid stone -> tan dust on high spots
+  // LIGHT tan/sand rocky palette — same warm family as before (~#bb9b69), kept bright.
+  // Variation comes from the height-driven tonal shifts + normal-map relief, NOT from
+  // going dark. Low crevices = slightly deeper tan, high spots = pale dust.
   function lerp(a, b, t) { return a + (b - a) * t; }
   for (let i = 0; i < S * S; i++) {
     const h = H[i];
     let r, g, b;
-    if (h < 0.42) { const t = h / 0.42; r = lerp(58, 92, t); g = lerp(50, 78, t); b = lerp(42, 62, t); }
-    else if (h < 0.7) { const t = (h - 0.42) / 0.28; r = lerp(92, 150, t); g = lerp(78, 128, t); b = lerp(62, 96, t); }
-    else { const t = (h - 0.7) / 0.3; r = lerp(150, 196, t); g = lerp(128, 170, t); b = lerp(96, 126, t); }
-    // per-pixel grain
-    const n = (Math.random() - 0.5) * 16;
+    if (h < 0.42) {            // crevices / low rock — warm mid tan
+      const t = h / 0.42;      r = lerp(150, 178, t); g = lerp(124, 150, t); b = lerp(86, 106, t);
+    } else if (h < 0.7) {      // main surface
+      const t = (h - 0.42) / 0.28; r = lerp(178, 200, t); g = lerp(150, 170, t); b = lerp(106, 122, t);
+    } else {                   // high spots — pale wind-blown dust
+      const t = (h - 0.7) / 0.3;   r = lerp(200, 222, t); g = lerp(170, 196, t); b = lerp(122, 150, t);
+    }
+    // per-pixel grain (a touch stronger for a grittier rock read)
+    const n = (Math.random() - 0.5) * 20;
     cd[i * 4] = Math.max(0, Math.min(255, r + n));
     cd[i * 4 + 1] = Math.max(0, Math.min(255, g + n));
     cd[i * 4 + 2] = Math.max(0, Math.min(255, b + n * 0.8));
