@@ -300,4 +300,31 @@ model ConstructionQueue {
   @@map("construction_queue")
 }
 
+model Alliance {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  tag         String   @unique
+  description String   @default("")
+  leaderId    String   @unique @map("leader_id")
+  memberCount Int      @default(1) @map("member_count")
+  maxMembers  Int      @default(50) @map("max_members")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  members     AllianceMember[]
+
+  @@map("alliances")
+}
+
+model AllianceMember {
+  id         String   @id @default(uuid())
+  allianceId String   @map("alliance_id")
+  empireId   String   @unique @map("empire_id")
+  role       String   @default("MEMBER") // LEADER, OFFICER, MEMBER
+  joinedAt   DateTime @default(now()) @map("joined_at")
+
+  alliance   Alliance @relation(fields: [allianceId], references: [id], onDelete: Cascade)
+
+  @@map("alliance_members")
+}
+
 // Enums converted to String for SQLite compatibility
