@@ -31,6 +31,9 @@ import {
   calculateCritChance,
   calculateCritMultiplier,
   getCriticalBonusFromSkills,
+  getWeaponDamageBonus,
+  getShipDamageBonus,
+  getShipDefenseBonus,
 } from './CommanderSystem';
 import { processEOS } from './ShieldSystem';
 
@@ -435,6 +438,18 @@ export function calculateAttack(
       damageRoll = Math.floor(damageRoll * (1 + skillDamageBonus));
     }
 
+    // 4a2. D02 — Aplicar Weapon Expertise del atacante (+30%/-30% según grado S/A/B/C/D)
+    const weaponBonus = getWeaponDamageBonus(attacker.commander, weapon.type);
+    damageRoll = Math.floor(damageRoll * (1 + weaponBonus));
+
+    // 4a3. D03 — Aplicar Ship Expertise de daño del atacante (+10%/-10% según grado)
+    const shipAttackBonus = getShipDamageBonus(attacker.commander, attacker.shipType);
+    damageRoll = Math.floor(damageRoll * (1 + shipAttackBonus));
+
+    // 4a4. D03 — Aplicar Ship Expertise de defensa del defensor (-10%/+10% daño recibido)
+    const shipDefenseBonus = getShipDefenseBonus(defender.commander, defender.shipType);
+    damageRoll = Math.floor(damageRoll * (1 - shipDefenseBonus));
+
     // 4b. Crítico
     const critResult = applyCriticalWithSkillBonus(
       damageRoll,
@@ -469,7 +484,8 @@ export function calculateAttack(
     );
     const damageAfterArmor = Math.floor(damageRoll * armorMult);
 
-    // 4d. Damage Negation: Heat Diffusion Shield, etc. reduce damage BEFORE shields
+    // 4d. Shield Negation (antes de escudos): Heat Diffusion Shield, etc.
+    // Estas defensas reducen el daño entrante ANTES de que toque los escudos.
     const damageAfterNegation = Math.max(0, damageAfterArmor - defender.damageNegation);
 
     if (damageAfterNegation <= 0) {
@@ -497,7 +513,11 @@ export function calculateAttack(
 
     // 4f. EOS check (deterministic RNG for reproducibility)
     const eosResult = processEOS(defender, penResult.hullDamage, rng);
-    const finalHullDamage = eosResult.adjustedDamage;
+
+    // 4g. Hull Negation (DESPUÉS de escudos): Energy Armor, Daedalus
+    // Solo afectan el daño que llega al casco, NO al escudo.
+    const hullDamageAfterNegation = Math.max(0, eosResult.adjustedDamage - defender.hullNegation);
+    const finalHullDamage = hullDamageAfterNegation;
 
     if (eosResult.triggered) {
       events.push({
@@ -507,7 +527,7 @@ export function calculateAttack(
       });
     }
 
-    // 4g. Calcular naves destruidas
+    // 4h. Calcular naves destruidas
     const damagePerShip = defender.hullPoints * defender.stability;
     const shipsDestroyed =
       damagePerShip > 0 ? Math.floor(finalHullDamage / damagePerShip) : 0;
@@ -522,7 +542,7 @@ export function calculateAttack(
       isPierce: penResult.isPierce,
     });
 
-    // 4h. Scatter (solo ballistic)
+    // 4i. Scatter (solo ballistic)
     let scatterResults: ScatterResult[] = [];
     if (weapon.type === 'ballistic' && weapon.scatterRange && weapon.scatterRange > 0) {
       // Scatter se calcula contra todos los enemigos (placeholder, se resuelve en BattleEngine)
@@ -591,9 +611,4 @@ export function aggregateDamage(
       totalHullDamage: 0,
       totalShieldDamage: 0,
       totalPierceDamage: 0,
-      totalShipsDestroyed: 0,
-      criticalCount: 0,
-      pierceCount: 0,
-    }
-  );
-}
+      totalShipsDest

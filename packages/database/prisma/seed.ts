@@ -159,17 +159,17 @@ async function main() {
     update: {},
     create: {
       id: 'tech-plasma-energy',
-      key: 'PLASMA_ENERGY',
-      name: 'Energía de Plasma',
-      description: 'Tecnología avanzada para extraer y estabilizar plasma.',
+      key: 'GAS_ENERGY',
+      name: 'Energía de Gas',
+      description: 'Tecnología avanzada para extraer y estabilizar gas.'
       category: 'PRODUCTION',
       baseCostMetal: 200,
       baseCostPlasma: 100,
       baseResearchTime: 300,
       maxLevel: 5,
-      effectType: 'PLASMA_PRODUCTION',
+      effectType: 'GAS_PRODUCTION',
       effectValue: 0.10,
-      effectDescription: '+10% producción de plasma por nivel',
+      effectDescription: '+10% producción de gas por nivel',
     },
   });
 

@@ -6,7 +6,7 @@ export type GlowVariant = "cyan" | "purple" | "gold" | "red" | "orange" | "green
 
 export type BuildingType =
   | "metal_extractor"
-  | "plasma_refinery"
+  | "gas_refinery"
   | "warehouse"
   | "energy_generator"
   | "control_center"
@@ -72,7 +72,7 @@ export const player: Player = { name: "ZIEGLER", level: 1, xp: 120, xpMax: 300 }
 
 export const resources: Resource[] = [
   { key: "metal", label: "METAL", value: 5000, max: 10000, rate: 100, tone: "cyan", webpName: "resource-metal", icon: "⚙️" },
-  { key: "plasma", label: "PLASMA", value: 5000, max: 10000, rate: 50, tone: "purple", webpName: "resource-plasma", icon: "⚡" },
+  { key: "plasma", label: "GAS", value: 5000, max: 10000, rate: 50, tone: "purple", webpName: "resource-gas", icon: "⚡" },
   { key: "credits", label: "CRÉDITOS", value: 5000, max: 999999999, rate: 0, tone: "gold", webpName: "resource-credits", icon: "💰" },
   { key: "energy", label: "ENERGÍA", value: 80, max: 100, rate: 20, tone: "green", webpName: "resource-energy", icon: "🔋" },
 ];
@@ -99,15 +99,15 @@ export const allBuildings: Building[] = [
   },
   {
     id: "b2",
-    type: "plasma_refinery",
-    name: "REFINERÍA DE PLASMA",
+    type: "gas_refinery",
+    name: "REFINERÍA DE GAS",
     level: 1,
     maxLevel: 20,
-    description: "Procesa plasma bruto para su uso en tecnologías avanzadas y construcción de estructuras.",
+    description: "Procesa gas bruto para su uso en tecnologías avanzadas y construcción de estructuras.",
     category: "production",
     status: "active",
-    image: "/game/assets/buildings/plasma-refinery.webp",
-    webpName: "plasma-refinery",
+    image: "/game/assets/buildings/gas-refinery.webp",
+    webpName: "gas-refinery",
     glow: "purple",
     production: { plasma: 50 },
     consumption: { energy: 15 },

@@ -128,7 +128,7 @@ export async function recalculateEmpireProduction(empireId: string): Promise<voi
       data: { productionPerHour: metalPerHour, capacity: metalCapacity },
     }),
     prisma.resource.updateMany({
-      where: { empireId, type: 'PLASMA' },
+      where: { empireId, type: 'GAS' },
       data: { productionPerHour: plasmaPerHour, capacity: plasmaCapacity },
     }),
     prisma.resource.updateMany({

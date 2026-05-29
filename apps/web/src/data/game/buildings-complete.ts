@@ -72,13 +72,13 @@ export const metalExtractor: BuildingComplete = {
 };
 
 // ============================================
-// 2. REFINERÍA DE PLASMA (HE3 Extractor)
+// 2. REFINERÍA DE GAS
 // ============================================
 export const plasmaRefinery: BuildingComplete = {
-  id: 'plasma_refinery',
-  type: 'plasma_refinery',
-  name: 'Refinería de Plasma',
-  description: 'Procesa plasma bruto extraído del subsuelo para tecnologías avanzadas. Producción: 10 plasma/hora por nivel.',
+  id: 'gas_refinery',
+  type: 'gas_refinery',
+  name: 'Refinería de Gas',
+  description: 'Procesa gas bruto extraído del subsuelo para tecnologías avanzadas. Producción: 10 gas/hora por nivel.',
   category: 'production',
   maxLevel: 20,
   glow: 'purple',

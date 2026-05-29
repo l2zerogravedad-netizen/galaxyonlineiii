@@ -178,7 +178,7 @@ export default function ResearchPage() {
 
   const canAfford = (costs: { metal: number; plasma: number }) => {
     const metal = resources.find((r) => r.type === 'METAL')?.amount || 0;
-    const plasma = resources.find((r) => r.type === 'PLASMA')?.amount || 0;
+    const plasma = resources.find((r) => r.type === 'GAS')?.amount || 0;
     return metal >= costs.metal && plasma >= costs.plasma;
   };
 
@@ -218,7 +218,7 @@ export default function ResearchPage() {
         <div className="flex gap-3 mb-4">
           {[
             { type: 'METAL', label: 'Metal', color: 'text-slate-300', bg: 'bg-slate-800 border-slate-600' },
-            { type: 'PLASMA', label: 'Plasma', color: 'text-cyan-400', bg: 'bg-slate-800 border-cyan-900/50' },
+            { type: 'GAS', label: 'Gas', color: 'text-cyan-400', bg: 'bg-slate-800 border-cyan-900/50' },
             { type: 'CREDITS', label: 'Créditos', color: 'text-yellow-400', bg: 'bg-slate-800 border-yellow-900/50' },
           ].map((res) => (
             <div key={res.type} className={`flex-1 ${res.bg} border rounded-lg px-3 py-2 flex items-center justify-between`}>

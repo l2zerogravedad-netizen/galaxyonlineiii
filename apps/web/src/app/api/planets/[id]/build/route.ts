@@ -115,7 +115,7 @@ export async function POST(
       (r: { type: string }) => r.type === 'METAL'
     );
     const plasma = resources.find(
-      (r: { type: string }) => r.type === 'PLASMA'
+      (r: { type: string }) => r.type === 'GAS'
     );
     const credits = resources.find(
       (r: { type: string }) => r.type === 'CREDITS'

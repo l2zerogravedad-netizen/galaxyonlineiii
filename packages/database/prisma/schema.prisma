@@ -51,7 +51,7 @@ model Empire {
 model Resource {
   id                  String   @id @default(uuid())
   empireId            String   @map("empire_id")
-  // Valid types: 'METAL' | 'PLASMA' | 'CREDITS' | 'HE3'
+  // Valid types: 'METAL' | 'GAS' | 'CREDITS' | 'HE3'
   type                String
   amount              Int      @default(0)
   capacity            Int      @default(1000)

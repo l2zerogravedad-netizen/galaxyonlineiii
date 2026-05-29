@@ -1,6 +1,6 @@
 /** Shared game API contracts (web + api + desktop + mobile). */
 import type { CanonicalBuildingTypeId } from './planetLayout';
-export type ApiResourceType = 'METAL' | 'PLASMA' | 'CREDITS';
+export type ApiResourceType = 'METAL' | 'GAS' | 'CREDITS';
 export type ApiBuildingType = CanonicalBuildingTypeId | string;
 export type ApiBuildingStatus = 'IDLE' | 'CONSTRUCTING' | 'UPGRADING' | string;
 export interface ApiResource {

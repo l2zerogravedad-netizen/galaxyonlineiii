@@ -62,13 +62,13 @@ export const ECONOMY_CONFIG = {
  * Calcula producción por hora de un edificio
  */
 export function calculateProduction(
-  buildingType: 'metal_extractor' | 'plasma_refinery' | 'energy_generator' | 'control_center',
+  buildingType: 'metal_extractor' | 'gas_refinery' | 'energy_generator' | 'control_center',
   level: number,
   researchBonus: number = 0,  // Porcentaje de bonus (ej: 0.25 = +25%)
   newPlayerBonus: boolean = false
 ): number {
   const baseProduction = ECONOMY_CONFIG.BASE_PRODUCTION[buildingType === 'metal_extractor' ? 'metal' : 
-                                                     buildingType === 'plasma_refinery' ? 'plasma' :
+                                                     buildingType === 'gas_refinery' ? 'plasma' :
                                                      buildingType === 'energy_generator' ? 'energy' : 'credits'];
   
   let production = baseProduction * level;
@@ -230,7 +230,7 @@ export function calculateResourceState(
   
   let plasmaPerHour = 0;
   for (const refinery of buildings.plasmaRefineries) {
-    plasmaPerHour += calculateProduction('plasma_refinery', refinery.level, researchBonus.production) * refinery.count;
+    plasmaPerHour += calculateProduction('gas_refinery', refinery.level, researchBonus.production) * refinery.count;
   }
   
   let energyPerHour = 0;

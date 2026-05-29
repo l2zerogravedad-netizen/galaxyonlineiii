@@ -345,6 +345,7 @@ export function createShipStack(partial: {
   he3?: number;
   movement?: number;
   damageNegation?: number;
+  hullNegation?: number;
   ppcCount?: number;
   armorType?: ArmorType;
 }): ShipStack {
@@ -355,6 +356,7 @@ export function createShipStack(partial: {
   const stability = partial.stability ?? BASE_STABILITY[shipType];
   const he3 = partial.he3 ?? BASE_HE3[shipType];
   const damageNegation = partial.damageNegation ?? 0;
+  const hullNegation = partial.hullNegation ?? 0;
 
   return {
     ...partial,
@@ -363,6 +365,7 @@ export function createShipStack(partial: {
     stability,
     he3,
     damageNegation,
+    hullNegation,
     currentShips: totalShips,
     currentHull: hullPoints,
     totalShield: shieldPoints * totalShips,

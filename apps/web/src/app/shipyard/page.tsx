@@ -158,7 +158,7 @@ export default function ShipyardPage() {
 
   const canAfford = (costs: { metal: number; plasma: number; credits: number }) => {
     const metal = resources.find((r) => r.type === 'METAL')?.amount || 0;
-    const plasma = resources.find((r) => r.type === 'PLASMA')?.amount || 0;
+    const plasma = resources.find((r) => r.type === 'GAS')?.amount || 0;
     const credits = resources.find((r) => r.type === 'CREDITS')?.amount || 0;
     return (
       metal >= costs.metal * quantity &&
@@ -236,9 +236,9 @@ export default function ShipyardPage() {
             </p>
           </div>
           <div className="bg-slate-800 p-4 rounded-lg">
-            <p className="text-gray-400">Plasma</p>
+            <p className="text-gray-400">Gas</p>
             <p className="text-xl font-bold">
-              {Math.floor(resources.find((r) => r.type === 'PLASMA')?.amount || 0).toLocaleString()}
+              {Math.floor(resources.find((r) => r.type === 'GAS')?.amount || 0).toLocaleString()}
             </p>
           </div>
           <div className="bg-slate-800 p-4 rounded-lg">
@@ -335,7 +335,7 @@ export default function ShipyardPage() {
                           Metal: {totalMetal.toLocaleString()}
                         </p>
                         <p className={!affordable ? 'text-red-400' : ''}>
-                          Plasma: {totalPlasma.toLocaleString()}
+                          Gas: {totalPlasma.toLocaleString()}
                         </p>
                         <p className={!affordable ? 'text-red-400' : ''}>
                           Créditos: {totalCredits.toLocaleString()}

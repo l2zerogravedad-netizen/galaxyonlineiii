@@ -13,7 +13,7 @@ export function productionFromBuilding(type: string, level: number): {
   switch (t) {
     case 'metal_extractor':
       return { metal: 20 * level };
-    case 'plasma_refinery':
+    case 'gas_refinery':
       return { plasma: 10 * level };
     case 'he3_extractor':
       return { he3: 8 * level };

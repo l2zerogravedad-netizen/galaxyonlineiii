@@ -24,8 +24,8 @@ function calculateResources(
   if (resource.type === 'METAL' && techBonuses['METAL_PRODUCTION']) {
     effectiveProductionPerHour *= 1 + techBonuses['METAL_PRODUCTION'];
   }
-  if (resource.type === 'PLASMA' && techBonuses['PLASMA_PRODUCTION']) {
-    effectiveProductionPerHour *= 1 + techBonuses['PLASMA_PRODUCTION'];
+  if (resource.type === 'GAS' && techBonuses['GAS_PRODUCTION']) {
+    effectiveProductionPerHour *= 1 + techBonuses['GAS_PRODUCTION'];
   }
 
   const production = effectiveProductionPerHour * hoursDiff;

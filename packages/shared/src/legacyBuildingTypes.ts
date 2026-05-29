@@ -6,7 +6,7 @@ export const LEGACY_TO_CANONICAL: Record<string, CanonicalBuildingTypeId> = {
   NEXUS_COMMAND: 'control_center',
   METAL_MINE: 'metal_extractor',
   METAL_QUARRY: 'metal_extractor',
-  PLASMA_EXTRACTOR: 'plasma_refinery',
+  GAS_EXTRACTOR: 'gas_refinery',
   HE3_SYNTHESIZER: 'he3_extractor',
   HE3_EXTRACTOR: 'he3_extractor',
   SHIPYARD: 'shipyard',

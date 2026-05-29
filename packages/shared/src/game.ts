@@ -2,7 +2,7 @@
 
 import type { CanonicalBuildingTypeId } from './planetLayout';
 
-export type ApiResourceType = 'METAL' | 'PLASMA' | 'CREDITS' | 'HE3';
+export type ApiResourceType = 'METAL' | 'GAS' | 'CREDITS' | 'HE3';
 
 export type ApiBuildingType = CanonicalBuildingTypeId | string;
 

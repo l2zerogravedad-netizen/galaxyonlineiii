@@ -22,7 +22,7 @@ export async function fetchGameDashboard(): Promise<GameDashboardDto> {
 
 function empireToDashboard(empire: ApiEmpire): GameDashboardDto {
   const metal = empire.resources.find((r) => r.type === 'METAL');
-  const plasma = empire.resources.find((r) => r.type === 'PLASMA');
+  const plasma = empire.resources.find((r) => r.type === 'GAS');
   const credits = empire.resources.find((r) => r.type === 'CREDITS');
   const planet = empire.planets[0];
 

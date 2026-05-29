@@ -29,7 +29,7 @@ export const GO2_CONSTRUCTION_QUEUE_SIZE = 5;
 
 export const CANONICAL_BUILDING_TYPE_IDS = [
   'metal_extractor',
-  'plasma_refinery',
+  'gas_refinery',
   'he3_extractor',
   'warehouse',
   'energy_generator',

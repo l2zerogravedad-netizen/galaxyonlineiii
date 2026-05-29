@@ -108,7 +108,7 @@ export async function POST(request: Request) {
 
     // ── Verificar recursos suficientes ──
     const metal = empire.resources.find((r) => r.type === 'METAL');
-    const plasma = empire.resources.find((r) => r.type === 'PLASMA');
+    const plasma = empire.resources.find((r) => r.type === 'GAS');
     const credits = empire.resources.find((r) => r.type === 'CREDITS');
 
     if (!metal || metal.amount < totalCostMetal) {
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
     if (!plasma || plasma.amount < totalCostPlasma) {
       throw new ApiError(
         400,
-        `Plasma insuficiente. Necesitas ${totalCostPlasma}, tienes ${plasma?.amount ?? 0}`
+        `Gas insuficiente. Necesitas ${totalCostPlasma}, tienes ${plasma?.amount ?? 0}`
       );
     }
     if (!credits || credits.amount < totalCostCredits) {

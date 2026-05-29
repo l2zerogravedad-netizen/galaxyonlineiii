@@ -160,7 +160,7 @@ describe('Dashboard API', () => {
       expect(Array.isArray(buildings)).toBe(true);
 
       // El registro crea 6 edificios iniciales:
-      // COMMAND_CENTER, METAL_MINE, PLASMA_EXTRACTOR, CREDIT_MINT, SHIPYARD, RESEARCH_LAB
+      // COMMAND_CENTER, METAL_MINE, GAS_EXTRACTOR, CREDIT_MINT, SHIPYARD, RESEARCH_LAB
       expect(buildings.length).toBeGreaterThanOrEqual(1);
 
       // Verificar que cada edificio tiene la estructura correcta

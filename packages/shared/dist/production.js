@@ -14,7 +14,7 @@ function productionFromBuilding(type, level) {
     switch (t) {
         case 'metal_extractor':
             return { metal: 20 * level };
-        case 'plasma_refinery':
+        case 'gas_refinery':
             return { plasma: 10 * level };
         case 'control_center':
             return { credits: 5 * level };

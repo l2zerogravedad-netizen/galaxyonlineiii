@@ -19,6 +19,9 @@ import type {
   SkillType,
   ActiveSkillState,
   RNG,
+  ExpertiseGrade,
+  WeaponExpertise,
+  ShipExpertise,
 } from './types';
 
 // ============================================================================
@@ -75,6 +78,8 @@ export function createCommander(partial: {
   hasEOS?: boolean;
   eosMultiplier?: number;
   specialAbility?: Commander['specialAbility'];
+  weaponExpertise?: WeaponExpertise;
+  shipExpertise?: ShipExpertise;
 }): Commander {
   const stars = Math.min(5, Math.max(1, partial.stars));
   return {
@@ -83,7 +88,130 @@ export function createCommander(partial: {
     effectiveStackBonus: getStackBonusByStars(stars),
     hasEOS: partial.hasEOS ?? false,
     eosMultiplier: partial.eosMultiplier ?? 2.0,
+    weaponExpertise: partial.weaponExpertise ?? { ...DEFAULT_WEAPON_EXPERTISE },
+    shipExpertise: partial.shipExpertise ?? { ...DEFAULT_SHIP_EXPERTISE },
     ...partial,
+  };
+}
+
+// ============================================================================
+// EXPERTISE CONSTANTS (D02 & D03)
+// ============================================================================
+
+/** D02 — Bonus de daño por Weapon Expertise según grado (afecta daño infligido).
+ *  S: +30%, A: +10%, B: 0%, C: -10%, D: -30%  */
+const WEAPON_EXPERTISE_BONUS: Record<ExpertiseGrade, number> = {
+  S: 0.30,
+  A: 0.10,
+  B: 0.00,
+  C: -0.10,
+  D: -0.30,
+};
+
+/** D03 — Bonus de daño por Ship Expertise según grado (afecta daño infligido).
+ *  S: +10%, A: +5%, B: 0%, C: -5%, D: -10%  */
+const SHIP_EXPERTISE_DAMAGE_BONUS: Record<ExpertiseGrade, number> = {
+  S: 0.10,
+  A: 0.05,
+  B: 0.00,
+  C: -0.05,
+  D: -0.10,
+};
+
+/** D03 — Bonus de defensa por Ship Expertise según grado (afecta daño recibido).
+ *  S: -10% daño recibido, A: -10% daño recibido, B: 0%, C: +10% daño recibido, D: +10% daño recibido  */
+const SHIP_EXPERTISE_DEFENSE_BONUS: Record<ExpertiseGrade, number> = {
+  S: 0.10,
+  A: 0.10,
+  B: 0.00,
+  C: -0.10,
+  D: -0.10,
+};
+
+/**
+ * D02 — Obtiene el bonus de daño de Weapon Expertise para un tipo de arma.
+ * Aplica al daño infligido.
+ *
+ * @param commander — Comandante atacante
+ * @param weaponType — Tipo de arma usada
+ * @returns Multiplicador de bonus (ej: 0.30 = +30% daño)
+ */
+export function getWeaponDamageBonus(
+  commander: Commander | undefined,
+  weaponType: WeaponType
+): number {
+  if (!commander) return 0;
+  const grade = commander.weaponExpertise[weaponType];
+  return WEAPON_EXPERTISE_BONUS[grade] ?? 0;
+}
+
+/**
+ * D03 — Obtiene el bonus de daño de Ship Expertise para un tipo de nave.
+ * Aplica al daño infligido por el atacante.
+ *
+ * @param commander — Comandante atacante
+ * @param shipType — Tipo de nave del stack atacante
+ * @returns Multiplicador de bonus (ej: 0.10 = +10% daño)
+ */
+export function getShipDamageBonus(
+  commander: Commander | undefined,
+  shipType: ShipType
+): number {
+  if (!commander) return 0;
+  const grade = commander.shipExpertise[shipType];
+  return SHIP_EXPERTISE_DAMAGE_BONUS[grade] ?? 0;
+}
+
+/**
+ * D03 — Obtiene el bonus de defensa de Ship Expertise para un tipo de nave.
+ * Aplica como reducción/aumento al daño recibido.
+ *
+ * @param commander — Comandante defensor
+ * @param shipType — Tipo de nave del stack defensor
+ * @returns Multiplicador de defensa (ej: 0.10 = -10% daño recibido)
+ */
+export function getShipDefenseBonus(
+  commander: Commander | undefined,
+  shipType: ShipType
+): number {
+  if (!commander) return 0;
+  const grade = commander.shipExpertise[shipType];
+  return SHIP_EXPERTISE_DEFENSE_BONUS[grade] ?? 0;
+}
+
+/** Expertise por defecto (grado B en todo) para inicialización */
+export const DEFAULT_WEAPON_EXPERTISE: WeaponExpertise = {
+  ballistic: 'B',
+  directional: 'B',
+  missile: 'B',
+  ship_based: 'B',
+};
+
+/** Expertise de nave por defecto (grado B en todo) */
+export const DEFAULT_SHIP_EXPERTISE: ShipExpertise = {
+  frigate: 'B',
+  cruiser: 'B',
+  battleship: 'B',
+};
+
+/**
+ * Deriva expertise de comandante a partir de sus stats base.
+ * Regla: attack > 6 → S, > 4 → A, > 2 → B, else C (para arma principal).
+ * Por ahora asigna B por defecto a todo; se puede extender con datos GO2.
+ *
+ * @param _commander — Datos raw del comandante
+ * @returns WeaponExpertise y ShipExpertise derivados
+ */
+export function deriveExpertiseFromStats(_commander?: {
+  attack?: number;
+  primaryWeapon?: WeaponType;
+}): { weapon: WeaponExpertise; ship: ShipExpertise } {
+  // TODO: extender con datos reales de go2-commander-data.ts
+  // Por ahora todo a grado B (neutral)
+  void _commander;
+  return {
+    weapon: { ...DEFAULT_WEAPON_EXPERTISE },
+    ship: { ...DEFAULT_SHIP_EXPERTISE },
   };
 }
 
@@ -894,145 +1022,4 @@ export function isStackParalyzed(stack: ShipStack): boolean {
  * @param effect - Efecto a aplicar
  * @param sourceStack - Stack que origina el efecto
  * @param targetStack - Stack objetivo
- * @returns Stack actualizado y eventos
- */
-export function applySkillEffect(
-  effect: SkillEffect,
-  sourceStack: ShipStack,
-  targetStack: ShipStack
-): { stack: ShipStack; events: import('./types').BattleEvent[] } {
-  const events: import('./types').BattleEvent[] = [];
-  let stack = { ...targetStack };
-
-  switch (effect.effectType) {
-    case 'paralyze': {
-      // Añadir estado de parálisis
-      const newState: ActiveSkillState = {
-        skillName: 'Paralyze',
-        effect,
-        remainingRounds: effect.duration,
-        sourceStackId: sourceStack.id,
-      };
-      stack.activeSkillStates = [...stack.activeSkillStates, newState];
-      events.push({
-        type: 'PARALYZE',
-        sourceId: sourceStack.id,
-        targetId: targetStack.id,
-        duration: effect.duration,
-      });
-      break;
-    }
-
-    case 'shield_boost': {
-      const shieldPerShip = stack.shieldPoints;
-      const totalShield = shieldPerShip * stack.currentShips;
-      const regenAmount = Math.floor(totalShield * effect.value);
-      const newTotalShield = Math.min(
-        totalShield,
-        stack.totalShield + regenAmount
-      );
-      stack = {
-        ...stack,
-        totalShield: newTotalShield,
-      };
-      events.push({
-        type: 'SKILL_SHIELD_BOOST',
-        stackId: stack.id,
-        amount: regenAmount,
-        totalShield: newTotalShield,
-      });
-      break;
-    }
-
-    case 'lucky_strike':
-    case 'overdrive':
-    case 'damage_boost_all':
-    case 'damage_boost_weapon':
-      // Estos efectos se aplican durante el cálculo de daño
-      // No modifican el stack directamente
-      break;
-
-    default:
-      break;
-  }
-
-  return { stack, events };
-}
-
-/**
- * Reduce en 1 las duraciones de todas las skills activas en un stack.
- * Elimina las que llegan a 0.
- *
- * @param stack - Stack con activeSkillStates
- * @returns Stack con duraciones actualizadas
- */
-export function decrementSkillDurations(stack: ShipStack): ShipStack {
-  if (!stack.activeSkillStates || stack.activeSkillStates.length === 0) {
-    return stack;
-  }
-
-  const updated = stack.activeSkillStates
-    .map((s) => ({
-      ...s,
-      remainingRounds: s.remainingRounds - 1,
-    }))
-    .filter((s) => s.remainingRounds > 0);
-
-  return {
-    ...stack,
-    activeSkillStates: updated,
-  };
-}
-
-/**
- * Obtiene el número de ataques extra que debe realizar un stack
- * debido a skills activas (Overdrive, Consecutive Strike).
- *
- * @param stack - Stack atacante
- * @returns Número de ataques adicionales
- */
-export function getExtraAttacksFromSkills(stack: ShipStack): number {
-  if (!stack.commander?.skill) return 0;
-  const skill = stack.commander.skill;
-
-  if (skill.type !== 'active_burst') return 0;
-
-  return skill.effects
-    .filter((e) => e.effectType === 'overdrive')
-    .reduce((sum, e) => sum + (e.value as number), 0);
-}
-
-/**
- * Obtiene el bonus crítico adicional de skills activas (Lucky Strike).
- *
- * @param stack - Stack atacante
- * @returns Bonus multiplicativo (ej: 1.0 = +100%)
- */
-export function getCriticalBonusFromSkills(stack: ShipStack): number {
-  if (!stack.commander?.skill) return 0;
-  const skill = stack.commander.skill;
-
-  // Solo skills que afectan daño crítico
-  const critSkills = skill.effects.filter(
-    (e) =>
-      e.effectType === 'lucky_strike' || e.stat === 'critical_damage'
-  );
-
-  return critSkills.reduce((sum, e) => sum + e.value, 0);
-}
-
-/**
- * Asigna una skill a un comandante basado en datos GO2.
- * Usa parseCommanderSkill para mapear desde nombre+descripción.
- */
-export function assignSkillToCommander(
-  commander: Commander,
-  skillName: string,
-  description?: string
-): Commander {
-  const skill = parseCommanderSkill(skillName, description);
-  return {
-    ...commander,
-    skill,
-  };
-}
+ * @returns Stack actualizado y ev

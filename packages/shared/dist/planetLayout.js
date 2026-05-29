@@ -13,7 +13,7 @@ exports.PLANET_BUILDING_SLOTS = exports.STANDARD_PLANET_BUILDING_SLOTS;
 exports.GO2_CONSTRUCTION_QUEUE_SIZE = 5;
 exports.CANONICAL_BUILDING_TYPE_IDS = [
     'metal_extractor',
-    'plasma_refinery',
+    'gas_refinery',
     'warehouse',
     'energy_generator',
     'control_center',
