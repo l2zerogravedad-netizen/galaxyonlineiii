@@ -49,6 +49,18 @@ export function countBuildingsOfType(
   ).length;
 }
 
+/**
+ * Counts buildings that are currently mid-construction or mid-upgrade, i.e. occupying a
+ * slot in the construction queue. Used to enforce GO2_CONSTRUCTION_QUEUE_SIZE.
+ */
+export function countActiveConstruction(
+  buildings: { status: string }[]
+): number {
+  return buildings.filter(
+    (b) => b.status === 'CONSTRUCTING' || b.status === 'UPGRADING'
+  ).length;
+}
+
 export function canPlaceBuildingType(
   buildings: { type: string; level: number; slotIndex: number; status: string }[],
   apiType: string,

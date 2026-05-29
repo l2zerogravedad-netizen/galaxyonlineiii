@@ -245,11 +245,11 @@ async function simulateBattleRound(
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const user = verifyAuth(request);
-    const battleId = params.id;
+    const { id: battleId } = await params;
 
     if (!battleId) {
       throw new ApiError(400, 'ID de batalla requerido');
@@ -326,11 +326,11 @@ interface RoundRequestBody {
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const user = verifyAuth(request);
-    const battleId = params.id;
+    const { id: battleId } = await params;
     const body: RoundRequestBody = await request.json();
 
     if (!battleId) {

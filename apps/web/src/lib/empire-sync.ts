@@ -6,7 +6,6 @@
 import {
   accrueResource,
   buildGo2ConstructionQueue,
-  buildCostForLevel,
   canPlaceBuildingType,
   countActiveConstruction,
   normalizeBuildingType,
@@ -30,6 +29,18 @@ const isDevCheap =
   process.env.DEV_CHEAP_COSTS === 'true' || process.env.DEV_CHEAP_COSTS === '1';
 const isDevFastTimers =
   process.env.DEV_FAST_TIMERS === 'true' || process.env.DEV_FAST_TIMERS === '1';
+
+/**
+ * Build/upgrade cost for a building at a target level, honouring the web app's dev flags.
+ * Mirrors apps/api/src/lib/buildingLogic.ts so the web API routes and the Fastify API agree.
+ */
+function buildCostForLevel(type: string, targetLevel: number) {
+  const cost = getBuildingLevelCost(type, targetLevel, isDevCheap);
+  if (isDevFastTimers) {
+    return { ...cost, time: Math.max(3, Math.floor(cost.time * 0.1)) };
+  }
+  return cost;
+}
 
 /* ──────────────────── Technology bonuses ─────────────────────────── */
 

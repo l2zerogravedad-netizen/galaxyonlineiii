@@ -5,11 +5,12 @@ import { verifyAuth, handleApiError } from '@/lib/api-auth';
 // GET: Detalle de alianza con miembros
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const alliance = await prisma.alliance.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         members: {
           select: {
@@ -45,9 +46,10 @@ export async function GET(
 // POST: Unirse a alianza
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = verifyAuth(request);
 
     // Verificar que no pertenece a otra alianza
@@ -63,7 +65,7 @@ export async function POST(
 
     // Verificar que la alianza existe y tiene espacio
     const alliance = await prisma.alliance.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
     if (!alliance) {
       return NextResponse.json(
@@ -82,13 +84,13 @@ export async function POST(
     await prisma.$transaction(async (tx) => {
       await tx.allianceMember.create({
         data: {
-          allianceId: params.id,
+          allianceId: id,
           empireId: user.empireId,
           role: 'MEMBER',
         },
       });
       await tx.alliance.update({
-        where: { id: params.id },
+        where: { id },
         data: { memberCount: { increment: 1 } },
       });
     });
@@ -105,13 +107,14 @@ export async function POST(
 // DELETE: Abandonar alianza
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = verifyAuth(request);
 
     const member = await prisma.allianceMember.findFirst({
-      where: { allianceId: params.id, empireId: user.empireId },
+      where: { allianceId: id, empireId: user.empireId },
     });
     if (!member) {
       return NextResponse.json(
@@ -121,7 +124,7 @@ export async function DELETE(
     }
 
     const alliance = await prisma.alliance.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
     if (!alliance) {
       return NextResponse.json(
@@ -136,10 +139,10 @@ export async function DELETE(
       const newCount = alliance!.memberCount - 1;
       if (newCount <= 0) {
         // Eliminar alianza si no quedan miembros
-        await tx.alliance.delete({ where: { id: params.id } });
+        await tx.alliance.delete({ where: { id } });
       } else {
         await tx.alliance.update({
-          where: { id: params.id },
+          where: { id },
           data: { memberCount: { decrement: 1 } },
         });
       }

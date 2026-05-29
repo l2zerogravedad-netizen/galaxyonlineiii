@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.productionFromBuilding = productionFromBuilding;
 exports.capacityBonusFromBuilding = capacityBonusFromBuilding;
 exports.countBuildingsOfType = countBuildingsOfType;
+exports.countActiveConstruction = countActiveConstruction;
 exports.canPlaceBuildingType = canPlaceBuildingType;
 const legacyBuildingTypes_1 = require("./legacyBuildingTypes");
 const terrestrialCatalog_1 = require("./terrestrialCatalog");
@@ -38,6 +39,13 @@ function countBuildingsOfType(buildings, apiType) {
     return buildings.filter((b) => (0, legacyBuildingTypes_1.normalizeBuildingType)(b.type) === canonical &&
         b.level > 0 &&
         (b.status === 'IDLE' || b.status === 'UPGRADING')).length;
+}
+/**
+ * Counts buildings that are currently mid-construction or mid-upgrade, i.e. occupying a
+ * slot in the construction queue. Used to enforce GO2_CONSTRUCTION_QUEUE_SIZE.
+ */
+function countActiveConstruction(buildings) {
+    return buildings.filter((b) => b.status === 'CONSTRUCTING' || b.status === 'UPGRADING').length;
 }
 function canPlaceBuildingType(buildings, apiType, slotIndex) {
     const canonical = (0, legacyBuildingTypes_1.normalizeBuildingType)(apiType);

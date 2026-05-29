@@ -10,6 +10,20 @@ export interface AuthPayload {
   username?: string;
 }
 
+/**
+ * Typed API error carrying an HTTP status. Route handlers `throw new ApiError(status, msg)`
+ * and `handleApiError` turns it into a JSON response with that status.
+ */
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 export function verifyAuth(request: Request): AuthPayload {
   const auth = request.headers.get('authorization');
   if (!auth?.startsWith('Bearer ')) {
@@ -22,6 +36,13 @@ export function verifyAuth(request: Request): AuthPayload {
 
 export function handleApiError(error: unknown): NextResponse {
   console.error('[API Error]', error);
+
+  if (error instanceof ApiError) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: error.status }
+    );
+  }
 
   if (error instanceof Error && error.message === 'Unauthorized') {
     return NextResponse.json(

@@ -7,11 +7,11 @@ import { prisma } from '@/lib/prisma';
 // GET /api/commanders/[id] — Detalle de un comandante + estado del jugador
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = verifyAuth(request);
-    const { id } = params;
+    const { id } = await params;
 
     // 1. Cargar catálogo
     const jsonPath = path.join(process.cwd(), 'public', 'data', 'commanders.json');

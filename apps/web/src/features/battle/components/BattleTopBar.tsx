@@ -19,19 +19,19 @@ export type BattlePhase = string;
 export interface BattleTopBarProps {
   attacker: PlayerInfo;
   defender: PlayerInfo;
-  round: number;
+  currentRound: number;
   maxRounds: number;
   phase: BattlePhase;
-  battleState: string;
+  battleState?: string;
 }
 
 export function BattleTopBar({
   attacker,
   defender,
-  round,
+  currentRound,
   maxRounds,
   phase,
-  battleState,
+  battleState = 'IN_PROGRESS',
 }: BattleTopBarProps) {
   return (
     <div className="h-12 bg-[#0c1325] border-b border-[#1a2d4f] flex items-center justify-between px-6">
@@ -55,7 +55,7 @@ export function BattleTopBar({
       <div className="flex items-center gap-4">
         <div className="text-[#4a6a8a] text-xs uppercase tracking-wider">Round</div>
         <div className="text-white font-bold text-lg">
-          {round} <span className="text-[#3a5a7a] text-xs">/ {maxRounds}</span>
+          {currentRound} <span className="text-[#3a5a7a] text-xs">/ {maxRounds}</span>
         </div>
         <div className="px-2 py-0.5 rounded bg-[#1a2d4f] text-cyan-400 text-[10px] font-bold uppercase">
           {phase.replace('_', ' ')}

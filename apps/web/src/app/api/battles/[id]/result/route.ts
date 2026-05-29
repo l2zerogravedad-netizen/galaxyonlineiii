@@ -30,11 +30,11 @@ interface BattleResultBody {
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const user = verifyAuth(request);
-    const battleId = params.id;
+    const { id: battleId } = await params;
     const body: BattleResultBody = await request.json();
 
     // ── Validaciones ──
@@ -191,11 +191,11 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const user = verifyAuth(request);
-    const battleId = params.id;
+    const { id: battleId } = await params;
 
     if (!battleId) {
       throw new ApiError(400, 'ID de batalla requerido');

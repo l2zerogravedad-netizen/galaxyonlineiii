@@ -11,11 +11,11 @@ import {
 // ============================================================
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = verifyAuth(request);
-    const { id: commanderId } = params;
+    const { id: commanderId } = await params;
 
     const hospital = await getHospital(user.empireId, commanderId);
 
@@ -72,11 +72,11 @@ export async function GET(
 // ============================================================
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = verifyAuth(request);
-    const { id: commanderId } = params;
+    const { id: commanderId } = await params;
     const body = (await request.json()) as {
       action: 'admit' | 'heal' | 'discharge';
       totalHealingTime?: number;
