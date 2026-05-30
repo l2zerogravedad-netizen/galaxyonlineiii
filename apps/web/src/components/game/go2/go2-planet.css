@@ -67,7 +67,14 @@
   position: absolute;
   inset: 2px;
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  background: linear-gradient(145deg, #6db85a 0%, #4d9340 45%, #3d7a34 100%);
+  /* Textura de terreno rocoso (estilo GO2) bajo un velo verde semi-transparente,
+     para conservar la lectura de biósfera sin que el suelo sea un verde plano. */
+  background-image:
+    linear-gradient(145deg, rgba(109, 184, 90, 0.42) 0%, rgba(61, 122, 52, 0.5) 100%),
+    url('/game/assets/destock-isometric/terrain_rock.png');
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
@@ -97,7 +104,11 @@
 }
 
 .go2-iso-tile--occupied::before {
-  background: linear-gradient(145deg, #5a8f4e 0%, #457a3c 100%);
+  background-image:
+    linear-gradient(145deg, rgba(90, 143, 78, 0.5) 0%, rgba(69, 122, 60, 0.55) 100%),
+    url('/game/assets/destock-isometric/terrain_metal.png');
+  background-size: cover, cover;
+  background-position: center, center;
 }
 
 .go2-iso-tile--building::before {
