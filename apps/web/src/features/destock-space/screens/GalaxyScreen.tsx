@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { Go2IconFrame } from '@/components/game/go2/Go2IconFrame';
 import type { Go2IconName } from '@/components/game/go2/Go2Icons';
@@ -43,6 +44,7 @@ const MOCK_GALAXY = buildGalaxy();
 export function GalaxyScreen() {
   const [cells, setCells] = useState<GalaxyCell[]>(MOCK_GALAXY);
   const [selected, setSelected] = useState(42);
+  const router = useRouter();
 
   // Logged in → overlay the REAL sector planets from /api/galaxy onto the grid.
   // Backend coords (galaxyX/galaxyY) are centered at 0,0 and can be negative, so we
@@ -184,7 +186,18 @@ export function GalaxyScreen() {
                 Ir al planeta
               </Link>
             ) : (
-              <button type="button" className="go2-btn-primary" disabled={cell.owner === 'empty'}>
+              <button
+                type="button"
+                className="go2-btn-primary"
+                disabled={cell.owner === 'empty'}
+                onClick={() => {
+                  if (cell.owner === 'empty') return;
+                  // Atacar el sector → lanza el combate. La misión escala con el nivel
+                  // del planeta (1–4, las misiones definidas en destockCombatData).
+                  const mission = Math.min(4, Math.max(1, cell.level ?? 1));
+                  router.push(`/destock/combat?mission=${mission}`);
+                }}
+              >
                 {cell.owner === 'empty' ? 'Sector vacío' : 'Espiar / Atacar'}
               </button>
             )}
