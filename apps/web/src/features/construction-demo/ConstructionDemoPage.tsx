@@ -18,6 +18,7 @@ import {
   AAAResearchIcon, AAAReactorIcon, AAAShipIcon, AAABaseIcon, AAAAllianceIcon, AAAMainIcon,
 } from './hud/AAAMenuIcons';
 import { questData, buildingsData, type BuildingDef } from './hud/questBuildData';
+import { Go2BaseMenu } from './Go2BaseMenu';
 
 /**
  * ConstructionDemoPage — Galaxy Online 2-style terrestrial base.
@@ -262,158 +263,18 @@ export function ConstructionDemoPage() {
         </div>
       </div>
 
-      {/* ==================== MENÚ PRINCIPAL INFERIOR (CENTRADO SOBRE FRIENDS) ==================== */}
-      <div className="absolute bottom-[110px] left-1/2 -translate-x-1/2 z-20 flex items-end drop-shadow-2xl">
-
-        {/* Bloque Izquierdo: Bases/Navegación */}
-        <div className="relative w-44 h-28 mr-2">
-          <div className="absolute bottom-1 left-2 w-40 h-20 bg-gradient-to-t from-[#1e293b] via-[#334155] to-[#475569] rounded-[40px] border border-[#64748b] shadow-[0_15px_25px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.2)]"></div>
-
-          {/* PLANETA → BASE ESPACIAL */}
-          <button
-            onClick={(e) => { e.stopPropagation(); window.location.href = '/dashboard/station'; }}
-            title="Base Espacial"
-            className="group absolute top-1 left-[38%] w-12 h-12 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-20">
-            <AAAResearchIcon className="w-9 h-9" />
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Base Espacial</span>
-          </button>
-
-          {/* GALAXIA */}
-          <button
-            onClick={(e) => { e.stopPropagation(); window.location.href = '/dashboard/galaxy'; }}
-            title="Galaxia"
-            className="group absolute top-10 left-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
-            <AAAReactorIcon className="w-8 h-8" />
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Galaxia</span>
-          </button>
-
-          {/* CONSTRUCCIÓN DE EDIFICIOS */}
-          <button
-            onClick={(e) => { e.stopPropagation(); closeAllMenus(); setActiveModal('build'); }}
-            title="Construir edificios"
-            className="group absolute top-10 right-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
-            <AAAShipIcon className="w-8 h-8" />
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Construir</span>
-          </button>
-
-          {/* CASITA → BASE TERRESTRE (pantalla actual) */}
-          <button
-            onClick={(e) => { e.stopPropagation(); closeAllMenus(); setActiveModal(null); }}
-            title="Base Terrestre"
-            className="group absolute bottom-0 left-[35%] w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(56,189,248,0.8),inset_0_0_10px_#000] z-30">
-            <AAABaseIcon className="w-9 h-9 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
-            <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Base Terrestre</span>
-          </button>
-        </div>
-
-        {/* Bloque Derecho: Acciones (Píldora alargada Metálica) */}
-        <div className="relative h-20 bg-gradient-to-t from-[#1e293b] via-[#334155] to-[#475569] rounded-[40px] border border-[#64748b] shadow-[0_15px_30px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.2)] flex items-center px-3 gap-2">
-
-          {/* BOTÓN 1: NETWORK GLOBE (MENÚ DE CONSTRUCCIÓN/INVESTIGACIÓN) */}
-          <div className="relative mb-2">
-            {isGlobeMenuOpen && (
-              <div className="absolute bottom-[110%] left-1/2 transform -translate-x-1/2 flex flex-col gap-1 items-center bg-gradient-to-b from-[#0a2558] to-[#041029] border-[1.5px] border-[#38bdf8] rounded-md p-1 shadow-[0_0_15px_rgba(56,189,248,0.5)] animate-fade-in-up z-50 w-11">
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Science Research</div>
-                  <button className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><ScienceAtomIcon className="w-6 h-6" /></button>
-                </div>
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Blueprint Research</div>
-                  <button className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><PieChartIcon className="w-6 h-6" /></button>
-                </div>
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Build Warship</div>
-                  <button className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><WarshipToolsIcon className="w-6 h-6" /></button>
-                </div>
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Construct Building</div>
-                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('build'); setIsGlobeMenuOpen(false); }} className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><ConstructBuildingIcon className="w-6 h-6" /></button>
-                </div>
-              </div>
-            )}
-            <button
-              onClick={(e) => { e.stopPropagation(); setIsGlobeMenuOpen(!isGlobeMenuOpen); setIsAllianceMenuOpen(false); setIsFlyoutOpen(false); }}
-              className={`w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center transition-transform shadow-[0_0_10px_rgba(56,189,248,0.4),inset_0_0_15px_#000] ${isGlobeMenuOpen ? 'scale-110 border-yellow-400 shadow-[0_0_15px_#facc15]' : 'hover:scale-105'}`}>
-              <AAAMainIcon className="w-9 h-9" />
-            </button>
-          </div>
-
-          {/* BOTÓN 2: JET */}
-          <button onClick={(e) => { e.stopPropagation(); closeAllMenus(); }} className="w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-105 transition-transform shadow-[0_0_10px_rgba(56,189,248,0.4),inset_0_0_15px_#000] mb-2">
-            <JetIcon className="w-8 h-8" />
-          </button>
-
-          {/* BOTÓN 3: ALIANZA (MENÚ DE QUEST/MAIL/INVENTARIO) */}
-          <div className="relative mb-2">
-            {isAllianceMenuOpen && (
-              <div className="absolute bottom-[110%] left-1/2 transform -translate-x-1/2 flex flex-col gap-1 items-center bg-gradient-to-b from-[#0a2558] to-[#041029] border-[1.5px] border-[#38bdf8] rounded-md p-1 shadow-[0_0_15px_rgba(56,189,248,0.5)] animate-fade-in-up z-50 w-11">
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Commander</div>
-                  <button className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><HelmetIcon className="w-6 h-6" /></button>
-                </div>
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Quest</div>
-                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('quest'); setIsAllianceMenuOpen(false); }} className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><QuestBoardIcon className="w-6 h-6" /></button>
-                </div>
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Mail</div>
-                  <button className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><MailEnvelopeIcon className="w-6 h-6" /></button>
-                </div>
-                <div className="group relative flex items-center justify-center w-full">
-                  <div className="absolute right-12 whitespace-nowrap bg-black text-gray-200 text-xs px-2 py-1 border border-gray-600 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Inventory</div>
-                  <button onClick={(e) => { e.stopPropagation(); setActiveModal('shop'); setIsAllianceMenuOpen(false); }} className="w-9 h-9 rounded bg-[#1e3a8a]/40 border border-transparent hover:bg-[#2563eb]/80 hover:border-[#60a5fa] flex items-center justify-center transition-all"><CubeItemIcon className="w-6 h-6" /></button>
-                </div>
-              </div>
-            )}
-            <button
-              onClick={(e) => { e.stopPropagation(); setIsAllianceMenuOpen(!isAllianceMenuOpen); setIsGlobeMenuOpen(false); setIsFlyoutOpen(false); }}
-              className={`w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center transition-transform shadow-[0_0_10px_rgba(56,189,248,0.4),inset_0_0_15px_#000] ${isAllianceMenuOpen ? 'scale-110 border-yellow-400 shadow-[0_0_15px_#facc15]' : 'hover:scale-105'}`}>
-              <AAAAllianceIcon className="w-9 h-9" />
-            </button>
-          </div>
-
-          {/* BOTÓN 4: RADAR */}
-          <button onClick={(e) => { e.stopPropagation(); closeAllMenus(); }} className="w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-105 transition-transform shadow-[0_0_10px_rgba(56,189,248,0.4),inset_0_0_15px_#000] mb-2">
-            <RadarIcon className="w-8 h-8" />
-          </button>
-
-          {/* Botón 5: Mall / Desplegable ($) */}
-          <div className="relative mb-2 ml-1">
-            {isFlyoutOpen && (
-              <div className="absolute bottom-[120%] left-1/2 transform -translate-x-1/2 flex flex-col gap-2 items-center bg-gradient-to-b from-[#1e293b]/90 to-[#0f172a]/95 p-2 rounded-full border border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] backdrop-blur-md animate-fade-in-up z-50">
-                <button className="w-10 h-10 rounded-full bg-gradient-to-b from-blue-500 to-blue-800 border-2 border-blue-300 flex items-center justify-center hover:scale-110 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-                  <Zap size={16} className="text-white drop-shadow-[0_0_2px_#fff]" />
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gradient-to-b from-blue-500 to-blue-800 border-2 border-blue-300 flex items-center justify-center hover:scale-110 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-                  <Shield size={16} className="text-white drop-shadow-[0_0_2px_#fff]" />
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gradient-to-b from-blue-500 to-blue-800 border-2 border-blue-300 flex items-center justify-center hover:scale-110 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-                  <Settings size={16} className="text-white drop-shadow-[0_0_2px_#fff]" />
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setActiveModal('lucky'); setIsFlyoutOpen(false); }}
-                  className="w-12 h-12 rounded-full bg-gradient-to-b from-cyan-400 to-blue-600 border-2 border-cyan-200 flex items-center justify-center hover:scale-110 shadow-[0_0_15px_rgba(34,211,238,0.8)] mt-1">
-                  <DollarSign size={22} className="text-white drop-shadow-[0_0_5px_#fff]" />
-                </button>
-              </div>
-            )}
-
-            <button
-              onClick={(e) => { e.stopPropagation(); setIsFlyoutOpen(!isFlyoutOpen); setIsGlobeMenuOpen(false); setIsAllianceMenuOpen(false); }}
-              className={`w-[3.5rem] h-[3.5rem] rounded-full flex items-center justify-center transition-transform hover:scale-105 z-30 relative ${isFlyoutOpen ? 'scale-110' : ''}`}
-              style={{
-                background: 'radial-gradient(circle at center, #1e3a8a 0%, #0f172a 100%)',
-                boxShadow: '0 0 20px #22d3ee, inset 0 0 15px rgba(0,0,0,0.8)',
-                border: '2px solid #a5f3fc',
-              }}>
-              <div className="absolute inset-[-6px] rounded-full bg-cyan-400 opacity-30 blur-sm pointer-events-none animate-pulse"></div>
-              <div className="w-[1.6rem] h-[1.6rem] rotate-45 border-[2.5px] border-[#fbbf24] bg-gradient-to-br from-[#1e3a8a] to-black flex items-center justify-center shadow-[0_0_8px_#fbbf24]">
-                <span className="-rotate-45 text-[#fcd34d] font-black text-sm drop-shadow-[0_0_3px_#fde047]">$</span>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* ==================== MENÚ PRINCIPAL INFERIOR (componente compartido Go2BaseMenu) ====================
+          MISMO menú que usa la Galaxia y demás pantallas — una sola fuente, sin botones duplicados.
+          En la base terrestre, "casita"/"construir" abren los modales locales; el resto navega. */}
+      <Go2BaseMenu
+        active="house"
+        onHouse={() => { closeAllMenus(); setActiveModal(null); }}
+        onBuildings={() => { closeAllMenus(); setActiveModal('build'); }}
+        onConstruct={() => { closeAllMenus(); setActiveModal('build'); }}
+        onQuest={() => { closeAllMenus(); setActiveModal('quest'); }}
+        onInventory={() => { closeAllMenus(); setActiveModal('shop'); }}
+        onLucky={() => { closeAllMenus(); setActiveModal('lucky'); }}
+      />
 
       {/* ==================== BOTTOM HUD (FRIENDS CAROUSEL) ==================== */}
       <div className="absolute bottom-0 w-full z-10 flex flex-col items-center">

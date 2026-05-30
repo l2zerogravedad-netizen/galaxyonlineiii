@@ -5,6 +5,7 @@ import { Go2GalaxyMap } from './Go2GalaxyMap';
 import { Go2GalaxyMinimap } from './Go2GalaxyMinimap';
 import { Go2GalaxyChat } from './Go2GalaxyChat';
 import { Go2BottomNav } from '../Go2BottomNav';
+import { Go2BaseMenu } from '@/features/construction-demo/Go2BaseMenu';
 import { GALAXY_PLANETS } from './galaxy-data';
 import { useGalaxyMap } from './useGalaxyMap';
 import {
@@ -329,19 +330,8 @@ export function Go2GalaxyScreen() {
         />
       </div>
 
-      {/* ==================== ACTION BAR (Bottom Right, above nav) ==================== */}
-      <div className="absolute bottom-[72px] right-[180px] z-30">
-        <div className="flex items-center gap-1.5 px-2 py-2 rounded-xl bg-gradient-to-t from-[#0a1628]/95 to-[#0a1628]/70 border border-blue-500/10 backdrop-blur-sm">
-          <ActionButton icon="&#127759;" label="Planet" />
-          <ActionButton icon="&#127756;" label="Galaxy" active />
-          <ActionButton icon="&#128640;" label="Fleets" />
-          <ActionButton icon="&#128737;" label="Shield" />
-          <ActionButton icon="&#9993;" label="Mail" />
-          <ActionButton icon="&#9881;" label="Settings" />
-          <ActionButton icon="&#128100;" label="Profile" />
-          <ActionButton icon="&#127942;" label="Rank" />
-        </div>
-      </div>
+      {/* Barra de acciones antigua eliminada: ahora usamos el MISMO menú de la base
+          terrestre (Go2BaseMenu) abajo, para no duplicar botones. */}
 
       {/* ==================== SELECTED PLANET PANEL ==================== */}
       {selectedPlanet && (
@@ -405,8 +395,8 @@ export function Go2GalaxyScreen() {
         </div>
       )}
 
-      {/* ==================== BOTTOM NAVIGATION ==================== */}
-      <Go2BottomNav />
+      {/* ==================== MENÚ GO2 (idéntico al de la base terrestre) ==================== */}
+      <Go2BaseMenu active="galaxy" />
     </div>
   );
 }
