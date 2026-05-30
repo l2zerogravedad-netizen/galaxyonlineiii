@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import Link from 'next/link';
+import { Go2ScreenShell } from '@/components/game/go2/Go2ScreenShell';
 
 interface Technology {
   id: string;
@@ -18,28 +18,12 @@ interface Technology {
   prerequisiteMet: boolean;
   prerequisiteName: string | null;
   requiredTechId: string | null;
-  costs: {
-    metal: number;
-    plasma: number;
-    time: number;
-  };
-  effects: {
-    type: string;
-    value: number;
-    description: string;
-  };
-  researchStatus: {
-    timeRemaining: number;
-    progress: number;
-    endsAt: string;
-  } | null;
+  costs: { metal: number; plasma: number; time: number };
+  effects: { type: string; value: number; description: string };
+  researchStatus: { timeRemaining: number; progress: number; endsAt: string } | null;
 }
 
-interface Resource {
-  type: string;
-  amount: number;
-  capacity: number;
-}
+interface Resource { type: string; amount: number; capacity: number }
 
 const categoryNames: Record<string, string> = {
   PRODUCTION: 'Producción',
@@ -47,10 +31,13 @@ const categoryNames: Record<string, string> = {
   MILITARY: 'Militar',
   LOGISTICS: 'Logística',
   PROPULSION: 'Propulsión',
+  NAVIGATION: 'Navegación',
+  ECONOMY: 'Economía',
+  DEFENSE: 'Defensa',
   GENERAL: 'General',
 };
 
-const categoryOrder = ['GENERAL', 'PRODUCTION', 'CONSTRUCTION', 'MILITARY', 'LOGISTICS', 'PROPULSION'];
+const categoryOrder = ['GENERAL', 'ECONOMY', 'PRODUCTION', 'CONSTRUCTION', 'MILITARY', 'DEFENSE', 'LOGISTICS', 'NAVIGATION', 'PROPULSION'];
 
 function getTier(tech: Technology, techMap: Map<string, Technology>): number {
   if (!tech.requiredTechId) return 0;
@@ -88,10 +75,7 @@ export default function ResearchPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/');
-      return;
-    }
+    if (!token) { router.push('/'); return; }
     fetchData();
     const syncInterval = setInterval(() => syncResearch(), 10000);
     return () => clearInterval(syncInterval);
@@ -131,13 +115,18 @@ export default function ResearchPage() {
     try {
       const [techRes, resourceRes] = await Promise.all([
         axios.get('/api/research', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('/api/empire/resources', { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get('/api/empire', { headers: { Authorization: `Bearer ${token}` } }),
       ]);
-      const techs = techRes.data.technologies;
+      const techs = (techRes.data.data?.technologies ?? techRes.data.technologies ?? []) as Technology[];
       setTechnologies(techs);
-      setResources(resourceRes.data);
+      setResources(resourceRes.data.resources ?? []);
       const active = techs.find((t: Technology) => t.status === 'RESEARCHING');
       setActiveResearch(active || null);
+      // default to first category that has techs
+      if (techs.length) {
+        const cats = categoryOrder.filter((c) => techs.some((t) => t.category === c));
+        if (cats.length && !cats.includes(activeCategory)) setActiveCategory(cats[0]);
+      }
       setLoading(false);
     } catch (err) {
       setError('Error al cargar datos');
@@ -149,10 +138,11 @@ export default function ResearchPage() {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const response = await axios.post('/api/research/sync', {}, { headers: { Authorization: `Bearer ${token}` } });
-      if (response.data.completedCount > 0) fetchData();
-    } catch (err) {
-      // silent
+      await axios.post('/api/research/sync', {}, { headers: { Authorization: `Bearer ${token}` } });
+      fetchData();
+    } catch {
+      // sync endpoint may not exist; refresh anyway to advance timers
+      fetchData();
     }
   };
 
@@ -182,166 +172,92 @@ export default function ResearchPage() {
     return metal >= costs.metal && plasma >= costs.plasma;
   };
 
-  const getResourceAmount = (type: string) => Math.floor(resources.find((r) => r.type === type)?.amount || 0);
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <p className="text-cyan-400 text-lg">Cargando árbol tecnológico...</p>
-      </div>
+      <Go2ScreenShell title="Investigación" subtitle="Árbol tecnológico del imperio">
+        <div className="go2-loading">Cargando árbol tecnológico…</div>
+      </Go2ScreenShell>
     );
   }
 
+  const availableCats = categoryOrder.filter((c) => technologies.some((t) => t.category === c));
   const catTechs = technologies.filter((t) => t.category === activeCategory);
   const tiers = buildTiers(catTechs);
 
   return (
-    <div className="min-h-screen bg-slate-900 p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="px-3 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-600 text-sm transition">
-              ← Volver
-            </Link>
-            <h1 className="text-xl font-bold text-white">Centro de Investigación</h1>
+    <Go2ScreenShell title="Investigación" subtitle="Nexo Cognitivo · árbol tecnológico">
+      {activeResearch && (
+        <div className="go2-panel" style={{ marginBottom: 12 }}>
+          <div className="go2-panel-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontWeight: 800, color: 'var(--go2-gold)' }}>🔬 {activeResearch.name}</div>
+              <div className="go2-card-sub">Nivel {activeResearch.currentLevel} → {activeResearch.currentLevel + 1}</div>
+            </div>
+            <div style={{ minWidth: 140 }}>
+              <div className="go2-queue-time" style={{ textAlign: 'right' }}>
+                {activeResearch.researchStatus && formatTime(Math.floor(activeResearch.researchStatus.timeRemaining / 1000))}
+              </div>
+              <div className="go2-progress"><div className="go2-progress-fill" style={{ width: `${activeResearch.researchStatus?.progress || 0}%` }} /></div>
+            </div>
           </div>
-          <button
-            onClick={() => { localStorage.removeItem('token'); router.push('/'); }}
-            className="px-3 py-2 bg-red-900/60 hover:bg-red-800 rounded-lg border border-red-700 text-sm transition"
-          >
-            Salir
+        </div>
+      )}
+
+      {error && <div className="go2-panel" style={{ marginBottom: 12, borderColor: '#b91c1c' }}><div className="go2-panel-body" style={{ color: 'var(--go2-red)' }}>{error}</div></div>}
+
+      <div className="go2-tabs">
+        {availableCats.map((cat) => (
+          <button key={cat} className={['go2-tab', activeCategory === cat ? 'go2-tab--on' : ''].join(' ')} onClick={() => setActiveCategory(cat)}>
+            {categoryNames[cat] ?? cat}
           </button>
-        </div>
+        ))}
+      </div>
 
-        {/* Resources Bar */}
-        <div className="flex gap-3 mb-4">
-          {[
-            { type: 'METAL', label: 'Metal', color: 'text-slate-300', bg: 'bg-slate-800 border-slate-600' },
-            { type: 'GAS', label: 'Gas', color: 'text-cyan-400', bg: 'bg-slate-800 border-cyan-900/50' },
-            { type: 'CREDITS', label: 'Créditos', color: 'text-yellow-400', bg: 'bg-slate-800 border-yellow-900/50' },
-          ].map((res) => (
-            <div key={res.type} className={`flex-1 ${res.bg} border rounded-lg px-3 py-2 flex items-center justify-between`}>
-              <span className="text-xs text-gray-400">{res.label}</span>
-              <span className={`font-mono font-bold ${res.color}`}>{getResourceAmount(res.type).toLocaleString()}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Active Research */}
-        {activeResearch && (
-          <div className="bg-yellow-900/20 border border-yellow-600/50 p-3 rounded-lg mb-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="font-semibold text-yellow-300 text-sm">🔬 {activeResearch.name}</p>
-                <p className="text-xs text-gray-400">Nivel {activeResearch.currentLevel} → {activeResearch.currentLevel + 1}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-yellow-400 font-mono text-sm">
-                  {activeResearch.researchStatus && formatTime(Math.floor(activeResearch.researchStatus.timeRemaining / 1000))}
-                </p>
-                <div className="w-32 h-1.5 bg-slate-700 rounded-full mt-1">
-                  <div className="h-full bg-yellow-500 rounded-full transition-all" style={{ width: `${activeResearch.researchStatus?.progress || 0}%` }} />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {error && <div className="bg-red-900/40 border border-red-500 text-red-200 p-2 rounded mb-4 text-sm">{error}</div>}
-
-        {/* Category Tabs */}
-        <div className="flex gap-1 mb-6 overflow-x-auto pb-1">
-          {categoryOrder.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-t-lg text-sm font-semibold transition border-b-2 whitespace-nowrap ${
-                activeCategory === cat
-                  ? 'bg-slate-800 text-cyan-400 border-cyan-400'
-                  : 'bg-slate-900/50 text-gray-500 border-transparent hover:text-gray-300'
-              }`}
-            >
-              {categoryNames[cat]}
-            </button>
-          ))}
-        </div>
-
-        {/* Tech Tree */}
-        <div
-          ref={containerRef}
-          className="relative bg-slate-950/60 rounded-xl border border-slate-700 p-6 min-h-[400px] overflow-x-auto"
-        >
-          {/* Connection lines */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+      <div className="go2-panel">
+        <div ref={containerRef} className="go2-panel-body" style={{ position: 'relative', minHeight: 360, overflowX: 'auto' }}>
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}>
             {lines.map((l, i) => (
               <g key={i}>
-                <line x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#1e40af" strokeWidth="2" opacity="0.7" />
-                <circle cx={l.x2} cy={l.y2} r="3" fill="#3b82f6" />
+                <line x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="#2f6fb0" strokeWidth="2" opacity="0.7" />
+                <circle cx={l.x2} cy={l.y2} r="3" fill="#7fd0ff" />
               </g>
             ))}
           </svg>
-
-          {/* Tiers */}
-          <div className="relative z-10 flex flex-col gap-16">
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 56 }}>
             {tiers.map((tier, tierIndex) => (
-              <div key={tierIndex} className="flex justify-center gap-8">
+              <div key={tierIndex} style={{ display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap' }}>
                 {tier.map((tech) => {
                   const isResearching = tech.status === 'RESEARCHING';
                   const isLocked = tech.status === 'LOCKED' || !tech.prerequisiteMet;
                   const affordable = canAfford(tech.costs);
-
+                  const border = isResearching ? 'var(--go2-gold)' : isLocked ? 'var(--go2-line-soft)' : tech.isMaxLevel ? 'var(--go2-green)' : affordable ? 'var(--go2-cyan)' : '#7a3030';
                   return (
                     <div
                       key={tech.id}
                       ref={(el) => { if (el) nodeRefs.current.set(tech.id, el); }}
-                      className="relative"
+                      style={{ position: 'relative' }}
                       onMouseEnter={(e) => { setTooltipTech(tech); setTooltipPos({ x: e.clientX, y: e.clientY }); }}
                       onMouseMove={(e) => setTooltipPos({ x: e.clientX, y: e.clientY })}
                       onMouseLeave={() => setTooltipTech(null)}
                     >
                       <button
-                        onClick={() => {
-                          if (!isLocked && !tech.isMaxLevel && !isResearching && !activeResearch && affordable) {
-                            startResearch(tech.id);
-                          }
-                        }}
+                        onClick={() => { if (!isLocked && !tech.isMaxLevel && !isResearching && !activeResearch && affordable) startResearch(tech.id); }}
                         disabled={!!(isLocked || tech.isMaxLevel || isResearching || activeResearch || !affordable)}
-                        className={`w-20 h-20 rounded-lg border-2 flex items-center justify-center relative transition ${
-                          isResearching
-                            ? 'border-yellow-400 bg-yellow-900/30 shadow-[0_0_15px_rgba(250,204,21,0.4)] animate-pulse'
-                            : isLocked
-                            ? 'border-slate-700 bg-slate-800/50 opacity-50 cursor-not-allowed'
-                            : tech.isMaxLevel
-                            ? 'border-green-500 bg-green-900/20 shadow-[0_0_10px_rgba(34,197,94,0.3)]'
-                            : !affordable
-                            ? 'border-red-800 bg-slate-800/70 cursor-not-allowed'
-                            : 'border-cyan-600 bg-slate-800 hover:bg-slate-700 hover:border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.2)] cursor-pointer'
-                        }`}
+                        style={{
+                          width: 76, height: 76, borderRadius: 12, cursor: isLocked || tech.isMaxLevel || isResearching || activeResearch || !affordable ? 'not-allowed' : 'pointer',
+                          border: `2px solid ${border}`, background: 'linear-gradient(180deg, rgba(20,40,70,0.6), rgba(10,22,42,0.6))',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative',
+                          boxShadow: isResearching ? '0 0 16px rgba(252,211,77,0.5)' : tech.isMaxLevel ? '0 0 12px rgba(74,222,128,0.4)' : 'none',
+                          opacity: isLocked ? 0.5 : 1, transition: 'all .15s',
+                        }}
                       >
-                        {/* Icon placeholder */}
-                        <div className="text-2xl">
-                          {isLocked ? '🔒' : isResearching ? '🔬' : tech.isMaxLevel ? '✓' : '⚡'}
-                        </div>
-
-                        {/* Level badge */}
-                        <div
-                          className={`absolute -bottom-2 -right-2 text-[10px] font-black px-1.5 py-0.5 rounded border ${
-                            tech.isMaxLevel
-                              ? 'bg-green-500 text-black border-green-700'
-                              : 'bg-orange-500 text-black border-orange-700'
-                          }`}
-                        >
-                          {tech.currentLevel}/{tech.maxLevel}
-                        </div>
+                        <span style={{ fontSize: 24 }}>{isLocked ? '🔒' : isResearching ? '🔬' : tech.isMaxLevel ? '✓' : '⚡'}</span>
+                        <span style={{
+                          position: 'absolute', bottom: -8, right: -8, fontSize: 10, fontWeight: 900, padding: '1px 6px', borderRadius: 6,
+                          background: tech.isMaxLevel ? 'var(--go2-green)' : 'var(--go2-gold)', color: '#04101f',
+                        }}>{tech.currentLevel}/{tech.maxLevel}</span>
                       </button>
-
-                      {/* Name under node */}
-                      <p className={`text-[10px] text-center mt-2 font-medium max-w-[90px] leading-tight ${
-                        isLocked ? 'text-gray-600' : 'text-gray-300'
-                      }`}>
-                        {tech.name}
-                      </p>
+                      <div style={{ fontSize: 10, textAlign: 'center', marginTop: 10, maxWidth: 90, lineHeight: 1.2, color: isLocked ? 'var(--go2-dim)' : 'var(--go2-txt)' }}>{tech.name}</div>
                     </div>
                   );
                 })}
@@ -351,30 +267,30 @@ export default function ResearchPage() {
         </div>
       </div>
 
-      {/* Tooltip */}
       {tooltipTech && (
         <div
-          className="fixed z-50 bg-slate-900 border border-slate-600 rounded-lg p-3 shadow-2xl max-w-xs pointer-events-none"
-          style={{
-            left: Math.min(tooltipPos.x + 15, typeof window !== 'undefined' ? window.innerWidth - 280 : 1000),
-            top: Math.min(tooltipPos.y + 15, typeof window !== 'undefined' ? window.innerHeight - 200 : 600),
-          }}
+          className="go2-panel"
+          style={{ position: 'fixed', zIndex: 80, maxWidth: 280, padding: 0, pointerEvents: 'none',
+            left: Math.min(tooltipPos.x + 15, typeof window !== 'undefined' ? window.innerWidth - 300 : 1000),
+            top: Math.min(tooltipPos.y + 15, typeof window !== 'undefined' ? window.innerHeight - 200 : 600) }}
         >
-          <p className="font-bold text-cyan-400 text-sm mb-1">{tooltipTech.name}</p>
-          <p className="text-xs text-gray-400 mb-2">{tooltipTech.description}</p>
-          <p className="text-xs text-green-400 mb-2">{tooltipTech.effects.description}</p>
-          {!tooltipTech.isMaxLevel && tooltipTech.status !== 'RESEARCHING' && (
-            <div className="text-xs space-y-0.5">
-              <p className="text-gray-400">Metal: {tooltipTech.costs.metal.toLocaleString()}</p>
-              <p className="text-gray-400">Plasma: {tooltipTech.costs.plasma.toLocaleString()}</p>
-              <p className="text-gray-400">Tiempo: {formatTime(tooltipTech.costs.time)}</p>
-            </div>
-          )}
-          {tooltipTech.prerequisiteName && !tooltipTech.prerequisiteMet && (
-            <p className="text-xs text-red-400 mt-1">Requiere: {tooltipTech.prerequisiteName}</p>
-          )}
+          <div className="go2-panel-body">
+            <div style={{ fontWeight: 800, color: 'var(--go2-cyan)', marginBottom: 4 }}>{tooltipTech.name}</div>
+            <div className="go2-card-sub" style={{ marginBottom: 6 }}>{tooltipTech.description}</div>
+            <div style={{ fontSize: 11, color: 'var(--go2-green)', marginBottom: 6 }}>{tooltipTech.effects?.description}</div>
+            {!tooltipTech.isMaxLevel && tooltipTech.status !== 'RESEARCHING' && (
+              <div style={{ fontSize: 11, color: 'var(--go2-dim)' }}>
+                <div>Metal: {tooltipTech.costs.metal.toLocaleString()}</div>
+                <div>Plasma: {tooltipTech.costs.plasma.toLocaleString()}</div>
+                <div>Tiempo: {formatTime(tooltipTech.costs.time)}</div>
+              </div>
+            )}
+            {tooltipTech.prerequisiteName && !tooltipTech.prerequisiteMet && (
+              <div style={{ fontSize: 11, color: 'var(--go2-red)', marginTop: 4 }}>Requiere: {tooltipTech.prerequisiteName}</div>
+            )}
+          </div>
         </div>
       )}
-    </div>
+    </Go2ScreenShell>
   );
 }

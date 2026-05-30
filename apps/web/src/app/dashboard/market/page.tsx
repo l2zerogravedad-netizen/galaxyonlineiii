@@ -1,11 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { Go2ScreenShell } from '@/components/game/go2/Go2ScreenShell';
 
-/**
- * Mercado — conectado a /api/marketplace (intercambio de recursos NPC).
- * GET listings + wallet; POST buy/sell. Recursos reales del imperio.
- */
+/** Mercado — conectado a /api/marketplace (intercambio de recursos NPC), tema GO2. */
 
 interface Listing {
   resource: string;
@@ -75,95 +73,47 @@ export default function MarketPage() {
   );
 
   return (
-    <div style={{ padding: 24, color: '#dbe9ff', maxWidth: 720, margin: '0 auto' }}>
-      <h1 style={{ fontSize: 24, fontWeight: 800 }}>Mercado Galáctico</h1>
-      <p style={{ marginTop: 4, color: '#9fb6d4', fontSize: 13 }}>
-        Intercambio de recursos con el mercado NPC. Créditos:{' '}
-        <b style={{ color: '#fcd34d' }}>{(wallet.CREDITS ?? 0).toLocaleString('es-ES')}</b>
-      </p>
-
-      <div style={{ margin: '16px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <label style={{ fontSize: 13 }}>Cantidad:</label>
-        <input
-          type="number"
-          min={1}
-          value={amount}
-          onChange={(e) => setAmount(Math.max(1, parseInt(e.target.value, 10) || 1))}
-          style={{
-            width: 120,
-            padding: '6px 10px',
-            borderRadius: 8,
-            border: '1px solid #2f6fb0',
-            background: '#0b1830',
-            color: '#dbe9ff',
-          }}
-        />
-      </div>
-
-      {loading ? (
-        <p style={{ color: '#9fb6d4' }}>Cargando mercado…</p>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {listings.map((l) => (
-            <div
-              key={l.resource}
+    <Go2ScreenShell title="Mercado Galáctico" subtitle="Intercambio de recursos con el mercado NPC">
+      <div className="go2-panel" style={{ maxWidth: 640 }}>
+        <div className="go2-panel-head">Comerciar</div>
+        <div className="go2-panel-body">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+            <span style={{ fontSize: 12, color: 'var(--go2-dim)' }}>Cantidad</span>
+            <input
+              type="number"
+              min={1}
+              value={amount}
+              onChange={(e) => setAmount(Math.max(1, parseInt(e.target.value, 10) || 1))}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '12px 16px',
-                borderRadius: 12,
-                border: '1px solid #1f4e7a',
-                background: 'linear-gradient(180deg,rgba(14,34,64,0.7),rgba(8,18,36,0.7))',
+                width: 120, padding: '6px 10px', borderRadius: 8,
+                border: '1px solid var(--go2-line)', background: 'rgba(2,8,18,0.6)', color: 'var(--go2-txt)',
               }}
-            >
-              <div>
-                <div style={{ fontWeight: 700 }}>{l.name}</div>
-                <div style={{ fontSize: 12, color: '#9fb6d4' }}>
-                  Tienes: {(wallet[l.resource] ?? 0).toLocaleString('es-ES')} · compra{' '}
-                  {l.buyPricePerUnit} cr · venta {l.sellPricePerUnit} cr
+            />
+          </div>
+
+          {loading ? (
+            <div className="go2-loading">Cargando mercado…</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {listings.map((l) => (
+                <div key={l.resource} className="go2-card" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', cursor: 'default' }}>
+                  <div>
+                    <div className="go2-card-title">{l.name}</div>
+                    <div className="go2-card-sub">
+                      Tienes {(wallet[l.resource] ?? 0).toLocaleString('es-ES')} · compra {l.buyPricePerUnit} · venta {l.sellPricePerUnit} cr
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button type="button" className="go2-btn" onClick={() => void trade('buy', l.resource)}>Comprar</button>
+                    <button type="button" className="go2-btn go2-btn--gold" onClick={() => void trade('sell', l.resource)}>Vender</button>
+                  </div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button type="button" onClick={() => void trade('buy', l.resource)} style={btn('#2563eb')}>
-                  Comprar
-                </button>
-                <button type="button" onClick={() => void trade('sell', l.resource)} style={btn('#b45309')}>
-                  Vender
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
-
-      {toast ? (
-        <div
-          style={{
-            marginTop: 16,
-            padding: '10px 14px',
-            borderRadius: 10,
-            background: 'rgba(34,197,94,0.15)',
-            border: '1px solid #16a34a',
-            color: '#bbf7d0',
-            fontSize: 13,
-          }}
-        >
-          {toast}
-        </div>
-      ) : null}
-    </div>
+      </div>
+      {toast ? <div className="go2-toast">{toast}</div> : null}
+    </Go2ScreenShell>
   );
-}
-
-function btn(bg: string): React.CSSProperties {
-  return {
-    padding: '8px 16px',
-    borderRadius: 8,
-    border: 'none',
-    background: bg,
-    color: '#fff',
-    fontWeight: 700,
-    cursor: 'pointer',
-  };
 }

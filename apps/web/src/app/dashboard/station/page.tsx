@@ -1,53 +1,33 @@
 'use client';
 
 import Link from 'next/link';
+import { Go2ScreenShell } from '@/components/game/go2/Go2ScreenShell';
 
-/** Estación — hub de navegación a los servicios del imperio (todos conectados al backend). */
+/** Estación — hub de navegación a los servicios del imperio (tema GO2). */
 
 const MODULES: { href: string; label: string; sub: string; accent: string }[] = [
-  { href: '/dashboard', label: 'Planeta', sub: 'Base y construcción', accent: '#22c55e' },
-  { href: '/dashboard/galaxy', label: 'Galaxia', sub: 'Mapa estelar', accent: '#38bdf8' },
+  { href: '/dashboard', label: 'Planeta', sub: 'Base y construcción', accent: '#4ade80' },
+  { href: '/dashboard/galaxy', label: 'Galaxia', sub: 'Mapa estelar', accent: '#7fd0ff' },
   { href: '/dashboard/market', label: 'Mercado', sub: 'Compra/venta de recursos', accent: '#fcd34d' },
-  { href: '/shipyard', label: 'Astillero', sub: 'Construcción de naves', accent: '#60a5fa' },
+  { href: '/shipyard', label: 'Astillero', sub: 'Construcción de naves', accent: '#5b9bd5' },
   { href: '/research', label: 'Investigación', sub: 'Árbol tecnológico', accent: '#a78bfa' },
   { href: '/missions', label: 'Misiones', sub: 'Campaña PvE', accent: '#fb923c' },
 ];
 
 export default function StationPage() {
   return (
-    <div style={{ padding: 24, color: '#dbe9ff', maxWidth: 720, margin: '0 auto' }}>
-      <h1 style={{ fontSize: 24, fontWeight: 800 }}>Estación Espacial</h1>
-      <p style={{ marginTop: 4, color: '#9fb6d4', fontSize: 13 }}>Centro de servicios del imperio.</p>
-      <div
-        style={{
-          marginTop: 18,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: 12,
-        }}
-      >
+    <Go2ScreenShell title="Estación Espacial" subtitle="Centro de servicios del imperio">
+      <div className="go2-grid go2-grid--3">
         {MODULES.map((m) => (
-          <Link
-            key={m.href}
-            href={m.href}
-            style={{
-              display: 'block',
-              padding: '16px',
-              borderRadius: 12,
-              border: `1px solid ${m.accent}55`,
-              background: 'linear-gradient(180deg,rgba(14,34,64,0.7),rgba(8,18,36,0.7))',
-              textDecoration: 'none',
-              color: '#dbe9ff',
-            }}
-          >
+          <Link key={m.href} href={m.href} className="go2-card" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: m.accent }} />
-              <span style={{ fontWeight: 800 }}>{m.label}</span>
+              <span style={{ width: 12, height: 12, borderRadius: '50%', background: m.accent, boxShadow: `0 0 10px ${m.accent}` }} />
+              <span className="go2-card-title">{m.label}</span>
             </div>
-            <div style={{ marginTop: 6, fontSize: 12, color: '#9fb6d4' }}>{m.sub}</div>
+            <div className="go2-card-sub">{m.sub}</div>
           </Link>
         ))}
       </div>
-    </div>
+    </Go2ScreenShell>
   );
 }

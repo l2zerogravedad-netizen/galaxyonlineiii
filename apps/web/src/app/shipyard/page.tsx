@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import Link from 'next/link';
+import { Go2ScreenShell } from '@/components/game/go2/Go2ScreenShell';
 
 interface Blueprint {
   id: string;
@@ -12,51 +12,18 @@ interface Blueprint {
   type: string;
   category: string;
   description: string;
-  stats: {
-    attack: number;
-    defense: number;
-    hp: number;
-    speed: number;
-    cargoCapacity: number;
-  };
-  costs: {
-    metal: number;
-    plasma: number;
-    credits: number;
-  };
+  stats: { attack: number; defense: number; hp: number; speed: number; cargoCapacity: number };
+  costs: { metal: number; plasma: number; credits: number };
   buildTime: number;
   unlocked: boolean;
-  unlockRequirements: {
-    tech: string | null;
-    building: string | null;
-  };
+  unlockRequirements: { tech: string | null; building: string | null };
   inventory: number;
-  activeConstruction: {
-    id: string;
-    quantity: number;
-    timeRemaining: number;
-    progress: number;
-    endsAt: string;
-  } | null;
+  activeConstruction: { id: string; quantity: number; timeRemaining: number; progress: number; endsAt: string } | null;
 }
 
-interface Resource {
-  type: string;
-  amount: number;
-  capacity: number;
-}
+interface Resource { type: string; amount: number; capacity: number }
 
-const categoryNames: Record<string, string> = {
-  COMBAT: 'Combate',
-  CIVIL: 'Civil',
-  TRANSPORT: 'Transporte',
-};
-
-const categoryColors: Record<string, string> = {
-  COMBAT: 'text-red-400',
-  CIVIL: 'text-blue-400',
-  TRANSPORT: 'text-green-400',
-};
+const categoryNames: Record<string, string> = { COMBAT: 'Combate', CIVIL: 'Civil', TRANSPORT: 'Transporte' };
 
 export default function ShipyardPage() {
   const router = useRouter();
@@ -70,38 +37,24 @@ export default function ShipyardPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/');
-      return;
-    }
-
+    if (!token) { router.push('/'); return; }
     fetchData();
-
-    // Sync construction every 10 seconds
-    const syncInterval = setInterval(() => {
-      syncConstruction();
-    }, 10000);
-
+    const syncInterval = setInterval(() => syncConstruction(), 10000);
     return () => clearInterval(syncInterval);
   }, [router]);
 
   const fetchData = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
-
     try {
       const [shipyardRes, resourceRes] = await Promise.all([
-        axios.get('/api/shipyard', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-        axios.get('/api/empire/resources', {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
+        axios.get('/api/shipyard', { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get('/api/empire', { headers: { Authorization: `Bearer ${token}` } }),
       ]);
-
-      setBlueprints(shipyardRes.data.blueprints);
-      setHasShipyard(shipyardRes.data.hasShipyard);
-      setResources(resourceRes.data);
+      const d = shipyardRes.data.data ?? shipyardRes.data;
+      setBlueprints(d.blueprints ?? []);
+      setHasShipyard(d.hasShipyard ?? false);
+      setResources(resourceRes.data.resources ?? []);
       setLoading(false);
     } catch (err) {
       setError('Error al cargar datos');
@@ -112,36 +65,19 @@ export default function ShipyardPage() {
   const syncConstruction = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
-
     try {
-      const response = await axios.post(
-        '/api/shipyard/sync',
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.data.completedCount > 0) {
-        fetchData();
-      }
-    } catch (err) {
-      // Silent fail
-    }
+      await axios.post('/api/shipyard/sync', {}, { headers: { Authorization: `Bearer ${token}` } });
+      fetchData();
+    } catch { fetchData(); }
   };
 
   const startConstruction = async (blueprintId: string) => {
     const token = localStorage.getItem('token');
     if (!token) return;
-
     setBuildingId(blueprintId);
     setError('');
-
     try {
-      await axios.post(
-        '/api/shipyard/build',
-        { blueprintId, quantity },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
+      await axios.post('/api/shipyard/build', { blueprintId, quantity }, { headers: { Authorization: `Bearer ${token}` } });
       setQuantity(1);
       fetchData();
     } catch (err: any) {
@@ -160,241 +96,99 @@ export default function ShipyardPage() {
     const metal = resources.find((r) => r.type === 'METAL')?.amount || 0;
     const plasma = resources.find((r) => r.type === 'GAS')?.amount || 0;
     const credits = resources.find((r) => r.type === 'CREDITS')?.amount || 0;
-    return (
-      metal >= costs.metal * quantity &&
-      plasma >= costs.plasma * quantity &&
-      credits >= costs.credits * quantity
-    );
+    return metal >= costs.metal * quantity && plasma >= costs.plasma * quantity && credits >= costs.credits * quantity;
   };
 
   const hasActiveConstruction = blueprints.some((b) => b.activeConstruction);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Cargando...</p>
-      </div>
-    );
+    return <Go2ScreenShell title="Astillero" subtitle="Doca de Forja"><div className="go2-loading">Cargando…</div></Go2ScreenShell>;
   }
 
   if (!hasShipyard) {
     return (
-      <div className="min-h-screen p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-4 mb-6">
-            <Link href="/dashboard" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded">
-              ← Volver
-            </Link>
-            <h1 className="text-2xl font-bold">Astillero</h1>
-          </div>
-          <div className="bg-red-900/50 border border-red-500 p-6 rounded-lg text-center">
-            <p className="text-red-200 text-lg">
-              🔧 Necesitas construir un <strong>Astillero</strong> en tu planeta para desbloquear esta funcionalidad.
-            </p>
-          </div>
-        </div>
-      </div>
+      <Go2ScreenShell title="Astillero" subtitle="Doca de Forja">
+        <div className="go2-empty">🔧 Necesitas construir un <strong>Astillero</strong> en tu planeta para desbloquear esta funcionalidad.</div>
+      </Go2ScreenShell>
     );
   }
 
-  // Group by category
-  const groupedBlueprints = blueprints.reduce((acc, bp) => {
-    const cat = bp.category;
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(bp);
+  const grouped = blueprints.reduce((acc, bp) => {
+    (acc[bp.category] ||= []).push(bp);
     return acc;
   }, {} as Record<string, Blueprint[]>);
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded">
-              ← Volver
-            </Link>
-            <h1 className="text-2xl font-bold">Astillero</h1>
-          </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem('token');
-              router.push('/');
-            }}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm"
-          >
-            Salir
-          </button>
+    <Go2ScreenShell title="Astillero" subtitle="Doca de Forja · construcción de naves">
+      {/* Quantity selector */}
+      <div className="go2-panel" style={{ marginBottom: 12, maxWidth: 420 }}>
+        <div className="go2-panel-body" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 12, color: 'var(--go2-dim)' }}>Cantidad</span>
+          <input type="range" min={1} max={10} value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} style={{ flex: 1 }} />
+          <span style={{ fontWeight: 800, width: 28, textAlign: 'center' }}>{quantity}</span>
         </div>
-
-        {/* Resources */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-slate-800 p-4 rounded-lg">
-            <p className="text-gray-400">Metal</p>
-            <p className="text-xl font-bold">
-              {Math.floor(resources.find((r) => r.type === 'METAL')?.amount || 0).toLocaleString()}
-            </p>
-          </div>
-          <div className="bg-slate-800 p-4 rounded-lg">
-            <p className="text-gray-400">Gas</p>
-            <p className="text-xl font-bold">
-              {Math.floor(resources.find((r) => r.type === 'GAS')?.amount || 0).toLocaleString()}
-            </p>
-          </div>
-          <div className="bg-slate-800 p-4 rounded-lg">
-            <p className="text-gray-400">Créditos</p>
-            <p className="text-xl font-bold">
-              {Math.floor(resources.find((r) => r.type === 'CREDITS')?.amount || 0).toLocaleString()}
-            </p>
-          </div>
-        </div>
-
-        {/* Quantity selector */}
-        <div className="bg-slate-800 p-4 rounded-lg mb-6">
-          <label className="text-sm text-gray-400">Cantidad a construir:</label>
-          <div className="flex items-center gap-4 mt-2">
-            <input
-              type="range"
-              min="1"
-              max="10"
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
-              className="flex-1"
-            />
-            <span className="text-xl font-bold w-12 text-center">{quantity}</span>
-          </div>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-red-900/50 border border-red-500 text-red-200 p-3 rounded mb-6">
-            {error}
-          </div>
-        )}
-
-        {/* Blueprints by Category */}
-        {Object.entries(groupedBlueprints).map(([category, bps]) => (
-          <div key={category} className="mb-8">
-            <h2 className={`text-lg font-semibold mb-4 ${categoryColors[category] || 'text-gray-400'}`}>
-              {categoryNames[category] || category}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {bps.map((bp) => {
-                const affordable = canAfford(bp.costs);
-                const isBuilding = !!bp.activeConstruction;
-                const isLocked = !bp.unlocked;
-
-                const totalMetal = bp.costs.metal * quantity;
-                const totalPlasma = bp.costs.plasma * quantity;
-                const totalCredits = bp.costs.credits * quantity;
-                const totalTime = bp.buildTime * quantity;
-
-                return (
-                  <div
-                    key={bp.id}
-                    className={`bg-slate-800 p-4 rounded-lg border-2 ${
-                      isBuilding
-                        ? 'border-yellow-500'
-                        : isLocked
-                        ? 'border-slate-700 opacity-60'
-                        : 'border-slate-600'
-                    }`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="font-semibold">{bp.name}</h3>
-                        <p className="text-xs text-gray-400">{bp.description}</p>
-                      </div>
-                      {bp.inventory > 0 && (
-                        <span className="text-sm bg-green-900/50 text-green-300 px-2 py-1 rounded">
-                          x{bp.inventory}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Stats */}
-                    <div className="grid grid-cols-3 gap-2 text-xs mb-3">
-                      <div className="bg-slate-700 p-1 rounded text-center">
-                        <span className="text-red-400">ATK</span>
-                        <p>{bp.stats.attack}</p>
-                      </div>
-                      <div className="bg-slate-700 p-1 rounded text-center">
-                        <span className="text-blue-400">DEF</span>
-                        <p>{bp.stats.defense}</p>
-                      </div>
-                      <div className="bg-slate-700 p-1 rounded text-center">
-                        <span className="text-green-400">HP</span>
-                        <p>{bp.stats.hp}</p>
-                      </div>
-                    </div>
-
-                    {/* Costs */}
-                    {!isLocked && !isBuilding && (
-                      <div className="space-y-1 text-sm mb-3">
-                        <p className={!affordable ? 'text-red-400' : ''}>
-                          Metal: {totalMetal.toLocaleString()}
-                        </p>
-                        <p className={!affordable ? 'text-red-400' : ''}>
-                          Gas: {totalPlasma.toLocaleString()}
-                        </p>
-                        <p className={!affordable ? 'text-red-400' : ''}>
-                          Créditos: {totalCredits.toLocaleString()}
-                        </p>
-                        <p className="text-gray-400">Tiempo: {formatTime(totalTime)}</p>
-                      </div>
-                    )}
-
-                    {/* Status/Action */}
-                    {isBuilding ? (
-                      <div className="text-center">
-                        <p className="text-yellow-400">
-                          Construyendo {bp.activeConstruction?.quantity} unidad(es)...
-                        </p>
-                        <p className="text-yellow-400 font-mono">
-                          {formatTime(Math.floor((bp.activeConstruction?.timeRemaining || 0) / 1000))}
-                        </p>
-                        <div className="w-full h-2 bg-slate-700 rounded-full mt-2">
-                          <div
-                            className="h-full bg-yellow-500 rounded-full transition-all"
-                            style={{ width: `${bp.activeConstruction?.progress || 0}%` }}
-                          />
-                        </div>
-                      </div>
-                    ) : isLocked ? (
-                      <div className="text-center text-red-400">
-                        <p>Bloqueado</p>
-                        {bp.unlockRequirements.tech && (
-                          <p className="text-xs">Requiere: {bp.unlockRequirements.tech}</p>
-                        )}
-                      </div>
-                    ) : hasActiveConstruction ? (
-                      <div className="text-center text-gray-500">
-                        Otra construcción en curso
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => startConstruction(bp.id)}
-                        disabled={buildingId === bp.id || !affordable}
-                        className={`w-full py-2 rounded font-medium ${
-                          !affordable
-                            ? 'bg-red-900/50 cursor-not-allowed'
-                            : 'bg-blue-600 hover:bg-blue-700'
-                        }`}
-                      >
-                        {!affordable
-                          ? 'Recursos insuficientes'
-                          : buildingId === bp.id
-                          ? 'Construyendo...'
-                          : 'Construir'}
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
       </div>
-    </div>
+
+      {error && <div className="go2-panel" style={{ marginBottom: 12, borderColor: '#b91c1c' }}><div className="go2-panel-body" style={{ color: 'var(--go2-red)' }}>{error}</div></div>}
+
+      {Object.entries(grouped).map(([category, bps]) => (
+        <div key={category} style={{ marginBottom: 18 }}>
+          <div className="go2-panel-head" style={{ borderRadius: 8, border: '1px solid var(--go2-line-soft)', marginBottom: 10 }}>{categoryNames[category] || category}</div>
+          <div className="go2-grid go2-grid--2">
+            {bps.map((bp) => {
+              const affordable = canAfford(bp.costs);
+              const isBuilding = !!bp.activeConstruction;
+              const isLocked = !bp.unlocked;
+              const totalMetal = bp.costs.metal * quantity;
+              const totalPlasma = bp.costs.plasma * quantity;
+              const totalCredits = bp.costs.credits * quantity;
+              const totalTime = bp.buildTime * quantity;
+              return (
+                <div key={bp.id} className={['go2-card', isLocked ? 'go2-card--locked' : ''].join(' ')} style={{ cursor: 'default', borderColor: isBuilding ? 'var(--go2-gold)' : undefined }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                      <div className="go2-card-title">{bp.name}</div>
+                      <div className="go2-card-sub">{bp.description}</div>
+                    </div>
+                    {bp.inventory > 0 && <span className="go2-badge go2-badge--ok">x{bp.inventory}</span>}
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 6, marginTop: 6 }}>
+                    <div className="go2-stat" style={{ flexDirection: 'column', borderBottom: 'none', padding: '4px', background: 'rgba(0,0,0,0.25)', borderRadius: 6, textAlign: 'center' }}><span style={{ color: '#f87171' }}>ATK</span><span>{bp.stats.attack}</span></div>
+                    <div className="go2-stat" style={{ flexDirection: 'column', borderBottom: 'none', padding: '4px', background: 'rgba(0,0,0,0.25)', borderRadius: 6, textAlign: 'center' }}><span style={{ color: '#7fd0ff' }}>DEF</span><span>{bp.stats.defense}</span></div>
+                    <div className="go2-stat" style={{ flexDirection: 'column', borderBottom: 'none', padding: '4px', background: 'rgba(0,0,0,0.25)', borderRadius: 6, textAlign: 'center' }}><span style={{ color: '#4ade80' }}>HP</span><span>{bp.stats.hp}</span></div>
+                  </div>
+                  {!isLocked && !isBuilding && (
+                    <div style={{ marginTop: 8 }}>
+                      <div className="go2-stat"><span>Metal</span><span style={{ color: affordable ? undefined : 'var(--go2-red)' }}>{totalMetal.toLocaleString()}</span></div>
+                      <div className="go2-stat"><span>Gas</span><span style={{ color: affordable ? undefined : 'var(--go2-red)' }}>{totalPlasma.toLocaleString()}</span></div>
+                      <div className="go2-stat"><span>Créditos</span><span style={{ color: affordable ? undefined : 'var(--go2-red)' }}>{totalCredits.toLocaleString()}</span></div>
+                      <div className="go2-stat"><span>Tiempo</span><span>{formatTime(totalTime)}</span></div>
+                    </div>
+                  )}
+                  {isBuilding ? (
+                    <div style={{ marginTop: 8, textAlign: 'center' }}>
+                      <div style={{ color: 'var(--go2-gold)', fontSize: 12 }}>Construyendo {bp.activeConstruction?.quantity} ud.</div>
+                      <div className="go2-queue-time">{formatTime(Math.floor((bp.activeConstruction?.timeRemaining || 0) / 1000))}</div>
+                      <div className="go2-progress"><div className="go2-progress-fill" style={{ width: `${bp.activeConstruction?.progress || 0}%` }} /></div>
+                    </div>
+                  ) : isLocked ? (
+                    <div style={{ marginTop: 8, textAlign: 'center', color: 'var(--go2-dim)' }}>
+                      <span className="go2-badge go2-badge--locked">Bloqueado</span>
+                      {bp.unlockRequirements.tech && <div className="go2-card-sub" style={{ marginTop: 4 }}>Requiere: {bp.unlockRequirements.tech}</div>}
+                    </div>
+                  ) : hasActiveConstruction ? (
+                    <div style={{ marginTop: 8, textAlign: 'center', color: 'var(--go2-dim)', fontSize: 12 }}>Otra construcción en curso</div>
+                  ) : (
+                    <button className="go2-btn go2-btn--block" style={{ marginTop: 8 }} onClick={() => startConstruction(bp.id)} disabled={buildingId === bp.id || !affordable}>
+                      {!affordable ? 'Recursos insuficientes' : buildingId === bp.id ? 'Construyendo…' : 'Construir'}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </Go2ScreenShell>
   );
 }

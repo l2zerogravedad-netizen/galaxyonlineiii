@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { Go2ScreenShell } from '@/components/game/go2/Go2ScreenShell';
 
 interface Mission {
   id: string;
@@ -18,32 +19,15 @@ interface Mission {
   rewardXp: number;
 }
 
-interface Fleet {
-  id: string;
-  name: string;
-  status: string;
-  totalPower: number;
-  formations: any[];
-}
+interface Fleet { id: string; name: string; status: string; totalPower: number; formations: any[] }
 
 interface ActiveMission {
-  id: string;
-  status: string;
-  mission: Mission;
-  fleet: Fleet;
-  startedAt: string;
-  endsAt: string;
-  remainingSeconds: number;
-  isComplete: boolean;
+  id: string; status: string; mission: Mission; fleet: Fleet;
+  startedAt: string; endsAt: string; remainingSeconds: number; isComplete: boolean;
 }
 
 interface MissionHistory {
-  id: string;
-  status: string;
-  result: string;
-  mission: Mission;
-  fleet: Fleet;
-  completedAt: string;
+  id: string; status: string; result: string; mission: Mission; fleet: Fleet; completedAt: string;
 }
 
 export default function MissionsPage() {
@@ -55,40 +39,31 @@ export default function MissionsPage() {
   const [selectedFleet, setSelectedFleet] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     loadData();
-    const interval = setInterval(() => {
-      syncMissions();
-    }, 5000);
+    const interval = setInterval(() => syncMissions(), 5000);
     return () => clearInterval(interval);
   }, []);
 
   const loadData = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/');
-        return;
-      }
-
+      if (!token) { router.push('/'); return; }
       const headers = { Authorization: `Bearer ${token}` };
-
       const [missionsRes, fleetsRes, activeRes, historyRes] = await Promise.all([
         axios.get('/api/missions', { headers }),
         axios.get('/api/fleets', { headers }),
-        axios.get('/api/missions/active', { headers }),
-        axios.get('/api/missions/history', { headers }),
+        axios.get('/api/missions/active', { headers }).catch(() => ({ data: {} })),
+        axios.get('/api/missions/history', { headers }).catch(() => ({ data: {} })),
       ]);
-
-      setMissions(missionsRes.data.missions || []);
-      setFleets(fleetsRes.data.fleets || []);
+      setMissions(missionsRes.data.data ?? missionsRes.data.missions ?? []);
+      setFleets(fleetsRes.data.data ?? fleetsRes.data.fleets ?? []);
       setActiveMissions(activeRes.data.activeMissions || []);
       setHistory(historyRes.data.history || []);
       setLoading(false);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to load missions');
+      setError(err.response?.data?.error || 'Error al cargar misiones');
       setLoading(false);
     }
   };
@@ -97,200 +72,107 @@ export default function MissionsPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-
       const headers = { Authorization: `Bearer ${token}` };
       const res = await axios.post('/api/missions/sync', {}, { headers });
-
-      if (res.data.completed.length > 0) {
-        // Reload to show completed missions
-        loadData();
-      }
-    } catch (err) {
-      // Silent fail for auto-sync
-    }
+      if (res.data.completed?.length > 0) loadData();
+    } catch { /* silent */ }
   };
 
   const startMission = async (missionId: string) => {
-    if (!selectedFleet) {
-      setError('Select a fleet first');
-      return;
-    }
-
     try {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
-
-      await axios.post(`/api/missions/${missionId}/start`, { fleetId: selectedFleet }, { headers });
+      await axios.post(`/api/missions/${missionId}/start`, selectedFleet ? { fleetId: selectedFleet } : {}, { headers });
       setSelectedFleet('');
       loadData();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to start mission');
+      setError(err.response?.data?.error || 'No se pudo iniciar la misión');
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}m ${secs}s`;
-  };
+  const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
 
-  const getDifficultyColor = (difficulty: number) => {
-    if (difficulty <= 1) return 'text-green-400';
-    if (difficulty <= 2) return 'text-yellow-400';
-    if (difficulty <= 3) return 'text-orange-400';
-    return 'text-red-400';
-  };
+  const difficultyColor = (d: number) => (d <= 1 ? '#4ade80' : d <= 2 ? '#fcd34d' : d <= 3 ? '#fb923c' : '#f87171');
+  const idleFleets = fleets.filter((f) => f.status === 'IDLE' && (f.formations?.length ?? 0) > 0);
 
-  const idleFleets = fleets.filter((f) => f.status === 'IDLE' && f.formations.length > 0);
-
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
+  if (loading) {
+    return <Go2ScreenShell title="Misiones" subtitle="Mando Táctico · campaña PvE"><div className="go2-loading">Cargando…</div></Go2ScreenShell>;
+  }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Missions</h1>
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
-          >
-            Back to Dashboard
-          </button>
-        </div>
+    <Go2ScreenShell title="Misiones" subtitle="Mando Táctico · campaña PvE">
+      {error && <div className="go2-panel" style={{ marginBottom: 12, borderColor: '#b91c1c' }}><div className="go2-panel-body" style={{ color: 'var(--go2-red)' }}>{error}</div></div>}
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded">
-            {error}
-          </div>
-        )}
-
-        {/* Active Missions */}
-        {activeMissions.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-3">Active Missions</h2>
-            <div className="space-y-3">
-              {activeMissions.map((mission) => (
-                <div key={mission.id} className="p-4 bg-yellow-900/30 border border-yellow-600 rounded-lg">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium">{mission.mission.name}</h3>
-                      <p className="text-sm text-gray-400">Fleet: {mission.fleet.name}</p>
-                    </div>
-                    <div className="text-right">
-                      {mission.isComplete ? (
-                        <span className="text-green-400 font-medium">Complete!</span>
-                      ) : (
-                        <span className="text-yellow-400">
-                          {formatTime(mission.remainingSeconds)} remaining
-                        </span>
-                      )}
-                    </div>
-                  </div>
+      {activeMissions.length > 0 && (
+        <div className="go2-panel" style={{ marginBottom: 12 }}>
+          <div className="go2-panel-head">Misiones en curso</div>
+          <div className="go2-panel-body go2-queue">
+            {activeMissions.map((m) => (
+              <div key={m.id} className="go2-queue-item">
+                <div>
+                  <div style={{ fontWeight: 700 }}>{m.mission.name}</div>
+                  <div className="go2-card-sub">Flota: {m.fleet?.name}</div>
                 </div>
-              ))}
-            </div>
+                {m.isComplete ? <span className="go2-badge go2-badge--ok">¡Completa!</span> : <span className="go2-queue-time">{formatTime(m.remainingSeconds)}</span>}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Fleet Selector */}
-        <div className="mb-6 p-4 bg-gray-800 rounded-lg">
-          <h2 className="text-lg font-semibold mb-2">Select Fleet</h2>
+      {/* Fleet selector */}
+      <div className="go2-panel" style={{ marginBottom: 12 }}>
+        <div className="go2-panel-head">Seleccionar flota</div>
+        <div className="go2-panel-body">
           {idleFleets.length === 0 ? (
-            <p className="text-gray-400">
-              No idle fleets available. Create a fleet and assign ships first.
-            </p>
+            <div className="go2-card-sub">No hay flotas inactivas. Crea una flota con naves en el astillero primero. (Sin flota se usará la primera disponible.)</div>
           ) : (
-            <div className="flex flex-wrap gap-2">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {idleFleets.map((fleet) => (
-                <button
-                  key={fleet.id}
-                  onClick={() => setSelectedFleet(fleet.id)}
-                  className={`px-3 py-2 rounded ${
-                    selectedFleet === fleet.id
-                      ? 'bg-blue-600'
-                      : 'bg-gray-700 hover:bg-gray-600'
-                  }`}
-                >
-                  {fleet.name} ({fleet.totalPower} power)
+                <button key={fleet.id} className={['go2-btn', selectedFleet === fleet.id ? '' : ''].join(' ')} style={{ background: selectedFleet === fleet.id ? undefined : 'linear-gradient(180deg, rgba(20,40,70,0.6), rgba(10,22,42,0.6))', borderColor: selectedFleet === fleet.id ? 'var(--go2-cyan)' : 'var(--go2-line)' }} onClick={() => setSelectedFleet(fleet.id)}>
+                  {fleet.name} ({fleet.totalPower} poder)
                 </button>
               ))}
             </div>
           )}
         </div>
+      </div>
 
-        {/* Available Missions */}
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">Available Missions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {missions.map((mission) => (
-              <div key={mission.id} className="p-4 bg-gray-800 rounded-lg">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-medium">{mission.name}</h3>
-                  <span className={getDifficultyColor(mission.difficulty)}>
-                    Difficulty: {mission.difficulty}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-400 mb-3">{mission.description}</p>
-                <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-                  <div className="text-gray-400">
-                    Duration: {formatTime(mission.durationSeconds)}
-                  </div>
-                  <div className="text-gray-400">
-                    Min Ships: {mission.minShipsRequired}
-                  </div>
-                  <div className="text-gray-400">
-                    Power: {mission.recommendedPower}
-                  </div>
-                </div>
-                <div className="text-sm mb-3">
-                  <span className="text-gray-400">Rewards:</span>
-                  <span className="ml-2 text-yellow-400">
-                    {mission.rewardMetal} Metal, {mission.rewardPlasma} Plasma, {mission.rewardCredits} Credits
-                  </span>
-                </div>
-                <button
-                  onClick={() => startMission(mission.id)}
-                  disabled={!selectedFleet}
-                  className={`w-full py-2 rounded ${
-                    selectedFleet
-                      ? 'bg-green-600 hover:bg-green-500'
-                      : 'bg-gray-600 cursor-not-allowed'
-                  }`}
-                >
-                  {selectedFleet ? 'Launch Mission' : 'Select a Fleet'}
-                </button>
+      {/* Available missions */}
+      <div className="go2-grid go2-grid--2">
+        {missions.map((mission) => (
+          <div key={mission.id} className="go2-card" style={{ cursor: 'default' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div className="go2-card-title">{mission.name}</div>
+              <span className="go2-badge" style={{ color: difficultyColor(mission.difficulty), background: 'rgba(0,0,0,0.3)' }}>Dif. {mission.difficulty}</span>
+            </div>
+            <div className="go2-card-sub">{mission.description}</div>
+            <div style={{ marginTop: 6 }}>
+              <div className="go2-stat"><span>Duración</span><span>{formatTime(mission.durationSeconds)}</span></div>
+              <div className="go2-stat"><span>Naves mín.</span><span>{mission.minShipsRequired}</span></div>
+              <div className="go2-stat"><span>Poder rec.</span><span>{mission.recommendedPower}</span></div>
+              <div className="go2-stat"><span>Recompensa</span><span style={{ color: 'var(--go2-gold)' }}>{mission.rewardMetal}M · {mission.rewardPlasma}G · {mission.rewardCredits}C</span></div>
+            </div>
+            <button className="go2-btn go2-btn--block go2-btn--gold" style={{ marginTop: 8 }} onClick={() => startMission(mission.id)}>
+              Lanzar misión
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {history.length > 0 && (
+        <div className="go2-panel" style={{ marginTop: 12 }}>
+          <div className="go2-panel-head">Historial</div>
+          <div className="go2-panel-body">
+            {history.map((entry) => (
+              <div key={entry.id} className="go2-stat">
+                <span>{entry.mission.name} · {entry.fleet?.name}</span>
+                <span style={{ color: entry.result === 'WIN' ? 'var(--go2-green)' : 'var(--go2-red)' }}>{entry.result}</span>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Mission History */}
-        {history.length > 0 && (
-          <div>
-            <h2 className="text-xl font-semibold mb-3">Mission History</h2>
-            <div className="space-y-2">
-              {history.map((entry) => (
-                <div
-                  key={entry.id}
-                  className={`p-3 rounded ${
-                    entry.result === 'WIN' ? 'bg-green-900/30' : 'bg-red-900/30'
-                  }`}
-                >
-                  <div className="flex justify-between">
-                    <span>{entry.mission.name}</span>
-                    <span className={entry.result === 'WIN' ? 'text-green-400' : 'text-red-400'}>
-                      {entry.result}
-                    </span>
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    Fleet: {entry.fleet.name} | {new Date(entry.completedAt).toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </Go2ScreenShell>
   );
 }
