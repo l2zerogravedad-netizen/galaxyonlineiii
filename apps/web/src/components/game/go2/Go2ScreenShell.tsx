@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import './go2-theme.css';
-import { Go2BottomNav } from './Go2BottomNav';
+import { Go2BaseMenu } from '@/features/construction-demo/Go2BaseMenu';
 
 /**
  * Go2ScreenShell — the shared Galaxy Online II chrome for every non-base screen
@@ -41,6 +42,15 @@ export function Go2ScreenShell({
   showResources?: boolean;
 }) {
   const [res, setRes] = useState<Resources | null>(null);
+  const pathname = usePathname() ?? '';
+  const menuActive: 'planet' | 'galaxy' | 'house' | 'buildings' | undefined =
+    pathname.startsWith('/dashboard/station')
+      ? 'planet'
+      : pathname.startsWith('/dashboard/galaxy')
+        ? 'galaxy'
+        : pathname.startsWith('/demo/construction')
+          ? 'house'
+          : undefined;
 
   useEffect(() => {
     if (!showResources) return;
@@ -94,7 +104,8 @@ export function Go2ScreenShell({
 
       <div className="go2-body">{children}</div>
 
-      <Go2BottomNav />
+      {/* Menú GO2 compartido (mismo de la base terrestre y la galaxia) — sin duplicar. */}
+      <Go2BaseMenu active={menuActive} />
     </div>
   );
 }
