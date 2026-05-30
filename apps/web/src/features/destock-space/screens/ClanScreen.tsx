@@ -130,14 +130,16 @@ export function ClanScreen() {
         <div className="go2-panel">
           <div className="go2-panel-head">Acciones</div>
           <div className="go2-panel-body">
-            <button type="button" className="go2-btn-primary">
-              Donar recursos
+            {/* Acciones sin backend dedicado aún: deshabilitadas ("próximamente")
+                en vez de botones muertos sin onClick. */}
+            <button type="button" className="go2-btn-primary" disabled title="Próximamente">
+              Donar recursos (próximamente)
             </button>
-            <button type="button" className="go2-btn-primary" style={{ marginTop: 8 }}>
-              Chat de alianza
+            <button type="button" className="go2-btn-primary" style={{ marginTop: 8 }} disabled title="Próximamente">
+              Chat de alianza (próximamente)
             </button>
-            <button type="button" className="go2-btn-primary" style={{ marginTop: 8 }}>
-              Ver territorios
+            <button type="button" className="go2-btn-primary" style={{ marginTop: 8 }} disabled title="Próximamente">
+              Ver territorios (próximamente)
             </button>
             <p style={{ marginTop: 12, fontSize: 9, color: '#78716c' }}>
               {useRealRanking
