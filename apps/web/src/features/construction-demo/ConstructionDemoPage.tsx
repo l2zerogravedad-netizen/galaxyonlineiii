@@ -74,8 +74,10 @@ export function ConstructionDemoPage() {
     const token = localStorage.getItem('token');
     if (!token) return; // guest → keep demo HUD numbers
     let cancelled = false;
-    (async () => {
+    const loadEmpire = async () => {
       try {
+        // GET /api/empire accrues production server-side before returning, so polling it
+        // periodically makes the HUD resource counters tick up over time.
         const res = await fetch('/api/empire', { headers: { Authorization: `Bearer ${token}` } });
         if (!res.ok) return;
         const d = await res.json();
@@ -87,15 +89,17 @@ export function ConstructionDemoPage() {
           level: d.level ?? 1,
           experience: d.experience ?? 0,
           metal: find('METAL'),
-          plasma: find('PLASMA'),
+          plasma: find('GAS') || find('PLASMA'), // canonical GAS, fall back to legacy PLASMA
           credits: find('CREDITS'),
           he3: find('HE3'),
         });
       } catch {
-        /* network/parse error → stay on demo numbers */
+        /* network/parse error → stay on the last known numbers */
       }
-    })();
-    return () => { cancelled = true; };
+    };
+    loadEmpire();
+    const id = window.setInterval(loadEmpire, 60000); // refresh production every 60s
+    return () => { cancelled = true; window.clearInterval(id); };
   }, []);
 
   const fmt = (n: number) => n.toLocaleString('en-US');

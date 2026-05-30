@@ -989,8 +989,13 @@ async function init() {
   setTimeout(resizeRenderer, 100);
   setTimeout(resizeRenderer, 500);
   // Logged in → load the real empire buildings; guest → restore the local sandbox.
-  if (BACKEND) { await loadBackendBase(); }
-  else { for (const p of placed) await placeItem(p.typeId, p.col, p.row, p.rot); }
+  if (BACKEND) {
+    await loadBackendBase();
+    // Keep scene resources in sync with server-side production so affordability stays right.
+    setInterval(refreshBackendResources, 60000);
+  } else {
+    for (const p of placed) await placeItem(p.typeId, p.col, p.row, p.rot);
+  }
   document.getElementById('load').style.opacity = '0';
   setTimeout(() => document.getElementById('load').style.display = 'none', 500);
   postCatalog();

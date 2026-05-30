@@ -13,7 +13,7 @@ export interface ResourceRow {
 
 export function normalizeResourceType(type: string): 'METAL' | 'GAS' | 'CREDITS' | 'HE3' | null {
   if (type === 'METAL') return 'METAL';
-  if (type === 'GAS') return 'GAS';
+  if (type === 'GAS' || type === 'PLASMA') return 'GAS';
   if (type === 'HE3') return 'HE3';
   if (type === 'CREDITS' || type === LEGACY_CREDITS_TYPE || type === 'CRYSTAL') return 'CREDITS';
   return null;
@@ -31,7 +31,10 @@ export function getResourceRow(
     );
   }
   if (canonical === 'GAS') {
-    return resources.find((r) => r.type === 'GAS');
+    return (
+      resources.find((r) => r.type === 'GAS') ??
+      resources.find((r) => r.type === 'PLASMA')
+    );
   }
   if (canonical === 'HE3') {
     return resources.find((r) => r.type === 'HE3');

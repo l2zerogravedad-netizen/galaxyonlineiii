@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       await tx.resource.createMany({
         data: [
           { empireId: empire.id, type: 'METAL', amount: 10000, capacity: 50000, productionPerHour: 100 },
-          { empireId: empire.id, type: 'PLASMA', amount: 10000, capacity: 50000, productionPerHour: 80 },
+          { empireId: empire.id, type: 'GAS', amount: 10000, capacity: 50000, productionPerHour: 80 },
           { empireId: empire.id, type: 'CREDITS', amount: 10000, capacity: 50000, productionPerHour: 60 },
         ],
       });

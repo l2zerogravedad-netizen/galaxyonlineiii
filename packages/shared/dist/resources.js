@@ -8,7 +8,7 @@ exports.LEGACY_CREDITS_TYPE = 'CREDITS';
 function normalizeResourceType(type) {
     if (type === 'METAL')
         return 'METAL';
-    if (type === 'GAS')
+    if (type === 'GAS' || type === 'PLASMA')
         return 'GAS';
     if (type === 'HE3')
         return 'HE3';
@@ -23,7 +23,8 @@ function getResourceRow(resources, canonical) {
             resources.find((r) => r.type === 'CRYSTAL'));
     }
     if (canonical === 'GAS') {
-        return resources.find((r) => r.type === 'GAS');
+        return (resources.find((r) => r.type === 'GAS') ??
+            resources.find((r) => r.type === 'PLASMA'));
     }
     if (canonical === 'HE3') {
         return resources.find((r) => r.type === 'HE3');

@@ -113,7 +113,7 @@ export async function POST(
       (r: { type: string }) => r.type === 'METAL'
     );
     const plasma = resources.find(
-      (r: { type: string }) => r.type === 'GAS'
+      (r: { type: string }) => r.type === 'GAS' || r.type === 'PLASMA'
     );
     const credits = resources.find(
       (r: { type: string }) => r.type === 'CREDITS'
@@ -145,16 +145,7 @@ export async function POST(
       credits.amount < totalCost.credits
     ) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'Insufficient resources',
-          debug: {
-            type: canonicalType,
-            level: targetLevel,
-            cost: totalCost,
-            have: { metal: metal.amount, plasma: plasma.amount, credits: credits.amount },
-          },
-        },
+        { success: false, error: 'Insufficient resources' },
         { status: 400 }
       );
     }
