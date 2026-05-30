@@ -145,7 +145,16 @@ export async function POST(
       credits.amount < totalCost.credits
     ) {
       return NextResponse.json(
-        { success: false, error: 'Insufficient resources' },
+        {
+          success: false,
+          error: 'Insufficient resources',
+          debug: {
+            type: canonicalType,
+            level: targetLevel,
+            cost: totalCost,
+            have: { metal: metal.amount, plasma: plasma.amount, credits: credits.amount },
+          },
+        },
         { status: 400 }
       );
     }
