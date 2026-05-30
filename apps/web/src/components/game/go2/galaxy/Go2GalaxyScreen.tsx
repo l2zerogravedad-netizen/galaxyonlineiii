@@ -142,7 +142,11 @@ export function Go2GalaxyScreen() {
       }
     } catch (err) {
       console.warn('[Go2GalaxyScreen] Galaxy API error, using local fallback:', err);
-      setGalaxyError(err instanceof Error ? err.message : 'Failed to load galaxy');
+      // Invitado (sin token) → 401: NO mostrar banner rojo, caer al mapa mock en
+      // silencio (como GO2). Solo se muestra banner para errores reales (no-auth).
+      const msg = err instanceof Error ? err.message : 'Failed to load galaxy';
+      const isAuth = /401|unauthor/i.test(msg);
+      setGalaxyError(isAuth ? null : msg);
       setUsingFallback(true);
     } finally {
       setGalaxyLoading(false);
