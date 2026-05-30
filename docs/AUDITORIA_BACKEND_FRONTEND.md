@@ -4,7 +4,13 @@
 
 ## TL;DR
 - **Backend: 31 endpoints, robustos y completos** (auth, empire, planets, shipyard, research, commanders, battles, fleets, galaxy, missions, alliances, leaderboard, chat). DB sincronizada y registro funcionando.
-- **Frontend: la mayoría YA está conectado.** Lo que falta conectar: la **base terrestre 3D** (`/demo/construction`) — el HUD ya lee recursos reales, pero la **colocación de edificios en el 3D no persiste**. Y faltan crear: **Market**, **Station**, y el **composer de Fleets** (`/fleets`).
+- **Frontend: la mayoría YA está conectado.** La **base terrestre 3D** (`/demo/construction`) AHORA está totalmente conectada (recursos reales + construcción persistente + sync de producción), verificado E2E en vivo. Falta crear: **Market**, **Station**, y el **composer de Fleets** (`/fleets`).
+
+## ⚠️ BUG CRÍTICO ENCONTRADO Y RESUELTO (2026-05-29)
+Al conectar la construcción se descubrió que **`POST /api/planets/[id]/build` devolvía 400 "Resources not found"** para CUALQUIER cuenta nueva → ninguna construcción funcionaba vía API.
+- **Causa:** `register` sembraba el plasma como `type:'PLASMA'`, pero todo el código GO2 (build, recalc de producción, `getResourceRow`) lo busca como `type:'GAS'`.
+- **Fix:** estandarizado a `GAS` en register + alias legacy `PLASMA→GAS` centralizado en `shared/resources` y tolerado en build/empire-sync/HUD.
+- **Verificado E2E en vivo:** registrar → build metal_extractor → persistió (buildings 6→7), descontó metal −60 / gas −10 / credits −50; upgrade → `UPGRADING`; invitado intacto (200).
 
 ---
 
@@ -47,7 +53,7 @@
 | `/planet/[id]/build` | ✅ CONECTADO | planeta + recursos reales | planets/[id], build |
 | `/dashboard/battle` | 🟡 PARCIAL | simulación local; resultado se guarda | battles, battles/[id], result |
 | `/dashboard/fleet` | 🟡 PARCIAL | comandantes con fallback a mock | commanders, fleets |
-| `/demo/construction` (BASE TERRESTRE 3D) | 🟡 HÍBRIDO | **HUD recursos REALES** ✅ / **colocación de edificios NO persiste** ❌ | empire (solo lectura) |
+| `/demo/construction` (BASE TERRESTRE 3D) | ✅ CONECTADO | HUD recursos reales + **construcción persistente** + sync producción | empire, planets/[id]/build |
 | `/dashboard/market` | 🔴 MOCK | placeholder "Próxima fase" | — |
 | `/dashboard/station` | 🔴 MOCK | placeholder "Próxima fase" | — |
 | `/fleets` (composer) | 🔴 MOCK | UI con datos de ejemplo | — |
