@@ -1,0 +1,288 @@
+/* Pantallas secundarias GO II — galaxia, estación, mercado, flotas, astillero */
+
+.go2-screen-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 20%, #0c1630 0%, #020814 55%, #000 100%);
+}
+
+.go2-screen-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 70% 40%, rgba(255, 255, 255, 0.25), transparent),
+    radial-gradient(1px 1px at 30% 80%, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200px 200px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.go2-screen-main {
+  flex: 1;
+  min-height: 0;
+  margin-top: 118px;
+  margin-bottom: 72px;
+  padding: 8px 10px 12px;
+  overflow: auto;
+}
+
+.go2-screen-title {
+  position: absolute;
+  top: 118px;
+  left: 8px;
+  right: 8px;
+  z-index: 25;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 2px solid rgba(180, 120, 40, 0.45);
+  background: linear-gradient(180deg, rgba(20, 14, 6, 0.9) 0%, rgba(8, 6, 4, 0.95) 100%);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fcd34d;
+}
+
+.go2-screen-layout {
+  display: grid;
+  gap: 8px;
+  height: 100%;
+  min-height: 280px;
+}
+
+.go2-screen-layout--galaxy {
+  grid-template-columns: minmax(0, 1fr) min(220px, 32vw);
+}
+
+.go2-screen-layout--triple {
+  grid-template-columns: min(200px, 28vw) minmax(0, 1fr) min(220px, 30vw);
+}
+
+.go2-screen-layout--fleet {
+  grid-template-columns: min(160px, 24vw) minmax(0, 1fr) min(200px, 28vw);
+}
+
+.go2-mission-preview-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  text-align: center;
+}
+
+.go2-panel {
+  border-radius: 8px;
+  border: 2px solid rgba(180, 120, 40, 0.55);
+  background: linear-gradient(180deg, rgba(25, 18, 8, 0.94) 0%, rgba(12, 8, 4, 0.96) 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.go2-panel-head {
+  padding: 8px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fcd34d;
+  border-bottom: 1px solid rgba(180, 120, 40, 0.35);
+}
+
+.go2-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.go2-galaxy-map {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3px;
+  padding: 4px;
+}
+
+.go2-galaxy-cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.6);
+  font-size: 8px;
+  color: #78716c;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 2px;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.go2-galaxy-cell .go2-icon-frame {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 36px;
+  max-height: 36px;
+  padding: 1px;
+}
+
+.go2-galaxy-cell:hover {
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.go2-galaxy-cell--self {
+  border-color: #22d3ee;
+  background: rgba(8, 145, 178, 0.35);
+  color: #a5f3fc;
+}
+
+.go2-galaxy-cell--enemy {
+  border-color: #f87171;
+  background: rgba(127, 29, 29, 0.4);
+  color: #fecaca;
+}
+
+.go2-galaxy-cell--ally {
+  border-color: #4ade80;
+  background: rgba(21, 128, 61, 0.3);
+  color: #bbf7d0;
+}
+
+.go2-galaxy-cell--selected {
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+  border-color: #fbbf24;
+}
+
+.go2-station-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 12px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.go2-station-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  border-radius: 8px;
+  border: 2px solid #78350f;
+  background: linear-gradient(180deg, #292524 0%, #1c1917 100%);
+  color: #fef3c7;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.go2-station-tile:hover {
+  border-color: #fbbf24;
+  transform: translateY(-2px);
+}
+
+.go2-station-tile span:first-child {
+  font-size: 28px;
+}
+
+.go2-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10px;
+  color: #e7e5e4;
+  cursor: pointer;
+}
+
+.go2-list-row:hover {
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.go2-list-row--on {
+  background: rgba(217, 119, 6, 0.2);
+  border-left: 3px solid #fbbf24;
+}
+
+.go2-market-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 2px solid #78350f;
+}
+
+.go2-detail-stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 10px;
+  color: #d6d3d1;
+}
+
+.go2-btn-primary {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 2px solid #b45309;
+  background: linear-gradient(180deg, #d97706 0%, #92400e 100%);
+  color: #fffbeb;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.go2-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.go2-shipyard-queue {
+  position: absolute;
+  top: 56px;
+  right: 8px;
+  z-index: 28;
+  width: min(220px, 32vw);
+}
+
+.go2-fleet-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.go2-coords {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: #fbbf24;
+}
+
+@media (max-width: 720px) {
+  .go2-screen-layout--galaxy,
+  .go2-screen-layout--triple,
+  .go2-screen-layout--fleet {
+    grid-template-columns: 1fr;
+  }
+
+  .go2-shipyard-queue {
+    position: static;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}

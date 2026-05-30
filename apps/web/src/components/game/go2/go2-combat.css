@@ -1,0 +1,413 @@
+/* Combate estilo GO II — Misión instancia (video UHNnmxPLsPg) */
+
+.go2-combat-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 30%, #0f172a 0%, #020617 55%, #000 100%);
+}
+
+.go2-combat-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 78% 12%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1.5px 1.5px at 44% 68%, rgba(200, 220, 255, 0.4), transparent);
+  background-size: 180px 180px;
+  animation: go2-star-drift 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes go2-star-drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-120px);
+  }
+}
+
+.go2-combat-topbar {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 2px solid rgba(180, 120, 40, 0.4);
+  background: linear-gradient(180deg, rgba(12, 10, 8, 0.95) 0%, rgba(4, 4, 8, 0.98) 100%);
+}
+
+.go2-combat-title {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fcd34d;
+}
+
+.go2-combat-sub {
+  font-size: 9px;
+  color: #78716c;
+}
+
+.go2-combat-auto {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 2px solid #78350f;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #a8a29e;
+  background: #292524;
+}
+
+.go2-combat-auto--on {
+  border-color: #fbbf24;
+  color: #451a03;
+  background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.45);
+  animation: go2-auto-breathe 2s ease-in-out infinite;
+}
+
+@keyframes go2-auto-breathe {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.55);
+  }
+}
+
+.go2-combat-body {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) min(200px, 28vw);
+  gap: 8px;
+  padding: 8px;
+}
+
+.go2-combat-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: auto;
+}
+
+.go2-combat-side-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  align-self: flex-start;
+  margin-left: 8%;
+}
+
+.go2-combat-side-label--enemy {
+  color: #f87171;
+}
+
+.go2-combat-side-label--player {
+  color: #67e8f9;
+}
+
+.go2-combat-grid-block {
+  position: relative;
+  padding: 8px;
+  border-radius: 10px;
+  border: 2px solid rgba(120, 80, 30, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.go2-combat-grid-block--field {
+  display: inline-block;
+}
+
+.go2-combat-beams-svg {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 5;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.go2-beam-stroke {
+  animation: go2-beam-flash-line 0.42s ease-out forwards;
+}
+
+@keyframes go2-beam-flash-line {
+  0% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+  }
+  100% {
+    opacity: 0.15;
+    filter: none;
+  }
+}
+
+.go2-combat-grid-inner {
+  position: relative;
+  z-index: 10;
+}
+
+.go2-combat-grid-block--enemy {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.go2-combat-grid-block--player {
+  border-color: rgba(103, 232, 249, 0.35);
+}
+
+.go2-combat-cell {
+  position: relative;
+  height: 28px;
+  width: 28px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.7);
+  cursor: default;
+}
+
+.go2-combat-cell--enemy-target {
+  cursor: crosshair;
+}
+
+.go2-combat-cell--enemy-target:hover {
+  border-color: #fbbf24;
+}
+
+.go2-combat-cell--corner::after {
+  content: '◇';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  color: rgba(248, 113, 113, 0.45);
+  pointer-events: none;
+}
+
+.go2-combat-cell--focus {
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
+  border-color: #fbbf24;
+}
+
+.go2-combat-cell--player .go2-combat-ship {
+  background: linear-gradient(180deg, #0ea5e9 0%, #0369a1 100%);
+  border-color: #7dd3fc;
+}
+
+.go2-combat-cell--enemy .go2-combat-ship {
+  background: linear-gradient(180deg, #dc2626 0%, #7f1d1d 100%);
+  border-color: #fca5a5;
+}
+
+.go2-combat-ship {
+  position: absolute;
+  inset: 2px;
+  border-radius: 3px;
+  border: 1px solid;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 800;
+  color: #fef3c7;
+  overflow: hidden;
+}
+
+.go2-combat-hp {
+  position: absolute;
+  top: 1px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.go2-combat-hp-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #22c55e, #a3e635);
+  transition: width 0.2s ease;
+}
+
+.go2-combat-shield {
+  position: absolute;
+  bottom: 1px;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: rgba(56, 189, 248, 0.5);
+}
+
+.go2-combat-flash {
+  animation: go2-combat-hit 0.4s ease-out;
+}
+
+@keyframes go2-combat-hit {
+  0% {
+    filter: brightness(2);
+    box-shadow: 0 0 12px #fbbf24;
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.go2-combat-beam-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+}
+
+.go2-combat-beam {
+  position: absolute;
+  height: 2px;
+  transform-origin: left center;
+  border-radius: 2px;
+  animation: go2-beam-fade 0.4s ease-out forwards;
+}
+
+.go2-combat-beam--directional {
+  background: linear-gradient(90deg, #38bdf8, #e0f2fe);
+  box-shadow: 0 0 8px #0ea5e9;
+}
+
+.go2-combat-beam--ballistic {
+  background: linear-gradient(90deg, #f97316, #fde68a);
+  box-shadow: 0 0 6px #ea580c;
+}
+
+.go2-combat-beam--crit {
+  height: 3px;
+  background: linear-gradient(90deg, #fbbf24, #fff);
+  box-shadow: 0 0 14px #f59e0b;
+}
+
+@keyframes go2-beam-fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.go2-combat-log {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 8px;
+  border: 2px solid rgba(180, 120, 40, 0.55);
+  background: linear-gradient(180deg, rgba(25, 18, 8, 0.94) 0%, rgba(8, 8, 12, 0.96) 100%);
+}
+
+.go2-combat-log-head {
+  padding: 8px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fcd34d;
+  border-bottom: 1px solid rgba(180, 120, 40, 0.35);
+}
+
+.go2-combat-log-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 8px;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.go2-log-line--hit {
+  color: #fde68a;
+}
+.go2-log-line--crit {
+  color: #fbbf24;
+  font-weight: 800;
+}
+.go2-log-line--kill {
+  color: #f87171;
+}
+.go2-log-line--warn {
+  color: #fb923c;
+}
+.go2-log-line--info {
+  color: #a8a29e;
+}
+
+.go2-combat-footer {
+  z-index: 30;
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px 12px;
+  justify-content: center;
+  background: linear-gradient(0deg, rgba(4, 4, 8, 0.98) 0%, transparent 100%);
+}
+
+.go2-combat-footer--actions {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.go2-combat-exit {
+  border-color: #7f1d1d !important;
+  color: #fecaca !important;
+}
+
+.go2-combat-start {
+  min-width: 180px;
+}
+
+.go2-combat-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.go2-combat-result {
+  padding: 24px 32px;
+  border-radius: 12px;
+  border: 3px solid #b45309;
+  background: linear-gradient(180deg, #1c1917 0%, #0c0a09 100%);
+  text-align: center;
+}
+
+.go2-combat-result h2 {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fcd34d;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .go2-combat-body {
+    grid-template-columns: 1fr;
+  }
+
+  .go2-combat-log {
+    max-height: 140px;
+  }
+}
