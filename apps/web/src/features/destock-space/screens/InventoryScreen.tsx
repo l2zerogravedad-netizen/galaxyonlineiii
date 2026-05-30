@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Go2IconFrame } from '@/components/game/go2/Go2IconFrame';
 import { DestockGo2Shell } from '../components/DestockGo2Shell';
 import { INVENTORY_ITEMS, type DestockInventoryItem } from '../data/destockInventoryData';
+import { destockHasToken } from '../destockApi';
 
 const CAT_LABEL: Record<DestockInventoryItem['category'], string> = {
   resource: 'Recursos',
@@ -15,12 +16,40 @@ const CAT_LABEL: Record<DestockInventoryItem['category'], string> = {
 export function InventoryScreen() {
   const [tab, setTab] = useState<DestockInventoryItem['category'] | 'all'>('all');
   const [selected, setSelected] = useState(INVENTORY_ITEMS[0].id);
+  const [allItems, setAllItems] = useState<DestockInventoryItem[]>(INVENTORY_ITEMS);
+
+  // Logged in → mostrar el inventario REAL del jugador (GET /api/inventory devuelve
+  // { id, name, category, qty, icon, rarity, description }, la misma forma que
+  // DestockInventoryItem). Invitado → queda el catálogo de muestra.
+  useEffect(() => {
+    if (!destockHasToken()) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('/api/inventory', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const json = await res.json();
+        const apiItems = json?.data?.items;
+        if (cancelled || !Array.isArray(apiItems) || apiItems.length === 0) return;
+        setAllItems(apiItems as DestockInventoryItem[]);
+        setSelected(apiItems[0].id);
+      } catch {
+        /* mantener el catálogo de muestra */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(
-    () => (tab === 'all' ? INVENTORY_ITEMS : INVENTORY_ITEMS.filter((i) => i.category === tab)),
-    [tab]
+    () => (tab === 'all' ? allItems : allItems.filter((i) => i.category === tab)),
+    [tab, allItems]
   );
-  const item = INVENTORY_ITEMS.find((i) => i.id === selected) ?? filtered[0];
+  const item = allItems.find((i) => i.id === selected) ?? filtered[0];
 
   return (
     <DestockGo2Shell title="Bóveda Orbital · Inventario">
