@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   X, Search, Star, Coins, User, Music, DollarSign,
-  ChevronLeft, ChevronRight, Settings, Box, Zap, Crosshair, Shield,
+  ChevronLeft, ChevronRight, Settings, Box, Zap, Crosshair, Shield, Satellite,
 } from 'lucide-react';
 import {
   CouponIcon, BlueprintIcon, BookIcon, GemIcon, PlanetIcon, CardIcon, ChipIcon,
@@ -226,6 +226,17 @@ export function ConstructionDemoPage() {
 
       {/* ==================== SIDE ICONS ==================== */}
       <div className="absolute top-36 left-2 flex flex-col gap-2 z-10">
+        {/* Acceso a la BASE ESPACIAL (estación orbital) */}
+        <button
+          onClick={(e) => { e.stopPropagation(); window.location.href = '/dashboard/station'; }}
+          title="Ir a la Base Espacial"
+          className="group relative w-10 h-10 mb-1 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-[#38bdf8] flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] hover:scale-110 transition-transform"
+        >
+          <Satellite size={18} className="text-cyan-300 drop-shadow-[0_0_4px_rgba(56,189,248,0.9)]" />
+          <span className="absolute left-12 top-1/2 -translate-y-1/2 text-[9px] font-bold text-cyan-100 bg-black/80 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap shadow-lg">
+            Base Espacial
+          </span>
+        </button>
         <button className="w-8 h-8 bg-gradient-to-b from-blue-700 to-blue-900 border border-blue-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105">
           <Music size={14} className="text-white" />
         </button>
