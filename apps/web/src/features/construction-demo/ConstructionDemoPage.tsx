@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   X, Search, Star, Coins, User, Music, DollarSign,
-  ChevronLeft, ChevronRight, Settings, Box, Zap, Crosshair, Shield, Satellite,
+  ChevronLeft, ChevronRight, Settings, Box, Zap, Crosshair, Shield,
 } from 'lucide-react';
 import {
   CouponIcon, BlueprintIcon, BookIcon, GemIcon, PlanetIcon, CardIcon, ChipIcon,
@@ -226,17 +226,6 @@ export function ConstructionDemoPage() {
 
       {/* ==================== SIDE ICONS ==================== */}
       <div className="absolute top-36 left-2 flex flex-col gap-2 z-10">
-        {/* Acceso a la BASE ESPACIAL (estación orbital) */}
-        <button
-          onClick={(e) => { e.stopPropagation(); window.location.href = '/dashboard/station'; }}
-          title="Ir a la Base Espacial"
-          className="group relative w-10 h-10 mb-1 rounded-full bg-gradient-to-b from-[#1e3a8a] to-[#0f172a] border-2 border-[#38bdf8] flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] hover:scale-110 transition-transform"
-        >
-          <Satellite size={18} className="text-cyan-300 drop-shadow-[0_0_4px_rgba(56,189,248,0.9)]" />
-          <span className="absolute left-12 top-1/2 -translate-y-1/2 text-[9px] font-bold text-cyan-100 bg-black/80 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap shadow-lg">
-            Base Espacial
-          </span>
-        </button>
         <button className="w-8 h-8 bg-gradient-to-b from-blue-700 to-blue-900 border border-blue-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105">
           <Music size={14} className="text-white" />
         </button>
@@ -280,20 +269,40 @@ export function ConstructionDemoPage() {
         <div className="relative w-44 h-28 mr-2">
           <div className="absolute bottom-1 left-2 w-40 h-20 bg-gradient-to-t from-[#1e293b] via-[#334155] to-[#475569] rounded-[40px] border border-[#64748b] shadow-[0_15px_25px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.2)]"></div>
 
-          <button className="absolute top-1 left-[38%] w-12 h-12 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-20">
+          {/* PLANETA → BASE ESPACIAL */}
+          <button
+            onClick={(e) => { e.stopPropagation(); window.location.href = '/dashboard/station'; }}
+            title="Base Espacial"
+            className="group absolute top-1 left-[38%] w-12 h-12 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-20">
             <AAAResearchIcon className="w-9 h-9" />
+            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Base Espacial</span>
           </button>
 
-          <button className="absolute top-10 left-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
+          {/* GALAXIA */}
+          <button
+            onClick={(e) => { e.stopPropagation(); window.location.href = '/dashboard/galaxy'; }}
+            title="Galaxia"
+            className="group absolute top-10 left-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
             <AAAReactorIcon className="w-8 h-8" />
+            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Galaxia</span>
           </button>
 
-          <button className="absolute top-10 right-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
+          {/* CONSTRUCCIÓN DE EDIFICIOS */}
+          <button
+            onClick={(e) => { e.stopPropagation(); closeAllMenus(); setActiveModal('build'); }}
+            title="Construir edificios"
+            className="group absolute top-10 right-1 w-11 h-11 rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_12px_rgba(56,189,248,0.6),inset_0_0_10px_#000] z-10">
             <AAAShipIcon className="w-8 h-8" />
+            <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Construir</span>
           </button>
 
-          <button className="absolute bottom-0 left-[35%] w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(56,189,248,0.8),inset_0_0_10px_#000] z-30">
+          {/* CASITA → BASE TERRESTRE (pantalla actual) */}
+          <button
+            onClick={(e) => { e.stopPropagation(); closeAllMenus(); setActiveModal(null); }}
+            title="Base Terrestre"
+            className="group absolute bottom-0 left-[35%] w-[3.25rem] h-[3.25rem] rounded-full bg-gradient-to-b from-[#0f172a] to-[#1e3a8a] border-2 border-[#38bdf8] flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_15px_rgba(56,189,248,0.8),inset_0_0_10px_#000] z-30">
             <AAABaseIcon className="w-9 h-9 drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
+            <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[9px] font-bold text-cyan-100 bg-black/85 px-1.5 py-0.5 rounded border border-cyan-500/50 whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">Base Terrestre</span>
           </button>
         </div>
 
