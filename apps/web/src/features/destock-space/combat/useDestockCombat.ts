@@ -108,10 +108,12 @@ export function useDestockCombat(missionId: number) {
   const waveIndexRef = useRef(waveIndex);
   const focusRef = useRef(focusCell);
   const roundRef = useRef(round);
+  const unitsRef = useRef(units);
   phaseRef.current = phase;
   waveIndexRef.current = waveIndex;
   focusRef.current = focusCell;
   roundRef.current = round;
+  unitsRef.current = units;
 
   const playerDeployCount = useMemo(
     () => units.filter((u) => u.side === 'player').length,
@@ -160,120 +162,98 @@ export function useDestockCombat(missionId: number) {
   const processRound = useCallback(() => {
     if (phaseRef.current !== 'fighting') return;
 
-    const roundResult = {
-      outcome: 'continue' as 'continue' | 'victory' | 'defeat' | 'spawn',
-      logLines: [] as { text: string; tone: CombatLogLine['tone'] }[],
-      beams: [] as CombatBeam[],
-      nextRound: 0,
-    };
+    // Cómputo 100% síncrono leyendo de unitsRef.current. NO mutar dentro de un
+    // updater de setUnits: React no garantiza que el updater corra síncrono (y en
+    // StrictMode lo invoca 2 veces), por lo que leer efectos justo después daba
+    // datos vacíos/duplicados → la ronda quedaba congelada. Aquí calculamos todo,
+    // luego aplicamos un único setUnits(valor) + efectos con datos ya válidos.
+    const currentUnits = unitsRef.current;
+    const players = alive(currentUnits, 'player');
+    const enemies = alive(currentUnits, 'enemy');
 
-    setUnits((currentUnits) => {
-      const players = alive(currentUnits, 'player');
-      const enemies = alive(currentUnits, 'enemy');
-
-      if (!players.length) {
-        roundResult.outcome = 'defeat';
-        roundResult.logLines = [{ text: 'Flota destruida. Retirada forzosa.', tone: 'warn' }];
-        return currentUnits;
-      }
-
-      if (!enemies.length) {
-        const wi = waveIndexRef.current;
-        if (wi < mission.waves.length) {
-          const added = appendWave(currentUnits, wi);
-          if (added) {
-            roundResult.outcome = 'spawn';
-            const cornerHint = mission.mode === 'base_defense' ? ' (esquinas)' : '';
-            roundResult.logLines = [
-              {
-                text: `Oleada ${wi + 1}${cornerHint} — ${added.spawned.length} contactos`,
-                tone: 'warn',
-              },
-            ];
-            waveIndexRef.current = wi + 1;
-            setWaveIndex(wi + 1);
-            return added.units;
-          }
-        }
-        roundResult.outcome = 'victory';
-        roundResult.logLines = [{ text: 'Objetivo cumplido. Misión completada.', tone: 'info' }];
-        return currentUnits;
-      }
-
-      const nextRound = roundRef.current + 1;
-      if (nextRound > mission.maxRounds) {
-        roundResult.outcome = 'defeat';
-        roundResult.logLines = [{ text: 'Tiempo agotado — misión fallida.', tone: 'warn' }];
-        return currentUnits;
-      }
-      roundResult.nextRound = nextRound;
-
-      const next = currentUnits.map((u) => ({ ...u }));
-      const focus = focusRef.current;
-
-      const act = (
-        attacker: CombatUnit,
-        targets: CombatUnit[],
-        focusCell: number | null,
-        side: 'player' | 'enemy'
-      ) => {
-        const liveTargets = targets.filter((t) => t.hp > 0);
-        const target = pickTarget(attacker, liveTargets, side === 'player' ? focusCell : null);
-        if (!target) return;
-        const att = next.find((x) => x.uid === attacker.uid);
-        const def = next.find((x) => x.uid === target.uid);
-        if (!att || !def || att.hp <= 0 || def.hp <= 0) return;
-
-        const { crit, shieldLoss, hpLoss } = resolveHit(att, def);
-        def.shield = Math.max(0, def.shield - shieldLoss);
-        def.hp = Math.max(0, def.hp - hpLoss);
-
-        beamId.current += 1;
-        roundResult.beams.push({
-          id: `b-${beamId.current}`,
-          fromCell: att.cell,
-          toCell: def.cell,
-          side,
-          kind: crit ? 'crit' : att.side === 'player' ? 'directional' : 'ballistic',
-        });
-
-        const msg = crit
-          ? `${att.name} CRÍTICO → ${def.name} (−${hpLoss + shieldLoss})`
-          : `${att.name} → ${def.name} (−${hpLoss + shieldLoss})`;
-        roundResult.logLines.push({ text: msg, tone: crit ? 'crit' : 'hit' });
-        if (def.hp <= 0) roundResult.logLines.push({ text: `${def.name} destruido`, tone: 'kill' });
-      };
-
-      for (const p of players) act(p, enemies, focus, 'player');
-      for (const e of enemies) act(e, players, null, 'enemy');
-
-      return next;
-    });
-
-    if (roundResult.outcome === 'spawn') {
-      for (const line of roundResult.logLines) pushLog(line.text, line.tone);
-      return;
-    }
-    if (roundResult.outcome === 'victory') {
-      setPhase('victory');
-      phaseRef.current = 'victory';
-      for (const line of roundResult.logLines) pushLog(line.text, line.tone);
-      return;
-    }
-    if (roundResult.outcome === 'defeat') {
+    if (!players.length) {
       setPhase('defeat');
       phaseRef.current = 'defeat';
-      for (const line of roundResult.logLines) pushLog(line.text, line.tone);
+      pushLog('Flota destruida. Retirada forzosa.', 'warn');
       return;
     }
 
-    if (roundResult.nextRound > 0) {
-      roundRef.current = roundResult.nextRound;
-      setRound(roundResult.nextRound);
+    if (!enemies.length) {
+      const wi = waveIndexRef.current;
+      if (wi < mission.waves.length) {
+        const added = appendWave(currentUnits, wi);
+        if (added) {
+          waveIndexRef.current = wi + 1;
+          setWaveIndex(wi + 1);
+          unitsRef.current = added.units;
+          setUnits(added.units);
+          const cornerHint = mission.mode === 'base_defense' ? ' (esquinas)' : '';
+          pushLog(`Oleada ${wi + 1}${cornerHint} — ${added.spawned.length} contactos`, 'warn');
+          return;
+        }
+      }
+      setPhase('victory');
+      phaseRef.current = 'victory';
+      pushLog('Objetivo cumplido. Misión completada.', 'info');
+      return;
     }
-    for (const line of roundResult.logLines) pushLog(line.text, line.tone);
-    if (roundResult.beams.length) {
-      setBeams([...roundResult.beams]);
+
+    const nextRound = roundRef.current + 1;
+    if (nextRound > mission.maxRounds) {
+      setPhase('defeat');
+      phaseRef.current = 'defeat';
+      pushLog('Tiempo agotado — misión fallida.', 'warn');
+      return;
+    }
+
+    const next = currentUnits.map((u) => ({ ...u }));
+    const focus = focusRef.current;
+    const logLines: { text: string; tone: CombatLogLine['tone'] }[] = [];
+    const roundBeams: CombatBeam[] = [];
+
+    const act = (
+      attacker: CombatUnit,
+      targets: CombatUnit[],
+      focusCell: number | null,
+      side: 'player' | 'enemy'
+    ) => {
+      const liveTargets = targets.filter((t) => t.hp > 0);
+      const target = pickTarget(attacker, liveTargets, side === 'player' ? focusCell : null);
+      if (!target) return;
+      const att = next.find((x) => x.uid === attacker.uid);
+      const def = next.find((x) => x.uid === target.uid);
+      if (!att || !def || att.hp <= 0 || def.hp <= 0) return;
+
+      const { crit, shieldLoss, hpLoss } = resolveHit(att, def);
+      def.shield = Math.max(0, def.shield - shieldLoss);
+      def.hp = Math.max(0, def.hp - hpLoss);
+
+      beamId.current += 1;
+      roundBeams.push({
+        id: `b-${beamId.current}`,
+        fromCell: att.cell,
+        toCell: def.cell,
+        side,
+        kind: crit ? 'crit' : att.side === 'player' ? 'directional' : 'ballistic',
+      });
+
+      const msg = crit
+        ? `${att.name} CRÍTICO → ${def.name} (−${hpLoss + shieldLoss})`
+        : `${att.name} → ${def.name} (−${hpLoss + shieldLoss})`;
+      logLines.push({ text: msg, tone: crit ? 'crit' : 'hit' });
+      if (def.hp <= 0) logLines.push({ text: `${def.name} destruido`, tone: 'kill' });
+    };
+
+    for (const p of players) act(p, enemies, focus, 'player');
+    for (const e of enemies) act(e, players, null, 'enemy');
+
+    unitsRef.current = next;
+    setUnits(next);
+    roundRef.current = nextRound;
+    setRound(nextRound);
+    for (const line of logLines) pushLog(line.text, line.tone);
+    if (roundBeams.length) {
+      setBeams(roundBeams);
       setTimeout(() => setBeams([]), 480);
     }
   }, [appendWave, mission.maxRounds, mission.mode, mission.waves.length, pushLog, resolveHit]);
@@ -305,6 +285,7 @@ export function useDestockCombat(missionId: number) {
       setWaveIndex(1);
     }
 
+    unitsRef.current = deployed;
     setUnits(deployed);
     setPhase('fighting');
     phaseRef.current = 'fighting';
