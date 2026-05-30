@@ -9,25 +9,18 @@ import type { Go2IconName } from '@/components/game/go2/Go2Icons';
 const UI_HD = '/game/assets/ui/hd';
 const BUILDINGS_HD = '/game/assets/buildings/hd';
 
-/** Iconos PNG → nombres lógicos del UI GO2 */
-export const GO2_HD_ICON_SRC: Partial<Record<Go2IconName, string>> = {
-  'nav-planet': `${UI_HD}/home_icon_hd.png`,
-  'nav-galaxy': `${UI_HD}/star_icon_hd.png`,
-  'nav-station': `${UI_HD}/people_icon_hd.png`,
-  'nav-market': `${UI_HD}/bag_icon_hd.png`,
-  'nav-fleets': `${UI_HD}/plane_icon_hd.png`,
-  inventory: `${UI_HD}/bag_icon_hd.png`,
-  mission: `${UI_HD}/bag_icon_hd.png`,
-  chest: `${UI_HD}/bag_icon_hd.png`,
-  ship: `${UI_HD}/plane_icon_hd.png`,
-  shield: `${UI_HD}/shield_icon_hd.png`,
-  module: `${UI_HD}/shield_icon_hd.png`,
-  clan: `${UI_HD}/people_icon_hd.png`,
-  research: `${UI_HD}/people_icon_hd.png`,
-  premium: `${UI_HD}/star_icon_hd.png`,
-  'star-self': `${UI_HD}/star_icon_hd.png`,
-  'star-ally': `${UI_HD}/star_icon_hd.png`,
-};
+/**
+ * Iconos PNG HD → nombres lógicos del UI GO2.
+ * VACÍO a propósito: los PNG /game/assets/ui/hd/*.png nunca se subieron (404 en
+ * producción) y Go2Icon renderiza el <img> sin onError, así que dejaba un icono
+ * roto en toda la nav/HUD en vez del SVG nativo. Con el mapa vacío Go2Icon cae
+ * siempre al SVG (que funciona). Restaurar las entradas cuando los PNG existan:
+ * nav-planet home_icon_hd · nav-galaxy/premium/star-* star_icon_hd ·
+ * nav-station/clan/research people_icon_hd · nav-market/inventory/mission/chest
+ * bag_icon_hd · nav-fleets/ship plane_icon_hd · shield/module shield_icon_hd.
+ */
+export const GO2_HD_ICON_SRC: Partial<Record<Go2IconName, string>> = {};
+void UI_HD;
 
 /** Edificios PNG → catalogId del catálogo terrestre */
 export const GO2_HD_BUILDING_SRC: Record<string, string> = {
