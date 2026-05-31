@@ -210,7 +210,23 @@
 </div>
 <main>
   <section id="battle" class="view active">
-    <div id="battleWrap"><canvas id="game" width="1280" height="720"></canvas></div>
+    <div id="battleWrap"><canvas id="game" width="1280" height="720"></canvas>
+      <!-- ===== Contenedor GO2: MVP + chat + dock circular (réplica del juego original) ===== -->
+      <div id="go2mvp">MVP</div>
+      <div id="go2chat">
+        <div class="g2c-head">World</div>
+        <div class="g2c-body" id="go2chatBody"></div>
+      </div>
+      <div id="go2dock">
+        <button class="g2d g2d-c" data-act="info" title="Info de flota">ℹ</button>
+        <div class="g2d-ring">
+          <button class="g2d" data-act="skill" title="Habilidad del comandante">⚡</button>
+          <button class="g2d" data-act="speed" title="Velocidad">»</button>
+          <button class="g2d" data-act="auto" title="Auto">A</button>
+          <button class="g2d" data-act="retreat" title="Retirada">⏏</button>
+        </div>
+      </div>
+    </div>
     <div class="bbar">
       <button id="newBattle">↻ NUEVA BATALLA</button>
       <div class="seg" id="speedSeg">
@@ -1288,6 +1304,43 @@ const Galaxy=(()=>{
   document.querySelectorAll(".plvl").forEach(b=>b.onclick=()=>{probeLvl=+b.dataset.lvl;document.querySelectorAll(".plvl").forEach(x=>x.classList.toggle("sel",x===b));});   // elegir nivel de sonda
   const gbs=document.getElementById("galBase");if(gbs)gbs.onclick=()=>{window.BMODE="base";go("battle");if(typeof BaseBattle!=="undefined")BaseBattle.preview();};   // 🏛 volver a MI base espacial (vista/edición)
   return {setActive};
+})();
+
+/* ===== Cableado del contenedor de batalla GO2 (chat + dock circular + MVP) ===== */
+(function(){
+  const wrap=document.getElementById("battleWrap");
+  // .fighting (muestra MVP) sincronizado con la pestaña de batalla
+  setInterval(()=>{ if(wrap) wrap.classList.toggle("fighting", document.body.classList.contains("in-battle")); }, 400);
+
+  // Dock circular → reusa los controles existentes (no duplica lógica)
+  const click=id=>{const e=document.getElementById(id);if(e)e.click();};
+  const dock=document.getElementById("go2dock");
+  if(dock) dock.addEventListener("click",e=>{
+    const b=e.target.closest(".g2d"); if(!b) return;
+    const act=b.dataset.act;
+    if(act==="skill")   click("skillBtn");
+    else if(act==="retreat") click("newBattle");
+    else if(act==="speed"){ const seg=document.getElementById("speedSeg");
+      const order=["1","2","4"]; const cur=(seg&&seg.querySelector("button.on")?.dataset.sp)||"1";
+      const next=order[(order.indexOf(cur)+1)%order.length];
+      seg?.querySelector(`button[data-sp="${next}"]`)?.click(); }
+    else if(act==="auto") b.classList.toggle("on");
+    else if(act==="info") document.getElementById("go2chat")?.classList.toggle("hidden");
+  });
+
+  // Chat de batalla estilo GO2 (banter de jugadores + mensajes de sistema)
+  const body=document.getElementById("go2chatBody");
+  const SYS=["[523,110] is the scene of some fierce battles!","[LIMBO1] Enter Planet.","[wsdam46] Enter Planet.","Reinforcements jumping in at sector 80,211."];
+  const USR=[["Madri™","speed in fight is 615"],["Diddy","just like the price of the QoB in the TET"],["CrazyCoolGuy","focus their flagship!"],["Nova","shields holding on the left flank"],["Reaper","MVP incoming 😎"],["Orion","push the front row, theirs is breaking"]];
+  function line(html,cls){ if(!body)return; const p=document.createElement("p"); p.className=cls; p.innerHTML=html; body.appendChild(p); while(body.children.length>30)body.removeChild(body.firstChild); body.scrollTop=body.scrollHeight; }
+  function tick(){
+    if(document.body.classList.contains("in-battle")){
+      if(Math.random()<.5){ const s=SYS[(Math.random()*SYS.length)|0]; line("[System] "+s,"g2c-sys"); }
+      else{ const u=USR[(Math.random()*USR.length)|0]; line("<b>["+u[0]+"]</b> "+u[1],"g2c-usr"); }
+    }
+    setTimeout(tick, 2600+Math.random()*2600);
+  }
+  line("[System] Battle log connected.","g2c-sys"); setTimeout(tick,1500);
 })();
 
 boot();
