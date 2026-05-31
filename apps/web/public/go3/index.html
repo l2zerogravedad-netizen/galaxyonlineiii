@@ -482,8 +482,8 @@ async function initConstructor(){
   if(CTOR)return; CTOR={hulls:[],parts:[],hull:null,eq:[],cat:"Ballistic Weapon"};
   const num=v=>{const n=parseFloat(v);return isNaN(n)?0:n;};
   const [bodies,parts]=await Promise.all([
-    fetch("/api/raw/ShipBody").then(r=>r.json()).catch(()=>[]),
-    fetch("/api/raw/ShipPart").then(r=>r.json()).catch(()=>[]) ]);
+    fetch("/go3/api/raw/ShipBody.json").then(r=>r.json()).catch(()=>[]),
+    fetch("/go3/api/raw/ShipPart.json").then(r=>r.json()).catch(()=>[]) ]);
   CTOR.hulls=(Array.isArray(bodies)?bodies:[]).map(b=>({id:b.ID,name:b.Name,cls:b._group||"—",sprite:b.ImageFileName||"Ship0",
     endure:num(b.Endure),shield:num(b.Shield),cubage:num(b.Cubage)||100,yare:num(b.Yare),defend:num(b.Defend),metal:num(b.Metal),he3:num(b.He3),time:num(b.CreateTime)})).filter(h=>h.cubage>0&&h.name);
   CTOR.parts=(Array.isArray(parts)?parts:[]).filter(p=>PART_ES[p._group]).map(p=>({id:p.ID,name:p.Name,grp:p._group,grpEs:PART_ES[p._group],icon:p.ImageFileName||"",
@@ -1233,7 +1233,7 @@ const Galaxy=(()=>{
     else if(n.type==="enemy"){n.spr="planetEn";n.w=64;}                            // planeta enemigo
     else if(n.type==="satellite"){n.spr=Math.random()<.5?"astro1":"astro2";n.w=46;}
     else{n.spr=Math.random()<.5?"astro1":"astro2";n.w=34;n.faint=true;}}
-  async function load(){loadAssets();const j=t=>fetch("/api/raw/"+t).then(r=>r.json()).catch(()=>[]);
+  async function load(){loadAssets();const j=t=>fetch("/go3/api/raw/"+t+".json").then(r=>r.json()).then(o=>Array.isArray(o)?o:((o&&(o.rows||o.data))||[])).catch(()=>[]);
     const[map,star,fortS,fort,field]=await Promise.all([j("GalaxyMap"),j("StarLevel"),j("FortificationStar"),j("Building"),j("FieldResource")]);
     DATA={map,star,fortS,fort,field};ready=true;gen();}
   function gen(){const pts=(DATA.map||[]).map(m=>({x:+m.X,y:+m.Y})).filter(p=>p.x&&p.y);if(!pts.length)return;
