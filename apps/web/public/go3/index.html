@@ -211,7 +211,22 @@
 <main>
   <section id="battle" class="view active">
     <div id="battleWrap"><canvas id="game" width="1280" height="720"></canvas>
-      <!-- ===== Contenedor GO2: MVP + chat + dock circular (réplica del juego original) ===== -->
+      <!-- ===== Contenedor GO2: barra superior + MVP + chat + dock circular (réplica del juego original) ===== -->
+      <div id="go2topbar">
+        <div class="g2t-player">
+          <div class="g2t-av"></div>
+          <div class="g2t-info">
+            <div class="g2t-name" id="g2tName">CrazyCoolGuy</div>
+            <div class="g2t-lv">LV <b id="g2tLv">165</b><span class="g2t-sp"><i id="g2tSp" style="width:82%"></i></span></div>
+          </div>
+        </div>
+        <div class="g2t-res">
+          <span class="g2t-r"><i class="g2t-ic" style="color:#ffd23a">🪙</i><b id="g2tGold">3,354,840</b></span>
+          <span class="g2t-r"><i class="g2t-ic" style="color:#bcd0e8">⚙️</i><b id="g2tMetal">1,530,735</b></span>
+          <span class="g2t-r"><i class="g2t-ic" style="color:#5dff9b">⛽</i><b id="g2tHe3">620</b></span>
+          <span class="g2t-clock" id="g2tClock">--:--:-- --</span>
+        </div>
+      </div>
       <div id="go2mvp">MVP</div>
       <div id="go2chat">
         <div class="g2c-head">World</div>
@@ -1357,6 +1372,15 @@ const Galaxy=(()=>{
     setTimeout(tick, 2600+Math.random()*2600);
   }
   line("[System] Battle log connected.","g2c-sys"); setTimeout(tick,1500);
+
+  // Barra superior GO2: recursos en vivo + reloj (cosmético, estilo del juego original)
+  (function(){let gold=3354840,metal=1530735,he3=620;
+    const fmt=n=>Math.floor(n).toLocaleString("en-US"); const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    function rtick(){gold+=Math.random()*900;metal+=Math.random()*500;he3+=Math.random()*4;
+      set("g2tGold",fmt(gold));set("g2tMetal",fmt(metal));set("g2tHe3",fmt(he3));
+      const c=document.getElementById("g2tClock");if(c){const d=new Date();let H=d.getHours();const ap=H>=12?"PM":"AM";H=H%12||12;
+        c.textContent=H+":"+String(d.getMinutes()).padStart(2,"0")+":"+String(d.getSeconds()).padStart(2,"0")+" "+ap;}}
+    rtick();setInterval(rtick,1000);})();
 })();
 
 boot();
