@@ -218,13 +218,14 @@
         <div class="g2c-body" id="go2chatBody"></div>
       </div>
       <div id="go2dock">
-        <button class="g2d g2d-c" data-act="info" title="Info de flota">ℹ</button>
         <div class="g2d-ring">
-          <button class="g2d" data-act="skill" title="Habilidad del comandante">⚡</button>
-          <button class="g2d" data-act="speed" title="Velocidad">»</button>
-          <button class="g2d" data-act="auto" title="Auto">A</button>
-          <button class="g2d" data-act="retreat" title="Retirada">⏏</button>
+          <button class="g2d" data-act="retreat" data-lbl="Salir" title="Retirada">⏏</button>
+          <button class="g2d" data-act="auto" data-lbl="Auto" title="Auto-combate">A</button>
+          <button class="g2d" data-act="speed" data-lbl="Veloc." title="Velocidad ×1/×2/×4">»</button>
+          <button class="g2d" data-act="info" data-lbl="Chat" title="Mostrar/ocultar chat">ℹ</button>
+          <button class="g2d" data-act="music" data-lbl="Música" title="Música on/off">♪</button>
         </div>
+        <button class="g2d g2d-c" data-act="skill" data-lbl="Habilidad" title="Habilidad del comandante">⚡</button>
       </div>
     </div>
     <div class="bbar">
@@ -907,10 +908,24 @@ const Battle = (()=>{
         ctx.font="800 11px Segoe UI";ctx.fillStyle=m.c;ctx.fillText(txt,x0+18,81);ctx.textBaseline="alphabetic";ctx.globalAlpha=1;
         bx2=left?bx2+tw+5:bx2-tw-5;}}}
   function hud(){cmdPanel("blue");cmdPanel("red");
-    ctx.textAlign="center";ctx.font="800 18px Segoe UI";ctx.fillStyle="#ffd23a";ctx.fillText("CONTRA",W/2,22);
-    ctx.fillStyle="rgba(6,16,38,.9)";ctx.beginPath();ctx.arc(W/2,52,17,0,TAU);ctx.fill();ctx.strokeStyle="#5ad6ff";ctx.lineWidth=2;ctx.stroke();
-    ctx.fillStyle="#eaf4ff";ctx.font="800 17px Segoe UI";ctx.fillText(round,W/2,58);
-    ctx.font="700 11px Segoe UI";ctx.fillStyle=over?"#9fc3e6":(atk==="blue"?"#5ad6ff":"#ff9a5a");ctx.fillText(over?"FIN":(atk==="blue"?"◀ TURNO ALIADO":"TURNO ENEMIGO ▶"),W/2,80);
+    // ===== Banner de RONDA estilo GO2 ("ROUND 0XX") arriba-centro =====
+    ctx.save();ctx.textAlign="center";
+    const rtxt="ROUND "+String(round).padStart(3,"0");
+    // marco/cinta del banner
+    ctx.font="900 30px 'Segoe UI',Impact,sans-serif";
+    const rw=ctx.measureText(rtxt).width, pad=26, bw=rw+pad*2, bx=W/2-bw/2, by=8, bh=40;
+    const g=ctx.createLinearGradient(bx,by,bx,by+bh);g.addColorStop(0,"rgba(10,28,60,.92)");g.addColorStop(1,"rgba(4,12,30,.92)");
+    ctx.fillStyle=g;ctx.beginPath();
+    ctx.moveTo(bx,by);ctx.lineTo(bx+bw,by);ctx.lineTo(bx+bw-16,by+bh);ctx.lineTo(bx+16,by+bh);ctx.closePath();ctx.fill();
+    ctx.strokeStyle="#5ad6ff";ctx.lineWidth=2;ctx.stroke();
+    ctx.shadowColor="#1e6fff";ctx.shadowBlur=8;ctx.strokeStyle="#9fe0ff";ctx.lineWidth=1;ctx.stroke();ctx.shadowBlur=0;
+    // texto ROUND con degradé dorado
+    const tg=ctx.createLinearGradient(0,by+6,0,by+bh-4);tg.addColorStop(0,"#fff3b0");tg.addColorStop(.5,"#ffd23a");tg.addColorStop(1,"#c47a00");
+    ctx.fillStyle=tg;ctx.fillText(rtxt,W/2,by+30);
+    // indicador de turno bajo el banner
+    ctx.font="700 12px Segoe UI";ctx.fillStyle=over?"#9fc3e6":(atk==="blue"?"#5ad6ff":"#ff9a5a");
+    ctx.fillText(over?"— FIN DE LA BATALLA —":(atk==="blue"?"◀ TURNO ALIADO":"TURNO ENEMIGO ▶"),W/2,by+bh+16);
+    ctx.restore();
   }
   function drawEnd(win){ctx.fillStyle="rgba(3,8,20,.8)";ctx.fillRect(0,0,W,H);
     ctx.textAlign="center";ctx.font="900 72px Segoe UI";ctx.fillStyle=win?"#5effa8":"#ff5a5a";ctx.shadowColor=win?"#3fff96":"#ff4646";ctx.shadowBlur=40;
@@ -1325,6 +1340,7 @@ const Galaxy=(()=>{
       const next=order[(order.indexOf(cur)+1)%order.length];
       seg?.querySelector(`button[data-sp="${next}"]`)?.click(); }
     else if(act==="auto") b.classList.toggle("on");
+    else if(act==="music"){ click("muteBtn"); b.classList.toggle("on"); }
     else if(act==="info") document.getElementById("go2chat")?.classList.toggle("hidden");
   });
 
