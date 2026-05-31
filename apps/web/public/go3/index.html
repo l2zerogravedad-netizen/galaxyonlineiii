@@ -971,6 +971,7 @@ const BaseBattle=(()=>{
   let ships=[],turrets=[],base=null,fxs=[],beams=[],dmg=[],stars=[],ray=null,running=false,over=false,raf=0,last=0,SPEED=1;
   let camX=0,camY=0,camZ=0.82,camRot=0,camRotTarget=0,previewing=false,camReady=false;   // cámara interactiva (zoom/desplazar/rotar); rotación con snap a 90°
   let queue=[],turnT=0,awaiting=false,gapT=0,phase="atk",round=1,mover=null,defName="Base enemiga",stolen=null,engaging=false,engGroup=null,cmdA=null,cmdD=null;
+  let editPick=null,editHover=null;   // editor de base (solo en preview): edificio levantado + celda bajo el cursor
   const WMOD={"Missile Weapon":{icon:"🚀",col:"#ff8c42"},"Ballistic Weapon":{icon:"🔫",col:"#ffd23a"},"Directional Weapon":{icon:"⚡",col:"#6fe0ff"},"Fighter-based weapon":{icon:"✈",col:"#b48cff"}};
   function setBaseCmd(side){const withP=COMMANDERS.filter(c=>c.portrait);const c=withP.length?withP[(Math.random()*withP.length)|0]:{name:side==="atk"?"Comandante":"Pirata"};
     const o={name:(c.name||"—").slice(0,16),lvl:50,stars:7+(Math.random()*3|0),img:null,col:side==="atk"?"#5ad6ff":"#ff7a4a"};
@@ -994,13 +995,45 @@ const BaseBattle=(()=>{
   function setupCam(){if(camReady)return;camReady=true;   // controles de cámara (solo en modo base): rueda=zoom, arrastrar=desplazar, Shift/clic-derecho=rotar
     cv.addEventListener("wheel",e=>{if(window.BMODE!=="base")return;e.preventDefault();camZ*=e.deltaY<0?1.12:.89;clampCam();},{passive:false});
     cv.addEventListener("contextmenu",e=>{if(window.BMODE==="base")e.preventDefault();});
-    let down=false,rot=false,lx=0,ly=0;
-    cv.addEventListener("pointerdown",e=>{if(window.BMODE!=="base")return;down=true;rot=(e.button===2||e.shiftKey);lx=e.clientX;ly=e.clientY;try{cv.setPointerCapture(e.pointerId);}catch(_){}});
-    cv.addEventListener("pointermove",e=>{if(!down||window.BMODE!=="base")return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;
+    let down=false,rot=false,lx=0,ly=0,sx0=0,sy0=0,moved=0;
+    cv.addEventListener("pointerdown",e=>{if(window.BMODE!=="base")return;down=true;rot=(e.button===2||e.shiftKey);lx=e.clientX;ly=e.clientY;sx0=e.clientX;sy0=e.clientY;moved=0;try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+    cv.addEventListener("pointermove",e=>{
+      if(window.BMODE!=="base")return;
+      if(previewing&&editPick&&!down){editHover=screenToCell(e.clientX,e.clientY);return;}   // fantasma sigue el cursor (sin arrastrar)
+      if(!down)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;moved+=Math.abs(dx)+Math.abs(dy);
+      if(previewing&&editPick&&!rot){editHover=screenToCell(e.clientX,e.clientY);return;}     // si hay edificio levantado, no paneamos: movemos el fantasma
       if(rot){camRot+=dx*.006;camRotTarget=camRot;}else{const a=-camRot,co=Math.cos(a),si=Math.sin(a);camX-=(dx*co-dy*si)/camZ;camY-=(dx*si+dy*co)/camZ;clampCam();}});
-    function endRot(){down=false;camRotTarget=camRot;}   // descansa en el ángulo soltado (rotación rígida = sin deformación a cualquier ángulo)
+    function endRot(e){down=false;camRotTarget=camRot;
+      if(previewing&&!rot&&moved<6&&e&&e.clientX!=null)editClick(e.clientX,e.clientY);}   // poco movimiento = click → levantar/colocar edificio
     cv.addEventListener("pointerup",endRot);cv.addEventListener("pointercancel",endRot);}
   function gdist(a,b){return Math.abs(a.cx-b.cx)+Math.abs(a.cy-b.cy);}
+  // ===== Editor de base: pantalla→celda, validación de zona y persistencia (localStorage) =====
+  function screenToCell(clientX,clientY){const r=cv.getBoundingClientRect();
+    let wx=(clientX-r.left)*(W/r.width),wy=(clientY-r.top)*(H/r.height);
+    wx=(wx-SCX)/camZ+camX; wy=(wy-SCY)/camZ+camY;                 // pantalla -> mundo
+    if(base&&camRot){const b=iso(base.cx,base.cy),co=Math.cos(-camRot),si=Math.sin(-camRot),dx=wx-b.x,dy=wy-b.y;wx=b.x+dx*co-dy*si;wy=b.y+dx*si+dy*co;}  // des-rotar
+    const cx=Math.round((wx/(TW/2)+wy/(TH/2))/2), cy=Math.round((wy/(TH/2)-wx/(TW/2))/2);
+    return {cx,cy};}
+  function cellInPlot(cx,cy){return !!base&&Math.max(Math.abs(cx-base.cx),Math.abs(cy-base.cy))<=(base.plotR||10);}   // dentro de la zona límite
+  function cellOccupied(cx,cy,ignore){
+    if(base&&cx===base.cx&&cy===base.cy)return true;                                  // núcleo
+    if(base&&(base.crystals||[]).some(cr=>cr.cx===cx&&cr.cy===cy))return true;        // cristales
+    return turrets.some(t=>t!==ignore&&t.alive&&t.cx===cx&&t.cy===cy);}              // otro edificio
+  function cellValid(cx,cy,ignore){return cellInPlot(cx,cy)&&!cellOccupied(cx,cy,ignore);}
+  function turretAt(cx,cy){return turrets.find(t=>t.alive&&t.cx===cx&&t.cy===cy);}
+  function saveLayout(){try{const m={};turrets.forEach((t,i)=>{m[i]=[t.cx,t.cy];});localStorage.setItem("go3-base-layout-v1",JSON.stringify(m));}catch(e){}}
+  function loadLayout(){try{const m=JSON.parse(localStorage.getItem("go3-base-layout-v1")||"null");if(m)turrets.forEach((t,i)=>{if(m[i]){t.cx=m[i][0];t.cy=m[i][1];}});}catch(e){}}
+  function editClick(clientX,clientY){           // click levanta / click coloca (modo edición)
+    if(!previewing||!base)return;
+    const {cx,cy}=screenToCell(clientX,clientY);
+    if(editPick){                                                                     // ya hay uno levantado -> intentar colocar
+      if(cellValid(cx,cy,editPick)){editPick.cx=cx;editPick.cy=cy;editPick=null;editHover=null;saveLayout();
+        const e=document.getElementById("battleInfo");if(e)e.textContent="🏛 BASE ESPACIAL · edificio colocado · click un edificio para moverlo";}
+      else{const e=document.getElementById("battleInfo");if(e)e.textContent="✗ Celda inválida (fuera de la zona o ocupada) — elegí una celda VERDE";}
+      return;}
+    const t=turretAt(cx,cy);                                                          // levantar el edificio bajo el cursor
+    if(t){editPick=t;editHover={cx,cy};const e=document.getElementById("battleInfo");if(e)e.textContent="⬆ Edificio levantado — movelo y hacé click en una celda VERDE para colocarlo";}
+  }
   function BWeapon(){const ks=["Ballistic Weapon","Directional Weapon","Missile Weapon","Fighter-based weapon"],k=ks[(Math.random()*4)|0];
     const cand=PARTS.filter(p=>p.kind===k&&p.dmgMax>0),p=cand.length?cand[(Math.random()*cand.length)|0]:{dmgMin:40,dmgMax:80};
     return {...(WTYPE[k]||WTYPE._default),dmgMin:p.dmgMin,dmgMax:p.dmgMax,kind:k,range:k==="Missile Weapon"?6:(k==="Directional Weapon"?5:3)};}
@@ -1043,8 +1076,9 @@ const BaseBattle=(()=>{
     buildBase(def);
     camRot=0;camZ=.62;centerCam();setupCam();   // zoom cercano (HD); rueda=zoom, arrastrar=desplazar, Shift/clic-der=rotar
     stars=Array.from({length:160},()=>({x:Math.random()*W,y:Math.random()*H,s:Math.random()*1.3+.3}));
+    loadLayout();editPick=null;editHover=null;   // restaurar posiciones guardadas + reset del editor
     window.BMODE="base";running=true;last=0;raf=requestAnimationFrame(loop);
-    const e=document.getElementById("battleInfo");if(e)e.textContent="🏛 BASE ESPACIAL (vista de edición) · Nv "+base.level+" · "+turrets.filter(t=>t.isTurret).length+" cañones · "+turrets.filter(t=>t.trench).length+" cubos · radio construible "+base.plotR;}
+    const e=document.getElementById("battleInfo");if(e)e.textContent="🏛 BASE ESPACIAL · click un edificio para levantarlo y movelo (verde=podés colocar) · radio "+base.plotR;}
   function info(){const e=document.getElementById("battleInfo");if(!e)return;const atk=ships.filter(s=>s.alive&&s.side==="atk");
     const cnt=atk.reduce((s,x)=>s+Math.max(0,Math.round((x.ships||3000)*(x.hull/x.maxHull))),0);
     e.textContent=over?"FIN":`Asalto: ${defName} · ronda ${round} · ${atk.length} flotas (${cnt.toLocaleString()} naves) · ${phase==="atk"?"avanza la flota":"defensa dispara"} · ${SPEED}×`;}
@@ -1162,6 +1196,21 @@ const BaseBattle=(()=>{
       ctx.fillStyle="rgba(120,170,255,.045)";ctx.fill();
       ctx.strokeStyle="rgba(150,200,255,.25)";ctx.lineWidth=7;ctx.stroke();
       ctx.strokeStyle="rgba(255,255,255,.9)";ctx.lineWidth=2.5;ctx.stroke();}
+    // ===== Editor (preview): resaltar celdas VERDE (válidas) / ROJO (inválidas) cuando hay un edificio levantado =====
+    if(previewing&&editPick){
+      const PR2=base.plotR||10;
+      for(let cy=base.cy-PR2;cy<=base.cy+PR2;cy++)for(let cx=base.cx-PR2;cx<=base.cx+PR2;cx++){
+        if(!cellInPlot(cx,cy))continue;
+        const ok=cellValid(cx,cy,editPick),a=riso(cx,cy);
+        ctx.beginPath();ctx.moveTo(a.x,a.y-TH/2);ctx.lineTo(a.x+TW/2,a.y);ctx.lineTo(a.x,a.y+TH/2);ctx.lineTo(a.x-TW/2,a.y);ctx.closePath();
+        ctx.fillStyle=ok?"rgba(70,227,106,.28)":"rgba(255,90,90,.22)";ctx.fill();
+        ctx.strokeStyle=ok?"rgba(90,255,150,.55)":"rgba(255,120,120,.45)";ctx.lineWidth=1.5;ctx.stroke();}
+      // celda objetivo bajo el cursor: borde marcado verde/rojo
+      if(editHover){const h=editHover,ok=cellValid(h.cx,h.cy,editPick),a=riso(h.cx,h.cy);
+        ctx.beginPath();ctx.moveTo(a.x,a.y-TH/2);ctx.lineTo(a.x+TW/2,a.y);ctx.lineTo(a.x,a.y+TH/2);ctx.lineTo(a.x-TW/2,a.y);ctx.closePath();
+        ctx.fillStyle=ok?"rgba(70,227,106,.5)":"rgba(255,90,90,.5)";ctx.fill();
+        ctx.strokeStyle=ok?"#5effa0":"#ff5a5a";ctx.lineWidth=3;ctx.stroke();}
+    }
     // footprint sutil de la base (3x3)
     const bp=riso(base.cx,base.cy);
     if(base.hull>0){ctx.fillStyle="rgba(120,180,255,.06)";ctx.strokeStyle="rgba(255,255,255,.14)";ctx.lineWidth=1;
