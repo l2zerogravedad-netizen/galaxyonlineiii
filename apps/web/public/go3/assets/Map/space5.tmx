@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" renderorder="right-down" width="27" height="29" tilewidth="200" tileheight="100">
+ <tileset firstgid="1" name="StarGateMc" tilewidth="300" tileheight="173">
+  <image source="StarGateMc.png" width="300" height="173"/>
+ </tileset>
+ <tileset firstgid="2" name="space_apron" tilewidth="1246" tileheight="641">
+  <tileoffset x="-523" y="216"/>
+  <image source="space_apron.png" width="1246" height="641"/>
+ </tileset>
+ <tileset firstgid="3" name="map_grid" tilewidth="200" tileheight="100">
+  <image source="map_grid.png" width="200" height="100"/>
+ </tileset>
+ <tileset firstgid="4" name="Aozai_1" tilewidth="246" tileheight="222">
+  <image source="Aozai_1.png" width="246" height="222"/>
+ </tileset>
+ <tileset firstgid="5" name="Aozai_2" tilewidth="428" tileheight="153">
+  <image source="Aozai_2.png" width="428" height="153"/>
+ </tileset>
+ <tileset firstgid="6" name="Aozai_3" tilewidth="308" tileheight="232">
+  <image source="Aozai_3.png" width="308" height="232"/>
+ </tileset>
+ <tileset firstgid="7" name="Blue_1" tilewidth="216" tileheight="200">
+  <image source="Blue_1.png" width="216" height="200"/>
+ </tileset>
+ <tileset firstgid="8" name="Blue_3" tilewidth="178" tileheight="126">
+  <image source="Blue_3.png" width="178" height="126"/>
+ </tileset>
+ <tileset firstgid="9" name="Blue2" tilewidth="214" tileheight="226">
+  <image source="Blue2.png" width="214" height="226"/>
+ </tileset>
+ <tileset firstgid="10" name="Boat_1" tilewidth="369" tileheight="326">
+  <image source="Boat_1.png" width="369" height="326"/>
+ </tileset>
+ <tileset firstgid="11" name="Boat_2" tilewidth="337" tileheight="319">
+  <image source="Boat_2.png" width="337" height="319"/>
+ </tileset>
+ <tileset firstgid="12" name="Clouds_1" tilewidth="311" tileheight="275">
+  <image source="Clouds_1.png" width="311" height="275"/>
+ </tileset>
+ <tileset firstgid="13" name="Clouds_2" tilewidth="286" tileheight="295">
+  <image source="Clouds_2.png" width="286" height="295"/>
+ </tileset>
+ <tileset firstgid="14" name="Ice_1" tilewidth="229" tileheight="242">
+  <image source="Ice_1.png" width="229" height="242"/>
+ </tileset>
+ <tileset firstgid="15" name="Ice_2" tilewidth="328" tileheight="226">
+  <image source="Ice_2.png" width="328" height="226"/>
+ </tileset>
+ <tileset firstgid="16" name="Ice_3" tilewidth="432" tileheight="213">
+  <image source="Ice_3.png" width="432" height="213"/>
+ </tileset>
+ <tileset firstgid="17" name="Meteorite_1" tilewidth="320" tileheight="246">
+  <image source="Meteorite_1.png" width="320" height="246"/>
+ </tileset>
+ <tileset firstgid="18" name="Meteorite_2" tilewidth="262" tileheight="225">
+  <image source="Meteorite_2.png" width="262" height="225"/>
+ </tileset>
+ <tileset firstgid="19" name="Meteorite_3" tilewidth="432" tileheight="163">
+  <image source="Meteorite_3.png" width="432" height="163"/>
+ </tileset>
+ <layer name="GridLayer" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi+gJkOeNSuUbtG7Rq1a7jaRaq+oeKv4WIXpW4azP6ixF2D1S5K7aPUrcPBLkrdNBD+Go4AAI0cBzk=
+  </data>
+ </layer>
+ <layer name="Aozai1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIAzAO/GtGATckaxW0CoBkfR1YfH0BJBs7fAAJ
+  </data>
+ </layer>
+ <layer name="Aozai2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Bd+JeMiIXwtAqaAMC9+Q4AUFsvBAAH
+  </data>
+ </layer>
+ <layer name="Aozai3" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJzt0bENAAAIw7AO/H8zX0AH+4JISQCgz3wHcM5z6LcxTAAJ
+  </data>
+ </layer>
+ <layer name="Aozai4" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Bd+JeMiCXwtAqaAABwYb4DUFoc1AAH
+  </data>
+ </layer>
+ <layer name="Aozai5" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEJAAAMA7A+8295MgolUZAEAIBV1w4w5QEXzAAG
+  </data>
+ </layer>
+ <layer name="Blue" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6C99i9sgAXQAxKQALS5DgAA7yxVXAAK
+  </data>
+ </layer>
+ <layer name="Boat1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztziEBAAAMAjD8+/d9BRxmS7AEAKBz6wAw9ThoAAw=
+  </data>
+ </layer>
+ <layer name="Boat2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7D9+PeLjIXQKmgCAPdNOwDwwAJH4AAM
+  </data>
+ </layer>
+ <layer name="Clouds1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6AFsH9e/xXQAxKQANDmOgAADy1hvAAN
+  </data>
+ </layer>
+ <layer name=" Clouds2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAMAiALrH/dVfDzgQQkAFu3DgAAlQdwYAAO
+  </data>
+ </layer>
+ <layer name="Meteorite1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7B5wL9XRCyBp1XQBKAz3wEA4MQCo1gAFA==
+  </data>
+ </layer>
+ <layer name="Meteorite2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6BlsH9Y/xXQAxKQANDmOgAADy2MfAAT
+  </data>
+ </layer>
+ <layer name="Meteorite3" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgEJAAAMA6BVeP+yjzEYmsAEgHXXDgAw4QF3jAAS
+  </data>
+ </layer>
+ <layer name="Meteorite4" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6BXsH9ZY3xOSEACAPDDtANw3AJDwAAS
+  </data>
+ </layer>
+ <layer name="Ice1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgEJAAAMA6BFeP+0jzEYmsAEgAXXDgAw7wFy/AAR
+  </data>
+ </layer>
+ <layer name="Ice2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6A3sH9bY3xOSEAC8MO0AwBw3AJ5sAAQ
+  </data>
+ </layer>
+ <layer name="Ice3" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgEJAAAMA6AleP+4jzEYmsAEYNu1AwAw4gFy1AAP
+  </data>
+ </layer>
+ <layer name="Ice4" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6AlsH9cn3XQAxKQAPDZXAcAoBZoVAAP
+  </data>
+ </layer>
+</map>

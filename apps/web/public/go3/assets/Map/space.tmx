@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" renderorder="right-down" width="27" height="29" tilewidth="200" tileheight="100">
+ <tileset firstgid="1" name="StarGateMc" tilewidth="224" tileheight="299">
+  <image source="StarGateMc.png" width="224" height="299"/>
+ </tileset>
+ <tileset firstgid="2" name="space_apron" tilewidth="1246" tileheight="641">
+  <tileoffset x="-523" y="216"/>
+  <image source="space_apron.png" width="1246" height="641"/>
+ </tileset>
+ <tileset firstgid="3" name="map_grid" tilewidth="200" tileheight="100">
+  <image source="map_grid.png" width="200" height="100"/>
+ </tileset>
+ <layer name="GridLayer" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi+gJkOeNSuUbtG7Rq1a7jaRaq+oeKvUbtG7Rq1a2jaRambBsJfwxEAANREB04=
+  </data>
+ </layer>
+ <layer name="StarGate" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh+gHGgHTAKRsEoGAWjYBSMglEwCkY8GG5tUpB/ABh8AAQ=
+  </data>
+ </layer>
+ <layer name="StarGate2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzUERAAAMAiDXv/RKeL6gAMnODS8AAKDrARgMAAI=
+  </data>
+ </layer>
+ <layer name="ApronLayer" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzkERAAAIA6Cd/UMbYAH0AQlIAKDNdQCAdxYYdAAD
+  </data>
+ </layer>
+</map>

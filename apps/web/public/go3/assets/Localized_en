@@ -1,0 +1,3994 @@
+// 代碼中用到的
+AddGoogleAccount = "Please add a Google account to your device first.";
+AuctionText31 = "You don't have enough Space Bux! Get more now?";
+AuctionText32 = "You don't have enough resources.Get more now!";
+AuctionText33 = "You must build a Trading Center.";
+AuctionText34 = "Bought [%s]";
+AuctionText7 = "Gold";
+AuctionText8 = "Space Bux";
+BagTXT19 = "Your inventory is full!";
+BagTXT20 = "Storage of this item is at maximum!";
+BagTXT21 = "You don't have enough Medals. Earn more from Challenge Missions.";
+BagTXT30 = "You don't have enough Honor. Fight in the Federation League to earn more Honor.";
+BattleMapText1 = "Round %d/%d";
+BattleMapText2 = "'Speed Up x3' unlocks at Lv %d.";
+BattleReport_15 = "Spoils of War";
+BattleReport_26 = "Gain Strength with";
+BattleReport_27 = "Resources Won";
+BattleReport_28 = "Resources Lost";
+BattleTXT08 = "You can only select (%d) fleets for this Mission.";
+BattleTXT09 = "Resource Planet";
+BattleTXT24 = "You can't take part in the Federation League and other Missions until the siege on your base is lifted.";
+BattleTXT27 = "Crush the Corsairs!";
+BattleTXT28 = "Set up your fleets first";
+BattleTXT29 = "Not matched to any opponent.";
+BattleTXT30 = "Space Station level only allows (%d) fleets.";
+BattleText3 = "You will be returning to your base. This battle will continue under the direction of the AI. You can return at anytime to resume command of your forces.";
+BattleText4 = "Battle situation unclear! Can't end battle right now.";
+BattleText5 = "Combat in progress. Please wait...";
+BattleTitl3 = "Return";
+BindUI_8 = "Bind Account";
+
+//BlueprintSourceItem
+BlueprintSourceItem_1 = "<font size='20' color='#06f6ff'>Standard Mission</font>";
+BlueprintSourceItem_2 = "<font size='20' color='#06f6ff'>Elite Mission</font>";
+BlueprintSourceItem_3 = "<font size='20' color='#06f6ff'>Challenge Misison</font>";
+BlueprintSourceItem_5 = "<font size='20' color='#06f6ff'> (</font><font size='20' color='#%s'>%d</font><font size='20' color='#06f6ff'>/%d)</font>";
+BlueprintSourceItem_6 = "<font size='20' color='#ffffff'>%s</font>";
+BlueprintSourceItem_7 = "<font size='20' color='#ff0000'> (Locked)</font>";
+BlueprintSourceItem_8 = "<font size='20' color='#06f6ff'>Stage %s </font>";
+BlueprintSourceItem_9 = "Base %s";
+BlueprintSourceItem_10 = "%s hasn't opened yet.";
+BlueprintSourceItem_11 = "<font size='20' color='#06f6ff'>Exploration Events</font>";
+BlueprintSourceItem_12 = "<font size='18' color='#ffffff'>%s.%s</font>";
+BlueprintSourceItem_13 = "<font size='20' color='#ff0000'>(Requires %s Lv %d)</font>";
+BlueprintSourceItem_14 = "Exploration Event";
+BlueprintSourceItem_15 = "Medal Store";
+BlueprintSourceItem_16 = "Honor Mall";
+BlueprintSourceItem_17 = "<font size='20' color='#06f6ff'>%s</font>";
+
+Boss33 = "<font size='%d' color='#ccba7a'>Type: </font> <font size='%d' color='#0090F8'>None</font>";
+Boss46 = "Humaroid";
+Boss72 = "Insufficient Slots";
+Boss80 = "Name cannot be blank";
+Boss83 = "You need 100 Space Bux to change your nickname. Confirm change?";
+Boss831 = "You need 100 Space Bux to change your nickname. Change to <font color='ffde00'>%s</font>?";
+Boss84 = "Nickname changed!";
+BuildLevelInfoUI0 = "%s (Level %d)";
+BuildLevelInfoUI1 = "<font size='20' color='#06f6ff'>HP: </font>";
+BuildLevelInfoUI2 = "<font size='20' color='#06f6ff'>Buildings Available: </font>";
+BuildLevelInfoUI3 = "Barricade";
+BuildLevelInfoUI4 = "Particle Cannon";
+BuildLevelInfoUI5 = "Hydra Cannon";
+BuildLevelInfoUI6 = "Thor's Cannon";
+BuildLevelInfoUI8 = "<font size='20' color='#06f6ff'>Max number of fleets: </font><font size='20' color='#ffffff'>%d</font>";
+BuildLevelInfoUI9 = "<font size='20' color='#06f6ff'>Max number of fleets: </font><font size='20' color='#ffffff'>%d</font><font size='20' color='#00ff00'> +%d</font>";
+BuildLevelInfoUI10 = "<font size='20' color='#06f6ff'>EXP</font><font size='20' color='#00ff00'> +%d</font>";
+BuildLevelInfoUI11 = "<font size='20' color='#06f6ff'>Current damage: </font>";
+BuildLevelInfoUI12 = "<font size='20' color='#06f6ff'>Range: </font><font size='20' color='#ffffff'>Unlimited</font>";
+
+BuildUpgradeInfo_10 = "New Building";
+BuildUpgradeInfo_11 = "Congratulations! Your %s is now Lv %d! You now have access to new buildings. Build them to increase your colony's might!";
+BuildUpgradeInfo_12 = "Requirement: ";
+BuildUpgradeInfo_13 = "Player Lv %d";
+BuildUpgradeInfo_14 = "Unlock Building";
+BuildUpgradeInfo_15 = "Unlock Ship";
+BuildUpgradeInfo_16 = "Upgrade";
+BuildUpgradeInfo_17 = "<font size='22' color='#ffffff'>Upgrade </font><img src='%s' align='1'/><font size='22' color='%s'>      %s</font>";
+
+BuildingText1 = "Cancel construction/upgrade? [";
+BuildingText20 = "Cancelling construction will only return a portion of the resources.";
+BuildingText25 = "Upgrade to Lv %d?";
+BuildingText26 = "Construction queue is already at limit";
+BuildingText28 = "Construction queue increased to %d";
+BuildingText29 = "Construction queue increased";
+BuildingText31 = "Upgrade %s to Lv %d?";
+BuildingText32 = "%s Lv %d";
+
+BuildingTipText1 = "Build Ship";
+BuildingTipText2 = "Science";
+BuildingTipText3 = "Discover";
+BuildingTipText4 = "Repair";
+BuildingTipText5 = "Free Hire";
+BuildingTipText6 = "Lay Siege";
+BuildingTipText7 = "Black Market";
+BuildingTipText8 = "Guild in Battle";
+BuildingTipText9 = "%d%% Discount";
+BuildingTipText10 = "Boost";
+
+BuyText1 = "You don't have enough Gold.";
+CardMergingDialog_21 = "<font size='20' color="#ffffff">Cards selected include</font><font size='20' color="#ff0000">Legendary</font><font size='20' color="#ffffff"> and above. Dismiss anyway?</font>";
+CardMergingDialog_22 = "<font size='20' color="#ffffff">Cards selected include </font><font size='20' color="#ff0000">5-Star</font><font size='20' color="#ffffff"> and above. Dismiss anyway?</font>";
+CardMergingDialog_23 = "You got %d Shards.";
+CardMergingDialog_25 = "Received";
+CardMergingDialog_29 = "Increasing a Captain's Rank allows more ships in the fleet to be active in battle: Cruiser%d    Battleship%d    Frigate%d";
+CardMergingDialog_30 = "Dismissing a 1-Star Veteran, Elite, Legendary, or Mythic Captain will grant you 14, 100, 200, and 400 shards respectively. The higher their Star rating, the more shards can be obtained.";
+CardMergingDialog_31 = "Unable to promote Captain as your Inventory is full.";
+CardMergingDialog_32 = "Rank Up!";
+CardMergingDialog_6 = "Cost";
+CardMergingDialog_8 = "<img src='resource_gold.png' align='1'width='22' height='22'><font size='23' color='#%s'> %s </font><font size='23' color='#ffffff'>Rank up</font></img>";
+ChatText10 = "<font color='%s' size='%d'> Congratulations! <font color='#FFF023' size='%d'>%s</font> reached <font color='#FFF023' size='%d'>Lv %d</font>.</font>";
+ChatText11 = "[%s] <font color='%s' size='%d'>occupied Resource Planet %s!</font>";
+ChatText13 = "[%s] <font color='%s' size='%d'>donated resources worth <font color='#FFF023' size='%d'>%d </font> Contribution!</font>";
+ChatText14 = "Guild";
+ChatText15 = "Guild Warehouse";
+ChatText16 = "Guild Merging Center";
+ChatText17 = "Guild Mall";
+ChatText18 = "<font color='%s' size='%d'> Warning! Your planet is under attack!</font>";
+ChatText19 = "%s<font color='%s' size='%d'> is under attack!</font>";
+ChatText2 = "Fused";
+ChatText20 = "Please don't spam messages.";
+ChatText21 = "<font color='%s' size='%d'>Congratulations! You completed <font color='#00ff00' size='%d'>%s</font>! Your rewards were sent to your inventory.</font>";
+ChatText22 = "<font color='%s' size='%d'>League match complete! Rewards have been sent to your inventory.</font>";
+ChatText23 = " got a %s Captain ";
+ChatText24 = "Generated %d-Star Captain";
+ChatText25 = "<font color='%s' size='%d'>Crush the Corsairs has begun! Join your Guild and blast those space pirates!</font><a href='GotoPirateBattle:0'> <font color='%s' size='%d'>[Access]<font></a>";
+ChatText26 = "<font color='%s' size='%d'>[%s] requests assistance for the invasion of Resource Planet [%s].</font><a href='GotoResPlanet:0'> <font color='%s' size='%d'>[Send reinforcements]<font></a>";
+ChatText3 = "Level%d";
+ChatText4 = "%d Shards";
+ChatText5 = "<font color='%s' size='%d'> Congratulations. The <font color='#00ff00' size='%d'>%s</font> Guild has been created. Join now to fight with your friends and create a space empire of your own! </font>";
+ChatText6 = "<font color='%s' size='%d'> Congratulations on joining <font color='#00ff00' size='%d'>%s</font>!</font>";
+ChatText7 = "<font color='%s' size='%d'> Your were kicked out of your Guild, <font color='#00ff00' size='%d'>%s</font>.</font>";
+ChatText8 = "<font color='%s' size='%d'> Your post in your Guild has been changed to <font color='#00ff00' size='%d'>%s</font>! </font>";
+ChatText9 = "[%s] <font color='%s' size='%d'> has joined the Guild. Welcome!</font>";
+ChatText27 = "You've been muted in chat for (%s). Please contact Live Support!";
+ChatText28 = "You have been unmuted. Have fun and play nice!";
+ChatText29 = "You've been muted in chat. Please contact Live Support!";
+ChatText30 = "Veteran Shard";
+ChatText31 = "Elite Shard";
+ChatText32 = "Legendary Shard";
+ChatText33 = "Mythic Shards";
+ChatText34 = "<font color='%s' size='%d'> Received %d </font><font color='%s' size='%d'><a href='PropsInfo:%d'>%s</a></font>";
+ChatText35 = "<font color='%s' size='%d'>Your Guild was demoted to Lv %d for failing to pay the daily maintenance cost.</font>";
+ChatText36 = "<font color='%s' size='%d'>Your Guild Wealth - %d - is enough to pay for %d days of maintenance. To avoid demotion, make sure Guild members each contribute to the Guild Wealth!</font>";
+ChatText37 = "<font color='%s' size='%d'>Your Guild will soon be demoted because your Guild Wealth is too low to pay for the next Daily Maintenance. Please make sure Guild Members are contributing to the Guild Wealth!</font>";
+ChatText38 = "<font color='%s' size='%d'>Congratulations! %s was victorious and crushed the Corsairs!</font>";
+ChatText39 = "<font color='%s' size='%d'>The Guild failed to eradicate the Corsairs from the sector.</font>";
+
+ChatWhisperUI_2 = "PM: %s";
+ChatingTXT10 = "[Annoucement]";
+ChatingTXT11 = "[System]";
+ChatingTXT13 = "[You]";
+ChatingTXT14 = "Me";
+ChatingTXT23 = "A battle is taking place at: ";
+ChatingTXT26 = "<font color='#ba1aff' size='%d'>Resource Planet</font><font color='#ffff00' size='%d'> is under attack!</font>";
+ChatingTXT29 = ": ";
+ChatingTXT30 = "Please enter something.";
+ChatingTXT35 = "Player is offline";
+ChatingTXT36 = "Message was blocked for illegal content.";
+ChatingTXT37 = "Target is offline or has changed name.";
+ChatingTXT38 = "Commander! You've achieved a win streak in your Division. Take this chance to flaunt your prowess.";
+ChatingTXT39 = " said: ";
+ChatingTXT4 = "This player does not exist.";
+ChatingTXT40 = " vs";
+ChatingTXT41 = "[Guild]";
+ChatingTXT42 = " [You]";
+ChooseCommanderItem_1 = "Gems x%d";
+CommanderAttribPage_13 = "%s affects the Captain's chance to trigger ability!";
+CommanderAttribPage_14 = ",";
+CommanderAttribPage_16 = "<font size='21' color='#2BB0B2'>Accuracy: </font><font size='21' color='#CAFEFF'>Increases hit rate and damage.</font>";
+CommanderAttribPage_17 = "<font size='21' color='#2BB0B2'>Initiative: </font><font size='21' color='#CAFEFF'>Affects a ship's combat order and increases chance for Chain Attacks.< /font>";
+CommanderAttribPage_18 = "<font size='21' color='#2BB0B2'>Evasion: </font><font size='21' color='#CAFEFF'>Lowers enemy hit rate and damage when attacked.</font> "" ;
+CommanderAttribPage_19 = "<font size='21' color='#2BB0B2'>Focus: </font><font size='21' color='#CAFEFF'>Increases critical hit rate and critical damage.< /font>";
+CommanderAttribPage_2 = "Accuracy";
+CommanderAttribPage_21 = "<font size='22' color='#2BB0B2'>%s-Ⅰ</font><br/><font size='21' color='#CAFEFF'>%s Damage +10%% when attacking.</font>";
+CommanderAttribPage_22 = "<font size='22' color='#2BB0B2'>%s-Ⅱ</font><br/><font size='21' color='#CAFEFF'>%s Damage + 30%% when attacking.</font>";
+CommanderAttribPage_23 = "<font size='22' color='#2BB0B2'>%s-Ⅰ</font><br/><font size='21' color='#CAFEFF'>%s Damage +5%% when attacking. Damage reduced by 10%% when attacked.</font>";
+CommanderAttribPage_24 = "<font size='22' color='#2BB0B2'>%s-Ⅱ</font><br/><font size='21' color='#CAFEFF'>%s Damage +10%% when attacking. Damage reduced by 10%% when attacked.</font>";
+CommanderAttribPage_3 = "Initiative";
+CommanderAttribPage_38 = "Ballistic Weapon";
+CommanderAttribPage_39 = "Energy Weapon";
+CommanderAttribPage_4 = "Evasion";
+CommanderAttribPage_40 = "Missile Weapon";
+CommanderAttribPage_41 = "Shuttle Weapon";
+CommanderAttribPage_47 = "Frigate";
+CommanderAttribPage_48 = "Battleship";
+CommanderAttribPage_49 = "Cruiser";
+CommanderAttribPage_50 = "Planetary Weapon";
+CommanderAttribPage_5 = "Focus";
+CommanderAttribPage_51 = "Ballistic";
+CommanderAttribPage_52 = "Energy";
+CommanderAttribPage_53 = "Missile";
+CommanderAttribPage_54 = "Shuttle";
+CommanderAttribPage_55 = "Planetary";
+CommanderAttribPage_56 = "Attributes";
+CommanderAttribPage_58 = "%s-Ⅰ";
+CommanderAttribPage_59 = "%s-Ⅱ";
+CommanderAttribPage_60 = "Captain promotion is in cooldown. Please try again later.";
+CommanderAttribPage_61 = "You don't have enough Star Shards to promote this Captain.";
+CommanderAttribPage_62 = "Captain is at max Rank."
+CommanderAttribPage_63 = "<font size='22' color='%s'>%s</font><font size='22' color='#ffffff'> Spend</font><font size='22' color='%s'> %s</font><font size='22' color='#ffffff'> to promote</font>";
+CommanderAttribPage_64 = "<font size='22' color='%s'>%s: </font><font size='22' color='#ffffff'>%d/%d</font>";
+CommanderAttribPage_65 = "Veteran Shard";
+CommanderAttribPage_66 = "Elite Shard";
+CommanderAttribPage_67 = "Legendary Shard";
+CommanderAttribPage_68 = "Mythic Shards";
+CommanderAttribPage_69 = "Promote to %d Star.";
+CommanderAttribPage_70 = "The Captain's level is too low";
+
+CommanderAttribViewer_0 = "Captain: ";
+CommanderAttribViewer_1 = "<font size='19' color='#06f6ff'>Biography</font><br/><font size='19' color='#06f6ff'>%s</font>"
+
+CommanderCardBuy_4 = "<font size='20' color='#ffffff'>Congratulations! You recruited </font>%s";
+CommanderCardBuy_5 = "%s<font size='20' color='#ffffff'> has already been recruited. Converting into </font><font size='20' color='%s'>%d Veteran Shards</font>";
+CommanderCardBuy_6 = "%s<font size='20' color='#ffffff'> has already been recruited. Converting into </font><font size='20' color='%s'>%d Elite Shards</font>";
+CommanderCardBuy_7 = "<font size='22' color='#ffffff'>Hire One </font><img src='resource_mallpoint.png' align='1' /><font size='22' color='%s'>      %s</font>";
+CommanderCardBuy_8 = "Free";
+CommanderCardBuy_9 = "<font size='22' color='#ffffff'>Hire Three </font><img src='resource_mallpoint.png' align='1'/><font size='22' color='%s'>      %s</font>";
+CommanderCardBuy_10 = "%s<font size='20' color='#ffffff'> has already been recruited. Converting into </font><font size='20' color='%s'>%d Legendary Shards</font>";
+CommanderCardBuy_11 = "%s<font size='20' color='#ffffff'> has already been recruited. Converting into </font><font size='20' color='%s'>%d Mythic Shards</font>";
+CommanderCardBuy_12 = ","
+CommanderCardBuy_13 = "<font size='20' color='%s'>%s Captain %s</font>";
+CommanderCardBuy_14 = "One Free Hire";
+
+CommanderChipUI_1 = "Veteran";
+CommanderChipUI_2 = "Elite";
+CommanderChipUI_3 = "Legendary";
+CommanderChipUI_4 = "Mythic";
+CommanderChipUI_7 = "Hired: %s";
+CommanderFramgtScrItem_1 = "<font size='20' color='#ffffff'> (</font><font size='20' color='#%s'>%d</font><font size='20' color='#ffffff'>/%d)</font>";
+CommanderListPage_10 = "Sort by %s";
+CommanderListPage_13 = "<font size='20' color='#ffffff'>Standard Mission</font>";
+CommanderListPage_14 = "<font size='20' color='#ffffff'>Elite Mission</font>";
+CommanderListPage_15 = "<font size='20' color='#ffffff'>Challenge Mission</font>";
+CommanderListPage_17 = "<font size='20' color='#ff0000'> (Locked)</font>";
+CommanderListPage_18 = "<font size='24' color='#06f6ff'>Form Design</font><font size='24' color='#ffffff'>%s</font><font size='24' color='#06f6ff'>?</font>";
+CommanderListPage_19 = "Fuse";
+CommanderListPage_20 = "Base %s ";
+CommanderListPage_21 = "%s hasn't opened yet.";
+CommanderListPage_6 = "Lv";
+CommanderListPage_7 = "Star Rank";
+CommanderListPage_8 = "Type";
+CommanderReruitPage_4 = "Out of free attempts";
+CommanderReruitPage_5 = "Free attempts: %d/%d";
+CommanderReruitPage_6 = "One Free Hire in %s";
+CommanderText100 = "Common Captain";
+CommanderText101 = "Lv %d";
+CommanderText107 = "<font size='%d' color='#0090F8'>Guardian</font>";
+CommanderText108 = "<font size='%d' color='#00C800'>Support</font>";
+CommanderText109 = "<font size='%d' color='#F80000'>Vanguard</font>";
+CommanderText11 = "You can't hire any more Captains.";
+CommanderText110 = "<font size='%d' color='%s'>Common</font>";
+CommanderText111 = "<font size='%d' color='%s'>Veteran</font>";
+CommanderText112 = "<font size='%d' color='%s'>Elite</font>";
+CommanderText113 = "<font size='%d' color='%s'>Legendary</font>";
+CommanderText114 = "<font size='%d' color='%s'>Mythic</font>";
+CommanderText116 = "Common";
+CommanderText117 = "Veteran";
+CommanderText118 = "Elite";
+CommanderText119 = "Legendary";
+CommanderText120 = "Mythic";
+
+CommanderText115 = "Affinity: ";
+CommanderText13 = "You don't have enough Space Bux. Please buy more.";
+CommanderText135 = "Couldn't modify fleet!";
+CommanderText136 = "Received";
+CommanderText137 = "Act Later";
+CommanderText138 = "Settings Saved";
+CommanderText141 = "You don't have enough Relics.";
+CommanderText142 = "<font size='%d' color='%s'>%s</font>";
+CommanderText19 = "CommanderText19";
+CommanderText29 = "Guild";
+CommanderText44 = "CommanderText44";
+CommanderText47 = "<font size='%d' color='#00C800'>Veteran</font>";
+CommanderText48 = "<font size='%d' color='#0090F8'>Elite</font>";
+CommanderText49 = "<font size='%d' color='#F800F8'>Legendary</font>";
+CommanderText50 = "<font size='%d' color='#ccba7a'>Type: </font> <font size='%d' color='#0090F8'>Guardian</font>";
+CommanderText51 = "<font size='%d' color='#ccba7a'>Type: </font> <font size='%d' color='#00C800'>Support</font>";
+CommanderText52 = "<font size='%d' color='#ccba7a'>Type: </font> <font size='%d' color='#F80000'>Vanguard</font>";
+CommanderText60 = "<font size='%d' color='#FFEF19'>Mythic</font>";
+CommanderText61 = "<font size='%d' color='#FFFFFF'>Common</font>";
+CommanderText71 = "Reset Captain's Accuracy, Evasion, Initiative, and Focus attributes?";
+CommanderText72 = "Status required to reset Captain: Resting";
+CommanderText76 = "Fleet modified Successfully!";
+CommanderText90 = "CommanderText90";
+CommanderText91 = "CommanderText91";
+CommanderText92 = "Please dismiss this Captain's fleet.";
+CommanderText93 = "Please remove the Gem from this captain.";
+CommanderText95 = "CommanderText95";
+CommanderText96 = "CommanderText96";
+CommanderText97 = "CommanderText97";
+CommanderText98 = "CommanderText98";
+CommanderText99 = "CommanderText99";
+CommonMsgBox_Cancel = "Cancel";
+CommonMsgBox_Confirm = "Confirm";
+CommonMsgBox_Title = "Tip";
+ComposeEmailDialog0 = "Please enter the opponent's name.";
+ComposeEmailDialog1 = "Please enter mail subject.";
+ComposeEmailDialog2 = "Subject can't have spaces!";
+ComposeEmailDialog3 = "You can't send mail to yourself!";
+ComposeEmailDialog4 = "This message is too long.";
+ComposeEmailDialog5 = "%s can't be used as a name.";
+ComposeEmailDialog6 = "Mail Sent!";
+ComposeEmailDialog7 = "This player does not exist.";
+ComposeEmailDialog8 = "Failed to send mail.";
+ComposeEmailDialog9 = "Please enter content of mail.";
+ComposeEmailDialog_6 = "Select Friend";
+ComposeEmailDialog10 = "You have reached the daily mail limit";
+ComposeEmailDialog11 = "%s can't be used in the mail.";
+CorpsText104 = " Upgrade Complete";
+CorpsText105 = "[%s]'s post in the Guild has been changed to [%s]";
+CorpsText106 = "[%s] has joined the Guild! Welcome!";
+CorpsText107 = "[%s]has been kicked from the Guild.";
+CorpsText108 = "[%s] has left the Guild.";
+CorpsText109 = "The General has changed from [%s] to [%s].";
+CorpsText110 = "[%s] vs Planet Base (%s)";
+CorpsText111 = "Defense Failed";
+CorpsText112 = "Defense Successful";
+CorpsText113 = "Attack Failed";
+CorpsText114 = "Attack Successful";
+CorpsText117 = "You successfully occupied Resource Planet (%s)!";
+CorpsText118 = "Resource Planet (%s) has been occupied!";
+CorpsText119 = "[%s] vs. Resource Planet(%s)";
+CorpsText120 = "Your Guild was demoted to Lv %d for not paying the daily maintence cost.";
+CorpsText121 = "[%s] successfully occupied Resouce Planet (%s)!";
+CorpsText122 = "[%s] failed to occupy Resource Planet (%s)";
+CorpsText28 = "Failed to deploy fleet. The number of ships on the Resource Planet has exceeded the maximum.";
+CorpsText49 = "If you send fleets to <font color='#F80000'>assist</font> your Guild, your Truce will be broken! Are you sure you want to continue?";
+CorpsText69 = "Owner: ";
+CorpsText93 = "Level Up Guild ";
+CorpsText94 = "Level Up Guild Warehouse";
+CorpsText95 = "Level Up Guild Merging Center";
+CorpsText96 = "Level Up Guild Mall";
+DailAwardBox_0 = "You got %s";
+DailAwardBox_Item%d = "DailAwardBox_Item%d";
+DailAwardBox_Item0 = ",";
+DaySignBonusItem_1 = "Silver STAR";
+DaySignBonusItem_2 = "Claim";
+DaySignBonusItem_3 = "Signed In";
+DaySignBonusItem_4 = "Sign-in %d days";
+DaySignBonusItem_5 = "Gold STAR";
+DaySignBonusItem_6 = "Diamond STAR";
+DaySignBonusUI_2 = "%d Sign-in Reward";
+DaySignBonusUI_5 = "You've signed-in for %d days this month.";
+DaySignBonusUI_6 = "Captain [%s] is already hired. Converting into %s.";
+DaySignBonusUI_7 = "%d Veteran Shards";
+DaySignBonusUI_8 = "%d Elite Shards";
+DaySignBonusUI_9 = "%d Legendary Shards";
+DaySignBonusUI_10 = "%d Mythic Shards";
+DaySignBonusUI_11 = "<font size='22' color='#00FF00'>Sign In for 7 days and win a </font>%s";
+DaySignBonusUI_12 = "<font size='22' color='#00FF00'>Collected </font>%s";
+DaySignBonusUI_13 = "<font size='18' color='#00FF00'>Sign in every day to earn %d CP. Your monthly tally is at </font><font size='18' color='#FFFFFF'>%d</font><font size='18' color='#00FF00'> days</font>";
+DaySignBonusUI_14 = "<font size='22' color='%s'>%s Captain %s</font>";
+DaySignBonusUI_15 = "Sign in every day to earn";
+DaySignBonusUI_16 = "CP";
+DaySignBonusUI_17 = "Sign In for 7 days and win";
+DaySignBonusUI_18 = "Your monthly tally is at ";
+DaySignBonusUI_19 = "Days";
+
+DeleteCharacterText1 = "Confirm deletion? Your character can't be recovered once deleted!";
+DesignText1 = "The ship has no movement value.";
+DesignText15 = "Design Complete";
+DesignText16 = "Modules installed have exceeded 50. Please try again.";
+DesignText18 = "Fleet movement has reached 16, the maximum allowed. No more Transmission Modules can be installed.";
+DesignText2 = "Enter a name for the Blueprint.";
+DesignText4 = "Reached the maximum number of designs";
+DisptchText4 = "Normal Warp";
+DisptchText5 = "Arrive Now";
+DoingsMainUI_5 = "All daily rewards claimed!";
+EctypeMapUIText1 = "This fleet doesn't have a full supply of He3! Continue?";
+EctypeMapUIText2 = "You don't have enough CP!";
+EctypeMapUIText3 = "Out of Elite Mission entries! Reset and try again";
+EctypeMapUIText4 = "You're out of free attempts!";
+EctypeMapUIText5 = "No Challenges left today!";
+EctypeMapUIText6 = "Purchase successful!";
+EctypeMapUIText7 = "You're out of daily attempts!";
+EctypeMapUIText8 = "You can select up to %d fleets for this Mission. With %d fleets selected, you can still select %d more. Captains of unselected fleets won't earn any EXP from Auto-Raids. Continue?";
+EctypeMapUIText9 = "You don't have enough CP.";
+EctypeMapUIText10 = "CP Purchased!";
+EctypeText1 = "%s X %d";
+EmailAttackItem0 = "You Won!";
+EmailAttackItem1 = "Your attack failed...";
+EmailCommomPage0 = "Player is not in a Guild";
+EmailCommonItem_3 = "%d D %d H %d M ago";
+EmailCommonItem_4 = "%d H %d M ago";
+EmailCommonItem_5 = "%d Minutes ago";
+EmailCommonItem_6 = "1 Minute ago";
+EmailDefendItem0 = "You repelled the enemy attack!";
+EmailDefendItem1 = "Your defenses have fallen...";
+EmailItem0 = "System";
+EmailItem1 = "Delete Confirmation";
+EmailItem10 = "<font color='#06f6ff'>Please claim the Honor that you've earned from the Federation League.</font>";
+EmailItem11 = "Current League Round Results: <br/>Won %d, Lost %d, Drew %d, Result %d, Win Rate (%d%%)<br/> Current Division is: %s";
+EmailItem12 = "You encountered <a href='LinkPlayer:%d,%s'><font color='#ff9900'>%s (ID: %s) </font></a> in a Federation League match.<br/><br/>Match Result: <br/>%s";
+EmailItem13 = "Win";
+EmailItem14 = "Fail";
+EmailItem15 = "Draw";
+EmailItem16 = "<font color='#06f6ff'>It looks like you're now familiar with Galaxy Online 3. Use this newfound knowledge to start your conquest of the universe!</font>";
+EmailItem17 = "<font color='#06f6ff'>The battle took place at <a href=GotoPos:<a href="GotoPos:%d,%d"><font color='#ff9900'>%s(%d,%d)</font></a> <font color='# ffffff'>%s</font> end.  </font>";
+EmailItem18 = "Your inventory is full!";
+EmailItem19 = "<font color='#06f6ff'>Congratulations! You bought Space Bux and also won a gift! Check your mailbox to claim your </font>10% Space Bux bonus<font color='#06f6ff'>.</font>";
+EmailItem2 = "One of the messages you're deleting contains an item. Delete anyway?";
+EmailItem20 = "<font color='#06f6ff'>Greetings<br/>Congratulations! You've become one of our STAR Members by buying Space Bux! Tap the STAR icon to buy Space Bux from now on to earn a 10% bonus on all orders.<br/>That's not all! Visit our official website for news on special STAR-only events coming your way soon!</font>";
+EmailItem21 = "<font color='#06f6ff' size='20'> You managed to fend off an attack from </font>%s<font color='#06f6ff'>. Claim your rewards!</font>";
+EmailItem24 = "<font color='#06f6ff' size='20'>Your battle at </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>ended in a</font><font color='#ffffff' size='20'> win!</font>";
+EmailItem25 = "<font color='#06f6ff' size='20'>Your battle at </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>ended in a </font><font color='#ffffff' size='20'> loss.</font>";
+EmailItem26 = "<font color='#06f6ff' size='20'>Your battle at </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>ended in a</font><font color='#ffffff' size='20'> draw.</font>";
+EmailItem27 = "<font color='#06f6ff' size='20'>Fleets lost in the attack on Resource Planet</font>";
+EmailItem28 = "<font color='#06f6ff' size='20'>Fleets lost in the defense of Resource Planet</font>";
+EmailItem29 = "<font color='#06f6ff' size='20'>Fleets lost in Crush the Corsairs</font>";
+EmailItem30 = "<font color='#06f6ff' size='20'>Fleets lost in the Siege</font>";
+EmailItem31 = "<font color='#06f6ff' size='20'>After a fierce battle, our Resource Planet, </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>has been taken over by </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>. Please strengthen the defenses of our remaining territories.</font>";
+EmailItem32 = "<font color='#06f6ff' size='20'>After a fierce battle, the attack on our Resource Planet, </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>, by </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'>has been rebuffed. Keep up the good work, Commander.</font>";
+EmailItem33 = "<font color='#06f6ff' size='20'>Sorry, your </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'> has expired as of </font><font color='#ffffff' size='20'>%s</font><font color='#06f6ff' size='20'> along with corresponding privileges. You may renew your VIP status from the VIP menu.</font>";
+EmailItem34 = "%d-%02d-%02d %02d:%02d:%02d";
+EmailItem35 = "Ships lost in Resource Planet Siege";
+EmailItem36 = "Ships lost in Resource Planet defense";
+EmailItem37 = "Ships lost in Crush the Corsairs";
+EmailItem38 = "Ships lost in Siege";
+EmailItem39 = "Your %d-Day Galactic Ladder Shipment";
+EmailItem3 = "You sold <font color='#ff9900'>%s</font> x <font color='#00ff00'>%d</font> for <font color=' #00ff00'>%d</font> %s<br/>. Buyer's ID: %d Character Name: %s";
+EmailItem4 = "You paid <font color='#00ff00'>%d</font>%s for <font color='#ff9900'>%s</font> x <font color ='#00ff00'>%d!</font>";
+EmailItem5 = "You cancelled the sale of <font color='#ff9900'>%s</font> x <font color='#00ff00'>%d</font>. Please collect your item in your mailbox.";
+EmailItem7 = "Your items that were stored in your former Guild Warehouse were sent to your mailbox.";
+EmailItem8 = "You completed <font color='#ff9900'>%s</font>. Please claim your reward!";
+EmailItem9 = "<font color='#06f6ff'>Welcome to Galaxy Online 3! Be sure to claim the gift that we've sent you and get a head start on your epic space quest!</font>";
+EmailItem40 = "Thank you for helping %s build their fleets!";
+EmailItem41 = "%s was dissolved for failing to pay daily maintenance fees.";
+EmailItem42 = "Your Guild Wealth - %d - is enough to pay for %d days of maintenance. Please support the Guild Wealth so your Guild can pay the Daily Maintenance and avoid demotion.";
+EmailItem43 = "Your Guild will soon be demoted because the Guild Wealth is too low to pay for the next Daily Maintenance. Please support the Guild Wealth to avoid demotions.";
+EmailItem44 = "You placed %d in Group %d of Federation League Division %s and have been promoted to Division %s. Here's your reward:";
+EmailItem45 = "You placed %d in Group %d of Federation League Division %s. Here's your reward:";
+EmailItem46 = "Congratulations, you defeated %s. Collect your bounty!";
+EmailItem47 = "Your Guild failed to eradicate %s but managed to destroy some of their forces. Please collect your reward!";
+EmailItem48 = "资源星战周击坠排行獎勵";
+EmailText2 = "Welcome to Galaxy Online 3!";
+Exit = "Leave";
+ExternPackUrlAndroid = "http://static-orig.go2.browsergame.com/2s";
+ExternPackUrlWin32 = "http://192.168.25.200/GalaxyOnline2S";
+
+FleetInfoItem_2 = "Tap to create Fleet.";
+FleetListItem0 = "Supplied! He3 is full!";
+FleetListItem1 = "Refueled but the tank isn't full. Spend <font color='#00FF00'>%d</font> Space Bux to buy more He3?";
+FleetListItem2 = "He3 is full";
+FleetListItem3 = "Out of He3! Spend <font color='#00FF00'>%d</font> Space Bux to refuel?";
+FleetListItem4 = "Launched";
+
+FleetListPage_4 = "<font color='#06f6ff' size='20'>Fleets: </font><font color='#ffffff' size='20'>%d/%d</font>";
+FleetListPage_6 = "Already at max number of fleets!";
+FleetModify_0 = "Attack Rating: ";
+FleetModify_1 = "Defense Rating: ";
+FleetModify_10 = "Maximum Range";
+FleetModify_11 = "Nearest Target";
+FleetModify_12 = "Defensive Buildings";
+FleetModify_13 = "Highest Attack";
+FleetModify_14 = "Lowest Attack";
+FleetModify_15 = "Highest Hull";
+FleetModify_16 = "Lowest Hull";
+FleetModify_17 = "Captain's Rank";
+FleetModify_18 = "Fleet";
+FleetModify_2 = "Movement: ";
+FleetModify_21 = "Template %d: %s";
+FleetModify_22 = "Temporarily Unavailable";
+FleetModify_23 = "Save to fleet template";
+FleetModify_24 = "Load Fleet Template";
+FleetModify_25 = "[%s] saved.";
+FleetModify_26 = "[%s] scan complete.";
+FleetModify_3 = "";
+FleetModify_31 = "%s";
+FleetModify_4 = "Round: ";
+FleetModify_5 = "Amount: ";
+FleetModify_9 = "Minimum Range";
+FleetModify_27 = "Unable to create fleet as there are no available ships";
+FleetModify_32 = "Your fleets are fully refueled!";
+FleetModify_33 = "Commander, you don't have enough He3 to fuel your new fleets. Spend %d Space Bux to fuel them?";
+FleetModify_34 = "Fleet assembled and ready for battle!";
+FleetModify_35 = "Commander, you don't have enough He3 to fuel your updated fleets. Spend %d Space Bux to fuel them?";
+FleetModify_36 = "Fleet modified and ready for battle!";
+FleetModify_37 = "Fleet Strength: ";
+FleetModify_38 = "Fleet name can not contain spaces.";
+FleetModify_39 = "View Fleet";
+FleetModify_40 = "Modify Fleet";
+
+FleetText1 = "You can't modify a fleet you don't own.";
+FleetText2 = "Dismissing a fleet will delete the ships in it. Continue?";
+FleetText28 = "%s can't be used as a name.";
+FleetText29 = "Please name the fleet.";
+FleetText30 = "You are currently under attack. Fleet assembly failed.";
+FleetText31 = "Fleet settings have been changed. Save?";
+FleetText32 = "Save Fleet";
+FleetText33 = "Give Up";
+FleetText_Change = "Switch";
+FleetText_Check = "Ship Info";
+FleetText_Dump = "Clear";
+FleetText_LoadSlot = "Use this fleet formation?";
+FleetText_Move = "Move";
+FleetText_SaveSlot = "Save Fleet?";
+FormationText10 = "FormationText10";
+FormationText11 = "FormationText11";
+FormationText12 = "FormationText12";
+FormationText13 = "FormationText13";
+FormationText14 = "FormationText14";
+FormationText15 = "You don't have enough ships!";
+FormationText2 = "No fleet assembled. Unable to save template.";
+FormationText22 = "Fleet created!";
+FormationText6 = "FormationText6";
+FormationText7 = "FormationText7";
+FormationText8 = "FormationText8";
+FormationText9 = "FormationText9";
+FriendFaceBookPage0 = "Please switch to a Facebook account.";
+FriendText11 = "wants to be your friend. Accept?";
+FriendText12 = "Delete Friend?";
+FriendText13 = "accepted your request and is now in your Friend List!";
+FriendText17 = "Unable to add friend, player is either offline or does not exist";
+FriendText18 = "Request sent";
+FriendText19 = "The player is already your friend.";
+FriendText20 = "You can't add yourself as a friend.";
+FriendText23 = "Wrong Nickname. Please enter it again!";
+FriendText24 = "That nickname's already in use! Please enter a new one.";
+FriendText28 = "Your friends list is full!";
+FriendText29 = "Friends list is full";
+FriendText30 = "Player's friend list is full";
+FriendText34 = "You reached the limit for requests. Please try again later.";
+FriendText35 = "You already sent this player a friend request";
+FriendText36 = "Friend Request list is full";
+FriendText37 = "Name cannot be shorter than 2 characters";
+FriendText38 = "You have a friend request from %s";
+FriendText39 = "Recommendation is in cooldown. Please try again later!";
+FriendText7 = "Enter IGG ID";
+FriendText8 = "Player is offline or does not exist."
+FriendText9 = "Scan is cooling down. Please try again later!"
+FriendText10 = "Invalid IGG ID. Please try again!"
+GalaxyText2 = "Targets in Truce Phase can't be attacked.";
+HomeCtrl0 = "Storage Silo is full.";
+IncreaseQuantity_Gold = "Gold";
+IncreaseQuantity_He3 = "He3";
+InstanceMopUpReportUI_0 = "Auto-Raid";
+InstanceMopUpReportUI_1 = "Auto-Raid x10";
+InstanceMopUpReportUI_2 = "Auto-Raid Success";
+ItemText10 = "Learned [%s]";
+ItemText14 = "Reached the purchase limit of the day";
+ItemText7 = "Used [%s]";
+ItemText8 = "<font color='#F80000'>(Research)</font>";
+ItemText9 = "<font color='#00C800'>Description: </font>";
+LoginFailedText8 = "Failed to Sign-In!";
+
+LoginErrorCode1 = "Server verification failed. Check your connection and try again.";
+LoginErrorCode2 = "Invalid IGG ID. Please try again!";
+LoginErrorCode3 = "Current account is logged in.";
+LoginErrorCode4 = "This account has been suspended. Please contact Live Support.";
+LoginErrorCode5 = "Your connection has timed out. Please check your network and try again.";
+LoginErrorCode6 = "Server is offline. Unable to connect at the moment.";
+
+LoginFailedTitle1 = "Error";
+LotteryText3 = "You don't have enough Space Bux!";
+Lottery_BuyContext = "You're out of free Galactic Gifts. You can buy an additional Gift at <font color='#00FF00' size='20'>%d Space Bux</font> each.";
+Lottery_BuyTitle = "Tip";
+Lottery_ItemGold = "Gold";
+Lottery_ItemHe3 = "He3";
+Lottery_ItemMetal = "Metal";
+Lottery_ItemStorageFontTag = "<font color='#00FF00'>%s/%s</font><br>";
+Lottery_ItemStorageGold = "<font color="#C4B275">Gold Capacity: </font>";
+Lottery_ItemStorageHe3 = "<font color="#C4B275">He3 Capacity: </font>";
+Lottery_ItemStorageMetal = "<font color="#C4B275">Metal Capacity: </font>";
+MailMsgTitle1 = "Tutorial Complete";
+MailText1 = "Battle Report";
+MailText27 = "Win";
+MailText28 = "Fail";
+MailText29 = "Item Sold";
+MailText30 = "Purchase successful";
+MailText31 = "Sale Cancelled";
+MailText32 = "Sale Expired";
+MailText33 = "Receive Resources";
+MailText41 = "Returned Item/s";
+MailText44 = "戰役獎勵";
+MailText55 = "System Gift";
+MailText56 = "Event Prize";
+MailText58 = "Honor Reward";
+MailText60 = "Division Changes";
+MailText62 = "Federation League Report";
+MailText66 = "Draw";
+MainUITXT24 = "Metal: The max you can hold is 900 billion.";
+MainUITXT25 = "He3 maxes out at 900,000,000";
+MainUITXT26 = "Gold: The max you can hold is 900 billion.";
+MainUITXT36 = "You got xxx from the Galactic Gift!";
+MainUITXT38 = "Congratulations";
+MallItemText1 = "Space Bux";
+MallItemText2 = "Metal";
+MallItemText3 = "He3";
+MallItemText4 = "Gold";
+MallItemText5 = "Tax";
+MallItemText6 = "Medal";
+MallItemText7 = "CP";
+MallItemText8 = "Relic";
+MallItemText9 = "VoyagerVisa";
+MallPointsText1 = "You got %d Space Bux!";
+MenuText1 = "View";
+MenuText2 = "Turn";
+MenuText3 = "Modify";
+MenuText5 = "Dismiss";
+MenuText6 = "Recall";
+Merge_All_Gem = "批量融合寶石";
+Merge_All_Gem_Use = "Use";
+Merge_Money_Not_Enough = "You don't have enough Gold.";
+NeedSpText1 = "<font color='#00ff00'>2</font> Command Points are needed for each fleet to warp travel. Spend <font color='#00ff00'>20</font> Space Bux to instantly transport a fleet to its destination. You can spend up to <font color='#00ff00'>300</font> Space Bux per voyage. This voyage costs a total of <font color='#00ff00'>%d</font> Command Points. Spend <font color='#00ff00'>%d</font> Space Bux to complete this voyage immediately.";
+NeedSpText2 = "2 Command Points are needed each time a Fleet attacks. Command Point cost for this attack: %d, <font color='#ff0000'>Your have no Command Points!</<font>";
+NetText1 = "Connection Lost.";
+NetText2 = "Failed to connect! Please check your network and try again.";
+NetText4 = "Your account is currently logged in on another device.";
+NewCorpsText3 = "Illegal characters found. Please try again.";
+NewCorpsText8 = "You are currently under attack. Fleet deployment failed.";
+NewCorpsText9 = "Number of fleets participating in this battle has reached %d.Please try again later.";
+NewCorpsText10 = "The Planet is getting too crowded now. You can only send %d of your fleets to join the battle.";
+NewGuideText1_0 = "NewGuideText1_0";
+NewGuideText1_1 = "NewGuideText1_1";
+NewGuideText1_2 = "NewGuideText1_2";
+NewGuideText1_3 = "NewGuideText1_3";
+NewGuideText1_4 = "NewGuideText1_4";
+NewGuideText1_5 = "NewGuideText1_5";
+NewGuideText1_6 = "NewGuideText1_6";
+NewGuideText2_0 = "NewGuideText2_0";
+NewGuideText2_1 = "NewGuideText2_1";
+NewGuideText2_2 = "NewGuideText2_2";
+NewGuideText2_3 = "NewGuideText2_3";
+NewGuideText2_4 = "NewGuideText2_4";
+NewGuideText2_5 = "NewGuideText2_5";
+NewGuideText3_0 = "NewGuideText3_0";
+NewGuideText3_1 = "NewGuideText3_1";
+NewGuideText3_2 = "NewGuideText3_2";
+NewItemText1 = "Your CP is full";
+NewText1 = "Obtained";
+NewText19 = "Store Items";
+NewText2 = "<font color='#ff0000'>%s</font><br/>%s<br/><br/><font color='#4A47FF'>Source</font><br/>%s";
+NewText22 = "Reconnect";
+NewText23 = "Revive";
+NewText24 = "Heal";
+NewText28 = "<font color='#00ff00' size='20'>%d </font><font color='#ffffff' size='20'>Points</font>";
+NewText29 = "<font color='#00ff00' size='20'>%d </font><font color='#ffffff' size='20'>Points</font>";
+NewText3 = "This is a Common Captain.";
+NewText32 = "Failed to set Avatar";
+NewText33 = "Refresh";
+NewText34 = "Online";
+NewText35 = "Save Fleet";
+NewText36 = "Chrome Armor";
+NewText37 = "Nano Armor";
+NewText38 = "Neutronium Armor";
+NewText39 = "Composite Armor";
+NewText4 = "Common Captain";
+NewText40 = "Masterwork Armor";
+NewText41 = "<font color='#FFFFFF'>Impact DMG</font><font color='#00FF00'>(Deals additional damage to Neutronium Armor)</font>";
+NewText42 = "<font color='#FFFFFF'>Magnetic DMG</font><font color='#00FF00'>(Deals additional damage to Nano Armor)</font>";
+NewText43 = "<font color='#FFFFFF'>Heat DMG</font><font color='#00FF00'>(Deals additional damage to Composite Armor)</font>";
+NewText44 = "<font color='#FFFFFF'>Explosion DMG</font><font color='#00FF00'>(Deals additional damage to Chrome Armor)</font>";
+NewText45 = "Contributed %d";
+NewText7 = "Roster";
+NewText8 = "Gems";
+NewText9 = "Upgrade Lv";
+NewText46 = "None";
+NewText47 = "Your Research Facility's level is too low to craft this!";
+NewText48 = "You do not have the required ingredient(s) to craft this!";
+NewText49 = "You don't have the required Hull or Module to craft this!";
+
+Pirate10 = "Only the General or Deputy can initiate "Crush the Corsairs."";
+Pirate11 = "Your Guild doesn't have enough wealth.";
+Pirate12 = "Rewards for Defeating Pirates: ";
+Pirate22 = "You're out of daily attempts.";
+PortraitChooseListPage_3 = "Spend %d Space Bux to change portrait?";
+QueueFrame_SpeedUpShipText2 = "Complete building all Ships in manufacturing queue now?";
+QuickPayText14 = "Spend <font color='#00FF00'>%d</font> Space Bux to get a Captain Card!";
+QuickPayText15 = "Spend <font color='#00FF00'>%d</font> Space Bux to buy a Construction Schedule slot? After purchase, you'll <font color='#00FF00'>permanently</font> have an additional slot in your Construction Schedule.";
+QuickPayText16 = "You don’t have enough resources. Spend <font color='#00FF00'>%d</font> Space Bux to begin construction?";
+QuickPayText17 = "Unable to buy resources with Space Bux!";
+QuickPayText18 = "Speed up construction to free up 1 slot for the next construction/upgrade.";
+QuickPayText19 = "Construction queue is full";
+QuickPayText20 = "<font color='#06f6ff'size='20'>Use Speed Up to complete ongoing construction and add a new building to your queue. Do you want to Speed Up: </font><font color='#00FF00'size='20'>%s</font><font color='#06f6ff'size='20'>?</font>";
+QuickPayText21 = "Resources are not enough, spend <font color='#00FF00'>%d</font> Space Bux to research now?";
+QuickPayText7 = "Spend <font color='#00FF00'>%d</font> Space Bux to restore your CP?";
+QuiteGameText0 = "Are you sure you want to quit \nGalaxy Online 3 ?";
+QuiteGameText1 = "Cancel";
+QuiteGameText2 = "Exit";
+RadarDialog_3 = "Resource Planet";
+RadarText15 = "None";
+RankAttackPowerPage_10 = "You don't have enough Space Bux!";
+RankAttackPowerPage_11 = "Player is in protection phase";
+RankAttackPowerPage_12 = "This player is in a state of truce. Unable to attack.";
+RankCupPage0 = "You have yet to enter the Rankings. Please wait as the Rankings will update once every 24 hours.";
+RankDialog0 = "My Rank";
+RankDialog1 = "Top 200";
+RegisterTips_10 = "Successfully Signed-Up!";
+RegisterTips_11 = "Sign-Up Failed: %s";
+
+//ResPlanet
+ResPlanet1 = "Upgrading Resource Planets will not only grant your Guild members more benefits but also allow more fleets to be garrisoned.";
+ResPlanet2 = "Lv %d: ";
+ResPlanet3 = "%s Fleets. Resource Planet Bonus: %.01f%%";
+ResPlanet4 = "Fleet(s) Available:";
+ResPlanet5 = "Resource Planet Bonus: ";
+
+SBattleMapUI_5 = "Speed Up ";
+SBattleMapUI_6 = "Return";
+SBattleMapUI_7 = "End Now";
+SBattleMapUI_8 = "Reinforce";
+
+BattleMap_2 = "Veteran";
+BattleMap_3 = "Elite";
+BattleMap_4 = "Legendary";
+BattleMap_5 = "Mythic";
+
+SBattleSelectUI_0 = "Standard Mission";
+SBattleSelectUI_1 = "Elite Mission";
+SBattleSelectUI_2 = "Challenge Mission";
+SBattleSelectUI_5 = "Required Lv %d";
+SBattleSelectUI_6 = "Tries:  %d/%d";
+SBattleUIActivityPage_0 = "Medal Store";
+SBattleUIInstanceInfoBox_1 = "<font color='#00CBCD' size='23'>You must complete Mission </font><font color='#ffffff' size='23'>%d</font><font color='#00CBCD' size='23'> to enter this battle. </font>";
+SBattleUIInstanceInfoBox_2 = "<font color='#00CBCD' size='23'>You must be at least Lv </font><font color='#ffffff' size='23'>%d</font><font color='#00CBCD' size='23'> to enter this Mission.</font>";
+SBattleUIInstanceInfoBox_3 = "Clear Standard Mission %d to enter this Mission.";
+SBattleUIInstanceInfoBox_4 = "Mission unlocks at Lv %d.";
+SBattleUIInstanceInfoBox_5 = "Clear Elite Mission %d to enter this Mission.";
+SBattleUILeagueMatchPage1 = "Honor Mall";
+SBattleUILeagueMatchPage2 = "None";
+SBattleUILeagueRankPage1 = "You're not on the Leaderboard.";
+SCommonMsgBox_0 = "Tip";
+SCommonMsgBox_5 = "Go to Store";
+SCommonMsgBox_6 = "Maintenance Update";
+SCommonMsgBox_7 = "Roger That";
+
+SCorps = "SCorps";
+SCorpsCreatePage1 = "Guild created";
+SCorpsCreatePage2 = "Unable to create Guild! Reason: ";
+SCorpsCreatePage3 = "Name is already in use";
+SCorpsCreatePage4 = "Name contains illegal characters";
+SCorpsCreatePage5 = "There are illegal characters in the description.";
+SCorpsCreatePage6 = "Guild names must be at least 3 characters long.";
+SCorpsCreatePage7 = "Guild names can only be 10 characters long.";
+SCorpsDonateBox1 = "Contributed %d";
+SCorpsInfoPage1 = "You won't be able to join any Guild for the next 24 hours if you leave your Guild. Continue?";
+SCorpsInfoPage2 = "You have used up your Mass Mail for today!";
+SCorpsInfoPage3 = "Please transfer leadership to another Guild member before leaving!";
+SCorpsInfoPage4 = "You don't have access to this feature.";
+SCorpsInfoPage5 = "Exit";
+SCorpsInfoPage6 = "Cancel";
+
+SCorpsJoinPage1 = "Application sent!";
+SCorpsJoinPage2 = "The Guild is full.";
+SCorpsJoinPage3 = "The Guild has set limitations on membership.";
+SCorpsMallPage1 = "You can't build any more fleets!";
+SCorpsMallPage2 = "Purchase successful";
+SCorpsMallPage3 = "You don't have enough Contribution Points to buy this!";
+SCorpsMemberPage1 = "Promote to General";
+SCorpsMemberPage2 = "Promote to Deputy";
+SCorpsMemberPage3 = "Promote to Officer";
+SCorpsMemberPage4 = "Demote to Guild Member";
+SCorpsMemberPage5 = "Demote to Officer";
+SCorpsMemberPage6 = "Delete member from Guild?";
+SCorpsMemberPage7 = "Transfer position as General?";
+SCorpsMemberPage9 = "Promote [%s] to the position of [%s]?";
+SCorpsMemberPage10 = "Demote [%s] to [%s]?";
+SCorpsRectuiyUI1 = "Guild member recruited!";
+SCorpsRectuiyUI2 = "Guild is full. Can't recruit more members.";
+SCorpsRectuiyUI3 = "You can't invite a player to a Guild if the player has fleets in warp or garrisoned on a Mission.";
+SCorpsStarUIItem0 = "Planet %d-%d";
+SCorpsStarUIItem2 = "You can't send fleets while Planet is in Truce Phase.";
+SCorpsStarUIItem3 = "You can't garrison fleets while Planet is in battle!";
+SCorpsStarUIItem4 = "Contest Window: ";
+SCorpsStarUIItem5 = "Truce Phase: ";
+SCorpsStarUIItem6 = "Can't enter. Planet isn't in battle.";
+SCorpsStarUIItem7 = "Only Guild members can enter the Planet during Truce Phase.";
+SCorpsStarUIItem8 = "Battle for this Resource Planet is now in Overtime. You cannot send more fleets to garrison at the moment!";
+SCorpsText1 = "Guild Member";
+SCorpsText10 = "Your Guild appointment has been changed!";
+SCorpsText11 = "Build a Guild Office to join a Guild";
+SCorpsText12 = "You're already in a Guild!";
+SCorpsText13 = "This guild is not open to applications!";
+SCorpsText14 = "Player is offline.";
+SCorpsText15 = "This Commander is representing the Guild in a battle for a Resource Planet at the moment. Unable to expel from the Guild.";
+SCorpsText2 = "Officer";
+SCorpsText3 = "Deputy";
+SCorpsText4 = "General";
+SCorpsText5 = "No One";
+SCorpsText6 = "Requires Approval";
+SCorpsText7 = "All Players";
+SCorpsText8 = "You left the Guild!";
+SCorpsText9 = "Successfully joined the Guild!";
+SCorpsUpgradeBox1 = "Upgrade Guild to Lv %d ?";
+SCorpsUpgradeBox2 = "You don't have enough Contribution. Donate resources to raise Contribution.";
+SDispatchFleetPVPUI_5 = "Start Battle";
+SDispatchFleetPVPUI_7 = "<font size='22' color='#ffffff'>Scan </font><img src='%s' align='1'><font size='22' color='%s'>%d</font></img>";
+SDispatchFleetPVPUI_8 = "<font size='22' color='#ffffff'>Start </font><img src='%s' align='1'><font size='22' color='%s'>%d</font></img>";
+SDispatchFleetPVPUI_9 = "Select fleets";
+SDispatchFleetPVPUI_10 = "You already selected the max number of fleets for this Mission!";
+SDispatchFleetPVPUI_11 = "You don't have any Siege attempts left.";
+
+SCorpsResourcesUIAttackPageItem_0 = "No Expiry";
+
+SDispatchFleetUI_7 = "<font size='24' color='#ffffff'>Search </font><img src='%s' align='1'><font size='24' color='%s'>%d</font></img>";
+SDispatchFleetUI_8 = "You already selected the max number of fleets for this Mission!";
+SDispatchFleetUI_9 = "You already completed Crush the Corsairs!";
+
+SEctypeMapRewardItem_2 = "Researched";
+SEctypeMapRewardItem_3 = "Not Learned";
+SEnterNumberBox_2 = "Confirm";
+SEnterNumberBox_3 = "Delete";
+SEnterNumberBox_4 = "Fuse";
+SGameEventPageItem_%d = "SGameEventPageItem_%d";
+ShipType0 = "None";
+SLotteryDialog_0 = "Spend %d Space Bux to open 1 Galactic Gift.";
+SLotteryDialog_1 = "Free attempts: %d/%d";
+SLotteryDialog_6 = "Free in %02d:%02d:%02d";
+SLotteryDialog_7 = "%dD %02dH";
+SMallQuickUseBox_5 = "Use";
+SMallQuickUseBox_6 = "Please enter quantity.";
+SMallResourceUI_Text0 = "Purchase successful";
+SMallResourceUI_Text1 = "Tip";
+SMallResourceUI_Title0 = "Metal";
+SMallResourceUI_Title1 = "He3";
+SMallResourceUI_Title2 = "Gold";
+SMallUICashItem_2 = "Metal";
+SMallUICashItem_3 = "Gold";
+SMallUICashItem_4 = "He3";
+SMallUINew_6 = "Refresh Black Market with %d Space Bux?";
+SMallUIPropBox_1 = "<font size='22' color='#06f6ff'>Own</font><font size='24' color='#ffffff'> %d</font><font size='22' color='#06f6ff'></font>";
+SMallUIPropBox_2 = "<font size='22' color='#06f6ff'>(Buy</font><font size='24' color='#ffffff'> %d</font><font size='22' color='#06f6ff'>)</font>";
+SMallUIPropItem1 = "Buy for %d Space Bux?";
+SMallUIPropItem2 = "Buy with %d Space Bux?";
+SMallUIPropItem6 = "Bought";
+SMallUIPropItem7 = "Gold at maximum!";
+SMallUIPropItem8 = "He3 is full";
+SMallUIPropItem9 = "Metal at maximum!";
+SMallUIPropItem10 = "<font size='20' color='#ffffff'>You don't have enough Gold. Spend </font><font color='#00FF00'>%d </font><font size='20' color='#ffffff'>Space Bux to buy more Gold?</font>";
+
+SFirstPunchUI_0 = "Buy your first Space Bux and claim a Legendary 3-Star Captain!";
+
+SMallUIResourceItem_0 = "Fill 10% of Storage Silo";
+SMallUIResourceItem_1 = "Fill half of Storage Silo";
+SMallUIResourceItem_2 = "Fill Storage Silo";
+SMallUIShieldItem1 = "During a Truce, your base can't be attacked by other players. Spend %d Space Bux to activate a Truce?";
+SMallUIShieldItem2 = "Tip";
+SMallUIShieldItem_0 = "Buy a permanent Construction Slot with %d Space Bux?";
+SMallUIShieldItem_3 = "Cooldown: %s";
+SMallUIShieldItem_4 = "Purchases can only be made after cooldown!";
+SMallUIShieldItem_5 = "You are currently under a Truce. Sending fleets on this campaign will end the Truce. Proceed?";
+SMallUIShieldItem_6 = "Confirm";
+SMallUIShieldItem_7 = "Tip";
+SPlayerInfoUI0 = "Buy %d CP with %d Space Bux? (Bought %d times today)";
+SPlayerInfoUI2 = "You've reached the daily purchase limit!";
+SPlayerInfoUI_1 = "Guild: ";
+SQuickPayDialog_0 = "Tip";
+SShipBlueUIItemText6 = "Not reseached";
+SShipBlueUIItemText7 = "Researched";
+SShipBodyUI0 = "Cancel Research?";
+SShipBodyUI1 = "Cancel the research of this Science? (Canceling will return all gold.)";
+SShipBuildPageItem_1 = "Amount: %d";
+SShipBuildPageItem_2 = "Time left: ";
+SShipBuildPageItem_3 = "Finish Now";
+SShipBuildPageItem_4 = "Give Up";
+SShipBuildPageItem_5 = "Tap to build Ship.";
+SShipBuildPageItem_6 = "Requires Lv %d Shipyard to unlock.";
+SShipBuildPageItem_7 = "Upgrade Shipyard";
+SShipBuildPageItem_8 = "Parallel Production "Science Research" unlocked";
+SShipBuildPageItem_9 = "Research Science";
+SShipBuildPageItem_10 = "Upgrading Shipyard"
+SShipBuildPageItem_11 = "<font size='20' color='#ffffff'>Assists Available</font>";
+SShipBuildPageItem_12 = "<font size='20' color='#ffffff'>Assists </font><font size='20' color='%s'>%d</font><font size='20' color='#ffffff'> times</font>";
+SShipDesginUI_1 = "This will replace your old Blueprint. Continue?"
+SShipDesginUI_2 = "Configuration Complete!"
+SShipEnterNumberBox_5 = "<font size='22' color='#FFDE00'>/%d</font>";
+SShipEnterNumberBox_6 = "<font size='22' color='#FFDE00'>/%d</font><font size='22' color='#FFFFFF'>(</font><font size='22' color='#%s'>Current max Construction Slots %d</font><font size='22' color='#FFFFFF'>)</font>";
+SShipEnterNumberBox_7 = "You don't have enough resources to build this. Spend <font color='#00FF00'>%d</font> Space Bux to build now?";
+SShipEnterNumberBox_8 = "You don't have enough Gold for ship repairs. Spend <font color='#00FF00'>%d</font> Space Bux to repair?";
+SShipEnterNumberBox_9 = "Your base has reached the max limit of ships.";
+SShipInfoUI_41 = "%.01f seconds";
+SShipRecycleInfoBox_0 = "<font color='#ffffff' size='22'> (%s) ships were scrapped. You got: </font><img src='resource_metal.png' align='1'><font>%s </font></img><img src='resource_he3.png' align='1'><font>%s </font></img>";
+SShipRecycleSelecUI_2 = "Repair Ships";
+SShipRecycleSelecUI_3 = "Scrap ships";
+SShipRecycleSelecUI_4 = "Your base has reached the max limit of working ships.";
+SShipShipUIItem_2 = "Tap to build.";
+SShipShipUI_0 = "All Types";
+SShipShipUI_1 = "Frigate";
+SShipShipUI_2 = "Cruiser";
+SShipShipUI_3 = "Battleship";
+SShipShipUI_4 = "Special Warship";
+STradingUIBlackMarketUIText0 = "Resources successfully exchanged!";
+STradingUIBlackMarketUIText1 = "Your Storage Silo is too full for this.";
+ScienceInfo_10 = "Requirements: ";
+ScienceInfo_11 = "Level Effects: ";
+ScienceInfo_12 = "Next level: ";
+ScienceInfo_13 = "%s Lv %d";
+ScienceInfo_14 = "Requires: ";
+Server42 = "Please select server.";
+SettingText23 = "Switch Account";
+SettingText25 = "Bind Account";
+SettingText26 = "Account bound!";
+SettingText27 = "Switch Failed";
+SettingText28 = "Please enter username and password.";
+SettingText29 = "Device is bound";
+SettingUI_24 = "<font color='#06f6ff' size='24'>IGG ID: </font><font color='#ffffff' size='24'> %lld </font>";
+SettingUI_5 = "Switch Account";
+ShipBlueprintInfoBox_2 = "<font size='19' color='#FFFFFF'>Chrome Armor</font><font size='19' color='#00FF00'>(Minimizes the damage dealt by Impact and Heat weapons)</font>";
+ShipBlueprintInfoBox_3 = "<font size='19' color='#FFFFFF'>Nano Armor</font><font size='19' color='#00FF00'>(Minimizes the damage dealt by Heat and Explosion weapons)</font>";
+ShipBlueprintInfoBox_4 = "<font size='19' color='#FFFFFF'>Neutronium Armor</font><font size='19' color='#00FF00'>(Minimizes the damage dealt by Magnetic and Explosion weapons)</font>";
+ShipBlueprintInfoBox_5 = "<font size='19' color='#FFFFFF'>Composite Armor</font><font size='19' color='#00FF00'>(Minimizes the damage dealt by Impact and Magnetic weapons)</font>";
+ShipBlueprintInfoBox_6 = "<font size='19' color='#FFFFFF'>Masterwork Armor</font><font size='19' color='#00FF00'>(Greatly reduces all forms of incoming damage)</font>";
+ShipBlueprintInfoBox_7 = "<font size='20' color='#FFFFFF'>Collected: </font><font size='20' color='%s'>%d</font><font size='20' color='#FFFFFF'>/%d</font>";
+
+ShipDesgin4 = "Add to construction queue";
+ShipDesgin6 = "Name is already in use";
+ShipInfoCtrl1 = "Blueprint has already been discovered!";
+ShipModelFeature_0 = "Attack";
+ShipModelFeature_1 = "Defend";
+ShipModelFeature_2 = "Common";
+ShipModelFeature_3 = "Reflect";
+ShipModelFeature_4 = "Close-range";
+ShipModelFeature_5 = "Mid-range";
+ShipModelFeature_6 = "Agility";
+ShipModelFeature_7 = "Shield";
+ShipModelFeature_8 = "Hull";
+ShipModelFeature_9 = "Long Range";
+ShipModelFeature_10 = "Long-range";
+ShipPartInfoBox_22 = "<font size='20' color="#ffffff">%s    </font>";
+ShipPartInfoBox_23 = "<font size='20' color="#06f6ff">Type: </font>";
+ShipPartInfoBox_24 = "<font size='20' color='#FFFFFF'>Impact DMG</font><font color='#00FF00'size='20' >(Deals additional damage to Neutronium Armor)</font>";
+ShipPartInfoBox_25 = "<font size='20' color='#FFFFFF'>Magnetic DMG</font><font color='#00FF00'size='20' >(Deals additional damage to Nano Armor)</font>";
+ShipPartInfoBox_26 = "<font size='20' color='#FFFFFF'>Heat DMG</font><font color='#00FF00'size='20' >(Deals additional damage to Composite Armor)</font>";
+ShipPartInfoBox_27 = "<font size='20' color='#FFFFFF'>Explosion DMG</font><font color='#00FF00'size='20' >(Deals additional damage to Chrome Armor)</font>";
+ShipPartInfoBox_28 = "<font size='20' color='#FFFFFF'>Collected: </font><font size='20' color='%s'>%d</font><font size='20' color='#FFFFFF'>/%d</font>";
+ShipPartInfoBox_29 = "<font size='20' color='#FFFFFF'>Requires: </font><font size='20' color='#00ff00'>%s</font><font size='20' color='#FFFFFF'> to fuse.</font>";
+
+//ShipRDBlueprintItem
+ShipRDBlueprintItem_1 = "<font size='19' color='#FFFFFF'>Research Facility </font><font size='19' color='%s'>Lv %d</font>";
+
+ShipRDCenterFrame_1 = "Battleship";
+ShipRDCenterFrame_2 = "Cruiser";
+ShipRDCenterFrame_3 = "Frigate";
+ShipRDCenterFrame_4 = "These ships are currently unavailable";
+ShipRDCenterFrame_5 = "New ships available for discovery with Lv %d Research Facility:";
+ShipRDCenterFrame_6 = "Upgrade Research Facility to Lv 6 to unlock Custom Blueprints.";
+
+ShipRepair6 = "Confirm repair?";
+ShipTeamInfoOverview_6 = "Target: ";
+ShipTeamInfoOverview_7 = "Range: ";
+ShipText1 = "Construction queue is full, unable to build";
+ShipText18 = "Are you sure you want to cancel the ship being built now? (Canceling won't return all resources.)";
+ShipText19 = "Are you sure you want to delete the Ship Blueprint?";
+Skip = "Skip";
+SpeedTXT02 = "You need more CP.";
+StarText10 = "This planet is occupied.";
+StarText23 = "You still have fleets out on expedition and cannot enter Truce. Please recall your fleets first.";
+StarText8 = "You couldn't relocate your Base because";
+StarText9 = "There are fleets currently out on a mission.";
+SwitchButton_0 = "ON";
+SwitchButton_1 = "OFF";
+TaskGuideText1 = "Hello, I'm %s, please add me as a friend!";
+TaskMainUI_14 = "You haven't built the Guild Office yet.";
+TaskMainUI_15 = "You are not a member of any Guild yet.";
+TaskMainUI_16 = "You haven't built the Science Institute yet.";
+TaskMainUI_17 = "You haven't built the Hangar yet.";
+TaskMainUI_18 = "You haven't built the Shipyard yet.";
+TaskMainUI_19 = "You haven't built the Academy yet.";
+TaskMainUI_20 = "You haven't built the Research Facility yet.";
+TaskMainUI_21 = "You haven't built the Radar yet.";
+TaskMainUI_Warning0 = "Any %s harvested beyond your max storage will be lost. Are you sure you want to continue?";
+TaskMainUI_Warning1 = ", ";
+TaskMainUI_WarningButton1 = "OK";
+TaskMainUI_WarningButton2 = "Expand";
+TechnologyBtn2 = "Ballistic Science";
+TechnologyBtn3 = "Energy Science";
+TechnologyBtn4 = "Missile Technology";
+TechnologyBtn5 = "Shuttle Science";
+TechnologyBtn6 = "Ship Defense Science";
+TechnologyBtn7 = "Construction Science";
+TechnologyBtn8 = "Planetary Defense Science";
+TechnologyText3 = "Cancel research? (Canceling research will return all gold.)";
+TechnologyText4 = "Research Complete!";
+Text10 = "Composite Armor<font color='#00FF00'> (Reduces incoming Impact and Magnetic DMG to minimum.)</font>";
+Text11 = "Masterwork Armor<font color='#00FF00'>(Reduces damage taken)</font>";
+Text12 = "Impact DMG";
+Text13 = "Magnetic DMG";
+Text14 = "Heat DMG";
+Text15 = "Explosion DMG";
+Text7 = "Chrome Armor<font color='#00FF00'>(Minimizes the damage dealt by Impact and Heat weapons)</font>";
+Text8 = "Nano Armor <font color='#00FF00'>(Reduces incoming Heat and Explosive damage to minimum.)</font>";
+Text9 = "Neutronium Armor<font color='#00FF00'>(Minimizes the damage dealt by Magnetic and Explosive weapons.)</font>";
+TimeText1 = "%d/%d, %02d:%02d";
+Update = "Update";
+UpdateTitle = "New Upgrade Available";
+UpgradeText7 = "Research complete!";
+
+UserInfoViewer1 = "No Guild";
+
+UseMoneyDialogBox_SEctypeMapUIContext = "Confirm Auto-Raid on Mission: %s";
+UseMoneyDialogBox_SEctypeMapUIContext_1 = "Reset %d Times Today";
+UseMoneyDialogBox_SEctypeMapUITitle = "Need more free attempts";
+UseMoneyDialogBox_SEctypeMapUITitle_1 = "Reset Mission Attempts";
+UseMoneyDialogBox_SpeedUpContext = "Confirm Acceleration: %s";
+UseMoneyDialogBox_BattleReportTitle_1 = "You don't have enough entries. Reset and try again.";
+UseMoneyDialogBox_LotteryContext = "<font size='22' color='#05e6eb'>No free Galactic Gifts left at the moment, spend </font><font size='22' color='#ffffff'>%d </font><font size='22' color='#05e6eb'>Space Bux to open a gift?</font>";
+UseMoneyDialogBox_LotteryContext1 = "<font size='22' color='#05e6eb'>Opening x10 Galactic Gifts will cost </font><font size='22' color='#ffffff'>%d</font><font size='22' color='#05e6eb'> Space Bux. Continue?</font>";
+UseMoneyDialogBox_LotteryContext2 = "<font size='22' color='#05e6eb'>Refreshing the Grand Prize will cost </font><font size='22' color='ffffff'>%d</font><font size='22' color='#05e6eb'> Space Bux. Continue?</font>";
+UseMoneyDialogBox_ResourceContext = "<font size='22' color='#05e6eb'>Spend </font><font size='22' color='#ffffff'>%d</font><font size='22' color='#05e6eb'> Space Bux to buy resources?</font>";
+VIP1 = "Congratulations! You are now a STAR Member!";
+VIPUI_10 = "<font size='22' color='#ffffff'>Unlock now </font><img src='resource_mallpoint.png' align='1'><font size='24' color='#%s'> %d</font></img>";
+VIPUI_11 = "<font size='22' color='#ffffff'>Extend now </font><img src='resource_mallpoint.png' align='1'><font size='24' color='#%s'> %d</font></img>";
+VIPUI_12 = "<font size='22' color='#ffffff'>Upgrade STAR </font><img src='resource_mallpoint.png' align='1'><font size='24' color='#%s'> %d</font></img>";
+VIPUI_13 = "<font size='20' color='#06F6FF'>Extending %s (%s) will cost </font><font size='20' color='#FFFFFF'>%d Space Bux </font><font size='20' color='#06F6FF'>. Proceed?</font>";
+VIPUI_14 = "<font size='20' color='#06F6FF'>Upgrade to Lv %s (%s) will cost </font><font size='20' color='#FFFFFF'>%d Space Bux</font><font size='20' color='#06F6FF'>. Proceed?</font>";
+VIPUI_15 = "%s(current) time left: ";
+VIPUI_16 = "%s";
+VIPUI_17 = "Silver STAR Privileges";
+VIPUI_18 = "Gold STAR Privileges";
+VIPUI_19 = "Diamond STAR Privileges";
+VIPUI_20 = "Silver STAR";
+VIPUI_21 = "Gold STAR";
+VIPUI_22 = "Diamond STAR";
+VIPUI_27 = "Speed Up";
+VIPUI_28 = "Free daily Auto-Raid";
+VIPUI_29 = "Hiring Cooldown reduced by";
+VIPUI_30 = "Additional CP recharge with Space Bux";
+VIPUI_31 = "Buy Elite Mission entries";
+VIPUI_32 = "Research Speed";
+VIPUI_33 = "Daily Medals";
+VIPUI_34 = "Add Construction Slots";
+VIPUI_35 = "Challenge Mission Drop Rate";
+VIPUI_36 = "Increased Honor earned from Federation League";
+VIPUI_37 = "<font size='20' color='#06F6FF'>Unlocking %s (%s) will cost </font><font size='20' color='#FFFFFF'>%d Space Bux</font><font size='20' color='#06F6FF'>. Procced?</font>";
+VIPUI_38 = "%d Day(s)";
+VIPUI_39 = "%d Hour(s)";
+VIPUI_40 = "%d Minute(s)";
+VIPUI_41 = "%d Second(s)";
+VIPUI_43 = "<font size='20' color='#06F6FF'>You are not a STAR Member.</font>";
+VIPUI_45 = "Collected Medals from STAR Privileges today";
+VIPUI_5 = "You can't activate %s status because you're already a %s.";
+VIPUI_46 = "Increase production of all resources";
+VIPUI_47 = "Congratulations on becoming a %s!";
+VIPUI_48 = "Congratulations, your %s status has been extended to %s!";
+VIPUI_49 = "Congratulations, you upgraded to %s!";
+VIPUI_50 = "Voyager's Visa";
+VIPUI_51 = "You do not have an active Voyager's Visa";
+VIPUI_52 = "Expires in: ";
+VIPUI_53 = "Collect";
+VIPUI_54 = "Buy for %s";
+VIPUI_55 = "Thank you for your purchase! You got %d Space Bux!";
+VIPUI_56 = "You got %d Space Bux from your active Voyager's Visa today.";
+VIPUI_57 = "You already collected the bonus Space Bux from Voyager's Visa today.";
+VIPUI_58 = "Buy a month's worth of Voyager's Visas?";
+VIPUI_59 = "Ladder Challenges You Can Buy";
+VIPUI_60 = "Cancel";
+VIPUI_61 = "Extend";
+VIPUI_62 = "Activate";
+
+WaringText2 = "You don't have enough Space Bux.";
+WaringText3 = "%s is censored or is an invalid character. Please input something else.";
+WaringText4 = "You can't enter a battle without ships. Build some right now!";
+WaringText5 = "You need at least 1 fleet assembled to proceed.";
+WaringText6 = "Guild name can't have spaces.";
+WaringText7 = "You won't be able to join any Guild for the next 24 hours after you left your Guild.";
+WaringText8 = "%s can't be used as a name.";
+WaringText9 = "%s can't be used in Guild Announcements.";
+
+corps_difficulty_bg%d.png = "corps_difficulty_bg%d.png";
+SGameEventPageItem_0 = "Important";
+SGameEventPageItem_1 = "Hot Events";
+SGameEventPageItem_2 = "Repair";
+BuildPopupUIText1 = "View";
+BuildPopupUIText2 = "Upgrade";
+BuildPopupUIText3 = "Collect";
+BuildPopupUIText4 = "Cancel";
+BuildPopupUIText5 = "Complete";
+BuildPopupUIText6 = "Enter";
+BuildPopupUIText7 = "Lv";
+BuildPopupUIText8 = "Boost";
+BuildPopupUIText9 = "Hire";
+
+//DailAwardBox
+DailAwardBox_Item1 = "Metal";
+DailAwardBox_Item2 = "He3";
+DailAwardBox_Item3 = "Gold";
+DailAwardBox_Item4 = "Space Bux";
+DailAwardBox_Item5 = "Relic";
+DailAwardBox_Item6 = "Medal";
+DailAwardBox_Item7 = "Honor";
+DailAwardBox_Item8 = "CP";
+DailAwardBox_Item9 = "";
+//Buff显示
+ItemText0 = "<font color='#06f6ff'>Increases Metal production by 30%.</font>";
+ItemText1 = "<font color='#06f6ff'>Increases He3 production by 30%.</font>";
+ItemText2 = "<font color='#06f6ff'>Increases Gold production by 30%.</font>";
+ItemText3 = "<font color='#06f6ff'>Silver STAR</font>";
+ItemText4 = "<font color='#06f6ff'>Gold STAR</font>";
+ItemText5 = "<font color='#06f6ff'>Diamond STAR</font>";
+ItemText6 = "<font color='#06f6ff'>Truce Phase</font>";
+BuffItemText7 = "<font color='#06f6ff'>You are not a VIP member.</font>";
+
+ResourceInfoLayerGold = "Gold";
+ResourceInfoLayerHe3 = "He3";
+ResourceInfoLayerMetal = "Metal";
+
+
+RandomName = "%s%c·%s";
+
+
+//资源商品说明
+SMallUIResource_Instruction = "You've successfully bought %d %s.";
+
+PVPSeachRival_0 = "<font size='20' color='#ffffff'>You don't have enough Gold to scan for a target. Spend </font><font color='#00FF00'>%d </font><font size='20' color='#ffffff'>Space Bux to scan?</font>";
+PVPSeachRival_1 = "Unable to find an opponent.";
+PVPSeachRival_2 = "<img src='%s' align='1'><font size='20' color='%s'>%d </font><font size='20' color='#ffffff'>Scan</font></img>";
+
+BuildUpgradeInfo_0 ="You haven't met the requirements for upgrade.";
+
+//BuildUpgradeInfoResPlanet
+BuildUpgradeInfoResPlanet_0 ="You don't have enough Wealth to upgrade.";
+BuildUpgradeInfoResPlanet_1 = "<font size='22' color='#06F6FF'>Wealth Cost: </font><font size='22' color='%s'>%s</font>";
+
+CommanderGetCard_0 = "The hiring system is currently unavailable. Please try again later.";
+
+DaySignBonusUI_0 = "You got: ";
+
+SBattleUILeagueMatchPage_0 = "<font size='20' color='#ffffff'>You don't have enough Gold to enter Federation League. Spend </font><font color='#00FF00'>%d </font><font size='20' color='#ffffff'>Space Bux to enter?</font>";
+SBattleUILeagueMatchPage_1 = "Federation League is in cooldown. Please try again later.";
+SBattleUILeagueMatchPage_2 = "You need to wait for %s before the next match. Cooldown can be removed by spending %d Space Bux.";
+
+LevelUpCommander_0 = "<font size='20' color='#ffffff'>You don't have enough Gold to promote Captain. Spend </font><font color='#00FF00'>%d </font><font size='20' color='#ffffff'>Space Bux to promote?</font>";
+LevelUpCommander_2 = "Captain promotion is in cooldown. Please try again later.";
+
+ScienceInfo_15 = "<font size='20' color='#ffffff'>You don't have enough Gold to conduct research. Spend </font><font color='#00FF00'>%d </font><font size='20' color='#ffffff'>Space Bux to research?</font>";
+ScienceInfo_16 = "Upgrade to Lv %d?";
+ScienceInfo_17 = "%s is at max Rank";
+ScienceInfo_18 = "You haven't met the requirements for upgrade.";
+ScienceInfo_19 = ",";
+ScienceInfo_20 = ", ";
+ScienceInfo_21 = "%s Lv %d";
+ScienceInfo_22 = "EXP: ";
+ScienceInfo_23 = "Research in progress. Please try again later.";
+ScienceInfo_24 = "%s Lv %d Research";
+
+//ShipBlueprintModelViewer
+ShipBlueprintModelViewer_10 = "Heat DMG: ";
+ShipBlueprintModelViewer_11 = "Magnetic DMG: ";
+ShipBlueprintModelViewer_12 = "Explosion DMG: ";
+ShipBlueprintModelViewer_13 = "Attack Range: ";
+ShipBlueprintModelViewer_14 = "Reload Speed: ";
+ShipBlueprintModelViewer_15 = "Hit Rate: ";
+ShipBlueprintModelViewer_16 = "Critical Strike Rate: ";
+ShipBlueprintModelViewer_17 = "Interception Rate: ";
+ShipBlueprintModelViewer_18 = "Shield Value: ";
+ShipBlueprintModelViewer_19 = "Hull: ";
+ShipBlueprintModelViewer_20 = "<font size='18' color='#fff6ac'>Reflect</font><font size='18' color='#ffffff'>%.1f%%</font><font size='18' color='#fff6ac'>of damage</font>";
+ShipBlueprintModelViewer_21 = "Shield Recovered per Round: ";
+ShipBlueprintModelViewer_22 = "Hull Recovered per Round: ";
+ShipBlueprintModelViewer_23 = "Damage Absorbed: ";
+ShipBlueprintModelViewer_24 = "Impact DMG Absorbed: ";
+ShipBlueprintModelViewer_25 = "Heat DMG Absorbed: ";
+ShipBlueprintModelViewer_26 = "Magnetic DMG Absorbed: ";
+ShipBlueprintModelViewer_27 = "Explosive DMG Absorbed: ";
+ShipBlueprintModelViewer_28 = "%d%% intercepts Missile and Shuttle weapons.";
+ShipBlueprintModelViewer_29 = "Movement: ";
+ShipBlueprintModelViewer_30 = "He3: ";
+ShipBlueprintModelViewer_31 = "Defend";
+ShipBlueprintModelViewer_32 = "Additional Info";
+ShipBlueprintModelViewer_33 = "You don't have enough resources to discover this Design!";
+ShipBlueprintModelViewer_34 = "%s must be at least Lv %d to discover this Blueprint.";
+ShipBlueprintModelViewer_35 = "Discovered: %s Design";
+ShipBlueprintModelViewer_36 = "You discovered %s Blueprint and got %s %s.";
+ShipBlueprintModelViewer_43 = "Damage: ";
+ShipBlueprintModelViewer_44 = "You haven't gathered the Module Designs required to discover the Ship Design.";
+ShipBlueprintModelViewer_6 = "<font size='20' color='#05e6eb'>Research Facility </font><font size='20' color='%s'>Lv %d</font>";
+ShipBlueprintModelViewer_7 = "Attacks will consume %.02f He3";
+ShipBlueprintModelViewer_9 = "Impact DMG: ";
+ShipBlueprintModelViewer_45 = "<font size='20' color='#ffffff'>You don't have enough resources to discover this Blueprint. Spend </font><font color='#00FF00'>%d</font><font size='20' color='#ffffff'> Space Bux to discover?</font>";
+ShipBlueprintModelViewer_46 = "Attack";
+ShipBlueprintModelViewer_47 = "Hull";
+ShipBlueprintModelViewer_48 = "Shield";
+ShipBlueprintModelViewer_49 = "Range";
+ShipBlueprintModelViewer_50 = "Movement";
+ShipBlueprintModelViewer_51 = "Attack Rating: ";
+ShipBlueprintModelViewer_52 = "Defense Rating: ";
+ShipBlueprintModelViewer_53 = "Precision: ";
+ShipBlueprintModelViewer_54 = "Agility: ";
+ShipBlueprintModelViewer_55 = "Defense Buffer: ";
+ShipBlueprintModelViewer_56 = "Stability: ";
+ShipBlueprintModelViewer_57 = "Build Time: ";
+ShipBlueprintModelViewer_58 = "Build Cost: ";
+ShipBlueprintModelViewer_59 = "%.1f";
+ShipBlueprintModelViewer_60 = "%.02f";
+ShipBlueprintModelViewer_61 = "%d";
+ShipBlueprintModelViewer_62 = "%.1f s";
+ShipBlueprintModelViewer_63 = "Fleet Strength: ";
+ShipBlueprintModelViewer_64 = "(-%.2f s)";
+ShipBlueprintModelViewer_65 = "(+%.1f)";
+ShipBlueprintModelViewer_66 = "(+%.02f)";
+ShipBlueprintModelViewer_67 = "(+%d)";
+ShipBlueprintModelViewer_68 = "(+%d%%)";
+ShipBlueprintModelViewer_69 = "(+%.1f%%)
+ShipBlueprintModelViewer_70 = "Activation uses %.02f He3";
+ShipBlueprintModelViewer_71 = "%d%%";
+ShipBlueprintModelViewer_72 = "Absorb all types of attack:";
+ShipBlueprintModelViewer_73 = "<font size='18' color='#fff6ac'>Reflect </font><font size='18' color='#ffffff'>%.1f%%</font><font size='18' color='#00ff00'>(+%.1f%%)</font><font size='18' color='#fff6ac'> of damage</font>";
+
+SBattleUILeagueFleet_0 = "Please select fleets to enter the match."; 
+
+SItemInfoBox_0 = "Gold";
+SItemInfoBox_1 = "Metal";
+SItemInfoBox_2 = "He3 ";
+SItemInfoBox_3 = "Space Bux";
+SItemInfoBox_4 = "Honor";
+SItemInfoBox_5 = "Medal";
+SItemInfoBox_6 = "Relic";
+SItemInfoBox_7 = "Earn %d %s";
+SItemInfoBox_8 = "<font size='22' color='#06f6ff'>Have </font><font size='22' color='#ffffff'>%d</font><font size='22' color='#06f6ff'></font>";
+SItemInfoBox_9 = "<font size='22' color='#06f6ff'>Have </font><font size='22' color='#ffffff'>%d</font>";
+SItemInfoBox_10 = "Earn %d Medals. Medals are used to buy items in the Medal Mall.";
+SItemInfoBox_11 = "Earn %d Honor. Honor is used to buy items in the Honor Mall.";
+SItemInfoBox_12 = "Earn %d Relics. Relics are used in the Academy to generate Captains.";
+SItemInfoBox_13 = "CP";
+
+ApronPanel_0 = "Unlocks for Lv %d Captains. Promote Captain now?"
+
+CommanderGemsPage_0 = "Inlay";
+CommanderGemsPage_1 = "Remove";
+CommanderGemsPage_2 = "Gem is already at max level.";
+CommanderGemsPage_4 = "%s already inlaid with 4 Gems";
+CommanderGemsPage_5 = "You don't have enough Gems to fuse.";
+CommanderGemsPage_6 = "Only 1 Gem of each type can be inlaid on a Captain.";
+CommanderGemsPage_7 = "Successfully fused [%s] into [%s]!";
+CommanderGemsPage_8 = "Accuracy +%d";
+CommanderGemsPage_9 = "Evasion +%d";
+CommanderGemsPage_10 = "Focus +%d";
+CommanderGemsPage_11 = "Initiative +%d";
+CommanderGemsPage_12 = "Damage dealt by all weapons +%.02f%%";
+CommanderGemsPage_13 = "Hull +%.02f%%";
+CommanderGemsPage_14 = "Shield +%.02f%%";
+CommanderGemsPage_15 = "Shield Regeneration +%.02f%%";
+CommanderGemsPage_16 = "Critical Strike damage +%.02f%%";
+CommanderGemsPage_17 = "Critical Strike rate +%.02f%%";
+CommanderGemsPage_18 = "Chain Attack rate +%.02f%%";
+CommanderGemsPage_19 = "You don't have enough Gold. Spend <font color='#00FF00'>%d</font> Space Bux to fuse this Gem?";
+CommanderGemsPage_20 = "Lv %d";
+
+CommanderGene_0 = "<font size='24' color='#ffffff'>Generate </font><img src='quest_shred.png' align='1' width='36' height='36'><font size='24' color='%s'>%d</font></img>";
+CommanderGene_1 = "<font size='20' color='#06f6ff'>Have: </font><font size='20' color='#ffffff'>%d</font>";
+CommanderGene_2 = "Select a Jackpot Bounty";
+CommanderGene_3 = "<font size='20' color='#ff6c00'>%s </font><font size='20' color='#ffffff'>generated </font>%s";
+CommanderGene_4 = "<font size='20' color='%s'>%s</font><font size='20' color='#ffffff'> X %d</font>";
+CommanderGene_5 = "%s<font size='20' color='#ffffff'> Captain </font>%s";
+CommanderGene_6 = "Veteran Shard";
+CommanderGene_7 = "Elite Shard";
+CommanderGene_8 = "Legendary Shard";
+CommanderGene_9 = "Mythic Shards";
+CommanderGene_10 = "No Jackpot here..."
+CommanderGene_11 = "Cannot generate another Captain while in cooldown."
+CommanderGene_12 = "You don't have enough Relics to generate Captain"
+CommanderGene_13 = "Congratulations, you won: ";
+CommanderGene_14 = "Captain %s is already hired. Converting into %d %s.";
+
+WormholeUI_0 = "Buy 1 Exploration entry with %d Space Bux? (Bought %d times today)";
+WormholeUI_1 = "No unused Exploration entries left today";
+WormholeUI_2 = "Congratulations, you successfully bought an Exploration entry!";
+WormholeUI_3 = "Unable to buy Exploration entries";
+WormholeUI_4 = "You bought 1 Exploration entry. Explore now!";
+
+SearchWormholeListUI_0 = "Select Constellation (%s)";
+SearchWormholeListUI_1 = "Exploration Failed";
+SearchWormholeListUI_2 = "Congratulations, you recover";
+SearchWormholeListUI_3 = "After a detailed search, you recover";
+SearchWormholeListUI_4 = "Return";
+SearchWormholeListUI_5 = "Explore again";
+
+SearchWormholeItem_0 = "You can't explore until you upgrade your Capital's level.";
+SearchWormholeItem_1 = "No Exploration entries left. Buy more to proceed.";
+SearchWormholeItem_2 = "Space Bux";
+SearchWormholeItem_3 = "Honor";
+SearchWormholeItem_4 = "Relic";
+SearchWormholeItem_5 = "Medal";
+SearchWormholeItem_6 = "Gold";
+SearchWormholeItem_7 = "Metal";
+SearchWormholeItem_8 = "He3";
+SearchWormholeItem_9 = "Trophy";
+SearchWormholeItem_10 = "EXP";
+SearchWormholeItem_11 = "CP";
+SearchWormholeItem_12 = "This item is no longer available through Exploration."
+
+//SkyUtils
+SkyUtils_0 = "%dDay";
+SkyUtils_1 = "%dHours";
+SkyUtils_2 = "%dmin";
+SkyUtils_3 = "%dSeconds";
+
+//CommanderIllustrations
+CommanderIllustrations_0 = "All";
+
+//CommanderCrystal
+CommanderCrystal_0 = "Fusion Failed.";
+CommanderCrystal_1 = "Fusion Successful!";
+CommanderCrystal_2 = "You don't have enough Gold for a Shard Fusion. Spend <font color='#00FF00'>%d</font> Space Bux to fuse?";
+
+//SBattleUIArenaMatchPage
+SBattleUIArenaMatchPage_0 = "Buy %d Match attempts with %d Space Bux? (Bought %d times today)";
+SBattleUIArenaMatchPage_1 = "Spend %d Space Bux to reset cooldown?";
+SBattleUIArenaMatchPage_2 = "Purchase successful!";
+SBattleUIArenaMatchPage_3 = "Purchase failed.";
+SBattleUIArenaMatchPage_4 = "You're out of Challenges for today. Do you want to get more daily Challenges by activating or upgrading your VIP status?";
+SBattleUIArenaMatchPage_5 = "You're out of Challenges. Try again tomorrow!";
+SBattleUIArenaMatchPage_6 = "No fleets deployed.";
+SBattleUIArenaMatchPage_7 = "This player is still in combat. Please wait or challenge a new opponent.";
+SBattleUIArenaMatchPage_8 = "This Commander has no fleets deployed for the Galactic Ladder.";
+SBattleUIArenaMatchPage_9 = "Rival ranking has changed, please challenge again later.";
+SBattleUIArenaMatchPage_10 = " Our base is under attack, unable to join the battle.";
+SBattleUIArenaMatchPage_11 = "You don't have any available fleets. Assemble fleets to enter a duel!";
+
+//SBattleUIArenaRecordItem
+SBattleUIArenaRecordItem_0 = "%s ago";
+//SBattleUIArenaExplainPage
+SBattleUIArenaExplainPage_0 = "（Rank %d-%d）";
+SBattleUIArenaExplainPage_1 = "（Rank %d and below）";
+SBattleUIArenaExplainPage_2 = "（Rank %d）";
+//SBattleUIArenaExplainDetail
+SBattleUIArenaExplainDetail_0 = "Rank %d-%d";
+SBattleUIArenaExplainDetail_1 = "Rank %d and below";
+SBattleUIArenaExplainDetail_2 = "Galactic Ladder 1-Day Reward Overview";
+SBattleUIArenaExplainDetail_3 = "7-Day Galactic Ladder Shipment Overview";
+SBattleUIArenaExplainDetail_4 = "Rank %d";
+
+//BuildDetailUI
+BuildDetailUI_0 = "Upgrade %s to Lv %d to build more %s.";
+BuildDetailUI_1 = "%s must be at least Lv %d.";
+
+//FriendSpeedUpBuildShipLogItem
+FriendSpeedUpBuildShipLogItem_0 = "<font color='#ff6c00' size='20'>%s </font><font color='#ffffff' size='20'>helped manufacture </font><font color='#06f6ff' size='20' >%d %s</font>";
+FriendSpeedUpBuildShipLogItem_1 = "%d seconds ago";
+FriendSpeedUpBuildShipLogItem_2 = "%d minutes ago";
+FriendSpeedUpBuildShipLogItem_3 = "%d hours ago";
+FriendSpeedUpBuildShipLogItem_4 = "%d days ago";
+FriendSpeedUpBuildShipLogItem_5 = "You Got:";
+
+//ThreeDaysBounsUI 
+ThreeDaysBounsUI_0 = "Verne's 1st Treasure";
+ThreeDaysBounsUI_1 = "Verne's 2nd Treasure";
+ThreeDaysBounsUI_2 = "Verne's 3rd Treasure";
+ThreeDaysBounsUI_3 = "Reward claimed!";
+ThreeDaysBounsUI_4 = "Play for %d day(s) to get this Treasure from General Verne!";
+
+//SpacePortTip
+SpacePortTip_0 = "You can't deploy defensive buildings or fleets in this square.";
+SpacePortTip_1 = "You can't deploy a fleet in this Square.";
+
+//FriendInteractiveItem
+FriendInteractiveItem_0 = "You have used up all of your daily Assists.";
+
+//SCorpsBattlePage
+SCorpsBattlePage_0 = " "Crush the Corsairs" is taking place upon your Guild mate's base! Dispatch reinforcements now!";
+SCorpsBattlePage_1 = " "Crush the Corsairs" is taking place upon your base! Deploy your fleets at once!";
+SCorpsBattlePage_2 = "View";
+SCorpsBattlePage_3 = "Reinforce";
+
+//BuffInfoBox
+BuffInfoBox_0 = "%s Activated - %s Left";
+BuffInfoBox_1 = "<font size='22' color='#ffffff'>Activate </font><img src='%s' align='1'><font size='22' color='%s'>%d</font></img>";
+SCorpsBattlePage_4 = ""Crush the Corsairs" is already in progress!";
+
+//SCorpsPirateUI
+SCorpsPirateUI_0 = "This event has ended.";
+
+//SCorpsPirateUIItem
+SCorpsPirateUIItem_0 = "Stronghold cleared of Corsairs!";
+SCorpsPirateUIItem_1 = "You can't launch any more attacks for this event!";
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+********************************************************************************************************************************************************************************************************
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+UI_ApronButton_0 = "For Lv %d";
+
+//UI_SPlayerInfoUI
+UI_SPlayerInfoUI_Title = "Commander Overview";
+//UI_SPlayerInfoUIItem
+UI_SPlayerInfoUIItem_3 = "Enter";
+//戰役提示
+EctypeMapUI_MsgBoxTitle = "There are unselected fleets.";
+
+FriendText31 = "This name is too short. Please enter a name that has at least 4 characters!";
+FriendText32 = "This name is too long. Please enter a name that has less than 20 characters!";
+FriendText33 = "%s is censored or is an invalid character. Please input something else.";
+FriendText40 = "Commander name can't have spaces.";
+FriendText41 = "Assist Failed!";
+
+SCorpsResourceInfoBox_1 = "You've acquired the max number of Resource Planets your Guild can control. Even if the siege of %s is a success, you'll be unable to occupy this Resource Planet. Proceed anyway?";
+SCorpsResourceInfoBox_2 = "Attack";
+SCorpsResourceInfoBox_3 = "Give Up";
+SCorpsEnterResourcesUI_1 = "Resource Planet is under siege. Unable to recall or garrison fleet.";
+SCorpsDonateBox_1 = "You don't have enough Space Bux or resources to donate!";
+
+// 新手引導
+GuideManName1 = "Pirate Barbarossa";
+GuideManName2 = "Captain Alie";
+GuideManName3 = "Lieutenant Wells";
+GuideManName4 = "General Verne";
+
+GuideText0_1 = "This is bad! Our radar has detected a breach in our borders… It's the Corsairs!";
+GuideText0_2 = "Impossible! They've been in exile for over 10 years!";
+GuideText0_3 = "These space scum dare try to swipe our resources? This is Federation space! You outlaws have no right being here!";
+GuideText0_4 = "Outlaws? Might makes right, General! I'm the law now!";
+GuideText0_5 = "Don't make me laugh! All ships, fly into formation!";
+GuideText0_6 = "We reigned over the cosmos and every star in the sky. We were the spark of civilization!";
+GuideText0_7 = "What's this? I've never seen an energy shield with this much power!";
+GuideText0_8 = "Peace has made you lazy, General! While you were twiddling your thumbs, we've been gearing up for war! We wield technology that's lightyears more advanced than yours!";
+GuideText0_9 = "Someone destroyed Wagner's fleet! Did that attack come from our ships? Hold your fire!";
+GuideText0_10 = "A ceasefire? What makes you think we'll abide to that? Count your lucky stars that you're not part of our plans today! Enjoy your last moments of peace!";
+GuideText0_11 = "General, they're in full retreat! Should we set a pursuit course?";
+GuideText0_12 = "Hold steady, Lieutenant. If the Corsairs are back, we must report to HQ at once!";
+
+GuideText1_1 = "The peace that we sustained for so many years was shattered in a single moment. With you as my prodigy, we must restore peace to these troubled skies. My assistant, Captain Alie, will guide you in your quest.";
+GuideText1_2 = "Nice to meet you! How may I address you, Commander?";
+GuideText50_1 = "Commander %s, you carry a name that's burdened with vengeance and glorious purpose! This planetary base will be a platform for you conquests. Manage it well. I will aid you every step of the way!";
+
+GuideText2_1 = "This is our base of operations. We may have defeated the space pirates but we have only earned a mere respite. They will return.";
+GuideText2_2 = "The protection and expansion of our base depends on the strength of our <font color='#00ff00'>Ships</font>. <font color='#ffa306'>Tap the highlighted area</font> to build a <font color='#00ff00'>Shipyard</font>.";
+GuideText2_3 = "Tasks are added to your <font color='#00ff00'>Construction Schedule</font> each time you construct a new building or upgrade an existing one. If the <font color='#00ff00'>Construction Schedule</font> is full, you must wait for a current task finish before starting another.";
+GuideText2_4 = "Now that your <font color='#00ff00'>Shipyard</font> is complete, we can begin manufacturing ships to defend against enemy attacks.";
+
+GuideText3_1 = "Greetings, Commander. I'm Captain Alie. Although we've managed to repel the corsairs, I believe it is a matter of time before they launch a second assault on our base.";
+GuideText3_2 = "We need to get a strong armada of fleets airborne ASAP. Let’s visit the Ship Factory right away.";
+GuideText3_3 = "You can complete these ships instantly by tapping the Finish Now button. Let's give it a try.";
+
+GuideText4_1 = "At the heart of every mighty <font color='#00ff00'>fleet</font> is a qualified <font color='#00ff00'>Captain</font>. Tap the <font color='#ffa306'>highlighted area</font> and build an <font color='#00ff00'>Academy</font>.";
+GuideText4_2 = "Now that the <font color='#00ff00'>Academy</font> is complete, you can hire some of the finest Captains in the galaxy for your fleets.";
+
+GuideText5_1 = "Our fleets need talented Captains to lead them into battle. Let's head to the Academy and recruit some right now.";
+
+GuideText6_1 = "With new <font color='#00ff00'>Ships</font> and <font color='#00ff00'>Captains</font>, you can create a fleet of your very own. <font color='#ffa306'>Tap</font><font color='#00ff00'> Fleet</font> in the Main Menu to continue.";
+GuideText6_2 = "<font color='#ffa306'>Tap</font> the empty slot to build new fleet.";
+GuideText6_3 = "Next, <font color='#ffa306'>pick a Captain</font> to lead your new <font color='#00ff00'>fleet</font>.";
+GuideText6_4 = "Now let's assemble a fleet. We can select the <font color='#00ff00'>type</font> and<font color='#00ff00'> number of ships.</font>";
+GuideText6_5 = "Your Hangar contains <font color='#00ff00'>nine slots</font>. <font color='#ffa306'>Tap one</font> to assign ships to the slot.";
+GuideText6_6 = "If you want to view your <font color='#00ff00'>assembled fleets</font>, tap  <font color='#00ff00'>All Fleets</font>. Congrats, we're now ready to take on the Corsairs!";
+GuideText7_1 = "Now that your fleets are prepared, it's time to fight the Corsairs.";
+GuideText7_2 = "Battles consume <font color='#00ff00'>CP</font>. If your <font color='#00ff00'>CP</font> is too low, you can't participate in combat. <font color='#00ff00'>CP</font> slowly recovers over time but can be instantly recovered with <font color='#ffa306'>Space Bux</font>.";
+GuideText7_3 = "<font color='#ffa306'>Tap the fleets</font> you wish you deploy.";
+GuideText8_1 = "The pirates will be back soon. Tap <font color='#ffa306'>highlighted area</font> to build your <font color='#00ff00'>Resource Buildings</font>.";
+GuideText8_2 = "Let's build a <font color='#00ff00'>Metal Extractor</font> first. Metal Extractors produce <font color='#00ff00'>Metal</font> at fixed intervals. <font color='#ffa306'>Tap</font> to build a Metal Extractor.";
+GuideText9_1 = "Well done, we will now build a <font color='#00ff00'>He3 Mine</font>.<br> The mine produces<font color='#00ff00'>He3</font> for construction and ship fuel. <font color='#ffa306'>Tap here </font> to build a He3 Mine.";
+GuideText10_1 = "Finally, let's build a <font color='#00ff00'>Housing District</font>! Housing Districts help develop your base by taxing <font color='#00ff00'>Gold</font> from residents. Tap the indicated area to build a Housing District. <font color='#ffa306'>Tap the ‘Construct' button</font> to begin.";
+GuideText10_2 = "Gold, Metal, and He3 are needed to build your base or army. With more resource production buildings, you'll be able to build more fleets.";
+
+GuideText11_1 = ""General Verne will no doubt be proud of the way you completed this mission! How shall I address you, Commander?"";
+
+GuideText101_1 = "Commander, we need to develop our base before the Corsairs launch another attack. Let's check what tasks are available.";
+GuideText101_2 = "Tap <font color='#00ff00'>Proceed</font> to go to the next step of the Task.";
+
+GuideText102_1 = "You've completed a Main Task. Return to Base and claim your reward!";
+
+GuideText103_1 = "Commander, you may claim your reward by tapping the Task icon.";
+GuideText103_2 = "Tap <font color='#00ff00'>Complete</font> to finish a mission and claim your reward!";
+
+GuideText105_1 = "This is where the cream of the crop gathers, where skills and experience determine victory or defeat. Defeat your rivals and rise through the Divisions! Do you have the guts to compete for honor?";
+GuideText105_2 = "You need to select at least one fleet to participate in the Federation League. Tap Fleet to make your selection.";
+GuideText105_3 = "Tap the Captain whose fleet you wish to use. To confirm your selection, tap Save Fleet.";
+GuideText105_4 = "Commander, your fleets are ready. Tap Join to enter.";
+
+GuideText106_1 = "With a completed Radar, you can scan for enemy players, lay siege to their bases, and plunder their resources. Try it out!";
+GuideText106_2 = "Tap Enter to access the Radar.";
+
+GuideText107_1 = "A fully operational Trade Center grants access to both the Resource Exchange and the Black Market. Enter the Trade Center to access!";
+GuideText107_2 = "Tap Enter to access the Trade Center.";
+GuideText107_3 = "Many Commanders who are unsanctioned by the Federation still choose to trade in the Black Market. The resources there can determine a mission's failure or success.";
+
+GuideText231_1 = "Welcome to the Academy's Genesis Chambers. You can generate or convert Captains here.";
+GuideText231_2 = "Congratulations! Your first experiment was a success! Feel free to Generate more. You might discover something unexpected!";
+
+TechMemoSplit = "、";
+
+SelectJumpDriectionBox_0 = "Select direction of attack";
+SelectJumpDriectionBox_1 = "Defense Orientation";
+SelectJumpDriectionBox_2 = "Attack";
+SelectJumpDriectionBox_3 = "Defend";
+
+SCorpsResourceCallHomePage_0 = "You recalled the fleet/s garrisoned at %s.";
+SCorpsResourceDefendPage_0 = "Fleets garrisoned at %s can be recalled at any time.";
+
+SCorpsPiratesUIDefendUI_0 = "This stronghold is already under siege. Please wait.";
+SCorpsPiratesUIDefendUI_1 = "This stronghold is already occupied.";
+
+//ShipModelInfoItem
+ShipModelInfoItem_0 = "(+%s)"
+ShipModelInfoItem_1 = "(-%.2f)"
+ShipModelInfoItem_2 = "<font color='#ffffff' size='18'>%d</font><font color='#ffffff' size='18'>/%d</font>"
+ShipModelInfoItem_3 = "<font color='#ffffff' size='18'>%d</font><font color='#00ff00' size='18'>(+%d)</font><font color='#ffffff' size='18'>/%d</font>"
+
+//GameSettingPage
+GameSettingPage_0 = "Link an account to prevent any loss of progress.";
+GameSettingPage_1 = "Linked %s Account: %s";
+GameSettingPage_2 = "None";
+GameSettingPage_3 = "Guest";
+GameSettingPage_4 = "Google";
+GameSettingPage_5 = "IGG";
+GameSettingPage_6 = "Facebook";
+GameSettingPage_7 = "Linked %s";
+
+//CommanderMetaItem
+CommanderMetaItem_0 = "Tap to claim.";
+
+//DispatchFleetTip
+DispatchFleetTip_0 = "You can't deploy your fleet here!";
+DispatchFleetTip_1 = "Select a fleet to deploy first";
+DispatchFleetTip_2 = "You can't deploy your fleet here!";
+
+//FriendInteractivePage
+FriendInteractivePage_0 = "Speed-Up success";
+FriendInteractivePage_1 = "Helping times are reached the limit";
+FriendInteractivePage_2 = "Fleets Building are complete";
+
+//SCorpsResourcesUIOwnerPageItem
+SCorpsResourcesUIOwnerPageItem_0 = "Planet is in Truce Phase（Unable to garrison when contested）";
+SCorpsResourcesUIOwnerPageItem_1 = "Planet is in Battle Phase（Unable to garrison）";
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 下面是UI的
+// UI 標題
+UI_TitleText_0 = "Battle Statistics";
+UI_TitleText_1 = "Task";
+UI_TitleText_2 = "PM";
+UI_TitleText_3 = "Inlay Gems";
+UI_TitleText_4 = "Roster";
+UI_TitleText_5 = "2";
+UI_TitleText_6 = "Load Fleet Template";
+UI_TitleText_7 = "Increase Captain Star Rank";
+UI_TitleText_8 = "Module Design";
+UI_TitleText_9 = "Tip";
+UI_TitleText_10 = "Guild Status";
+UI_TitleText_11 = "Guild Name";
+UI_TitleText_12 = "Rules";
+UI_TitleText_13 = "Select Difficulty";
+UI_TitleText_14 = "Apply to join";
+UI_TitleText_15 = "Select Defending Fleets";
+UI_TitleText_16 = "(%s) Lv %d";
+UI_TitleText_17 = "Rules";
+UI_TitleText_19 = "Send Mail";
+UI_TitleText_20 = "Guild Settings";
+UI_TitleText_21 = "Title";
+UI_TitleText_22 = " ";
+UI_TitleText_23 = "Mall";
+UI_TitleText_24 = "Task";
+UI_TitleText_25 = "Task";
+UI_TitleText_26 = "Science";
+UI_TitleText_27 = "Ship Type";
+UI_TitleText_28 = "Build Ship";
+UI_TitleText_29 = "Please enter quantity.";
+UI_TitleText_30 = "Select Ship";
+UI_TitleText_31 = "Select Module";
+UI_TitleText_32 = "Trade Center";
+UI_TitleText_33 = "Task";
+UI_TitleText_34 = "STAR Rules";
+UI_TitleText_35 = "Black Market";
+UI_TitleText_36 = "Resource Exchange";
+UI_TitleText_37 = "Select Ship";
+UI_TitleText_38 = "About EXP Elixirs";
+UI_TitleText_39 = "Treasures";
+UI_TitleText_40 = "Battle Report";
+UI_TitleText_41 = "Crush the Corsairs Guide";
+
+//UI 輸入框提示
+UI_PlaceHolderText_0 = "Please enter player's name (maximum of 16 characters.)";
+UI_PlaceHolderText_1 = "Please enter subject (maximum of 20 characters).";
+UI_PlaceHolderText_2 = "Enter message (255 character limit)";
+UI_PlaceHolderText_3 = "Please enter the player's ID.";
+UI_PlaceHolderText_4 = "Please enter your name.";
+UI_PlaceHolderText_5 = "Tap to input ID.";
+UI_PlaceHolderText_6 = "Please enter description.";
+UI_PlaceHolderText_7 = "Tap to input name of Guild.";
+UI_PlaceHolderText_8 = "Tap to input name of Ship.";
+UI_PlaceHolderText_9 = "";
+UI_PlaceHolderText_10 = "Please enter total price.";
+UI_PlaceHolderText_11 = "Enter player's name";
+UI_PlaceHolderText_12 = "Enter IGG ID";
+
+//UI 介面//UI_ApronButton
+
+//UI_ApronPanel
+
+//UI_ArcSlider
+
+//UI_BattleReport
+UI_BattleReport_0 = "Allied Losses";
+UI_BattleReport_1 = "Build Ship";
+UI_BattleReport_2 = "Hire Captains";
+UI_BattleReport_3 = "Discover Blueprint";
+UI_BattleReport_4 = "Replay";
+UI_BattleReport_5 = "Details";
+UI_BattleReport_6 = "Return";
+UI_BattleReport_7 = "Thanks for supporting Galaxy Online 3! Rate us 5-Stars and we'll";
+UI_BattleReport_8 = "Don't show again";
+UI_BattleReport_9 = "Reject";
+UI_BattleReport_10 = "Rate Now";
+UI_BattleReport_11 = "<font size='20' color='#ffffff'>Allied Losses </font><font size='20' color='#00FEFF'>(Ships damaged in Mission have been repaired.)</font>";
+UI_BattleReport_12 = "You've been defeated! Your Captains did not earn any EXP.";
+UI_BattleReport_13 = "Repeat";
+UI_BattleReport_14 = "Unable to playback. Please try again later.";
+UI_BattleReport_15 = "Congratulations! Your Rank is now %d!";
+UI_BattleReport_16 = "Your Rank is unchanged.";
+UI_BattleReport_17 = "Learn Dynamics";
+UI_BattleReport_18 = "Gain Strength with";
+UI_BattleReport_19 = "Promote Captains";
+
+//UI_BattleReportCostItem
+UI_BattleReportCostItem_0 = "%d";
+
+//UI_BattleReportDetail
+UI_BattleReportDetail_0 = "Ships destroyed by Allies";
+UI_BattleReportDetail_1 = "Ships Destroyed by Enemies";
+
+//UI_BattleReportRewardItem
+
+//UI_BattleReportShotdownItem
+UI_BattleReportShotdownItem_0 = "Lv %d";
+UI_BattleReportShotdownItem_1 = "Fleets Destroyed: %d";
+UI_BattleReportShotdownItem_2 = "Lv %d";
+UI_BattleReportShotdownItem_3 = "Fleets Destroyed: %d";
+
+//UI_BindUI
+UI_BindUI_0 = "Register Account";
+UI_BindUI_1 = "FACEBOOK";
+UI_BindUI_2 = "Google";
+UI_BindUI_3 = "Device Sign-in";
+UI_BindUI_4 = "Switch Account";
+
+//UI_BlueprintSourceItem
+
+//UI_BlueprintUI
+UI_BlueprintUI_0 = "Discover Ship";
+UI_BlueprintUI_1 = "Discover Module";
+UI_BlueprintUI_2 = "Frigate";
+UI_BlueprintUI_3 = "Cruiser";
+UI_BlueprintUI_4 = "Battleship";
+UI_BlueprintUI_5 = "Ballistic Weapon";
+UI_BlueprintUI_6 = "Energy Weapon";
+UI_BlueprintUI_7 = "Missile Weapon";
+UI_BlueprintUI_8 = "Shuttle Weapon";
+UI_BlueprintUI_9 = "Planetary Weapon";
+UI_BlueprintUI_10 = "Hull Module";
+UI_BlueprintUI_11 = "Shield Module";
+UI_BlueprintUI_12 = "Anti-Air Module";
+UI_BlueprintUI_13 = "Computer (Module)";
+
+//UI_BuildDetailUI
+
+//UI_BuildingCircleAnimate
+
+//UI_BuildLevelInfoUI
+
+//UI_BuildSpaceBuildingItem
+
+//UI_BuildUpgradeComplete
+UI_BuildUpgradeComplete_0 = "Info";
+UI_BuildUpgradeComplete_1 = "Confirm";
+UI_BuildUpgradeComplete_2 = "Name";
+
+//UI_BuildUpgradeInfo
+UI_BuildUpgradeInfo_0 = "Resources";
+UI_BuildUpgradeInfo_1 = "Resources";
+UI_BuildUpgradeInfo_2 = "Resources";
+UI_BuildUpgradeInfo_3 = "Time";
+UI_BuildUpgradeInfo_4 = "Name";
+UI_BuildUpgradeInfo_5 = "Info";
+
+//UI_BuildUpgradeInfoResPlanet
+UI_BuildUpgradeInfoResPlanet_0 = "Name";
+UI_BuildUpgradeInfoResPlanet_1 = "Tip";
+UI_BuildUpgradeInfoResPlanet_3 = "%s";
+UI_BuildUpgradeInfoResPlanet_4 = "Guild Wealth: %s";
+UI_BuildUpgradeInfoResPlanet_5 = "Upgrade";
+
+//UI_CashUIItem
+UI_CashUIItem_0 = "999999";
+UI_CashUIItem_1 = "999999";
+UI_CashUIItem_2 = "999999";
+
+//UI_ChangeLanguageUI
+UI_ChangeLanguageUI_0 = ;
+UI_ChangeLanguageUI_1 = "English";
+
+//UI_ChatHistoryUI
+UI_ChatHistoryUI_0 = "World";
+UI_ChatHistoryUI_1 = "Guild";
+UI_ChatHistoryUI_2 = "Planet";
+UI_ChatHistoryUI_3 = "PM";
+UI_ChatHistoryUI_4 = "View";
+UI_ChatHistoryUI_5 = "Mail";
+UI_ChatHistoryUI_6 = "Enter";
+UI_ChatHistoryUI_7 = "PM";
+UI_ChatHistoryUI_8 = "Add Friend";
+
+//UI_ChatInfoItem
+
+//UI_ChatInputBar
+UI_ChatInputBar_0 = "Send";
+
+//UI_ChatUI
+
+//UI_ChatWhiperInfoItem
+
+//UI_ChatWhisperUI
+
+//UI_ChooseCommanderItem
+
+//UI_CommanderAttribPage
+UI_CommanderAttribPage_0 = "Effective Command";
+UI_CommanderAttribPage_1 = "Accuracy";
+UI_CommanderAttribPage_2 = "Focus";
+UI_CommanderAttribPage_3 = "Evasion";
+UI_CommanderAttribPage_4 = "Initiative";
+UI_CommanderAttribPage_5 = "Promote";
+UI_CommanderAttribPage_6 = "Expertise";
+UI_CommanderAttribPage_7 = "<font size='21' color='#2BB0B2'>Accuracy: </font><font size='21' color='#CAFEFF'>Increases hit rate and damage.</font>";
+UI_CommanderAttribPage_8 = "<font size='21' color='#2BB0B2'>Initiative: </font><font size='21' color='#CAFEFF'>Affects a ship's combat order and increases chance for Chain Attacks.< /font>";
+UI_CommanderAttribPage_9 = "<font size='21' color='#2BB0B2'>Evasion: </font><font size='21' color='#CAFEFF'>Lowers enemy hit rate and damage when attacked.</font>";
+UI_CommanderAttribPage_10 = "<font size='21' color='#2BB0B2'>Focus: </font><font size='21' color='#CAFEFF'>Increases critical hit rate and critical damage.< /font>";
+
+//UI_CommanderAttribViewer
+UI_CommanderAttribViewer_0 = "Captain";
+UI_CommanderAttribViewer_1 = "Information: ";
+UI_CommanderAttribViewer_2 = "0";
+UI_CommanderAttribViewer_3 = "0";
+UI_CommanderAttribViewer_4 = "0";
+UI_CommanderAttribViewer_5 = "0";
+
+//UI_CommanderCardBuy
+UI_CommanderCardBuy_0 = "Hire Captains with a %d%% discount. Daily discounts left: %d/%d";
+UI_CommanderCardBuy_1 = "Hire One grants 10 Honor. Hire Three grants 50 Honor.";
+
+//UI_CommanderCardBuyItem
+UI_CommanderCardBuyItem_0 = "Name";
+
+//UI_CommanderChipItem
+
+//UI_CommanderChipUI
+UI_CommanderChipUI_0 = "%d";
+UI_CommanderChipUI_1 = "%d";
+UI_CommanderChipUI_2 = "%d";
+UI_CommanderChipUI_3 = "%d";
+UI_CommanderChipUI_4 = "%d";
+UI_CommanderChipUI_5 = "How to obtain Relics: ";
+UI_CommanderChipUI_6 = "Daily Task";
+UI_CommanderChipUI_7 = "Challenge Mission";
+
+//UI_CommanderFragmentInfoItem
+
+//UI_CommanderFramgtScrItem
+UI_CommanderFramgtScrItem_0 = "Recruit from Academy";
+UI_CommanderFramgtScrItem_1 = "Shard Fusion";
+
+//UI_CommanderGemsPage
+
+//UI_CommanderInfoItem
+
+//UI_CommanderListPage
+UI_CommanderListPage_0 = "Hired Captains: %d/%d";
+UI_CommanderListPage_1 = "Order";
+UI_CommanderListPage_2 = "To acquire: ";
+UI_CommanderListPage_3 = "Return";
+UI_CommanderListPage_4 = "%s: %d";
+UI_CommanderListPage_5 = "You are out of %s";
+
+//UI_CommanderMetaItem
+UI_CommanderMetaItem_0 = "Name_bottom";
+UI_CommanderMetaItem_1 = "Tap to claim.";
+
+//UI_CommanderReruitFrame
+UI_CommanderReruitFrame_0 = "Hire Captains";
+UI_CommanderReruitFrame_1 = "Generate Captain";
+UI_CommanderReruitFrame_2 = "Shard Fusion";
+UI_CommanderReruitFrame_3 = "Gallery";
+
+//UI_SDialogBack
+
+//UI_SDialogBack2
+
+//UI_SDialogBackActionLayer1
+
+//UI_SDialogBackActionLayer2
+
+//UI_SDialogBackOnlyButton
+
+//UI_SDialogBaseTitleStyle2
+UI_SDialogBaseTitleStyle2_0 = "Tip";
+
+//UI_SDialogBaseTitleStyle3
+
+//UI_SDialogBaseTitleStyle4
+
+//UI_SDialogBaseTitleStyle5
+
+//UI_SDialogBaseTitleStyle6
+UI_SDialogBaseTitleStyle6_0 = "Standard Mission";
+
+//UI_SDialogBaseTitleStyle7
+
+//UI_SDialogBaseTitleStyle8
+
+//UI_SDialogBaseTitleStyle9
+
+//UI_SPopupDialog
+
+//UI_SPopupDialog2
+
+//UI_SSelectDialog
+
+//UI_ComposeEmailDialog
+UI_ComposeEmailDialog_0 = "Select Friend";
+UI_ComposeEmailDialog_1 = "To: ";
+UI_ComposeEmailDialog_2 = "Subject: ";
+UI_ComposeEmailDialog_3 = "Content: ";
+UI_ComposeEmailDialog_4 = "Clear";
+UI_ComposeEmailDialog_5 = "Send";
+UI_ComposeEmailDialog_6 = "CHANGE ACCOUNT";
+
+//UI_DailAwardBox
+UI_DailAwardBox_0 = "You got %s";
+
+//UI_DailyAwardItem
+UI_DailyAwardItem_0 = "1";
+
+//UI_DailyChestItem
+UI_DailyChestItem_0 = "100";
+UI_DailyChestItem_1 = "2000";
+UI_DailyChestItem_2 = "Claim";
+UI_DailyChestItem_3 = "Integral mission Insufficient receive";
+UI_DailyChestItem_4 = "Have received awards";
+
+//UI_DailyTaskInfoItem
+UI_DailyTaskInfoItem_0 = "Complete";
+UI_DailyTaskInfoItem_1 = "Proceed";
+UI_DailyTaskInfoItem_2 = "Name";
+UI_DailyTaskInfoItem_3 = "Reward: ";
+
+//UI_DaySignBonusItem
+UI_DaySignBonusItem_0 = "%d";
+UI_DaySignBonusItem_1 = "Double";
+
+//UI_DaySignBonusUI
+UI_DaySignBonusUI_0 = "%d Sign-in Reward";
+UI_DaySignBonusUI_1 = "You've signed-in for %d days this month.";
+UI_DaySignBonusUI_2 = "You got: ";
+UI_DaySignBonusUI_3 = "%d";
+
+//UI_DismissFleetComfirmBox
+UI_DismissFleetComfirmBox_0 = "Dismiss Fleet";
+UI_DismissFleetComfirmBox_1 = "Distance: ";
+UI_DismissFleetComfirmBox_2 = "Target: ";
+UI_DismissFleetComfirmBox_3 = "Damage: ";
+UI_DismissFleetComfirmBox_4 = "Hull: ";
+UI_DismissFleetComfirmBox_5 = "Movement:";
+UI_DismissFleetComfirmBox_6 = "Save: ";
+UI_DismissFleetComfirmBox_7 = "Rounds fought:";
+UI_DismissFleetComfirmBox_8 = "Amount: ";
+UI_DismissFleetComfirmBox_9 = "Dismiss Fleet";
+UI_DismissFleetComfirmBox_10 = "Cancel";
+
+//UI_DoingsMainUI
+UI_DoingsMainUI_0 = "Game Event";
+UI_DoingsMainUI_1 = "Sign-In Reward";
+UI_DoingsMainUI_2 = "Galactic Gift";
+
+//UI_EmailAttackItem
+UI_EmailAttackItem_0 = "DefendName";
+UI_EmailAttackItem_1 = "Scorp";
+UI_EmailAttackItem_2 = "100";
+UI_EmailAttackItem_3 = "100";
+UI_EmailAttackItem_4 = "100";
+UI_EmailAttackItem_5 = "00:00:00";
+UI_EmailAttackItem_6 = "Result";
+UI_EmailAttackItem_7 = "100%";
+UI_EmailAttackItem_8 = "1000";
+UI_EmailAttackItem_9 = "Replay";
+UI_EmailAttackItem_10 = "Revenge";
+UI_EmailAttackItem_11 = "10";
+EmailAttackItem_Text1 = "Resource Planet";
+EmailAttackItem_Text2 = "Space Pirate";
+
+//UI_EmailAttackPage
+UI_EmailAttackPage_0 = "View Guild";
+UI_EmailAttackPage_1 = "Delete";
+
+//UI_EmailChooseFirendItem
+UI_EmailChooseFirendItem_0 = "Select Friend";
+
+//UI_EmailCommonItem
+UI_EmailCommonItem_0 = "FromName";
+UI_EmailCommonItem_1 = "Time";
+UI_EmailCommonItem_2 = "Delete";
+UI_EmailCommonItem_3 = "Claim";
+UI_EmailCommonItem_4 = "Reply";
+UI_EmailCommonItem_5 = "Email Info";
+UI_EmailCommonItem_6 = "Details"
+
+//UI_EmailCommonPage
+UI_EmailCommonPage_0 = "View Guild";
+
+//UI_EmailDefendItem
+UI_EmailDefendItem_0 = "DefendName";
+UI_EmailDefendItem_1 = "Scorp";
+UI_EmailDefendItem_2 = "100";
+UI_EmailDefendItem_3 = "100";
+UI_EmailDefendItem_4 = "100";
+UI_EmailDefendItem_5 = "00:00:00";
+UI_EmailDefendItem_6 = "Result";
+UI_EmailDefendItem_7 = "100%";
+UI_EmailDefendItem_8 = "1000";
+UI_EmailDefendItem_9 = "Replay";
+UI_EmailDefendItem_10 = "Revenge";
+UI_EmailDefendItem_11 = "10";
+
+//UI_EmailDefendPage
+UI_EmailDefendPage_0 = "View Guild";
+UI_EmailDefendPage_1 = "Delete";
+
+//UI_EmailListDialog
+UI_EmailListDialog_0 = "Defense Log";
+UI_EmailListDialog_1 = "Attack Log";
+UI_EmailListDialog_2 = "Email";
+UI_EmailListDialog_3 = "Compose";
+
+//UI_EmailPropsItem
+UI_EmailPropsItem_0 = "999";
+UI_EmailPropsItem_1 = "9";
+
+//UI_EmailReportLossItem
+UI_EmailReportLossItem_0 = "%d";
+
+//UI_FleetChooseCommander
+UI_FleetChooseCommander_0 = "Fleets: %d/%d";
+UI_FleetChooseCommander_1 = "Order";
+
+//UI_FleetInfoItem
+UI_FleetInfoItem_0 = "Item Name";
+UI_FleetInfoItem_1 = "27000";
+UI_FleetInfoItem_2 = "Lv %d";
+
+//UI_FleetListPage
+UI_FleetListPage_0 = "Upgrade Space Station to deploy more fleets.";
+UI_FleetListPage_1 = "Space Station";
+
+//UI_FleetMainUI
+UI_FleetMainUI_0 = "All Fleets";
+UI_FleetMainUI_1 = "Create fleet";
+UI_FleetMainUI_2 = "Reserve Ships";
+
+//UI_FleetModify
+UI_FleetModify_0 = "Modify Fleet";
+UI_FleetModify_1 = "Tactics: ";
+UI_FleetModify_2 = "Save Template";
+UI_FleetModify_3 = "Load Template";
+UI_FleetModify_4 = "Auto-Assemble";
+UI_FleetModify_5 = "Save Fleet";
+UI_FleetModify_6 = "Switch";
+UI_FleetModify_7 = "Fleet Strength: ";
+UI_FleetModify_8 = "Movement: ";
+UI_FleetModify_9 = "Round: ";
+
+//UI_FriendFaceBookItem
+UI_FriendFaceBookItem_0 = "Name";
+UI_FriendFaceBookItem_1 = "SFriendDialog_12";
+
+//UI_FriendFaceBookPage
+
+//UI_FriendGameItem
+UI_FriendGameItem_0 = "Name";
+UI_FriendGameItem_1 = "FBName";
+UI_FriendGameItem_2 = "1";
+UI_FriendGameItem_3 = "ScorpName";
+UI_FriendGameItem_4 = "Offline Time";
+UI_FriendGameItem_5 = "00:00:00";
+UI_FriendGameItem_6 = "Online";
+
+//UI_FriendGamePage
+UI_FriendGamePage_0 = "Add Friend";
+UI_FriendGamePage_1 = "Friends: ";
+UI_FriendGamePage_2 = "<font size='20' color='#06f6ff'>Friends: </font><font size='20' color='#ffffff'>%d/%d</font>";
+UI_FriendGamePage_3 = "PM";
+UI_FriendGamePage_4 = "Send Mail";
+UI_FriendGamePage_5 = "Delete";
+
+//UI_FriendAuthItem
+UI_FriendAuthItem_0 = "Reject";
+UI_FriendAuthItem_1 = "Agree";
+
+//UI_FriendSearchPage
+UI_FriendSearchPage_0 = "Search";
+UI_FriendSearchPage_1 = "Recommend";
+
+FriendSearchPage_0 = "Search";
+FriendSearchPage_1 = "Scan (%ds)";
+FriendSearchPage_2 = "Recommended Allies";
+FriendSearchPage_3 = "Friends Found";
+FriendSearchPage_4 = "Recommend";
+FriendSearchPage_5 = "Recommend(%ds)";
+
+//UI_FriendPassAuth
+UI_FriendPassAuth_0 = "Friends";
+UI_FriendPassAuth_1 = "Friends";
+UI_FriendPassAuth_2 = "Reject";
+UI_FriendPassAuth_3 = "Accept";
+
+//UI_GameHelpPage
+UI_GameHelpPage_0 = "Submit Ticket";
+UI_GameHelpPage_1 = "Email Customer Support";
+UI_GameHelpPage_2 = "Privacy Policy";
+UI_GameHelpPage_3 = "Forum";
+UI_GameHelpPage_4 = "Event";
+UI_GameHelpPage_5 = "Terms of Service";
+UI_GameHelpPage_6 = "Version";
+UI_GameHelpPage_7 = "©IGG Inc. All Rights Reserved.";
+UI_GameHelpPage_8 = "help.galaxy.android@igg.com";
+UI_GameHelpPage_9 = "Guide";
+UI_GameHelpPage_IOS = "ihelp.galaxy@igg.com";
+
+//UI_GameSettingPage
+UI_GameSettingPage_0 = "IGG ID: ";
+UI_GameSettingPage_1 = "Music: ";
+UI_GameSettingPage_2 = "Sound Effects: ";
+UI_GameSettingPage_3 = "Language:";
+UI_GameSettingPage_4 = ;
+UI_GameSettingPage_5 = "English";
+UI_GameSettingPage_6 = "Switch Account";
+UI_GameSettingPage_7 = "Bind Account";
+UI_GameSettingPage_8 = "Notifications:"
+UI_GameSettingPage_9 = "View more";
+
+//UI_GuideAnim0
+
+//UI_GuideAnim1
+
+//UI_GuideAnim10
+UI_GuideAnim10_0 = "Round One";
+UI_GuideAnim10_1 = "Galactic Federation";
+UI_GuideAnim10_2 = "General Verne";
+UI_GuideAnim10_3 = "Corsairs";
+UI_GuideAnim10_4 = "Barbarossa";
+UI_GuideAnim10_5 = "Veteran";
+UI_GuideAnim10_6 = "Roosevelt";
+UI_GuideAnim10_7 = "Mythic";
+UI_GuideAnim10_8 = "Jane Flyer";
+
+//UI_GuideAnim11
+UI_GuideAnim11_0 = "Veteran";
+UI_GuideAnim11_1 = "Roosevelt";
+UI_GuideAnim11_2 = "Brilliance's Edge";
+
+//UI_GuideAnim11_12
+
+//UI_GuideAnim12
+UI_GuideAnim12_0 = "Mythic";
+UI_GuideAnim12_1 = "Jane Flyer";
+UI_GuideAnim12_2 = "Hyper Warp";
+
+//UI_GuideAnim13
+
+//UI_GuideAnim14
+
+//UI_GuideAnim15
+
+//UI_GuideAnim16
+
+//UI_GuideAnim2
+
+//UI_GuideAnim3
+UI_GuideAnim3_0 = "Round One";
+UI_GuideAnim3_1 = "Galactic Federation";
+UI_GuideAnim3_2 = "General Verne";
+UI_GuideAnim3_3 = "Corsairs";
+UI_GuideAnim3_4 = "Barbarossa";
+UI_GuideAnim3_5 = "Veteran";
+UI_GuideAnim3_6 = "Roosevelt";
+UI_GuideAnim3_7 = "Mythic";
+UI_GuideAnim3_8 = "Jane Flyer";
+UI_GuideAnim3_9 = "Veteran";
+UI_GuideAnim3_10 = "Wagner";
+UI_GuideAnim3_11 = "Mythic";
+UI_GuideAnim3_12 = "Jane Flyer";
+UI_GuideAnim3_13 = "Veteran";
+UI_GuideAnim3_14 = "Wagner";
+
+//UI_GuideAnim4
+UI_GuideAnim4_0 = "Round One";
+UI_GuideAnim4_1 = "Veteran";
+UI_GuideAnim4_2 = "Roosevelt";
+UI_GuideAnim4_3 = "Mythic";
+UI_GuideAnim4_4 = "Jane Flyer";
+UI_GuideAnim4_5 = "Cosmic Rush";
+UI_GuideAnim4_6 = "Cosmic Downfall";
+
+//UI_GuideAnim5
+UI_GuideAnim5_0 = "Round One";
+UI_GuideAnim5_1 = "Galactic Federation";
+UI_GuideAnim5_2 = "General Verne";
+UI_GuideAnim5_3 = "Corsairs";
+UI_GuideAnim5_4 = "Barbarossa";
+UI_GuideAnim5_5 = "Veteran";
+UI_GuideAnim5_6 = "Roosevelt";
+UI_GuideAnim5_7 = "Mythic";
+UI_GuideAnim5_8 = "Jane Flyer";
+
+//UI_GuideAnim6
+UI_GuideAnim6_0 = "Round One";
+UI_GuideAnim6_1 = "Galactic Federation";
+UI_GuideAnim6_2 = "General Verne";
+UI_GuideAnim6_3 = "Corsairs";
+UI_GuideAnim6_4 = "Barbarossa";
+UI_GuideAnim6_5 = "Mythic";
+UI_GuideAnim6_6 = "Jane Flyer";
+UI_GuideAnim6_7 = "Veteran";
+UI_GuideAnim6_8 = "Wagner";
+
+//UI_GuideAnim7
+UI_GuideAnim7_0 = "Mythic";
+UI_GuideAnim7_1 = "Jane Flyer";
+UI_GuideAnim7_2 = "Rays of Zeus";
+
+//UI_GuideAnim7_8
+
+//UI_GuideAnim8
+UI_GuideAnim8_0 = "Veteran";
+UI_GuideAnim8_1 = "Wagner";
+
+//UI_GuideAnim9
+UI_GuideAnim9_0 = "Round One";
+UI_GuideAnim9_1 = "Galactic Federation";
+UI_GuideAnim9_2 = "General Verne";
+UI_GuideAnim9_3 = "Corsairs";
+UI_GuideAnim9_4 = "Barbarossa";
+UI_GuideAnim9_5 = "Veteran";
+UI_GuideAnim9_6 = "Roosevelt";
+UI_GuideAnim9_7 = "Mythic";
+UI_GuideAnim9_8 = "Jane Flyer";
+
+//UI_InstanceActivityLevels
+
+//UI_InstanceMopUpReport
+UI_InstanceMopUpReport_0 = "Spoils of War (%d Auto-Raids)";
+UI_InstanceMopUpReport_1 = "EXP: %d";
+UI_InstanceMopUpReport_2 = "Return";
+
+//UI_LevelUpCommander
+UI_LevelUpCommander_2 = "Captains Owned";
+UI_LevelUpCommander_18 = "Increase Star Rank";
+
+//UI_LevelUpCommanderItem
+
+//UI_LoginUI
+UI_LoginUI_0 = "FACEBOOK";
+UI_LoginUI_1 = "Sign-In";
+UI_LoginUI_2 = "GOOGLE";
+UI_LoginUI_3 = "Sign-In";
+UI_LoginUI_4 = "IGG";
+UI_LoginUI_5 = "Sign-In";
+UI_LoginUI_6 = "GAME CENTER";
+UI_LoginUI_7 = "Sign-In";
+
+//UI_MaintenanceUI
+UI_MaintenanceUI_0 = "Server Maintenance";
+UI_MaintenanceUI_1 = "Forum";
+UI_MaintenanceUI_2 = "Facebook";
+
+//UI_MainUIAnimate
+
+//UI_MainUINew
+UI_MainUINew_0 = "Return";
+UI_MainUINew_1 = "00:00:00";
+
+//UI_MapAnim
+UI_MapAnim_0 = "Missions";
+UI_MapAnim_1 = "Federation League";
+UI_MapAnim_3 = "Exploration";
+UI_MapAnim_4 = "Galactic Ladder";
+
+//UI_MatchExplain
+
+//UI_MatchTip
+UI_MatchTip_0 = "Enter the Federation League from the Battle interface.";
+UI_MatchTip_1 = "[Rules]";
+UI_MatchTip_2 = "There are no requirements for joining the Federation League.";
+UI_MatchTip_3 = "3. You can send up to four fleets to a League match.";
+UI_MatchTip_4 = "[Consumed]";
+UI_MatchTip_5 = "Ships and He3 will be restored after each League match.";
+UI_MatchTip_6 = "2. When you challenge an opponent, an entry fee of Gold will be deducted from your account.";
+UI_MatchTip_7 = "3. Required fees for a match = Your Division x30,000 Gold.";
+UI_MatchTip_8 = "[Battle Report]";
+UI_MatchTip_9 = "1. Points System: Win +3 Points. Lose +1 Point. Draw +1 Point.";
+UI_MatchTip_10 = "2 Based on their points, Captains are sorted into Divisions at the end of each week.";
+UI_MatchTip_11 = "3. All players start at Division 1 and can reach up to Division 10.";
+UI_MatchTip_12 = "Tip: How you perform in battle affects your weekly Division and place. Divisions affect the amount of Honor you can win daily.";
+
+//UI_MatchTip2
+UI_MatchTip2_0 = "[Rewards]";
+UI_MatchTip2_1 = "1. Honor will be sent to your in-game maibox after each League match.";
+UI_MatchTip2_2 = "2. The higher your Division, the more Honor you'll earn each day.";
+UI_MatchTip2_3 = "3. Honor can be spent on Honor Items in the Mall. These items are non-transferable.";
+UI_MatchTip2_4 = "Tip: The position of your fleets at your Space Station is identical to how they'll be positioned in the Federation League.";
+UI_MatchTip2_5 = "";
+UI_MatchTip2_6 = "[Honor Earned]";
+UI_MatchTip2_7 = "Post";
+UI_MatchTip2_8 = "Honor Reward";
+UI_MatchTip2_9 = "101";
+UI_MatchTip2_10 = "400";
+UI_MatchTip2_11 = "91";
+UI_MatchTip2_12 = "300";
+UI_MatchTip2_13 = "8";
+UI_MatchTip2_14 = "290";
+UI_MatchTip2_15 = "7";
+UI_MatchTip2_16 = "250";
+UI_MatchTip2_17 = "6";
+UI_MatchTip2_18 = "240";
+UI_MatchTip2_19 = "5";
+UI_MatchTip2_20 = "200";
+UI_MatchTip2_21 = "4";
+UI_MatchTip2_22 = "190";
+UI_MatchTip2_23 = "3";
+UI_MatchTip2_24 = "170";
+UI_MatchTip2_25 = "2";
+UI_MatchTip2_26 = "156";
+UI_MatchTip2_27 = "1";
+UI_MatchTip2_28 = "122";
+
+//UI_MatchTip3
+UI_MatchTip3_0 = "[Weekly Division Change]";
+UI_MatchTip3_1 = "Post";
+UI_MatchTip3_2 = "Total Players";
+UI_MatchTip3_3 = "Upgrade";
+UI_MatchTip3_4 = "Demote";
+UI_MatchTip3_5 = "No Change";
+
+//UI_MenuUI
+UI_MenuUI_0 = "Captain";
+UI_MenuUI_1 = "Fleet";
+UI_MenuUI_2 = "Inventory";
+UI_MenuUI_3 = "Friends";
+UI_MenuUI_4 = "Leaderboards";
+UI_MenuUI_5 = "Settings";
+
+//UI_MergeCenterMainUI
+UI_MergeCenterMainUI_0 = "Increase Captain Star Rank";
+
+//UI_ModuleBlueprintInfo
+UI_ModuleBlueprintInfo_0 = "Name";
+UI_ModuleBlueprintInfo_1 = "Name";
+UI_ModuleBlueprintInfo_2 = "Damage: ";
+UI_ModuleBlueprintInfo_3 = "Range: ";
+UI_ModuleBlueprintInfo_4 = "Reload Speed: ";
+UI_ModuleBlueprintInfo_5 = "Weight: ";
+UI_ModuleBlueprintInfo_6 = "Cost";
+UI_ModuleBlueprintInfo_7 = "111";
+UI_ModuleBlueprintInfo_8 = "111";
+UI_ModuleBlueprintInfo_9 = "111";
+UI_ModuleBlueprintInfo_10 = "111";
+UI_ModuleBlueprintInfo_11 = "111";
+UI_ModuleBlueprintInfo_12 = "111";
+UI_ModuleBlueprintInfo_13 = "111";
+UI_ModuleBlueprintInfo_14 = "Upgrade";
+UI_ModuleBlueprintInfo_15 = "12:12:12";
+UI_ModuleBlueprintInfo_16 = "99999";
+UI_ModuleBlueprintInfo_17 = "Cancel";
+UI_ModuleBlueprintInfo_18 = "12:12:12";
+
+//UI_ModuleBlueprintInfo2
+UI_ModuleBlueprintInfo2_0 = "Name";
+UI_ModuleBlueprintInfo2_1 = "Damage: ";
+UI_ModuleBlueprintInfo2_2 = "Range: ";
+UI_ModuleBlueprintInfo2_3 = "Reload Speed: ";
+UI_ModuleBlueprintInfo2_4 = "Weight: ";
+UI_ModuleBlueprintInfo2_5 = "19";
+UI_ModuleBlueprintInfo2_6 = "20";
+UI_ModuleBlueprintInfo2_7 = "21";
+UI_ModuleBlueprintInfo2_8 = "22";
+
+//UI_ModuleBlueprintUI
+UI_ModuleBlueprintUI_0 = "All Types";
+UI_ModuleBlueprintUI_1 = "Weapon";
+UI_ModuleBlueprintUI_2 = "Defensive Module";
+UI_ModuleBlueprintUI_3 = "Auxiliary Module";
+
+//UI_OtherUserHeaderItem
+
+//UI_PortraitChooseItem
+UI_PortraitChooseItem_0 = "150";
+
+//UI_PortraitChooseListPage
+UI_PortraitChooseListPage_0 = "Select Avatar";
+UI_PortraitChooseListPage_1 = "Tip: Tap to change avatar.";
+UI_PortraitChooseListPage_2 = "Spend %d Space Bux to change portrait?";
+UI_PortraitChooseListPage_3 = "15";
+
+//UI_PVPSeachRival
+UI_PVPSeachRival_0 = "Scan for an opponent.";
+UI_PVPSeachRival_1 = "Tap to scan for opponents in the area";
+UI_PVPSeachRival_2 = "Next Siege attempt in:";
+UI_PVPSeachRival_3 = "Siege attempts left:";
+
+//UI_QuestAwardBox
+UI_QuestAwardBox_0 = "You got: ";
+
+//UI_QuestAwardItem
+
+//UI_RankCupItem
+UI_RankCupItem_0 = "Scorps";
+UI_RankCupItem_1 = "Currently in a Truce.";
+UI_RankCupItem_2 = "Crush the Corsairs!!!";
+
+//UI_RankCupPage
+UI_RankCupPage_0 = "View";
+UI_RankCupPage_1 = "Mail";
+UI_RankCupPage_2 = "Add Friend";
+UI_RankCupPage_3 = "Attack";
+UI_RankCupPage_4 = "Search";
+
+//UI_RankDialog
+UI_RankDialog_0 = "Trophy";
+UI_RankDialog_1 = "Guild";
+UI_RankDialog_2 = "资源星战击坠";
+
+//UI_ReadEmailContentDialog
+UI_ReadEmailContentDialog_0 = "Content";
+UI_ReadEmailContentDialog_1 = "System Mail";
+UI_ReadEmailContentDialog_2 = "October 16, 9:56 pm";
+UI_ReadEmailContentDialog_3 = "Welcome to Galaxy Online 3!";
+UI_ReadEmailContentDialog_4 = "Content";
+UI_ReadEmailContentDialog_5 = "Claim";
+UI_ReadEmailContentDialog_6 = "View Match Log";
+UI_ReadEmailContentDialog_7 = "Delete";
+UI_ReadEmailContentDialog_8 = "Previous";
+UI_ReadEmailContentDialog_9 = "Next";
+UI_ReadEmailContentDialog_10 = "Reply";
+
+//UI_RegisterUI
+UI_RegisterUI_0 = "Select Your Commander's Avatar.";
+UI_RegisterUI_1 = "Create";
+UI_RegisterUI_2 = "Name";
+
+//UI_RegisterUIIconItem
+
+//UI_ResourceInfoLayer
+UI_ResourceInfoLayer_0 = "Gold";
+UI_ResourceInfoLayer_1 = "Production/Hour: ";
+UI_ResourceInfoLayer_2 = "Production: ";
+UI_ResourceInfoLayer_3 = "Science Bonus: ";
+UI_ResourceInfoLayer_4 = "Guild Bonus: ";
+UI_ResourceInfoLayer_5 = "VIP Bonus: ";
+UI_ResourceInfoLayer_6 = "Building Bonus: ";
+UI_ResourceInfoLayer_7 = "Max Storage: ";
+UI_ResourceInfoLayer_8 = "Production/Hour: ";
+UI_ResourceInfoLayer_9 = "Production: ";
+UI_ResourceInfoLayer_10 = "Science Bonus: ";
+UI_ResourceInfoLayer_11 = "Guild Bonus: ";
+UI_ResourceInfoLayer_12 = "VIP Bonus: ";
+UI_ResourceInfoLayer_13 = "Building Bonus: ";
+UI_ResourceInfoLayer_14 = "Max Storage: ";
+
+//UI_RobotNPC
+
+//UI_SBattleActivitySubUIItem
+UI_SBattleActivitySubUIItem_0 = "Challenge Mission";
+UI_SBattleActivitySubUIItem_1 = "Difficulty: %d";
+UI_SBattleActivitySubUIItem_2 = "CP: %d";
+UI_SBattleActivitySubUIItem_3 = "Mission Requirements";
+UI_SBattleActivitySubUIItem_4 = "Player Level: %d";
+
+//UI_SBattleActivitySubUIPage
+UI_SBattleActivitySubUIPage_0 = "Select Difficulty";
+UI_SBattleActivitySubUIPage_1 = "Daily attempts left: ";
+UI_SBattleActivitySubUIPage_2 = "%d";
+
+//UI_SBattleActivityUIItem
+UI_SBattleActivityUIItem_0 = "Nano Armor";
+UI_SBattleActivityUIItem_1 = "Challenge Mission";
+
+//UI_SBattleMapUI
+UI_SBattleMapUI_0 = "Round 0/100";
+UI_SBattleMapUI_1 = "Name";
+UI_SBattleMapUI_2 = "Name";
+UI_SBattleMapUI_3 = "End Now";
+UI_SBattleMapUI_4 = "Speed Up";
+UI_SBattleMapUI_5 = "Display Grid";
+UI_SBattleMapUI_6 = "Hide Grid";
+
+//UI_SBattleMapUIBgAnimt
+
+//UI_SBattleScene
+UI_SBattleScene_0 = "Name";
+UI_SBattleScene_1 = "Name";
+
+//UI_SBattleSceneBgAnimt
+
+//UI_SBattleSceneItem1
+UI_SBattleSceneItem1_0 = "99";
+
+//UI_SBattleSceneItem2
+UI_SBattleSceneItem2_0 = "99";
+
+//UI_SBattleScene_CommanderSkill
+
+//UI_SBattleScene_CommanderSkill2
+
+//UI_SBattleScene_CriticalHit
+
+//UI_SBattleSelectUI
+UI_SBattleSelectUI_0 = "Standard Mission";
+UI_SBattleSelectUI_1 = "Elite Mission";
+UI_SBattleSelectUI_2 = "Challenge Mission";
+UI_SBattleSelectUI_3 = "戰役規則";
+UI_SBattleSelectUI_5 = "Earn CP & Strength by completing missions for the first time.";
+
+//UI_SBattleUI
+
+//UI_SBattleUIActivityPage
+UI_SBattleUIActivityPage_0 = "Challenge Mission 1";
+UI_SBattleUIActivityPage_1 = "Challenge Mission 3";
+UI_SBattleUIActivityPage_2 = "戰役活動";
+UI_SBattleUIActivityPage_3 = "Event Period";
+UI_SBattleUIActivityPage_4 = "Rewards: ";
+UI_SBattleUIActivityPage_5 = "戰役活動";
+UI_SBattleUIActivityPage_6 = "Event Period";
+UI_SBattleUIActivityPage_7 = "Rewards: ";
+UI_SBattleUIActivityPage_8 = "Medal Store";
+
+//UI_SBattleUIInstanceInfoBox
+UI_SBattleUIInstanceInfoBox_0 = "<font color='#00CBCD' size='23'>You must complete Mission </font><font color='#ffffff' size='23'>%d</font><font color='#00CBCD' size='23'> to enter this battle. </font>";
+UI_SBattleUIInstanceInfoBox_1 = "Confirm";
+
+//UI_SBattleUIInstanceItem
+UI_SBattleUIInstanceItem_0 = "01";
+
+//UI_SBattleUIInstancePage
+
+//UI_SBattleUILeagueExplainPage
+UI_SBattleUILeagueExplainPage_0 = "1. You can send up to four fleets per Federation League match.\n2. A Gold entry fee is required to participate in a Federation League match.\n3. All ships destoyed and all He3 consumed during a Federation League match wil be restored to their original numbers at the end of the match.\n4. The winner of a League match will win 3 League Points. In a draw, players will win 1 point each. Every three days, players' League Points will be added up to determine their Division. Players can be promoted to the next Division, relegated to the lower Division, or remain in the current Division. \n5. Honor is granted to the winner of a League match. The amount of Honor granted is determined by the winner's current Division."
+UI_SBattleUILeagueExplainPage_1 = "Post";
+UI_SBattleUILeagueExplainPage_2 = "Honor earned per win";
+UI_SBattleUILeagueExplainPage_3 = "Fee";
+UI_SBattleUILeagueExplainPage_4 = "Division Changes";
+UI_SBattleUILeagueExplainPage_5 = "Post";
+UI_SBattleUILeagueExplainPage_6 = "Total Players";
+UI_SBattleUILeagueExplainPage_7 = "Upgrade";
+UI_SBattleUILeagueExplainPage_8 = "Relegated";
+UI_SBattleUILeagueExplainPage_9 = "Unchanged";
+
+//UI_SBattleUILeagueFleet
+UI_SBattleUILeagueFleet_0 = "Deploy Fleets: %d/%d";
+UI_SBattleUILeagueFleet_1 = "Save Fleet";
+UI_SBattleUILeagueFleet_2 = "Return";
+
+//UI_SBattleUILeagueMatchPage
+UI_SBattleUILeagueMatchPage_0 = "League Points";
+UI_SBattleUILeagueMatchPage_1 = "Round Result";
+UI_SBattleUILeagueMatchPage_2 = "Matches Left: ";
+UI_SBattleUILeagueMatchPage_3 = "%d";
+UI_SBattleUILeagueMatchPage_4 = "%d";
+UI_SBattleUILeagueMatchPage_5 = "%d";
+UI_SBattleUILeagueMatchPage_6 = "Win";
+UI_SBattleUILeagueMatchPage_7 = "Negative";
+UI_SBattleUILeagueMatchPage_8 = "Draw";
+UI_SBattleUILeagueMatchPage_9 = "%d/5";
+UI_SBattleUILeagueMatchPage_10 = "Try again in %s";
+UI_SBattleUILeagueMatchPage_11 = "%d";
+UI_SBattleUILeagueMatchPage_12 = "(Group %lld)";
+UI_SBattleUILeagueMatchPage_13 = "Exchange reward";
+UI_SBattleUILeagueMatchPage_14 = "Fleets";
+UI_SBattleUILeagueMatchPage_15 = "Join (      %d)";
+UI_SBattleUILeagueMatchPage_16 = "Speed Up";
+
+//UI_SBattleUILeagueMatchPageItem
+UI_SBattleUILeagueMatchPageItem_0 = "%d";
+UI_SBattleUILeagueMatchPageItem_1 = "Place";
+UI_SBattleUILeagueMatchPageItem_2 = "League Points";
+
+//UI_SBattleUILeaguePage
+UI_SBattleUILeaguePage_0 = "Results";
+UI_SBattleUILeaguePage_1 = "Overall Rankings";
+UI_SBattleUILeaguePage_2 = "Rules";
+
+//UI_SBattleUILeagueRankItem
+UI_SBattleUILeagueRankItem_0 = "Post";
+UI_SBattleUILeagueRankItem_1 = "Win";
+UI_SBattleUILeagueRankItem_2 = "Negative";
+UI_SBattleUILeagueRankItem_3 = "Draw";
+UI_SBattleUILeagueRankItem_4 = "League Points";
+
+//UI_SBattleUILeagueRankPage
+UI_SBattleUILeagueRankPage_0 = "My Rank";
+UI_SBattleUILeagueRankPage_1 = "Top 100";
+UI_SBattleUILeagueRankPage_2 = "Search Opponent";
+
+//UI_SBattleUILeagueRankHead
+UI_SBattleUILeagueRankHead_0 = "%d~%d Place Rewards:";
+
+//UI_SBattleUILeagueRankTile
+UI_SBattleUILeagueRankTile_0 = "Division (Group %lld) Placing";
+
+//UI_SBattleUILeagueResultPage
+UI_SBattleUILeagueResultPage_0 = "VS";
+UI_SBattleUILeagueResultPage_1 = "60";
+UI_SBattleUILeagueResultPage_2 = "Lv %d";
+UI_SBattleUILeagueResultPage_3 = "Current Round: ";
+UI_SBattleUILeagueResultPage_4 = "%d";
+UI_SBattleUILeagueResultPage_5 = "%d";
+UI_SBattleUILeagueResultPage_6 = "%d";
+UI_SBattleUILeagueResultPage_7 = "Win";
+UI_SBattleUILeagueResultPage_8 = "Negative";
+UI_SBattleUILeagueResultPage_9 = "Draw";
+UI_SBattleUILeagueResultPage_10 = "Lv %d";
+UI_SBattleUILeagueResultPage_11 = "Current Round: ";
+UI_SBattleUILeagueResultPage_12 = "%d";
+UI_SBattleUILeagueResultPage_13 = "%d";
+UI_SBattleUILeagueResultPage_14 = "%d";
+UI_SBattleUILeagueResultPage_15 = "Win";
+UI_SBattleUILeagueResultPage_16 = "Negative";
+UI_SBattleUILeagueResultPage_17 = "Draw";
+
+//UI_SBattleUIRestrictedItem
+UI_SBattleUIRestrictedItem_0 = "01";
+
+//UI_SBattleUIRestrictedPage
+
+//UI_SBlueInfoBoxs
+
+//UI_SBuyBuildQueueBox
+UI_SBuyBuildQueueBox_0 = "Tip";
+UI_SBuyBuildQueueBox_1 = "RichText";
+UI_SBuyBuildQueueBox_2 = "Purchase";
+
+//UI_SBuyResourceBox
+UI_SBuyResourceBox_0 = "Tip";
+UI_SBuyResourceBox_1 = "RichText";
+
+//UI_ScienceInfo
+UI_ScienceInfo_0 = "Time";
+UI_ScienceInfo_1 = "Lv ";
+UI_ScienceInfo_2 = "Lv";
+UI_ScienceInfo_3 = "Resources";
+UI_ScienceInfo_4 = "Resources";
+UI_ScienceInfo_5 = "Resources";
+UI_ScienceInfo_6 = "Content";
+UI_ScienceInfo_7 = "Upgrade";
+UI_ScienceInfo_8 = "Cancel";
+UI_ScienceInfo_9 = "Complete Now";
+
+//UI_SCommonAwardBox
+UI_SCommonAwardBox_0 = "%s";
+UI_SCommonAwardBox_1 = "%d";
+UI_SCommonAwardBox_2 = "%s";
+
+//UI_SCommonMsgBox
+UI_SCommonMsgBox_0 = "Tip";
+UI_SCommonMsgBox_1 = "RichText";
+UI_SCommonMsgBox_2 = "Content";
+UI_SCommonMsgBox_3 = "Yes";
+UI_SCommonMsgBox_4 = "No";
+
+//UI_SCorpsBattlePage
+UI_SCorpsBattlePage_0 = "Crush the Corsairs";
+UI_SCorpsBattlePage_1 = "%d/1";
+UI_SCorpsBattlePage_2 = "Exchange reward";
+UI_SCorpsBattlePage_3 = "Rules";
+UI_SCorpsBattlePage_4 = "Space Pirates are invading! \nTap to deploy garrisoned fleets.";
+UI_SCorpsBattlePage_5 = "Fight for Resource Planet";
+UI_SCorpsBattlePage_6 = "Resource Planet Status";
+UI_SCorpsBattlePage_7 = "Rules";
+UI_SCorpsBattlePage_8 = "You are needed at a Resource Planet!";
+UI_SCorpsBattlePage_9 = "Enter Battle";
+UI_SCorpsBattlePage_10 = ""Guild members are attacking a Resource Planet!\nTap to reinforce"";
+
+//UI_SCorpsCreatePage
+UI_SCorpsCreatePage_0 = "Name: ";
+UI_SCorpsCreatePage_1 = "Logo: ";
+UI_SCorpsCreatePage_2 = "Description: ";
+UI_SCorpsCreatePage_3 = "Type: ";
+UI_SCorpsCreatePage_4 = "Strength Req: ";
+UI_SCorpsCreatePage_5 = "120";
+
+//UI_SCorpsCreatePageItem
+
+//UI_SCorpsDonateBox
+UI_SCorpsDonateBox_0 = "For every <font color='#00ff00'>10k</font> resources or <font color='#00ff00'>1</font> Space Bux you donate, you'll get <font color='#00ff00'>1</font> Contribution point and the Guild will get <font color='#00ff00'>1</font> Wealth point. <font color='#00ff00'>(Contribution points can be used to buy ships in the Guild Mall.)</font>";
+UI_SCorpsDonateBox_1 = "Contribution earned: %d";
+UI_SCorpsDonateBox_2 = "Donation";
+UI_SCorpsDonateBox_3 = "/%d";
+UI_SCorpsDonateBox_4 = "x10k";
+
+//UI_SCorpsEnterResourcesUI
+UI_SCorpsEnterResourcesUI_0 = "Lv %d";
+UI_SCorpsEnterResourcesUI_1 = "Guild Wealth: ";
+UI_SCorpsEnterResourcesUI_2 = "Garrisoned Fleets: ";
+UI_SCorpsEnterResourcesUI_3 = "%d/%d";
+UI_SCorpsEnterResourcesUI_4 = "Bonus: ";
+UI_SCorpsEnterResourcesUI_5 = "%d%%";
+UI_SCorpsEnterResourcesUI_6 = "Garrison";
+
+//UI_SCorpsEventUI
+UI_SCorpsEventUI_0 = "Updates";
+UI_SCorpsEventUI_1 = "Guild Battle";
+UI_SCorpsEventUI_2 = "Edit Position";
+
+//UI_SCorpsEventUIItem
+
+//UI_SCorpsInfoBox
+UI_SCorpsInfoBox_0 = "Total Points: ";
+UI_SCorpsInfoBox_1 = "Guild Level: ";
+UI_SCorpsInfoBox_2 = "Member: ";
+UI_SCorpsInfoBox_3 = "Memberships：";
+UI_SCorpsInfoBox_4 = "Strength Req: ";
+UI_SCorpsInfoBox_5 = "%d/%d";
+UI_SCorpsInfoBox_6 = "Total Bonus: ";
+UI_SCorpsInfoBox_7 = "Metal Production";
+UI_SCorpsInfoBox_8 = "+%d%%";
+UI_SCorpsInfoBox_9 = "He3 Production";
+UI_SCorpsInfoBox_10 = "+%d%%";
+UI_SCorpsInfoBox_11 = "Gold Production";
+UI_SCorpsInfoBox_12 = "+%d%%";
+UI_SCorpsInfoBox_13 = "Speed up Shipbuilding";
+UI_SCorpsInfoBox_14 = "+%d%%";
+UI_SCorpsInfoBox_15 = "Speed Up Science";
+UI_SCorpsInfoBox_16 = "+%d%%";
+UI_SCorpsInfoBox_17 = "Guild Bulletin: ";
+UI_SCorpsInfoBox_18 = "Join Guild";
+
+//UI_SCorpsInfoPage
+UI_SCorpsInfoPage_0 = "Wealth: ";
+UI_SCorpsInfoPage_1 = "Daily Maintenance Cost: ";
+UI_SCorpsInfoPage_2 = "Total Points: ";
+UI_SCorpsInfoPage_3 = "Guild Level: ";
+UI_SCorpsInfoPage_4 = "Member: ";
+UI_SCorpsInfoPage_5 = "Memberships: ";
+UI_SCorpsInfoPage_6 = "Strength Req: ";
+UI_SCorpsInfoPage_7 = "%d/%d";
+UI_SCorpsInfoPage_8 = "Apply to join";
+UI_SCorpsInfoPage_9 = "Guild Status";
+UI_SCorpsInfoPage_10 = "Leave the Guild";
+UI_SCorpsInfoPage_11 = "Total Bonus: ";
+UI_SCorpsInfoPage_12 = "Metal Production";
+UI_SCorpsInfoPage_13 = "+%d%%";
+UI_SCorpsInfoPage_14 = "He3 Production";
+UI_SCorpsInfoPage_15 = "+%d%%";
+UI_SCorpsInfoPage_16 = "Gold Production";
+UI_SCorpsInfoPage_17 = "+%d%%";
+UI_SCorpsInfoPage_18 = "Speed up Shipbuilding";
+UI_SCorpsInfoPage_19 = "+%d%%";
+UI_SCorpsInfoPage_20 = "Speed Up Science";
+UI_SCorpsInfoPage_21 = "+%d%%";
+UI_SCorpsInfoPage_22 = "Level Up Guild";
+UI_SCorpsInfoPage_23 = "Guild Settings";
+UI_SCorpsInfoPage_24 = "Send Mail";
+UI_SCorpsInfoPage_25 = "Contribute";
+UI_SCorpsInfoPage_26 = "Resource Planet: ";
+
+//UI_SCorpsInfoUI
+UI_SCorpsInfoUI_0 = "Add";
+UI_SCorpsInfoUI_1 = "Create";
+UI_SCorpsInfoUI_2 = "Search";
+
+//UI_SCorpsJoinBox
+UI_SCorpsJoinBox_0 = "I want to join your Guild.";
+UI_SCorpsJoinBox_1 = "Cancel";
+UI_SCorpsJoinBox_2 = "Apply";
+
+//UI_SCorpsJoinPage
+UI_SCorpsJoinPage_0 = "Total Points: ";
+UI_SCorpsJoinPage_1 = "Guild Level: ";
+UI_SCorpsJoinPage_2 = "Member: ";
+UI_SCorpsJoinPage_3 = "Memberships：";
+UI_SCorpsJoinPage_4 = "Strength Req: ";
+UI_SCorpsJoinPage_5 = "Guild Bonus: ";
+UI_SCorpsJoinPage_6 = "Guild Bulletin: ";
+UI_SCorpsJoinPage_7 = "Metal";
+UI_SCorpsJoinPage_8 = "+%d%%";
+UI_SCorpsJoinPage_9 = "He3";
+UI_SCorpsJoinPage_10 = "+%d%%";
+UI_SCorpsJoinPage_11 = "Gold";
+UI_SCorpsJoinPage_12 = "+%d%%";
+UI_SCorpsJoinPage_13 = "Speed up Shipbuilding";
+UI_SCorpsJoinPage_14 = "+%d%%";
+UI_SCorpsJoinPage_15 = "Speed Up Science";
+UI_SCorpsJoinPage_16 = "+%d%%";
+UI_SCorpsJoinPage_17 = "%d/%d";
+UI_SCorpsJoinPage_18 = "Join Guild";
+UI_SCorpsJoinPage_19 = "Resource Planet: ";
+
+//UI_SCorpsJoinPageItem
+
+//UI_SCorpsMallBuyBox
+UI_SCorpsMallBuyBox_0 = "Spend %d Contribution Points to buy %d ships.";
+UI_SCorpsMallBuyBox_1 = "Amount: %d";
+UI_SCorpsMallBuyBox_2 = "Contribution Point Cost: %d";
+UI_SCorpsMallBuyBox_3 = "Purchase";
+UI_SCorpsMallBuyBox_4 = "/%d";
+
+//UI_SCorpsMallPage
+UI_SCorpsMallPage_0 = "Contribution: %d";
+
+//UI_SCorpsMallPageItem
+UI_SCorpsMallPageItem_0 = "%d Contribution / %d Ship";
+UI_SCorpsMallPageItem_1 = "Req: Guild Lv %d";
+UI_SCorpsMallPageItem_2 = "Traits: ";
+
+//UI_SCorpsMemberPage
+UI_SCorpsMemberPage_0 = "View Base";
+UI_SCorpsMemberPage_1 = "Send Mail";
+UI_SCorpsMemberPage_2 = "PM";
+UI_SCorpsMemberPage_3 = "Add Friend";
+UI_SCorpsMemberPage_4 = "Promote";
+UI_SCorpsMemberPage_5 = "Demote";
+UI_SCorpsMemberPage_6 = "Kick from Guild";
+UI_SCorpsMemberPage_7 = "Lv";
+UI_SCorpsMemberPage_8 = "Donation";
+UI_SCorpsMemberPage_9 = "Strength";
+UI_SCorpsMemberPage_10 = "Sort by %s";
+UI_SCorpsMemberPage_11 = "切磋";
+
+//UI_SCorpsMemberPageItem
+UI_SCorpsMemberPageItem_0 = "Guild Contribution";
+UI_SCorpsMemberPageItem_1 = "Offline Time";
+
+//UI_SCorpsMoreInfoBox
+UI_SCorpsMoreInfoBox_0 = "Guild Bonus: ";
+UI_SCorpsMoreInfoBox_1 = "Metal Production";
+UI_SCorpsMoreInfoBox_2 = "+%d%%";
+UI_SCorpsMoreInfoBox_3 = "He3 Production";
+UI_SCorpsMoreInfoBox_4 = "+%d%%";
+UI_SCorpsMoreInfoBox_5 = "Gold Production";
+UI_SCorpsMoreInfoBox_6 = "+%d%%";
+UI_SCorpsMoreInfoBox_7 = "Speed up Shipbuilding";
+UI_SCorpsMoreInfoBox_8 = "+%d%%";
+UI_SCorpsMoreInfoBox_9 = "Speed Up Science";
+UI_SCorpsMoreInfoBox_10 = "+%d%%";
+UI_SCorpsMoreInfoBox_11 = "Resource Bonus: ";
+UI_SCorpsMoreInfoBox_12 = "Metal Production";
+UI_SCorpsMoreInfoBox_13 = "+%d%%";
+UI_SCorpsMoreInfoBox_14 = "He3 Production";
+UI_SCorpsMoreInfoBox_15 = "+%d%%";
+UI_SCorpsMoreInfoBox_16 = "Gold Production";
+UI_SCorpsMoreInfoBox_17 = "+%d%%";
+UI_SCorpsMoreInfoBox_18 = "Speed up Shipbuilding";
+UI_SCorpsMoreInfoBox_19 = "+%d%%";
+UI_SCorpsMoreInfoBox_20 = "Speed Up Science";
+UI_SCorpsMoreInfoBox_21 = "+%d%%";
+
+//UI_SCorpsNoneUI
+UI_SCorpsNoneUI_0 = "Add";
+UI_SCorpsNoneUI_1 = "Create";
+UI_SCorpsNoneUI_2 = "Search";
+
+//UI_SCorpsPirateRuleBox
+UI_SCorpsPirateRuleBox_0 = "How to Begin:";
+UI_SCorpsPirateRuleBox_1 = "1. Only the General or Deputy of the Guild can initiate this event.\n2. Occupy all Corsair strongholds within the time limit to win.\n3. Only Guild members who joined the event will be eligible to win prizes.\n4. Honor awarded after every battle will be determined by the number of Corsairs defeated and the level of difficulty.";
+UI_SCorpsPirateRuleBox_2 = "Battle Rules:";
+UI_SCorpsPirateRuleBox_3 = "1. Each Guild member is only allowed to join up to two battles per event.\n2. Ships lost will be restored immediately after each battle.\n3. Limit 20 Rounds per battle.";
+
+//UI_SCorpsPirateFightBox
+UI_SCorpsPirateFightBox_0 = "%d Attacks Launched";
+
+//UI_SCorpsPirateFightBoxItem
+UI_SCorpsPirateFightBoxItem_0 = "Kills: %s";
+
+//UI_SCorpsPirateSelectBox
+UI_SCorpsPirateSelectBox_0 = "Daily attempts left";
+UI_SCorpsPirateSelectBox_1 = "%dDays";
+
+//UI_SCorpsPirateSelectBoxItem
+UI_SCorpsPirateSelectBoxItem_0 = "Difficulty: %d";
+UI_SCorpsPirateSelectBoxItem_1 = "Reward for Crush the Corsairs: ";
+UI_SCorpsPirateSelectBoxItem_2 = "5000";
+UI_SCorpsPirateSelectBoxItem_3 = "To Unlock: ";
+UI_SCorpsPirateSelectBoxItem_4 = "Guild Level";
+UI_SCorpsPirateSelectBoxItem_5 = "10";
+UI_SCorpsPirateSelectBoxItem_6 = "Guild Wealth";
+UI_SCorpsPirateSelectBoxItem_7 = "40";
+
+//UI_SCorpsPirateUI
+UI_SCorpsPirateUI_0 = "Strongholds Left:";
+UI_SCorpsPirateUI_1 = "Attacks Left:";
+
+//UI_SCorpsPiratesUIDefendUI
+UI_SCorpsPiratesUIDefendUI_0 = "VS";
+UI_SCorpsPiratesUIDefendUI_1 = "Lv %d";
+UI_SCorpsPiratesUIDefendUI_2 = "Space Pirate";
+UI_SCorpsPiratesUIDefendUI_3 = "Lv %d";
+UI_SCorpsPiratesUIDefendUI_4 = "Return";
+UI_SCorpsPiratesUIDefendUI_5 = "Start Battle";
+
+//UI_SCorpsPiratesUIMemberItem
+
+//UI_SCorpsRankPage
+UI_SCorpsRankPage_0 = "Search";
+
+//UI_SCorpsRankPageItem
+UI_SCorpsRankPageItem_0 = "Lv %d";
+UI_SCorpsRankPageItem_1 = "Tap for details.";
+UI_SCorpsRankPageItem_2 = "Member";
+UI_SCorpsRankPageItem_3 = "%d/%d";
+
+//UI_SCorpsRankPageSearchItem
+UI_SCorpsRankPageSearchItem_0 = "Lv %d";
+UI_SCorpsRankPageSearchItem_1 = "Tap for details.";
+UI_SCorpsRankPageSearchItem_2 = "Member";
+UI_SCorpsRankPageSearchItem_3 = "%d/%d";
+
+//UI_SCorpsRectuiyUI
+
+//UI_SCorpsRectuiyUIItem
+UI_SCorpsRectuiyUIItem_0 = "Reject";
+UI_SCorpsRectuiyUIItem_1 = "Allow";
+
+//UI_SCorpsResourceCallHomePage
+UI_SCorpsResourceCallHomePage_0 = "<font color='#06f6ff' size='24'>Fleets: </font><font color='#ffffff' size='24'>%d/%d</font>";
+UI_SCorpsResourceCallHomePage_1 = "Upgrade Space Station to deploy more fleets.";
+UI_SCorpsResourceCallHomePage_2 = "Recall fleets";
+
+//UI_SCorpsResourceDefendBox
+UI_SCorpsResourceDefendBox_0 = "Garrisoned Fleets: ";
+UI_SCorpsResourceDefendBox_1 = "%d/%d";
+UI_SCorpsResourceDefendBox_2 = "Garrison";
+
+//UI_SCorpsResourceDefendPage
+UI_SCorpsResourceDefendPage_0 = "<font color='#06f6ff' size='24'>Fleets: </font><font color='#ffffff' size='24'>%d/%d</font>";
+UI_SCorpsResourceDefendPage_1 = "Upgrade Space Station to deploy more fleets.";
+UI_SCorpsResourceDefendPage_2 = "Garrison";
+
+//UI_SCorpsResourceFleetItem
+UI_SCorpsResourceFleetItem_0 = "Item Name";
+UI_SCorpsResourceFleetItem_1 = "%d";
+UI_SCorpsResourceFleetItem_2 = "Lv %d";
+
+//UI_SCorpsResourceFleetUI
+UI_SCorpsResourceFleetUI_0 = "Garrison Fleets";
+UI_SCorpsResourceFleetUI_1 = "Recall fleets";
+
+//UI_SCorpsResourceInfoBox
+UI_SCorpsResourceInfoBox_0 = "Resource Bonus: ";
+UI_SCorpsResourceInfoBox_1 = "Metal Production";
+UI_SCorpsResourceInfoBox_2 = "+%.01f%%";
+UI_SCorpsResourceInfoBox_3 = "He3 Production";
+UI_SCorpsResourceInfoBox_4 = "+%.01f%%";
+UI_SCorpsResourceInfoBox_5 = "Gold Production";
+UI_SCorpsResourceInfoBox_6 = "+%.01f%%";
+UI_SCorpsResourceInfoBox_7 = "Speed up Shipbuilding";
+UI_SCorpsResourceInfoBox_8 = "+%.01f%%";
+UI_SCorpsResourceInfoBox_9 = "Speed Up Science";
+UI_SCorpsResourceInfoBox_10 = "+%.01f%%";
+UI_SCorpsResourceInfoBox_11 = "Enter";
+UI_SCorpsResourceInfoBox_12 = "Attack";
+UI_SCorpsResourceInfoBox_13 = "Garrison";
+
+//UI_SCorpsResourceRuleBox
+UI_SCorpsResourceRuleBox_0 = "<font color='#ccba7a'>Resource Planet: </font><br><font color='#00FF00'>1.</font>If you are in a Guild, you can compete with others to control this planet. Upon taking control, all ownership rights will go to your Guild.<br><font color='#00FF00'>2.</font> All defense buildings on the planet can be upgraded using the Guild's wealth. The higher the level, the better the upgrades will be.<font color='#00FF00'> (accessible only by Generals)</font><br><font color='#00FF00'>3.</font> The higher the level of the Resource Planet base, the faster the ship production and Science Research rates of the controling Guilds. Additionally, the maximum number of fleets that can be stationed on the planet will increase.<font color='#00FF00'>(Garrison Resource Planet from the Guild "Territories" interface. Elite Guild members can garrison Resource Planets.)</font><br><font color='#00FF00'>4.</font> Once the Resource Bonus Planet is occupied, it will go into a protection phase for 3 days. After that time it goes into 1 day of battle, then 3 days of protection again, etc.<font color='#00FF00'>(If the Resource Planet is still contested when it goes into the protection phase, the battle goes into Overtime, and participants can no longer dispatch reinforcement fleets. Resource Planets under the protection phase cannot be attacked.)</font><br><font color='#00FF00'>5.</font>Ships can only be garrisoned and recalled from the Resource Planets outside of combat. Battles that go into Overtime will continue until either all fleets on one side of the battle are eliminated or when the battle has reached the maximum number of Rounds allowed (Stalemate). If the result is a stalemate, the defending side wins and the surviving invader fleets return to their respective bases. If the invaders win, the protection phase of the Resource Planet resets back to the full duration of 3 days. If the defending side wins, the protection phase continues with its countdown to expiry.<font color='#00FF00'>(Players can select their own fleets stationed at the Resource Planets and choose to recall them from there.)</font>"
+
+//UI_SCorpsResourcesUI
+UI_SCorpsResourcesUI_0 = "Occupied";
+UI_SCorpsResourcesUI_1 = "Contested";
+
+//UI_SCorpsResourcesUIOwnerPage
+UI_SCorpsResourcesUIOwnerPage_0 = "+%d%%";
+UI_SCorpsResourcesUIOwnerPage_1 = "+%d%%";
+UI_SCorpsResourcesUIOwnerPage_2 = "+%d%%";
+UI_SCorpsResourcesUIOwnerPage_3 = "+%d%%";
+UI_SCorpsResourcesUIOwnerPage_4 = "+%d%%";
+UI_SCorpsResourcesUIOwnerPage_5 = "Resource Bonus: ";
+UI_SCorpsResourcesUIOwnerPage_6 = "Resource Planet: ";
+
+//UI_SCorpsResourcesUIOwnerPageItem
+UI_SCorpsResourcesUIOwnerPageItem_0 = "Lv: ";
+UI_SCorpsResourcesUIOwnerPageItem_1 = "Bonus: ";
+UI_SCorpsResourcesUIOwnerPageItem_2 = "%.01f%%";
+UI_SCorpsResourcesUIOwnerPageItem_3 = "Planet is in Truce Phase (Garrison still allowed).";
+UI_SCorpsResourcesUIOwnerPageItem_5 = "Truce Phase: ";
+UI_SCorpsResourcesUIOwnerPageItem_6 = "Contest Window: ";
+UI_SCorpsResourcesUIOwnerPageItem_7 = "Garrisoned Fleets: ";
+UI_SCorpsResourcesUIOwnerPageItem_8 = "Enter";
+
+//UI_SCorpsResourcesUIAttackPageItem
+UI_SCorpsResourcesUIAttackPageItem_0 = "Lv: ";
+UI_SCorpsResourcesUIAttackPageItem_1 = "Bonus: ";
+UI_SCorpsResourcesUIAttackPageItem_2 = "%d%%";
+UI_SCorpsResourcesUIAttackPageItem_3 = "Window closes in: ";
+UI_SCorpsResourcesUIAttackPageItem_4 = "Space Station HP: ";
+UI_SCorpsResourcesUIAttackPageItem_5 = "Proceed";
+
+//UI_SCorpsSendMailBox
+UI_SCorpsSendMailBox_0 = "Attention Guild members: ";
+UI_SCorpsSendMailBox_1 = "Message Sent: ";
+UI_SCorpsSendMailBox_2 = "Daily messages left: ";
+UI_SCorpsSendMailBox_3 = "10";
+UI_SCorpsSendMailBox_4 = "Cancel";
+UI_SCorpsSendMailBox_5 = "Send";
+
+//UI_SCorpsSettingUI
+UI_SCorpsSettingUI_0 = "Name: ";
+UI_SCorpsSettingUI_1 = "Logo: ";
+UI_SCorpsSettingUI_2 = "Description: ";
+UI_SCorpsSettingUI_3 = "Guild Name";
+UI_SCorpsSettingUI_4 = "Guild Type: ";
+UI_SCorpsSettingUI_5 = "Strength Req: ";
+UI_SCorpsSettingUI_6 = "Save Fleet";
+
+//UI_SCorpsSettingUIItem
+
+//UI_SCorpsStarItem
+UI_SCorpsStarItem_0 = "Not Occupied";
+UI_SCorpsStarItem_1 = "01";
+
+//UI_SCorpsStarUI
+UI_SCorpsStarUI_0 = "Genesis Nebula %d";
+
+//UI_SCorpsStarUIItem
+UI_SCorpsStarUIItem_0 = "Occupied by "Corsairs" ";
+UI_SCorpsStarUIItem_1 = "01";
+UI_SCorpsStarUIItem_2 = "?";
+
+//UI_SCorpsUI
+UI_SCorpsUI_0 = "My Guild";
+UI_SCorpsUI_1 = "Guild Members";
+UI_SCorpsUI_2 = "Guild Mall";
+UI_SCorpsUI_3 = "Guild Battle";
+
+//UI_SCorpsUpgradeBox
+UI_SCorpsUpgradeBox_0 = "Guild members limits increased %d. Guild Warehouse expanded %d. Metal production bonus increased to %d%%. He3 production bonus increased to %d%%. Gold production bonus increased to %d%%. Science research speed increased to %d%%. Ship production speed increased by %d%%.";
+UI_SCorpsUpgradeBox_1 = "Guild maintenance cost has increased to %d";
+UI_SCorpsUpgradeBox_2 = "Guild Wealth Cost: ";
+UI_SCorpsUpgradeBox_3 = "1000000";
+UI_SCorpsUpgradeBox_4 = "Upgrade";
+
+//UI_SDispatchFleetPVPUI
+UI_SDispatchFleetPVPUI_0 = "VS";
+UI_SDispatchFleetPVPUI_1 = "Chance to get: ";
+UI_SDispatchFleetPVPUI_2 = "Failure: ";
+UI_SDispatchFleetPVPUI_3 = "Participating Fleets: %d/%d";
+UI_SDispatchFleetPVPUI_4 = "End Battle";
+UI_SDispatchFleetPVPUI_5 = "Start Battle";
+
+//UI_SDispatchFleetUI
+UI_SDispatchFleetUI_0 = "Fleets: %d/%d";
+UI_SDispatchFleetUI_1 = "Return";
+UI_SDispatchFleetUI_2 = "Defend";
+UI_SDispatchFleetUI_3 = "Attack";
+UI_SDispatchFleetUI_4 = "Lv %d";
+UI_SDispatchFleetUI_5 = "View";
+
+//UI_SEctypeMapFleetItem
+UI_SEctypeMapFleetItem_0 = "%d";
+UI_SEctypeMapFleetItem_1 = "Lv %d";
+UI_SEctypeMapFleetItem_2 = "Fleet Name";
+
+//UI_SEctypeMapRewardItem
+UI_SEctypeMapRewardItem_0 = "%s";
+UI_SEctypeMapRewardItem_1 = "%d";
+UI_SEctypeMapRewardItem_2 = "Researched";
+
+//UI_SEctypeMapUI
+UI_SEctypeMapUI_0 = "Fleets: %d/%d";
+UI_SEctypeMapUI_1 = "Free Auto-Raids left: ";
+UI_SEctypeMapUI_2 = "%d";
+UI_SEctypeMapUI_3 = "Daily Attempts: ";
+UI_SEctypeMapUI_4 = "%d";
+UI_SEctypeMapUI_5 = "/%d";
+UI_SEctypeMapUI_6 = "CP Cost: ";
+UI_SEctypeMapUI_7 = "%d";
+UI_SEctypeMapUI_8 = "Exp: ";
+UI_SEctypeMapUI_9 = "%d";
+UI_SEctypeMapUI_10 = "Chance to get: ";
+UI_SEctypeMapUI_11 = "1st Completion Drop: ";
+UI_SEctypeMapUI_12 = "Start Battle";
+UI_SEctypeMapUI_13 = "End Battle";
+UI_SEctypeMapUI_14 = "Auto-Raid";
+UI_SEctypeMapUI_15 = " ";
+UI_SEctypeMapUI_16 = "Auto-Raid (%d)";
+UI_SEctypeMapUI_17 = "Earn: ";
+UI_SEctypeMapUI_18 = "Clear with 3 Stars to unlock Auto-Raid."
+UI_SEctypeMapUI_19 = "Rec. STR:";
+UI_SEctypeMapUI_20 = "Your STR:";
+UI_SEctypeMapUI_21 = "%d/%d";
+UI_SEctypeMapUI_22 = "CP Left：";
+
+SEctypeMapUI_TEXT1 = "Select fleets";
+SEctypeMapUI_TEXT2 = "%s is not open yet";
+
+//UI_SelectGoogleAccountUI
+UI_SelectGoogleAccountUI_0 = "Select Google Account";
+
+//UI_SEnterNumberBox
+UI_SEnterNumberBox_0 = "/%d";
+UI_SEnterNumberBox_1 = "Please enter quantity.";
+
+//UI_SettingDialog
+UI_SettingDialog_0 = "Game Settings";
+UI_SettingDialog_1 = "Help";
+UI_SettingDialog_2 = "Follow Us";
+
+//UI_SFirstPunchUI
+UI_SFirstPunchUI_0 = "Power Gem x1";
+UI_SFirstPunchUI_1 = "20,000 Gold";
+UI_SFirstPunchUI_2 = "Elite Shards x50";
+UI_SFirstPunchUI_3 = "Buy your first Space Bux and win these prizes!";
+UI_SFirstPunchUI_4 = "Buy Now";
+UI_SFirstPunchUI_5 = "Collect";
+UI_SFirstPunchUI_6 = "You will get 70 Legendary Shards instead if you already have Nora in your roster.";
+
+//UI_SettingUI
+UI_SettingUI_0 = "Music: ";
+UI_SettingUI_1 = "Sound Effects: ";
+UI_SettingUI_2 = "Language";
+UI_SettingUI_3 = "Lang";
+UI_SettingUI_4 = "Submit Ticket";
+UI_SettingUI_5 = "Mailbox";
+UI_SettingUI_6 = "Privacy Policy";
+UI_SettingUI_7 = "Forum";
+UI_SettingUI_8 = "Event";
+UI_SettingUI_9 = "Terms of Service";
+UI_SettingUI_10 = "Version";
+UI_SettingUI_11 = "?IGG Inc. All Rights Reserved.";
+UI_SettingUI_12 = " help.galaxy.android@igg.com";
+UI_SettingUI_13 = "Delete Character";
+UI_SettingUI_14 = "Switch Account";
+UI_SettingUI_15 = "Bind Account";
+
+//UI_SFriendDialog
+UI_SFriendDialog_0 = "Game Friend";
+UI_SFriendDialog_1 = "Facebook Friends";
+UI_SFriendDialog_2 = "Search";
+UI_SFriendDialog_3 = "Friend Requests";
+UI_SFriendDialog_4 = "Assist";
+
+//UI_SFriendItem
+
+//UI_SGameEventInfoBox
+UI_SGameEventInfoBox_0 = "Time: 08:00:00 01.07.2014";
+UI_SGameEventInfoBox_1 = "Context";
+
+//UI_SGameEventPage
+
+//UI_SGameEventPageItem
+UI_SGameEventPageItem_0 = "Important";
+UI_SGameEventPageItem_1 = "%s";
+
+//UI_SGuideUI
+UI_SGuideUI_0 = "Build, upgrade, and develop the strongest base in the galaxy.";
+UI_SGuideUI_1 = "%d/%d";
+
+//UI_ShipBlueprintInfoBox
+UI_ShipBlueprintInfoBox_0 = "Shield Value: ";
+UI_ShipBlueprintInfoBox_1 = "Hull: ";
+UI_ShipBlueprintInfoBox_2 = "Stability: ";
+UI_ShipBlueprintInfoBox_3 = "Damage Reduction: ";
+UI_ShipBlueprintInfoBox_4 = "Agility: ";
+UI_ShipBlueprintInfoBox_5 = "Movement: ";
+UI_ShipBlueprintInfoBox_6 = "Critical Strike Rate: ";
+UI_ShipBlueprintInfoBox_7 = "To acquire: ";
+UI_ShipBlueprintInfoBox_8 = "Temporarily Unavailable";
+UI_ShipBlueprintInfoBox_9 = "Designs Required: ";
+UI_ShipBlueprintInfoBox_10 = "%d";
+UI_ShipBlueprintInfoBox_11 = "%s: ";
+UI_ShipBlueprintInfoBox_12 = "%d Designs (%d Designs to craft 1 Module/Framework)";
+
+//UI_ShipBlueprintModelViewer
+UI_ShipBlueprintModelViewer_0 = "Ship Modules";
+UI_ShipBlueprintModelViewer_1 = "Ship Info";
+UI_ShipBlueprintModelViewer_2 = "Discover";
+UI_ShipBlueprintModelViewer_16 = "%d";
+UI_ShipBlueprintModelViewer_17 = "%d";
+UI_ShipBlueprintModelViewer_18 = "%d";
+UI_ShipBlueprintModelViewer_19 = "Build Ship";
+UI_ShipBlueprintModelViewer_20 = "Return";
+UI_ShipBlueprintModelViewer_21 = "Affects weapon Hit Rate. Increase Precision for higher Hit Rate.";
+UI_ShipBlueprintModelViewer_22 = "Affects damage taken. Increasse Agility to reduce damage taken.";
+UI_ShipBlueprintModelViewer_23 = "Reduces damage taken. The higher the Defense Buffer, the lower the damage received.";
+UI_ShipBlueprintModelViewer_24 = "Stability improves the distribution of damage taken across the ships in the fleet. The higher the stability, the less ships are destroyed from enemy attacks.";
+UI_ShipBlueprintModelViewer_25 = "Modules"
+
+//UI_ShipChooseList
+UI_ShipChooseList_0 = "Select Ship";
+UI_ShipChooseList_1 = "Confirm";
+
+//UI_ShipChooseListItem
+
+//UI_ShipModelInfoItem
+
+//UI_ShipNewUnlockBlueprint
+
+//UI_ShipPartInfoBox
+UI_ShipPartInfoBox_0 = "Damage: ";
+UI_ShipPartInfoBox_1 = "Range: ";
+UI_ShipPartInfoBox_2 = "Reload Speed: ";
+UI_ShipPartInfoBox_3 = "Interception Rate: ";
+UI_ShipPartInfoBox_4 = "Hit Rate: ";
+UI_ShipPartInfoBox_5 = "Precision";
+UI_ShipPartInfoBox_6 = "Critical Strike Rate: ";
+UI_ShipPartInfoBox_7 = "He3 Cost: ";
+UI_ShipPartInfoBox_8 = "Module Details: ";
+UI_ShipPartInfoBox_9 = "He3 Cost: ";
+UI_ShipPartInfoBox_10 = "To acquire: ";
+UI_ShipPartInfoBox_11 = "Temporarily Unavailable";
+UI_ShipPartInfoBox_12 = "Designs Required: ";
+UI_ShipPartInfoBox_13 = "%d";
+UI_ShipPartInfoBox_14 = "%s: ";
+UI_ShipPartInfoBox_15 = "%d Designs (%d Designs to craft 1 Module/Framework)";
+
+//UI_ShipPartItem
+UI_ShipPartItem_0 = "%d";
+
+//UI_ShipProduceFrame
+UI_ShipProduceFrame_0 = "Frigate";
+UI_ShipProduceFrame_1 = "Cruiser";
+UI_ShipProduceFrame_2 = "Battleship";
+UI_ShipProduceFrame_3 = "New ships available for discovery with Lv %d Research Facility: ";
+
+//UI_ShipRDBlueprintNoneItem
+UI_ShipRDBlueprintNoneItem_0 = "Custom Blueprints: ";
+UI_ShipRDBlueprintNoneItem_1 = "%d/%d";
+UI_ShipRDBlueprintNoneItem_2 = "Craft Custom Blueprint";
+UI_ShipRDBlueprintNoneItem_3 = "Customize";
+
+//UI_ShipRDBlueprintItem
+UI_ShipRDBlueprintItem_0 = "Research Facility Lv %d";
+UI_ShipRDBlueprintItem_1 = "Attack Rating: ";
+UI_ShipRDBlueprintItem_2 = "Defense Rating: ";
+UI_ShipRDBlueprintItem_3 = "<font size='20' color='#FFFFFF'>Research Facility Level: </font><font size='20' color='#00FF00'>%d</font>";
+UI_ShipRDBlueprintItem_4 = "Fleet Strength: %d";
+
+//UI_ShipRDBlueprintSpacerItem
+
+//UI_ShipRDCenterFrame
+UI_ShipRDCenterFrame_0 = "Frigate";
+UI_ShipRDCenterFrame_1 = "Cruiser";
+UI_ShipRDCenterFrame_2 = "Battleship";
+UI_ShipRDCenterFrame_3 = "Custom";
+
+//UI_ShipTeamInfoOverview
+UI_ShipTeamInfoOverview_0 = "Tip";
+UI_ShipTeamInfoOverview_1 = "1";
+UI_ShipTeamInfoOverview_2 = "Captain";
+UI_ShipTeamInfoOverview_3 = "Lv ";
+UI_ShipTeamInfoOverview_4 = "Fleet Owner: ";
+UI_ShipTeamInfoOverview_5 = "Guild";
+UI_ShipTeamInfoOverview_6 = "Target: ";
+UI_ShipTeamInfoOverview_7 = "Tactics: ";
+UI_ShipTeamInfoOverview_8 = "5";
+UI_ShipTeamInfoOverview_9 = "He3: "
+UI_ShipTeamInfoOverview_10 = "Fleet Details"
+
+//UI_ShipTeamNode1
+UI_ShipTeamNode1_0 = "99";
+UI_ShipTeamNode1_1 = "You don't have enough He3.";
+
+//UI_ShipTeamNode2
+UI_ShipTeamNode2_0 = "You don't have enough He3.";
+
+//UI_SIconItem
+
+//UI_SIconItemBig
+
+//UI_SIconItemMiddle
+
+//UI_SideQuestItem
+UI_SideQuestItem_0 = "Complete";
+UI_SideQuestItem_1 = "Proceed";
+UI_SideQuestItem_2 = "Recommend";
+UI_SideQuestItem_3 = "Name";
+UI_SideQuestItem_4 = "1000M/1000M";
+UI_SideQuestItem_5 = "Complete";
+UI_SideQuestItem_6 = "Reward: ";
+UI_SideQuestItem_7 = "Comment fdas  fdsa ";
+
+//UI_SItemInfoBox
+
+//UI_SItemUIInfoUI
+UI_SItemUIInfoUI_0 = "All";
+UI_SItemUIInfoUI_1 = "Design";
+UI_SItemUIInfoUI_2 = "Captain";
+UI_SItemUIInfoUI_3 = "Inventory Space: ";
+UI_SItemUIInfoUI_4 = "%d/%d";
+UI_SItemUIInfoUI_5 = "Guild capacity increased by %d";
+UI_SItemUIInfoUI_6 = "Delete";
+UI_SItemUIInfoUI_7 = "Send";
+UI_SItemUIInfoUI_8 = "Fuse";
+UI_SItemUIInfoUI_9 = "Use";
+UI_SItemUIInfoUI_10 = "Items";
+
+//UI_SItemUIInfoUIItem
+
+//UI_SItemUseBox
+UI_SItemUseBox_0 = "/%d";
+
+//UI_SLotteryDialog
+UI_SLotteryDialog_0 = "Free attempts: %d/%d";
+UI_SLotteryDialog_1 = "<img src='resource_mallpoint.png' align='1'><font size='20' color='#FFFFFF'>%d</font></img>";
+UI_SLotteryDialog_2 = "<img src='resource_mallpoint.png' align='1'><font size='20' color='#FFFFFF'>%d</font></img>";
+UI_SLotteryDialog_3 = "<img src='resource_mallpoint.png' align='1'><font size='20' color='#F50C22'>%d</font></img>";
+UI_SLotteryDialog_4 = "<img src='resource_mallpoint.png' align='1'><font size='20' color='#FFFFFF'>%d</font></img>";
+UI_SLotteryDialog_5 = "<img src='resource_mallpoint.png' align='1'><font size='20' color='#F50C22'>%d</font></img>";
+UI_SLotteryDialog_6 = "Free in %02d:%02d:%02d";
+UI_SLotteryDialog_7 = "%d Space Bux to open 1 Galactic Gift";
+UI_SLotteryDialog_8 = "Open 10 Gifts";
+UI_SLotteryDialog_9 = "Free Galactic Gifts";
+UI_SLotteryDialog_10 = "You have";
+UI_SLotteryDialog_11 = "Change Grand Prize";
+UI_SLotteryDialog_12 = "Out of free attempts";
+UI_SLotteryDialog_13 = "Grand Prizes won in Server";
+UI_SLotteryDialog_14 = "Galactic Gift Records";
+UI_SLotteryDialog_15 = "Galactic Gift Records";
+UI_SLotteryDialog_16 = "Failed to change Grand Prize";
+
+//UI_SMallBuyBox
+UI_SMallBuyBox_0 = "Item";
+UI_SMallBuyBox_1 = "Use";
+UI_SMallBuyBox_2 = "Purchase";
+UI_SMallBuyBox_3 = "/%d";
+
+//UI_SMallQuickBuyBox
+UI_SMallQuickBuyBox_0 = "Item";
+UI_SMallQuickBuyBox_1 = "Use";
+UI_SMallQuickBuyBox_2 = "Purchase";
+UI_SMallQuickBuyBox_3 = "Use after Purchase";
+UI_SMallQuickBuyBox_4 = "/%d";
+
+//UI_SMallQuickUseBox
+UI_SMallQuickUseBox_0 = "Item";
+UI_SMallQuickUseBox_1 = "9999";
+UI_SMallQuickUseBox_2 = "Use";
+
+//UI_SMallResourceUI
+UI_SMallResourceUI_0 = "Metal";
+UI_SMallResourceUI_1 = "He3";
+UI_SMallResourceUI_2 = "Gold";
+UI_SMallResourceUI_3 = "%d";
+UI_SMallResourceUI_4 = "%d";
+UI_SMallResourceUI_5 = "%d";
+UI_SMallResourceUI_6 = "%d";
+
+//UI_SMallUI
+UI_SMallUI_0 = "Space Bux";
+UI_SMallUI_1 = "Item";
+UI_SMallUI_2 = "Design";
+UI_SMallUI_3 = "Gems";
+UI_SMallUI_4 = "Honor";
+UI_SMallUI_5 = "Medal";
+
+//UI_SMallUICashItem
+UI_SMallUICashItem_0 = "%d Space Bux";
+UI_SMallUICashItem_1 = "30000";
+UI_SMallUICashItem_2 = "%d%% Bonus";
+SMallUICashItem_TEXT2 = "%d%% Bonus";
+SMallUICashItem_TEXT3 = "Hot";
+SMallUICashItem_TEXT4 = "Best Value";
+SMallUICashItem_TEXT5 = "Limited";
+
+//UI_SMallUIInfoUI
+UI_SMallUIInfoUI_0 = "999.9m";
+UI_SMallUIInfoUI_1 = "999.9m";
+UI_SMallUIInfoUI_2 = "999.9m";
+
+//UI_SMallUIInfoUIItem
+
+//UI_SMallUINew
+UI_SMallUINew_0 = "Space Bux";
+UI_SMallUINew_1 = "Mall";
+UI_SMallUINew_2 = "Protection";
+UI_SMallUINew_3 = "Live Support";
+UI_SMallUINew_4 = "Free Offer";
+UI_SMallUINew_5 = "Next Refresh: %s";
+UI_SMallUINew_6 = "Refresh";
+UI_SMallUINew_7 = "30";
+UI_SMallUINew_8 = "999999";
+UI_SMallUINew_9 = "Truce Period: ";
+UI_SMallUINew_10 = "00:00:00";
+UI_SMallUINew_11 = "Gems";
+
+//UI_SmallUIProComBox
+UI_SmallUIProComBox_0 = "Name";
+UI_SmallUIProComBox_1 = "<font size='22' color='#06f6ff'>You have </font><font size='24' color='#ffffff'>%d</font>";
+UI_SmallUIProComBox_2 = "Purchase";
+UI_SmallUIProComBox_3 = "<font size='22' color='#06f6ff'>(Buy</font><font size='24' color='#ffffff'>%d</font><font size='22' color='#06f6ff'>)</font>";
+UI_SmallUIProComBox_4 = "4534";
+
+//UI_SMallUIPropItem 
+UI_SMallUIPropItem _0 = "ItemName";
+UI_SMallUIPropItem _1 = "30000";
+
+//UI_SMallUIResourceItem
+UI_SMallUIResourceItem_0 = "ItemName";
+UI_SMallUIResourceItem_1 = "%d";
+UI_SMallUIResourceItem_2 = "%d";
+
+//UI_SMallUIShieldItem
+UI_SMallUIShieldItem_0 = "ItemName";
+UI_SMallUIShieldItem_1 = "%d";
+UI_SMallUIShieldItem_2 = "Cooldown: %s";
+
+//UI_SMopUpReportUIItem
+
+//UI_SOnlineAwardBox
+UI_SOnlineAwardBox_0 = "You got: ";
+UI_SOnlineAwardBox_1 = "<font color='#ffffff' size='22'>%d (%s) was scrapped. You got: </font><img src='resource_metal.png' align='1'><font>%s </font></img><img src='resource_he3.png' align='1'><font>%s </font></img>";
+SOnlineAwardBox_TEXT1 = "You got: ";
+SOnlineAwardBox_TEXT2 = "You spent %d Space Bux and got";
+
+//UI_SplashScreen
+UI_SplashScreen_0 = "Loading";
+UI_SplashScreen_1 = "%d/%d";
+UI_SplashScreen_2 = "Background";
+UI_SplashScreen_3 = "Skip";
+UI_SplashScreen_4 = "Updating... Please wait..."
+
+//UI_SPlayerInfoUI
+UI_SPlayerInfoUI_0 = "Guild: ";
+UI_SPlayerInfoUI_1 = "%s";
+UI_SPlayerInfoUI_2 = "Lv: ";
+UI_SPlayerInfoUI_3 = "%d";
+UI_SPlayerInfoUI_4 = "CP: ";
+UI_SPlayerInfoUI_5 = "%d";
+UI_SPlayerInfoUI_6 = "%d/%d";
+UI_SPlayerInfoUI_7 = "%d/%d";
+UI_SPlayerInfoUI_8 = "Switch Avatar";
+
+//UI_SPlayerInfoUIItem
+UI_SPlayerInfoUIItem_0 = "Time left: ";
+UI_SPlayerInfoUIItem_1 = "Use";
+UI_SPlayerInfoUIItem_2 = "%d";
+
+//UI_SQuickPayDialog
+UI_SQuickPayDialog_0 = "Tip";
+UI_SQuickPayDialog_1 = "RichText";
+UI_SQuickPayDialog_2 = "Purchase";
+
+//UI_SScienceDialog
+UI_SScienceDialog_0 = "Science";
+UI_SScienceDialog_1 = "Construction";
+UI_SScienceDialog_2 = "Planetary Defense";
+UI_SScienceDialog_3 = "Ballistic";
+UI_SScienceDialog_4 = "Energy";
+UI_SScienceDialog_5 = "Missile";
+UI_SScienceDialog_6 = "Shuttle";
+UI_SScienceDialog_7 = "Defend";
+UI_SScienceDialog_8 = "Attack";
+
+//UI_SScienceItem
+UI_SScienceItem_0 = "10/10";
+UI_SScienceItem_1 = "00:00:00";
+
+//UI_SShieldTime
+UI_SShieldTime_0 = "Truce Period: ";
+UI_SShieldTime_1 = "00:00:00";
+
+//UI_SShipBigIcon
+
+//UI_SShipBlueprintStudyUI
+UI_SShipBlueprintStudyUI_0 = "Framework";
+UI_SShipBlueprintStudyUI_1 = "Weapon";
+UI_SShipBlueprintStudyUI_2 = "Defensive";
+UI_SShipBlueprintStudyUI_3 = "Auxiliary";
+
+//UI_SShipBlueprintBodyNode
+UI_SShipBlueprintBodyNode_0 = "Battleship";
+UI_SShipBlueprintBodyNode_1 = "Cruiser";
+UI_SShipBlueprintBodyNode_2 = "Frigate";
+
+//UI_SShipBlueprintPartAtkNode
+UI_SShipBlueprintPartAtkNode_0 = "Planetary";
+UI_SShipBlueprintPartAtkNode_1 = "Ship-Based";
+UI_SShipBlueprintPartAtkNode_2 = "Missile";
+UI_SShipBlueprintPartAtkNode_3 = "Directional";
+UI_SShipBlueprintPartAtkNode_4 = "Ballistic";
+
+//UI_SShipBlueprintPartDefnedNode
+UI_SShipBlueprintPartDefnedNode_0 = "Hull";
+UI_SShipBlueprintPartDefnedNode_1 = "Shield";
+UI_SShipBlueprintPartDefnedNode_2 = "Interception";
+
+//UI_SShipBlueprintPartAuxNode
+UI_SShipBlueprintPartAuxNode_0 = "Engine";
+UI_SShipBlueprintPartAuxNode_1 = "Computer";
+
+//UI_SShipBodySelectUI
+UI_SShipBodySelectUI_0 = "Frigate";
+UI_SShipBodySelectUI_1 = "Cruiser";
+UI_SShipBodySelectUI_2 = "Battleship";
+
+//UI_SShipBodySelectUIItem
+UI_SShipBodySelectUIItem_0 = "%d Available Power";
+UI_SShipBodySelectUIItem_1 = "Hull:";
+UI_SShipBodySelectUIItem_2 = "Shield:";
+UI_SShipBodySelectUIItem_3 = "Stability:";
+UI_SShipBodySelectUIItem_4 = "Defense Buffer:";
+UI_SShipBodySelectUIItem_5 = "Agility:";
+UI_SShipBodySelectUIItem_6 = "Movement:";
+UI_SShipBodySelectUIItem_7 = "Fuel Capacity:";
+
+//UI_SShipBodyUpgradeBox
+UI_SShipBodyUpgradeBox_0 = "%d Available Power";
+UI_SShipBodyUpgradeBox_1 = "Hull:";
+UI_SShipBodyUpgradeBox_2 = "Shield:";
+UI_SShipBodyUpgradeBox_3 = "Stability:";
+UI_SShipBodyUpgradeBox_4 = "Defense Buffer:";
+UI_SShipBodyUpgradeBox_5 = "Agility:";
+UI_SShipBodyUpgradeBox_6 = "Movement:";
+UI_SShipBodyUpgradeBox_7 = "Fuel Capacity:";
+UI_SShipBodyUpgradeBox_8 = "Lv %d Research Facility";
+UI_SShipBodyUpgradeBox_9 = "Research";
+
+//UI_SShipPartEditBox
+UI_SShipPartEditBox_0 = "Install";
+UI_SShipPartEditBox_1 = "Power:";
+
+//UI_SShipBlueUIItem
+UI_SShipBlueUIItem_0 = "Nano Armor";
+UI_SShipBlueUIItem_1 = "%d Power";
+UI_SShipBlueUIItem_2 = "Yet to possess";
+UI_SShipBlueUIItem_3 = "Research";
+UI_SShipBlueUIItem_4 = "Not reseached";
+UI_SShipBlueUIItem_5 = "00:00:00";
+UI_SShipBlueUIItem_6 = "Upgrade";
+UI_SShipBlueUIItem_7 = "2000";
+UI_SShipBlueUIItem_8 = "00:00:00";
+UI_SShipBlueUIItem_9 = "Complete Now";
+UI_SShipBlueUIItem_10 = "Give Up";
+
+//UI_SShipBodySelecBoxItem
+UI_SShipBodySelecBoxItem_1 = "Hull: ";
+UI_SShipBodySelecBoxItem_2 = "Shield: ";
+UI_SShipBodySelecBoxItem_3 = "Stability: ";
+UI_SShipBodySelecBoxItem_4 = "Agility: ";
+UI_SShipBodySelecBoxItem_5 = "Defense Buffer: ";
+UI_SShipBodySelecBoxItem_6 = "Movement: ";
+
+//UI_SShipBodyUI
+UI_SShipBodyUI_0 = "All Types";
+UI_SShipBodyUI_1 = "Frigate";
+UI_SShipBodyUI_2 = "Cruiser";
+UI_SShipBodyUI_3 = "Battleship";
+UI_SShipBodyUI_4 = "Special Warship";
+
+//UI_SShipBodyUIItem
+
+//UI_SShipBuildPage
+
+//UI_SShipBuildPageItem
+
+//UI_SShipBuildUI
+
+//UI_SShipDesginPage
+UI_SShipDesginPage_0 = "Frigate";
+UI_SShipDesginPage_1 = "Cruiser";
+UI_SShipDesginPage_2 = "Battleship";
+
+//UI_SShipDesginPageItem
+UI_SShipDesginPageItem_0 = "%s Capacity";
+UI_SShipDesginPageItem_1 = "Shield Value: ";
+UI_SShipDesginPageItem_2 = "Damage Reduction: ";
+UI_SShipDesginPageItem_3 = "%d%%";
+UI_SShipDesginPageItem_4 = "Hull: ";
+UI_SShipDesginPageItem_5 = "Agility: ";
+UI_SShipDesginPageItem_6 = "Movement:";
+UI_SShipDesginPageItem_7 = "Stability: ";
+UI_SShipDesginPageItem_8 = "%d%%";
+
+//UI_SShipDesginUI
+UI_SShipDesginUI_0 = "Weapon";
+UI_SShipDesginUI_1 = "Defensive";
+UI_SShipDesginUI_2 = "Auxiliary";
+UI_SShipDesginUI_3 = "Power:";
+UI_SShipDesginUI_4 = "Clear";
+UI_SShipDesginUI_5 = "Save";
+UI_SShipDesginUI_6 = "Modules:";
+
+//UI_SShipDesginUIItem
+
+//UI_SShipEnterNumberBox
+UI_SShipEnterNumberBox_0 = "999.9m";
+UI_SShipEnterNumberBox_1 = "999.9m";
+UI_SShipEnterNumberBox_2 = "999.9m";
+UI_SShipEnterNumberBox_3 = "Confirm";
+
+//UI_SShipInfoUI
+UI_SShipInfoUI_0 = "Attributes";
+UI_SShipInfoUI_1 = "Details";
+UI_SShipInfoUI_2 = "Item Name";
+UI_SShipInfoUI_3 = "Armor: ";
+UI_SShipInfoUI_4 = "Range: ";
+UI_SShipInfoUI_5 = "He3 Storage: ";
+UI_SShipInfoUI_6 = "Damage: ";
+UI_SShipInfoUI_7 = "Hull: ";
+UI_SShipInfoUI_8 = "Move: ";
+UI_SShipInfoUI_9 = "Ship Armor: ";
+UI_SShipInfoUI_10 = "Precision";
+UI_SShipInfoUI_11 = "Agility: ";
+UI_SShipInfoUI_12 = "Memberships: ";
+UI_SShipInfoUI_13 = "%d-%d";
+UI_SShipInfoUI_14 = "%d-%d";
+UI_SShipInfoUI_15 = "(%d)";
+UI_SShipInfoUI_16 = "(%d)";
+UI_SShipInfoUI_17 = "Build Time";
+UI_SShipInfoUI_18 = "Build Cost: ";
+UI_SShipInfoUI_19 = "Damage: ";
+UI_SShipInfoUI_20 = "%s-%s";
+UI_SShipInfoUI_21 = "Reload Speed: ";
+UI_SShipInfoUI_22 = "He3 Cost: ";
+UI_SShipInfoUI_23 = "Damage Type: ";
+UI_SShipInfoUI_24 = "%s";
+UI_SShipInfoUI_25 = "Range: ";
+UI_SShipInfoUI_26 = "%s-%s";
+UI_SShipInfoUI_27 = "Weight: ";
+UI_SShipInfoUI_28 = "Precision";
+UI_SShipInfoUI_29 = "Interception Rate: ";
+UI_SShipInfoUI_30 = "%d%%";
+UI_SShipInfoUI_31 = "Module Cost: ";
+UI_SShipInfoUI_32 = "Module Details: ";
+UI_SShipInfoUI_33 = "Build Time";
+UI_SShipInfoUI_34 = "Build Cost: ";
+
+//UI_SShipModelActiveUIItem
+
+//UI_SShipModelPage
+UI_SShipModelPage_0 = "Frigate";
+UI_SShipModelPage_1 = "Cruiser";
+UI_SShipModelPage_2 = "Battleship";
+
+//UI_SShipModelPageItem
+UI_SShipModelPageItem_0 = "%d Capacity";
+UI_SShipModelPageItem_1 = "Attack Rating: ";
+UI_SShipModelPageItem_2 = "Move: ";
+UI_SShipModelPageItem_3 = "Defense Rating: ";
+UI_SShipModelPageItem_4 = "Craft";
+
+//UI_SShipModelUI
+UI_SShipModelUI_0 = "Frigate";
+UI_SShipModelUI_1 = "Cruiser";
+UI_SShipModelUI_2 = "Battleship";
+
+//UI_SShipModelUIItem
+UI_SShipModelUIItem_0 = "%d Capacity";
+UI_SShipModelUIItem_1 = "Attack Rating: ";
+UI_SShipModelUIItem_2 = "Move: ";
+UI_SShipModelUIItem_3 = "Defense Rating: ";
+
+//UI_SShipModuleInfoBox
+UI_SShipModuleInfoBox_0 = "Damage: ";
+UI_SShipModuleInfoBox_1 = "%s-%s";
+UI_SShipModuleInfoBox_2 = "Reload Speed: ";
+UI_SShipModuleInfoBox_3 = "He3 Cost: ";
+UI_SShipModuleInfoBox_4 = "Damage Type: ";
+UI_SShipModuleInfoBox_5 = "%s";
+UI_SShipModuleInfoBox_6 = "Range: ";
+UI_SShipModuleInfoBox_7 = "%s-%s";
+UI_SShipModuleInfoBox_8 = "Weight: ";
+UI_SShipModuleInfoBox_9 = "Precision";
+UI_SShipModuleInfoBox_10 = "Interception Rate: ";
+UI_SShipModuleInfoBox_11 = "%d%%";
+UI_SShipModuleInfoBox_12 = "Module Cost: ";
+UI_SShipModuleInfoBox_13 = "Module Details: ";
+UI_SShipModuleInfoBox_14 = "Research Design";
+
+//UI_SShipPartSelecBox
+UI_SShipPartSelecBox_0 = "Installed";
+UI_SShipPartSelecBox_1 = "Install";
+
+//SShipPartSelectUI
+UI_SShipPartSelectUI_0 = "Ballistic";
+UI_SShipPartSelectUI_1 = "Directional";
+UI_SShipPartSelectUI_2 = "Missile";
+UI_SShipPartSelectUI_3 = "Ship-Based";
+UI_SShipPartSelectUI_4 = "Planetary";
+UI_SShipPartSelectUI_5 = "Hull";
+UI_SShipPartSelectUI_6 = "Shield";
+UI_SShipPartSelectUI_7 = "Interception";
+UI_SShipPartSelectUI_8 = "Computer";
+UI_SShipPartSelectUI_9 = "Fuel";
+UI_SShipPartSelectUI_10 = "Engine";
+UI_SShipPartSelectUI_11 = "Available Volume: %d";
+
+//SShipPartSelectUIItem
+UI_SShipPartSelectUIItem_0 = "Cost: %d Power";
+UI_SShipPartSelectUIItem_1 = "Activition uses He3 ";
+UI_SShipPartSelectUIItem_2 = "Attack";
+UI_SShipPartSelectUIItem_3 = "Attack Range";
+UI_SShipPartSelectUIItem_4 = "Reload Speed:";
+UI_SShipPartSelectUIItem_5 = "Precision";
+UI_SShipPartSelectUIItem_6 = "Hit Rate";
+UI_SShipPartSelectUIItem_7 = "Interception:";
+
+//SShipPartUpgradeBox
+UI_SShipPartUpgradeBox_0 = "Cost: %d Power";
+UI_SShipPartUpgradeBox_1 = "Activition uses He3 ";
+UI_SShipPartUpgradeBox_2 = "Attack";
+UI_SShipPartUpgradeBox_3 = "Attack Range";
+UI_SShipPartUpgradeBox_4 = "Reload Speed:";
+UI_SShipPartUpgradeBox_5 = "Precision";
+UI_SShipPartUpgradeBox_6 = "Hit Rate";
+UI_SShipPartUpgradeBox_7 = "Interception:";
+UI_SShipPartUpgradeBox_8 = "Lv %d Research Facility";
+UI_SShipPartUpgradeBox_9 = "Research";
+
+//UI_SShipRecycleReport
+UI_SShipRecycleReport_0 = "%d (%s) was scrapped. You got:";
+UI_SShipRecycleReport_1 = "%s";
+UI_SShipRecycleReport_2 = "%s";
+
+//UI_SShipRecycleSelecUI
+UI_SShipRecycleSelecUI_0 = "Ship Repair";
+UI_SShipRecycleSelecUI_1 = "Scrap Ships";
+UI_SShipRecyCleSelecUI_2 = "You're about to destroy %d %s. These ships will be permanently removed from your Hangar. Proceed anyway?";
+
+
+//UI_ShipHangarBlueprintItem
+UI_ShipHangarBlueprintItem_0 = "Quantity: %d";
+
+
+//UI_SShipRecycleWarningBox
+UI_SShipRecycleWarningBox_0 = "Tip";
+UI_SShipRecycleWarningBox_1 = "<font color='#0efad0' size='22'>Resources earned from scrapping %d (%s) will exceed your maximum capacity by </font><font color='#ffffff' size='22'> %s </font><font color='#0efad0' size='22'>Metal and </font><font color='#ffffff' size='22'> %s </font><font color='#0efad0' size='22'>He3. Scrap anyway?</font>";
+UI_SShipRecycleWarningBox_2 = "Cancel";
+UI_SShipRecycleWarningBox_3 = "Confirm";
+
+//UI_SShipShipUI
+UI_SShipShipUI_0 = "Switch";
+
+//UI_SShipShipUIItem
+UI_SShipShipUIItem_0 = "Amount: %d";
+
+//UI_SSocialDialog
+UI_SSocialDialog_0 = "Friends";
+UI_SSocialDialog_1 = "Asteroid Harvester";
+UI_SSocialDialog_2 = "Leaderboards";
+
+//UI_SSPTime
+UI_SSPTime_0 = "Current Time: ";
+UI_SSPTime_1 = "CP Purchases: ";
+UI_SSPTime_2 = "Recover CP in: ";
+UI_SSPTime_3 = "Full CP in: ";
+UI_SSPTime_4 = "Cooldown: ";
+UI_SSPTime_5 = "00:00:00";
+UI_SSPTime_6 = "00:00:00";
+UI_SSPTime_7 = "00:00:00";
+UI_SSPTime_8 = "00:00:00";
+UI_SSPTime_9 = "4.8 minutes";
+
+//UI_SSShipModuleItem
+UI_SSShipModuleItem_0 = "222";
+
+//UI_STaskGuideUI
+UI_STaskGuideUI_0 = "Skip";
+UI_STaskGuideUI_1 = "Lieutenant Wells";
+UI_STaskGuideUI_2 = "Lieutenant Wells";
+
+//UI_STradingUI
+
+//UI_STradingUIBlackMarketPage
+UI_STradingUIBlackMarketPage_0 = "%s Metal";
+UI_STradingUIBlackMarketPage_1 = "Exchange 10% Gold for Metal";
+UI_STradingUIBlackMarketPage_2 = "80";
+UI_STradingUIBlackMarketPage_3 = "%s He3";
+UI_STradingUIBlackMarketPage_4 = "Exchange 10% Gold for He3";
+UI_STradingUIBlackMarketPage_5 = "240";
+
+//UI_SUseMoneyBox
+UI_SUseMoneyBox_0 = "Tip";
+UI_SUseMoneyBox_1 = "RichText";
+
+//UI_SUserMsgBox
+UI_SUserMsgBox_0 = "Tip";
+UI_SUserMsgBox_1 = "Text";
+UI_SUserMsgBox_2 = "Content";
+UI_SUserMsgBox_3 = "Yes";
+UI_SUserMsgBox_4 = "No";
+
+//UI_SWaitBox
+
+//UI_SwitchButton
+UI_SwitchButton_0 = "ON";
+UI_SwitchButton_1 = "OFF";
+UI_SwitchButton_2 = "OFF";
+
+//UI_TaskMainUI
+UI_TaskMainUI_0 = "Task";
+UI_TaskMainUI_1 = "Daily Task";
+
+//UI_UpdateLayer
+UI_UpdateLayer_0 = "%d/%d";
+UI_UpdateLayer_1 = "Loading resources…";
+
+//UI_UserInfoViewer
+UI_UserInfoViewer_0 = "PlayerName";
+UI_UserInfoViewer_1 = "LV 99";
+UI_UserInfoViewer_2 = "Guild: ";
+UI_UserInfoViewer_3 = "CorpsName";
+UI_UserInfoViewer_4 = "Strength Ranking: ";
+UI_UserInfoViewer_5 = "Rank";
+UI_UserInfoViewer_6 = "Truce: ";
+UI_UserInfoViewer_7 = "State";
+UI_UserInfoViewer_8 = "Offline Time";
+UI_UserInfoViewer_9 = "00:00:00";
+UI_UserInfoViewer_10 = "Space Station Lv: ";
+UI_UserInfoViewer_11 = "Lv 1";
+UI_UserInfoViewer_12 = "Missions Fought: ";
+UI_UserInfoViewer_13 = "Lv 2";
+UI_UserInfoViewer_14 = "Post: ";
+UI_UserInfoViewer_15 = "Lv 3";
+UI_UserInfoViewer_16 = "Colony Level: ";
+UI_UserInfoViewer_17 = "Lv 4";
+UI_UserInfoViewer_18 = "View Guild";
+
+UserInfoViewer_TEXT0 = "None";
+
+//UI_VIPPrivilegeItem
+
+//UI_VIPUI
+UI_VIPUI_0 = "STAR Rules";
+UI_VIPUI_1 = "You can't activate %s status because you're already a %s.";
+UI_VIPUI_2 = "Daily Bonus";
+UI_VIPUI_3 = "%d";
+UI_VIPUI_4 = "Claim";
+UI_VIPUI_5 = "1. VIP privileges can only be enjoyed while the VIP status is in effect.\n2. Each player may only have one level of VIP status in effect at any time.\n3. Each time a VIP status is activated or upgraded, the privileges will be in effect for at least 7 days.\n4. VIP statuses can be upgraded to a higher level.\n5. When upgrading VIP status, any leftover time for previous statuses will be converted into Space Bux that go towards the cost of the VIP upgrade.\n6. If the amount of Space Bux converted from leftover time isn't enough to buy a VIP upgrade of at least 7 days, players can use additional Space Bux from their account to make up the balance. \n7. If the amount of Space Bux converted from leftover time exceeds the upgrade cost of the new VIP status, then no Space Bux will be used from the player's account. The duration of the upgraded VIP status will depend on the amount of Space Bux converted from the upgrade.";
+UI_VIPUI_6 = "Buy Now to Get: ";
+UI_VIPUI_7 = "Daily Space Bux(30 Days): ";
+
+VIPUI_1 = "Reward claimed!";
+VIPUI_2 = "You're not a %s yet.";
+
+NewText70 = "--";
+
+UI_FleetInstructionPage_0 = "Combat Dynamics";
+UI_FleetInstructionPage_1 = "Ship Dynamics";
+UI_FleetInstructionPage_2 = "Damage Armor Dynamics";
+UI_FleetInstructionPage_3 = "Fleet Configuration";
+UI_FleetInstructionPage_4 = "Bonus Damage";
+UI_FleetInstructionPage_5 = "Damage Penalty";
+UI_FleetInstructionPage_6 = "Battleship";
+UI_FleetInstructionPage_7 = "Cruiser";
+UI_FleetInstructionPage_8 = "Frigate";
+UI_FleetInstructionPage_9 = "Damage dealt by ship is affected by its position in the fleet.";
+UI_FleetInstructionPage_10 = "<font size='22' color='#ffffff'> Ships in the </font><font size='22' color='#06F6FF'>Front</font><font size='22' color='#ffffff'> can deal 100% of their damage output</font>";
+UI_FleetInstructionPage_11 = "<font size='22' color='#ffffff'> Ships in the </font><font size='22' color='#06F6FF'>Mid</font><font size='22' color='#ffffff'> can deal 90% of their damage output</font>";
+UI_FleetInstructionPage_12 = "<font size='22' color='#ffffff'> Ships in the </font><font size='22' color='#06F6FF'>Back</font><font size='22' color='#ffffff'> can deal 75% of their damage output</font>";
+UI_FleetInstructionPage_13 = "Chrome";
+UI_FleetInstructionPage_14 = "Nano";
+UI_FleetInstructionPage_15 = "Neutronium";
+UI_FleetInstructionPage_16 = "Composite";
+UI_FleetInstructionPage_17 = "Masterwork";
+UI_FleetInstructionPage_18 = "Impact";
+UI_FleetInstructionPage_19 = "75%";
+UI_FleetInstructionPage_20 = "100%";
+UI_FleetInstructionPage_21 = "150%";
+UI_FleetInstructionPage_22 = "50%";
+UI_FleetInstructionPage_23 = "16%";
+UI_FleetInstructionPage_24 = "Heat";
+UI_FleetInstructionPage_25 = "50%";
+UI_FleetInstructionPage_26 = "75%";
+UI_FleetInstructionPage_27 = "100%";
+UI_FleetInstructionPage_28 = "150%";
+UI_FleetInstructionPage_29 = "16%";
+UI_FleetInstructionPage_30 = "Explosion";
+UI_FleetInstructionPage_31 = "150%";
+UI_FleetInstructionPage_32 = "50%";
+UI_FleetInstructionPage_33 = "75%";
+UI_FleetInstructionPage_34 = "100%";
+UI_FleetInstructionPage_35 = "16%";
+UI_FleetInstructionPage_36 = "Magnetic DMG";
+UI_FleetInstructionPage_37 = "100%";
+UI_FleetInstructionPage_38 = "150%";
+UI_FleetInstructionPage_39 = "55%";
+UI_FleetInstructionPage_40 = "75%";
+UI_FleetInstructionPage_41 = "16%";
+
+SMallUIInfoUI_TEXT0 = "You already hired this Captain.";
+
+BattleReportRewardItem_TEXT0 = "Lv %d";
+
+//UI_SBuildingQueueWarningBox
+UI_SBuildingQueueWarningBox_0 = "Construction queue is full";
+UI_SBuildingQueueWarningBox_1 = "Buy Construction Slot";
+UI_SBuildingQueueWarningBox_2 = "Activate VIP membership to increase Construction Slot";
+UI_SBuildingQueueWarningBox_3 = "Activate VIP";
+UI_SBuildingQueueWarningBox_4 = "No";
+
+//UI_SVIPAwardBox
+UI_SVIPAwardBox_0 = "Congratulations on winning Gold VIP status for 3 hours!";
+//MainUINew
+MainUINew_Text0 = "CP+%d";
+
+//CommanderDetailFrame
+CommanderDetailFrame_0 = "Attributes";
+CommanderDetailFrame_1 = "Gems";
+CommanderDetailFrame_2 = "Background";
+
+UI_CommanderGemsPage_0 = "Fuse";
+UI_CommanderGemsPage_1 = "Inlay";
+UI_CommanderGemsPage_3 = "Remove";
+UI_CommanderGemsPage_4 = "Upgrade Gem";
+UI_CommanderGemsPage_5 = "<font color='#06f6ff' size='20'>You have: </font><font color='#ffffff' size='20'>%d</font>";
+UI_CommanderGemsPage_6 = "How to obtain: ";
+UI_CommanderGemsPage_7 = "Gem Mall";
+UI_CommanderGemsPage_8 = "Challenge Mission";
+UI_CommanderGemsPage_9 = "Galactic Gift";
+UI_CommanderGemsPage_10 = "Lv %d";
+UI_CommanderGemsPage_11 = "<font size='22' color='#ffffff'>Upgrade</font><font size='22' color='%s'>%d</font><img src='resource_gold.png' align='1' />";
+UI_CommanderGemsPage_12 = "<font size='20' color='%s'>%d</font><font size='20' color='#ffffff'>/%d</font>";
+UI_CommanderGemsPage_13 = "/%d";
+
+UI_CommanderGene_0 = "Standard Bounty";
+UI_CommanderGene_1 = "Jackpot Bounty";
+UI_CommanderGene_2 = "Select a Jackpot Bounty";
+UI_CommanderGene_3 = "Jackpot History";
+UI_CommanderGene_4 = "Fusion Records";
+UI_CommanderGene_5 = "Captain Generation History";
+UI_CommanderGene_6 = "Relic";
+UI_CommanderGene_7 = "To acquire: ";
+UI_CommanderGene_8 = "Challenge Mission";
+UI_CommanderGene_9 = "Galactic Gift";
+UI_CommanderGene_10 = "Use Relics to generate one of the five below.";
+
+UI_WormholeUI_0 = "Exploration Event";
+UI_WormholeUI_1 = "Explorations left: ";
+UI_WormholeUI_2 = "Centaurus Constellation";
+UI_WormholeUI_3 = "Virgo Constellation";
+UI_WormholeUI_4 = "Perseus Constellation";
+UI_WormholeUI_5 = "Canis Major Constellation";
+UI_WormholeUI_6 = "Gain 1 entry in: ";
+UI_WormholeUI_7 = "Cooldown: ";
+
+UI_SearchWormhole_0 = "Explore";
+
+UI_SearchWormholeListUI_0 = "Explorations left: %d/%d";
+UI_SearchWormholeListUI_1 = "Upgrade your Capital to win more rewards!"
+UI_SearchWormholeItem_0 = "Planet Name: ";
+UI_SearchWormholeItem_1 = "Requires: ";
+UI_SearchWormholeItem_2 = "%s Lv%d";
+UI_SearchWormholeItem_3 = "Bounty: ";
+UI_SearchWormholeItem_4 = "Explore";
+
+//EctypeUseMoneyBox
+UI_EctypeUseMoneyBox_0 = "Tip";
+UI_EctypeUseMoneyBox_1 = "RichText";
+UI_EctypeUseMoneyBox_2 = "VIP";
+UI_EctypeUseMoneyBox_3 = "Auto-Raid";
+UI_EctypeUseMoneyBox_4 = "%d";
+UI_EctypeUseMoneyBox_5 = "VIP Upgrade";
+UI_EctypeUseMoneyBox_Content01 = "<font size='22' color='#06f6ff'>You can either spend Space Bux to Auto-Raid </font><font size='22' color='#00ff00'>%s</font><font size='22' color='#06f6ff'> or become a VIP member to increase the number of daily Auto-Raids.</font>";
+UI_EctypeUseMoneyBox_Content02 = "<font size='22' color='#06f6ff'>You can either spend Space Bux to Auto-Raid </font><font size='22' color='#00ff00'>%s</font><font size='22' color='#06f6ff'> or upgrade your VIP status to increase the number of daily Auto-Raids.</font>";
+//
+UI_SLotteryAwardBox_0 = "Congratulations, you have won: ";
+UI_SLotteryAwardBox_1 = "%s has already been recruited. Converting into %d Veteran Shards";
+UI_SLotteryAwardBox_2 = "%s has already been recruited. Converting into %d Elite Shards";
+UI_SLotteryAwardBox_3 = "%s has already been recruited. Converting into %d Legendary Shards";
+UI_SLotteryAwardBox_4 = "%s has already been recruited. Converting into %d Mythic Shards";
+//
+LotteryBroadcastItem_0 = "<font size='20' color='#ff6c00'>%s</font><font size='20' color='#06f6ff'> won </font>%s<font size='20' color='#0be400'> X %d</font>";
+LotteryBroadcastItem_1 = "<font size='20' color='%s'>%s</font>;
+
+//
+SBetaTips = "Coming soon";
+//
+UI_ConnectRetryBox_Title = "Connection Lost.";
+UI_ConnectRetryBox_0 = "Commander, your connection has been lost. Please check your network and try again.";
+UI_ConnectRetryBox_1 = "Reconnect";
+
+UI_ServerClosedBox_Title = "Server Closed."
+UI_ServerClosedBox_1 = "Dear Commander, our servers are under maintenance, you can check the reopen time on our official site. We apologize for any inconvenience caused."
+
+//
+UI_SBattleUIArenaPage_0 = "Galactic Ladder";
+UI_SBattleUIArenaPage_1 = "Overall Rankings";
+UI_SBattleUIArenaPage_2 = "History";
+//
+UI_SBattleUIArenaMatchPage_0 = "Ranking:";
+UI_SBattleUIArenaMatchPage_1 = "Wins:";
+UI_SBattleUIArenaMatchPage_2 = "Win";
+UI_SBattleUIArenaMatchPage_3 = "Challenges left:";
+UI_SBattleUIArenaMatchPage_4 = "<font size='22' color='%s'>%d</font><font size='22' color='#ffffff'>/%d</font>";
+UI_SBattleUIArenaMatchPage_5 = "Cooldown:";
+UI_SBattleUIArenaMatchPage_6 = "Reset";
+UI_SBattleUIArenaMatchPage_7 = "Medals: ";
+UI_SBattleUIArenaMatchPage_8 = "Exchange reward";
+UI_SBattleUIArenaMatchPage_9 = "Fleets";
+UI_SBattleUIArenaMatchPage_10 = "Rules";
+UI_SBattleUIArenaMatchPage_11 = "Purchase";
+
+UI_SBattleUIArenaMatchPage_Detail0 = "Lv: ";
+UI_SBattleUIArenaMatchPage_Detail1 = "Rank: ";
+UI_SBattleUIArenaMatchPage_Detail2 = "Wins: ";
+//
+UI_SBattleUIArenaRankPage_0 = "My Rank";
+UI_SBattleUIArenaRankPage_1 = "Top 100";
+UI_SBattleUIArenaRankPage_2 = "<font size='20' color='#06f6ff'>Rankings reset in: </font><font size='20' color='#ffffff'>%s</font>";
+//
+UI_SBattleUIArenaMatchPageItem_0 = "Challenge";
+//
+UI_SBattleUIArenaRankItem_0 = "Wins";
+//
+UI_SBattleUIArenaExplainPage_0 = "Rules";
+UI_SBattleUIArenaExplainPage_1 = "You are now Ranked %d %s, and are eligible for:";
+UI_SBattleUIArenaExplainPage_2 = "You are Ranked %d %s, and eligible to win this 7-day Shipment:";
+UI_SBattleUIArenaExplainPage_3 = "Your rank: %d";
+UI_SBattleUIArenaExplainPage_4 = "Galactic Ladder Rules: ";
+UI_SBattleUIArenaExplainPage_5 = "You are now Ranked %d. This Rank is ineligible for a reward.";
+
+UI_SBattleUIArenaExplainPage_Text = "1. Up to eight fleets can be deployed at once.\n2. Ships and He3 expended in Galactic Ladder will be restored.\n3. If an attacker wins against a defender with a higher rank, the attacker will switch ranks with the defender.\n4. The defender will win by default if the attacker can't win after a specific number of rounds.\n5. You can attempt up to %d challenges every day. Challenge attempts will reset at 12:00 a.m. daily.\n6. A %d minute cooldown will be imposed after each challenge.\n7. Rewards will be sent to your in-game mailbox at 12:00 a.m. every day. The size of the reward will be determined by your daily rank.\n8. Galactic Ladder rewards get bigger and better as players complete more duels and reach higher rankings.\n9. 7-Day Shipments, substantially better than 1-Day Shipment rewards, will be sent to the mailboxes of all eligible Commanders every Monday at 00:00 hrs.";
+//
+UI_CommanderCrystal_0 ="Veteran Shard";
+UI_CommanderCrystal_1 ="Elite Shard";
+UI_CommanderCrystal_2 ="Legendary Shard";
+UI_CommanderCrystal_3 ="Mythic Shard";
+UI_CommanderCrystal_4 ="<font size='22' color='#ffffff'>Fuse </font><img src='resource_gold.png' align='1' /><font size='22' color='%s'>      %d</font>";
+UI_CommanderCrystal_5 ="<font size='22' color='#ffffff'>Fuse x5 </font><img src='resource_gold.png' align='1' /><font size='22' color='%s'>      %d</font>";
+UI_CommanderCrystal_6 ="<font size='20' color='#ffffff'>You have: </font><font size='20' color='#00ff00'>%d</font>"; 
+
+//UI_CommanderIllustrations
+UI_CommanderIllustrations_0 = "Filter";
+
+//UI_CommanderIllustrationAttrib
+UI_CommanderIllustrationAttrib_0 = "Background";
+UI_CommanderIllustrationAttrib_1 = "<font size='20' color='#06f6ff'>%s</font>";
+UI_CommanderIllustrationAttrib_2 = "<font size='20' color='#ffffff'>%s</font>";
+
+//UI_GameFollowUsPage
+UI_GameFollowUsPage_0 = "Facebook";
+UI_GameFollowUsPage_1 = "Twitter";
+UI_GameFollowUsPage_2 = "YouTube";
+UI_GameFollowUsPage_3 = "LINK";
+UI_GameFollowUsPage_4 = "Forum";
+
+//UI_SBattleUIArenaFleetPage
+UI_SBattleUIArenaFleetPage_0 = "Fleets Available";
+UI_SBattleUIArenaFleetPage_1 = "Deployed Fleets";
+UI_SBattleUIArenaFleetPage_2 = "Ready";
+UI_SBattleUIArenaFleetPage_3 = "You can select more fleets to deploy. Proceed anyway?";
+UI_SBattleUIArenaFleetPage_4 = "Deployed Fleets：";
+UI_SBattleUIArenaFleetPage_5 = "<font size='20' color='%s'>%d</font><font size='20' color='#00ff00'>/%d</font>";
+
+//UI_FriendInteractivePage
+UI_FriendInteractivePage_0 = "<font size='20' color='#06f6ff'>Assists: </font><font size='20' color='#ffffff'>%d/%d</font>";
+
+//UI_FriendInteractiveItem
+UI_FriendInteractiveItem_0 = "Ships: %d"
+UI_FriendInteractiveItem_1 = "%s--%s"
+UI_FriendInteractiveItem_2 = "Assist"
+
+//UI_FriendSpeedUpBuildShipLogBox
+UI_FriendSpeedUpBuildShipLogBox_0 = "Assistance Log";
+UI_FriendSpeedUpBuildShipLogBox_1 = "Assists Received";
+UI_FriendSpeedUpBuildShipLogBox_2 = "Thank your friend for the assist and your friend will get 1 CP. You'll also get 10,000 Gold.";
+
+//UI_FriendSpeedUpBuildShipLogItem
+UI_FriendSpeedUpBuildShipLogItem_0 = "Thanks";
+
+//UI_ThreeDaysBounsUI 
+UI_ThreeDaysBounsUI_0 = "Collected!";
+UI_ThreeDaysBounsUI_1 = "Claim";
+//UI_GiftListItem
+UI_GiftListItem_0 = "Ends on %d %d %d:%02d";
+
+//UI_ExpItemSource
+UI_ExpItemSource_0 = "Collected:";
+
+//UI_ChangeFleetCommander
+UI_ChangeFleetCommander_0 = "Choose Commander";
+UI_ChangeFleetCommander_1 = "You already have this Captain";
+
+//UI_SUIButton
+UI_SUIButton_0 = "Boost";
+UI_SUIButton_1 = "Activated";
+
+//UI_UserUpdateUI
+UI_UserUpdateUI_0 = "CP：";
+UI_UserUpdateUI_1 = "Unlocked：";
+UI_UserUpdateUI_2 = "Capital Lv %d";
+
+//UI_BattleReportPromptUI
+UI_BattleReportPromptUI_0 = "Proceed";
+
+//UI_BattleReportPromptUIItem1
+UI_BattleReportPromptUIItem1_0 = "Boost your firepower and expand your fleets!";
+
+//UI_BattleReportPromptUIItem2
+UI_BattleReportPromptUIItem2_0 = "Beat your rivals with superior technology!";
+
+//UI_BattleReportPromptUIItem3
+UI_BattleReportPromptUIItem3_0 = "Master ship dynamics...";
+UI_BattleReportPromptUIItem3_1 = "And you'll never go wrong with your tactics!";
+
+//UI_BattleReportPromptUIItem4
+UI_BattleReportPromptUIItem4_0 = "Recruit the most talented Captains in the galaxy!";
+
+//UI_BattleReportPromptUIItem5
+UI_BattleReportPromptUIItem5_0 = "Equip and train your Captains to unlock their potential!";
+
+//UI_GameSettingMsgBox
+UI_GameSettingMsgBox_0 = "Switch Account";
+UI_GameSettingMsgBox_1 = "<font size='20' color='#06f6ff'>1. Switching an account between different devices</font><br/>Your game account will be linked automatically to your Apple Game Center account when you first login.<br/>To access your account on another device, log in to Game Center on that device.<br/><font size='20' color='#06f6ff'>2. Switching between accounts on one device</font><br/>To switch between different accounts, log in to the Game Center account linked to the other game account.";
+
+//UI_IGGPromotionBox
+UI_IGGPromotionBox_0 = "Close";
+UI_IGGPromotionBox_1 = "Ignore";

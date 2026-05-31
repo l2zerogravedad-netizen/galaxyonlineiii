@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AudioAssitDocument>
+  <audioPath>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio</audioPath>
+  <audioList>
+    <audio path="audio_error.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\audio_error.mp3</name>
+      <duration>0.417</duration>
+      <enum>AUDIO_ERROR</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="battle.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\battle.mp3</name>
+      <duration>53.473</duration>
+      <enum>BATTLE</enum>
+      <group>1</group>
+      <behavior>AsMusic</behavior>
+      <loop>True</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EBomb.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EBomb.mp3</name>
+      <duration>1.734</duration>
+      <enum>EBOMB</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ECommander.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ECommander.mp3</name>
+      <duration>0.701</duration>
+      <enum>ECOMMANDER</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EConnon.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EConnon.mp3</name>
+      <duration>1.2</duration>
+      <enum>ECONNON</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EFlack.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EFlack.mp3</name>
+      <duration>0.613</duration>
+      <enum>EFLACK</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ELaser.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ELaser.mp3</name>
+      <duration>1.357</duration>
+      <enum>ELASER</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EMissile.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EMissile.mp3</name>
+      <duration>1.422</duration>
+      <enum>EMISSILE</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EMove.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EMove.mp3</name>
+      <duration>1.728</duration>
+      <enum>EMOVE</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EParticle.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EParticle.mp3</name>
+      <duration>0.545</duration>
+      <enum>EPARTICLE</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EShield.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EShield.mp3</name>
+      <duration>0.764</duration>
+      <enum>ESHIELD</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EShipBase.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EShipBase.mp3</name>
+      <duration>1.027</duration>
+      <enum>ESHIPBASE</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EShipBlast.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EShipBlast.mp3</name>
+      <duration>1.161</duration>
+      <enum>ESHIPBLAST</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EThor.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EThor.mp3</name>
+      <duration>0.9</duration>
+      <enum>ETHOR</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="galaxy.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\galaxy.mp3</name>
+      <duration>53.737</duration>
+      <enum>GALAXY</enum>
+      <group>1</group>
+      <behavior>AsMusic</behavior>
+      <loop>True</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="spell_accelerate.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\spell_accelerate.mp3</name>
+      <duration>0.173</duration>
+      <enum>SPELL_ACCELERATE</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="audio_close.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\audio_close.mp3</name>
+      <duration>1.065</duration>
+      <enum>AUDIO_CLOSE</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EAttackBtn.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EAttackBtn.mp3</name>
+      <duration>1.665</duration>
+      <enum>EATTACKBTN</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EBattleDefeat.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EBattleDefeat.mp3</name>
+      <duration>2.299</duration>
+      <enum>EBATTLEDEFEAT</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EBattleVictory.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EBattleVictory.mp3</name>
+      <duration>3.06</duration>
+      <enum>EBATTLEVICTORY</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EBatttleDraw.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EBatttleDraw.mp3</name>
+      <duration>4.056</duration>
+      <enum>EBATTTLEDRAW</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EBuildCompled.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EBuildCompled.mp3</name>
+      <duration>1.404</duration>
+      <enum>EBUILDCOMPLED</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ECloseWin.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ECloseWin.mp3</name>
+      <duration>0.964</duration>
+      <enum>ECLOSEWIN</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ECreateBuild.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ECreateBuild.mp3</name>
+      <duration>1.322</duration>
+      <enum>ECREATEBUILD</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EDelItem.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EDelItem.mp3</name>
+      <duration>1.33</duration>
+      <enum>EDELITEM</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EErrorBulid.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EErrorBulid.mp3</name>
+      <duration>0.491</duration>
+      <enum>EERRORBULID</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EExpandChat.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EExpandChat.mp3</name>
+      <duration>0.7</duration>
+      <enum>EEXPANDCHAT</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EInfo.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EInfo.mp3</name>
+      <duration>0.6</duration>
+      <enum>EINFO</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ELuckDraw.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ELuckDraw.mp3</name>
+      <duration>1.774</duration>
+      <enum>ELUCKDRAW</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EMoveBuild.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EMoveBuild.mp3</name>
+      <duration>1.378</duration>
+      <enum>EMOVEBUILD</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EOpenWin.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EOpenWin.mp3</name>
+      <duration>1.201</duration>
+      <enum>EOPENWIN</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EPopBuildMenu.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EPopBuildMenu.mp3</name>
+      <duration>0.565</duration>
+      <enum>EPOPBUILDMENU</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EPopup.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EPopup.mp3</name>
+      <duration>0.465</duration>
+      <enum>EPOPUP</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EPrepareCreateBuild.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EPrepareCreateBuild.mp3</name>
+      <duration>2.187</duration>
+      <enum>EPREPARECREATEBUILD</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EProduceShipCompleted.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EProduceShipCompleted.mp3</name>
+      <duration>1.926</duration>
+      <enum>EPRODUCESHIPCOMPLETED</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EProduceShipStart.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EProduceShipStart.mp3</name>
+      <duration>2.526</duration>
+      <enum>EPRODUCESHIPSTART</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ESelectBuildingCard.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ESelectBuildingCard.mp3</name>
+      <duration>0.726</duration>
+      <enum>ESELECTBUILDINGCARD</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="EShrinkChat.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\EShrinkChat.mp3</name>
+      <duration>0.772</duration>
+      <enum>ESHRINKCHAT</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ETechUpgradeCompled.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ETechUpgradeCompled.mp3</name>
+      <duration>2.291</duration>
+      <enum>ETECHUPGRADECOMPLED</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+    <audio path="ETechUpgradeStart.mp3">
+      <name>D:\workspace\galaxy_cocos\GalaxyOnline_co\GalaxyOnline2\Resources\Audio\ETechUpgradeStart.mp3</name>
+      <duration>1.691</duration>
+      <enum>ETECHUPGRADESTART</enum>
+      <group>0</group>
+      <behavior>AsEffect</behavior>
+      <loop>False</loop>
+      <stopBeforePlay>True</stopBeforePlay>
+      <switch>YesOnce</switch>
+    </audio>
+  </audioList>
+  <publishOptions>
+    <includeDuration>False</includeDuration>
+    <durationType>float</durationType>
+    <includeGroup>True</includeGroup>
+    <includeBehavior>True</includeBehavior>
+    <includeLoop>True</includeLoop>
+    <includeStopBeforePlay>True</includeStopBeforePlay>
+    <includeSwitch>True</includeSwitch>
+    <trimName>True</trimName>
+    <trimWhite>True</trimWhite>
+    <enumPrefix>ENUM_AUDIO</enumPrefix>
+    <infoFilePath>audio_info.plist</infoFilePath>
+    <headerFilePath>AudioAssitEnums.h</headerFilePath>
+  </publishOptions>
+</AudioAssitDocument>

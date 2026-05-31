@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" renderorder="right-down" width="27" height="29" tilewidth="200" tileheight="100">
+ <tileset firstgid="1" name="StarGateMc" tilewidth="300" tileheight="173">
+  <image source="StarGateMc.png" width="300" height="173"/>
+ </tileset>
+ <tileset firstgid="2" name="space_apron" tilewidth="1246" tileheight="641">
+  <tileoffset x="-523" y="216"/>
+  <image source="space_apron.png" width="1246" height="641"/>
+ </tileset>
+ <tileset firstgid="3" name="map_grid" tilewidth="200" tileheight="100">
+  <image source="map_grid.png" width="200" height="100"/>
+ </tileset>
+ <tileset firstgid="4" name="Aozai_1" tilewidth="246" tileheight="222">
+  <image source="Aozai_1.png" width="246" height="222"/>
+ </tileset>
+ <tileset firstgid="5" name="Aozai_2" tilewidth="428" tileheight="153">
+  <image source="Aozai_2.png" width="428" height="153"/>
+ </tileset>
+ <tileset firstgid="6" name="Aozai_3" tilewidth="308" tileheight="232">
+  <image source="Aozai_3.png" width="308" height="232"/>
+ </tileset>
+ <tileset firstgid="7" name="Blue_1" tilewidth="216" tileheight="200">
+  <image source="Blue_1.png" width="216" height="200"/>
+ </tileset>
+ <tileset firstgid="8" name="Blue_3" tilewidth="178" tileheight="126">
+  <image source="Blue_3.png" width="178" height="126"/>
+ </tileset>
+ <tileset firstgid="9" name="Blue2" tilewidth="214" tileheight="226">
+  <image source="Blue2.png" width="214" height="226"/>
+ </tileset>
+ <tileset firstgid="10" name="Boat_1" tilewidth="369" tileheight="326">
+  <image source="Boat_1.png" width="369" height="326"/>
+ </tileset>
+ <tileset firstgid="11" name="Boat_2" tilewidth="337" tileheight="319">
+  <image source="Boat_2.png" width="337" height="319"/>
+ </tileset>
+ <tileset firstgid="12" name="Clouds_1" tilewidth="311" tileheight="275">
+  <image source="Clouds_1.png" width="311" height="275"/>
+ </tileset>
+ <tileset firstgid="13" name="Clouds_2" tilewidth="286" tileheight="295">
+  <image source="Clouds_2.png" width="286" height="295"/>
+ </tileset>
+ <tileset firstgid="14" name="Ice_1" tilewidth="229" tileheight="242">
+  <image source="Ice_1.png" width="229" height="242"/>
+ </tileset>
+ <tileset firstgid="15" name="Ice_2" tilewidth="328" tileheight="226">
+  <image source="Ice_2.png" width="328" height="226"/>
+ </tileset>
+ <tileset firstgid="16" name="Ice_3" tilewidth="432" tileheight="213">
+  <image source="Ice_3.png" width="432" height="213"/>
+ </tileset>
+ <tileset firstgid="17" name="Meteorite_1" tilewidth="320" tileheight="246">
+  <image source="Meteorite_1.png" width="320" height="246"/>
+ </tileset>
+ <tileset firstgid="18" name="Meteorite_2" tilewidth="262" tileheight="225">
+  <image source="Meteorite_2.png" width="262" height="225"/>
+ </tileset>
+ <tileset firstgid="19" name="Meteorite_3" tilewidth="432" tileheight="163">
+  <image source="Meteorite_3.png" width="432" height="163"/>
+ </tileset>
+ <layer name="GridLayer" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi+gJkOeNSuUbtG7Rq1a7jaRaq+oeKvUbtG7Rq1a2jaRambBsJfwxEAANREB04=
+  </data>
+ </layer>
+ <layer name="Aozai1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Bd+JeMjIXQKmgC8Mu0AwBw1AI31AAH
+  </data>
+ </layer>
+ <layer name="Aozai2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6Ad9s/sWugBCUiA7+Y6AABQCy6MAAU=
+  </data>
+ </layer>
+ <layer name="Aozai3" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIwKAd9s9sDD0gAQVQcx0AAN5bLPwABQ==
+  </data>
+ </layer>
+ <layer name="Aozai4" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Ad+NeMiCXwtAqaANCa7wAAHFgn/AAF
+  </data>
+ </layer>
+ <layer name="Aozai5" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7A9+LeMiRGeVkET6JjvAAAApxY97AAG
+  </data>
+ </layer>
+ <layer name="Aozai6" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Bd+JeMjIXQKmjy27QDAABwxAJPpAAH
+  </data>
+ </layer>
+ <layer name="Aozai7" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7A9+LeMiRGeVkETLs13AAAAShZCiAAG
+  </data>
+ </layer>
+ <layer name="Aozai8" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Ad+NeMjIXQKmjCddMOAADwwgI2HAAF
+  </data>
+ </layer>
+ <layer name="Aozai9" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztziEBAAAIA7Ar+kemwD2ILcESAL6Z6wAAFAsz/AAH
+  </data>
+ </layer>
+ <layer name="Blue" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztziEBAAAIA7Bb+hemwwWYLcESAOjNdwCAMwtB0AAK
+  </data>
+ </layer>
+ <layer name="Boat1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEJAAAMA7D+8+93MgolUZAEYMO1AwAw7gFd4AAM
+  </data>
+ </layer>
+ <layer name="Boat2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztziEBAAAIA7Br+gcmwiWILcES4IO5DgAAFAtjHAAL
+  </data>
+ </layer>
+ <layer name="Clouds" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzkERAAAIA6AFsH9eS8zzAwlIALg03wEAKFleLAAN
+  </data>
+ </layer>
+ <layer name="Meteorite1" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAMAiA7rH/XVfDzgQQkALBz6wAAtQd4mAAU
+  </data>
+ </layer>
+ <layer name="Meteorite2" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6BlsH9Yj4XQAxKQAEDNdQCA1xZ7DAAT
+  </data>
+ </layer>
+ <layer name="Meteorite3" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgEJAAAMA6BVeP+yjzEYmsAEWHbtAAAw4wGaFAAS
+  </data>
+ </layer>
+ <layer name="Ice" width="27" height="29">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6AnsH9cY3xOSEAC8Ne0AwBwyAJxTAAP
+  </data>
+ </layer>
+</map>
