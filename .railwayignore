@@ -1,0 +1,19 @@
+# Shrink the `railway up` tarball so the upload completes over a flaky link.
+# The full worktree is ~193MB and the upload kept corrupting mid-stream
+# (TLS BadRecordMac) → "Deployment does not have an associated build".
+# None of the entries below are needed by the build or runtime.
+# DO NOT exclude apps/web/public/go3/{assets,assetsc,icons,api} — the GO3 client needs them.
+
+# Original APK (51MB) — reference only, the server never reads it
+*.apk
+
+# Research / docs (not used at build or runtime)
+docs/
+DEMO-BATALLA/
+EXTRACTED/
+.clauderc/
+
+# Local caches (already gitignored, belt-and-suspenders)
+**/.next/
+**/node_modules/
+.git/
