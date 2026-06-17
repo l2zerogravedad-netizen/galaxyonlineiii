@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import '@/lib/apiBase';
+import PostHogProvider from '@/components/PostHogProvider';
 
 export const metadata: Metadata = {
   title: 'Galaxy Online III',
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <PostHogProvider>{children}</PostHogProvider>
+      </body>
     </html>
   );
 }
