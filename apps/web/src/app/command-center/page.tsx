@@ -1,6 +1,6 @@
 'use client';
 
-import { Bot, Shield, ShieldOff, ExternalLink, Film } from 'lucide-react';
+import { Bot, Shield, ShieldOff, ExternalLink, Film, MessageSquare } from 'lucide-react';
 import { useCommandCenter } from '@/lib/tasks/taskStore';
 import { ProjectSelector } from '@/components/command-center/ProjectSelector';
 import { AgentSidebar } from '@/components/command-center/AgentSidebar';
@@ -65,6 +65,15 @@ function TopBar() {
         {approvalMode ? <Shield size={11} /> : <ShieldOff size={11} />}
         <span className="hidden sm:block">{approvalMode ? 'aprob. ON' : 'aprob. OFF'}</span>
       </button>
+
+      <a
+        href="/chat"
+        className="flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-zinc-800 text-zinc-600 hover:text-indigo-400 hover:border-zinc-700 transition-colors duration-150"
+        title="Chat con IA local"
+      >
+        <MessageSquare size={11} />
+        <span className="hidden sm:block text-xs font-mono">Chat IA</span>
+      </a>
 
       <a
         href="/videos"
